@@ -1,4 +1,3 @@
-import React from "react";
 import ImageHero from "./componets/ImageHero";
 import HeroDescription from "./componets/HeroDescription";
 import { Button } from "@/components/ui/button";

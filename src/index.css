@@ -197,4 +197,5 @@ body {
 @theme {
   --breakpoint-xs: 29rem;
   --color-primary: #cba462;
+  --color-secondary: #153b4d;
 }
