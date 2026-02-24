@@ -50,14 +50,14 @@ export const Pagination: React.FC<PaginationProps> = ({
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`p-2 rounded-md border ${
+          className={`p-2 rounded-xl border ${
             currentPage === 1
-              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              : 'bg-white  hover:bg-primary/10 border-primary/30'
+              ? 'bg-gray-200 text-black cursor-not-allowed'
+              : 'bg-gray-200 text-black'
           }`}
           title="السابق"
         >
-          <ChevronRight size={18} className="text-black" />
+          <ChevronRight size={18} className="text-black " />
         </button>
 
         {/* أرقام الصفحات */}
@@ -67,12 +67,12 @@ export const Pagination: React.FC<PaginationProps> = ({
               key={index}
               onClick={() => typeof page === 'number' ? onPageChange(page) : null}
               disabled={page === '...'}
-              className={`min-w-[36px] h-9 px-2 rounded-md text-sm font-medium ${
+              className={`min-w-[36px] h-9 px-2 rounded-md text-sm font-medium rounded-xl ${
                 page === currentPage
                   ? 'bg-primary text-white'
                   : page === '...'
                   ? 'cursor-default bg-transparent'
-                  : 'bg-white text-gray-700 hover:bg-primary/10 border border-gray-300'
+                  : 'bg-gray-200 text-black '
               }`}
             >
               {page}
@@ -84,10 +84,10 @@ export const Pagination: React.FC<PaginationProps> = ({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={`p-2 rounded-md border ${
+          className={`p-2 rounded-xl border ${
             currentPage === totalPages
-              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              : 'bg-white text-primary hover:bg-primary/10 border-primary/30'
+              ? 'bg-gray-200 text-black cursor-not-allowed'
+              : 'bg-gray-200 text-black'
           }`}
           title="التالي"
         >

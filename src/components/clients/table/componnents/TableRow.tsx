@@ -2,9 +2,6 @@
 import React from 'react';
 import { Eye, Edit2, Trash2 } from 'lucide-react';
 import type { TableRowProps } from '../../types';
-
-
-
 export const TableRow: React.FC<TableRowProps> = ({
   client,
   index,
