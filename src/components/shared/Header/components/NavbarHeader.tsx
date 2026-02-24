@@ -55,8 +55,16 @@ export default function NavbarHeader() {
             </Link>
 
             <Link to={"profile"} className="flex items-center gap-2 ">
-              <div className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full  overflow-hidden border border-secondary">
-                yes
+              <div
+                className="text-secondary h-6 w-6 sm:h-12 sm:w-12 
+                bg-secondary/8 flex justify-center items-center 
+                rounded-full overflow-hidden border border-secondary"
+              >
+                <img
+                  src="/images/user-placeholder.jpg"
+                  alt="User avatar"
+                  className="block w-full h-full object-contain "
+                />
               </div>
               <p> علاء</p>
 

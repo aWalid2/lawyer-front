@@ -1,28 +1,84 @@
-import React from "react";
-import { MainIcon } from "@/components/shared/icons/Main";
-import { CaseMangementIcon } from "@/components/shared/icons/CaseManagement";
-import { RulingsIcon } from "@/components/shared/icons/Rulings";
+import { AboutOfficeIcon } from "@/components/shared/icons/AboutOffice";
 import { CalendarIcon } from "@/components/shared/icons/Calendar";
-import { RollIcon } from "@/components/shared/icons/Roll";
-import { DocumentsIcon } from "@/components/shared/icons/Documents";
-import { ReportsIcon } from "@/components/shared/icons/Reports";
-import { UserTasksIcon } from "@/components/shared/icons/UserTasks";
+import { CaseMangementIcon } from "@/components/shared/icons/CaseManagement";
 import { ConsultationsIcon } from "@/components/shared/icons/Consultations";
 import { ContractsIcon } from "@/components/shared/icons/Contracts";
+import { DocumentsIcon } from "@/components/shared/icons/Documents";
 import { FinanceIcon } from "@/components/shared/icons/Finance";
-import { AboutOfficeIcon } from "@/components/shared/icons/AboutOffice";
-import { NavLink } from "react-router-dom";
-import { UsersIcon } from "@/components/shared/icons/Users";
+import { MainIcon } from "@/components/shared/icons/Main";
+import { ReportsIcon } from "@/components/shared/icons/Reports";
+import { RollIcon } from "@/components/shared/icons/Roll";
+import { RulingsIcon } from "@/components/shared/icons/Rulings";
 import { SettingsIcon } from "@/components/shared/icons/Settings";
+import { UsersIcon } from "@/components/shared/icons/Users";
+import { UserTasksIcon } from "@/components/shared/icons/UserTasks";
+import { NavLink } from "react-router-dom";
+
+import CollapsibleNavDashboard from "./components/CollapsibleNavDashboard";
+
+const reportsLinks = [
+  {
+    label: "تقارير الموكلين",
+    to: "/dashboard/reports/clients",
+  },
+  {
+    label: " تقارير القضايا ",
+    to: "/dashboard/reports/cases",
+  },
+  {
+    label: "تقارير الجلسات",
+    to: "/dashboard/reports/sitting",
+  },
+  {
+    label: "تقارير المستخدمين",
+    to: "/dashboard/reports/users",
+  },
+  {
+    label: "تقارير المصروفات",
+    to: "/dashboard/reports/expenses",
+  },
+  {
+    label: "تقارير المدفوعات",
+    to: "/dashboard/reports/payments",
+  },
+];
+const usersLinks = [
+  {
+    label: "الموكلين",
+    to: "/dashboard/users/clients",
+  },
+  {
+    label: "العقود",
+    to: "/dashboard/users/lawyers",
+  },
+  {
+    label: "الموظفين",
+    to: "/dashboard/users/employees",
+  },
+];
+const financeLinks = [
+  {
+    label: "المصروفات ",
+    to: "/dashboard/finance/expences",
+  },
+  {
+    label: "المدفوعات",
+    to: "/dashboard/finance/payments",
+  },
+];
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center justify-between p-4 rounded-lg transition
-     ${isActive ? "bg-primary text-white" : "text-[#727272]  hover:bg-primary hover:text-white"}`;
+  ${
+    isActive
+      ? "bg-gradient-to-l from-[#CBA462] to-[#E3C086] text-white"
+      : "text-[#727272] hover:bg-primary hover:text-white"
+  }`;
 
 const NavDashboard = () => {
   return (
     <nav className="space-y-2 text-sm">
-      <NavLink to="/dashboard" className={linkClass}>
+      <NavLink end to="/dashboard" className={linkClass}>
         <div className="flex items-center gap-3 ">
           <MainIcon />
           <p className=" text-base font-normal">الرئيسية</p>
@@ -65,24 +121,24 @@ const NavDashboard = () => {
           <p className=" text-base font-normal">المستندات</p>
         </div>
       </NavLink>
-      <NavLink to="/dashboard/reports" className={linkClass}>
-        <div className="flex items-center gap-3 ">
-          <ReportsIcon />
-          <p className=" text-base font-normal">التقارير</p>
-        </div>
-      </NavLink>
+
+      <CollapsibleNavDashboard
+        data={reportsLinks}
+        title={"التقارير"}
+        icon={<ReportsIcon />}
+      />
+
       <NavLink to="/dashboard/user-tasks" className={linkClass}>
         <div className="flex items-center gap-3 ">
           <UserTasksIcon />
           <p className=" text-base font-normal">مهام المستخدم</p>
         </div>
       </NavLink>
-      <NavLink to="/dashboard/users" className={linkClass}>
-        <div className="flex items-center gap-3 ">
-          <UsersIcon />
-          <p className=" text-base font-normal">المستخدمين</p>
-        </div>
-      </NavLink>
+      <CollapsibleNavDashboard
+        data={usersLinks}
+        title={"المستخدمين"}
+        icon={<UsersIcon />}
+      />
       <NavLink to="/dashboard/consultaions" className={linkClass}>
         <div className="flex items-center gap-3 ">
           <ConsultationsIcon />
@@ -95,12 +151,11 @@ const NavDashboard = () => {
           <p className=" text-base font-normal">العقود</p>
         </div>
       </NavLink>
-      <NavLink to="/dashboard/finance" className={linkClass}>
-        <div className="flex items-center gap-3 ">
-          <FinanceIcon />
-          <p className=" text-base font-normal">المالية</p>
-        </div>
-      </NavLink>
+      <CollapsibleNavDashboard
+        data={financeLinks}
+        title={"المالية"}
+        icon={<FinanceIcon />}
+      />
       <NavLink to="/dashboard/about-office" className={linkClass}>
         <div className="flex items-center gap-3 ">
           <AboutOfficeIcon />
