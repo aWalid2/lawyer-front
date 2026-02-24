@@ -78,11 +78,7 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 const NavDashboard = () => {
   return (
     <nav className="space-y-2 text-sm">
-<<<<<<< HEAD:src/features/dashboard/components/NavDashboard.tsx
-      <NavLink to="/" className={linkClass}>
-=======
       <NavLink end to="/dashboard" className={linkClass}>
->>>>>>> 83560dfc527f8ce22a70e1f0bcd03a50df06b5f7:src/features/dashboard/components/SidebarDashboard/components/NavDashboard/index.tsx
         <div className="flex items-center gap-3 ">
           <MainIcon />
           <p className=" text-base font-normal">الرئيسية</p>
