@@ -84,7 +84,7 @@ const NavDashboard = () => {
           <p className=" text-base font-normal">الرئيسية</p>
         </div>
       </NavLink>
-      <NavLink to="/clients" className={linkClass}>
+      <NavLink to="/dashboard/clients" className={linkClass}>
         <div className="flex items-center gap-3 ">
           <UsersIcon />
           <p className=" text-base font-normal">الموكلين</p>

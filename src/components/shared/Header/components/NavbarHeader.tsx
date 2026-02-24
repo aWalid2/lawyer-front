@@ -16,7 +16,7 @@ import { CheveronDownIcon } from "../../icons/CheveronDown";
 
 export default function NavbarHeader() {
   return (
-    <header className="w-full bg-white rounded-0  md:rounded-[12px] px-6    ">
+    <header className="w-full bg-white rounded-0  md:rounded-[12px] px-6 shadow-[0_0_24px_0_rgba(21,58,77,0.16)]   ">
       <div className="h-20 flex justify-between   ">
         {/* Desktop Navigation */}
 

@@ -1,24 +1,24 @@
 // src/components/clients/ClientsSearch.tsx
-import React, { useState, useEffect } from 'react';
-import { Search } from 'lucide-react';
-import type { ClientsSearchProps } from './types';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Search } from "lucide-react";
+import type { ClientsSearchProps } from "./types";
+import { Link } from "react-router-dom";
 
 export const ClientsSearch: React.FC<ClientsSearchProps> = ({
   onSearch,
-  onAddNew
+  onAddNew,
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState("");
 
   // Debounce للبحث
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchTerm.length >= 2 || searchTerm.length === 0) {
         onSearch(searchTerm);
-        setError('');
+        setError("");
       } else if (searchTerm.length === 1) {
-        setError('البحث يحتاج على الأقل حرفين');
+        setError("البحث يحتاج على الأقل حرفين");
       }
     }, 500);
 
@@ -30,16 +30,14 @@ export const ClientsSearch: React.FC<ClientsSearchProps> = ({
   };
 
   const handleClearSearch = () => {
-    setSearchTerm('');
-    onSearch('');
+    setSearchTerm("");
+    onSearch("");
   };
 
   return (
     <div className="flex items-center justify-between gap-4 w-full">
       {/* العنوان على اليمين */}
-      <h1 className="text-xl tracking-tight whitespace-nowrap">
-        الموكلين
-      </h1>
+      <h1 className="text-xl tracking-tight whitespace-nowrap">الموكلين</h1>
 
       {/* السيرش في النص - HTML عادي */}
       <div className="relative flex-1 max-w-md">
@@ -69,18 +67,16 @@ export const ClientsSearch: React.FC<ClientsSearchProps> = ({
 
         {/* رسالة الخطأ */}
         {error && (
-          <p className="text-red-500 text-xs mt-1 text-right">
-            {error}
-          </p>
+          <p className="text-red-500 text-xs mt-1 text-right">{error}</p>
         )}
       </div>
 
       <Link
-        to="/add-client"
+        to="/dashboard/clients/add-client"
         onClick={onAddNew}
         className="flex items-center gap-2 px-6 py-3 text-white font-cairo rounded-[12px] transition-all whitespace-nowrap w-[137px] h-[50px] justify-center relative overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, #E3C086 0%, #CBA462 100%)',
+          background: "linear-gradient(135deg, #E3C086 0%, #CBA462 100%)",
         }}
       >
         <span className="relative z-10">+ موكل جديد</span>

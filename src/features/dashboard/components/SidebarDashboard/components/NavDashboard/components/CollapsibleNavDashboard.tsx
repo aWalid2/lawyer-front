@@ -38,7 +38,7 @@ const CollapsibleNavDashboard: React.FC<CollapsibleNavDashboardProps> = ({
       <CollapsibleTrigger asChild>
         <button
           className={`flex items-center justify-between w-full p-4 rounded-lg transition
-          ${open ? "bg-gradient-to-l from-[#CBA462] to-[#E3C086] text-white" : "text-[#727272] hover:bg-primary hover:text-white"}`}
+          ${open ? "bg-linear-to-l from-[#CBA462] to-[#E3C086] text-white" : "text-[#727272] hover:bg-primary hover:text-white"}`}
         >
           <div className="flex items-center gap-3">
             {icon}

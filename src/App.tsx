@@ -23,6 +23,7 @@ import UsersEmployees from "./pages/dashboard/users/UsersEmployees";
 // Finance
 import FinanceExpenses from "./pages/dashboard/finance/FinanceExpenses";
 import FinancePayments from "./pages/dashboard/finance/FinancePayments";
+import AddClient from "./components/clients/addclient/AddClient";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
 
         {/* Main Routes */}
         <Route path="clients" element={<Clients />} />
+        <Route path="clients/add-client" element={<AddClient />} />
         <Route path="case-management" element={<CaseMangement />} />
 
         {/* Reports Routes */}

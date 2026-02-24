@@ -12,8 +12,8 @@ import NavDashboard from "./components/NavDashboard";
 const SidebarDashboard = () => {
   return (
     <>
-      <aside className=" ">
-        <div className="hidden md:block h-fit min:h-fit w-70 md:bg-gray-50 md:min-h-screen p-4 border-l shadow-sm rounded-[12px]   ">
+      <aside className=" bg-white ">
+        <div className="hidden md:block bg-white h-fit min:h-fit w-70 md:bg-white md:min-h-screen p-4 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] rounded-[12px]   ">
           <div className="mb-10">
             <img
               src="/public/images/logo.webp"
