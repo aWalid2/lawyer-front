@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import NavDashboard from "./NavDashboard";
+import NavDashboard from "./components/NavDashboard";
 
 const SidebarDashboard = () => {
   return (
