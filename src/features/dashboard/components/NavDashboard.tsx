@@ -22,13 +22,13 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 const NavDashboard = () => {
   return (
     <nav className="space-y-2 text-sm">
-      <NavLink to="/dashboard" className={linkClass}>
+      <NavLink to="/" className={linkClass}>
         <div className="flex items-center gap-3 ">
           <MainIcon />
           <p className=" text-base font-normal">الرئيسية</p>
         </div>
       </NavLink>
-      <NavLink to="/dashboard/clients" className={linkClass}>
+      <NavLink to="/clients" className={linkClass}>
         <div className="flex items-center gap-3 ">
           <UsersIcon />
           <p className=" text-base font-normal">الموكلين</p>

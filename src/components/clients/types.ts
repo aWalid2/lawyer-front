@@ -26,7 +26,7 @@ export interface ClientsStatsProps {
 
 export interface ClientsSearchProps {
   onSearch: (term: string) => void;
-  onAddNew: () => void;
+  onAddNew?: () => void;
 }
 
 export interface PerformanceFilterProps {

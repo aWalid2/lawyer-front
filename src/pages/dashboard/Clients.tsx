@@ -1,6 +1,6 @@
-// src/pages/ClientsPage.tsx
-import React, { useState, useMemo } from "react";
-import { ClientsTable } from "../../components/clients/table/componnents/ClientsTable"; // تعديل المسار (كان componnents غلط)
+
+import React, { useState } from "react";
+import { ClientsTable } from "../../components/clients/table/componnents/ClientsTable";
 import type { Client, ClientsPageProps } from "../../components/clients/types";
 
 // بيانات تجريبية
@@ -15,27 +15,21 @@ const mockClients: Client[] = [
   { id: 8, name: "هند صالح", phone: "054837892", performance: 9 },
   { id: 9, name: "خالد ابراهيم", phone: "054837892", performance: 4 },
   { id: 10, name: "لمى فيصل", phone: "054837892", performance: 11 },
-  { id: 11, name: "لمى فيصل", phone: "054837892", performance: 11 },
-  { id: 12, name: "لمى فيصل", phone: "054837892", performance: 11 },
-  { id: 13, name: "لمى فيصل", phone: "054837892", performance: 11 },
-  { id: 14, name: "لمى فيصل", phone: "054837892", performance: 11 },
-  { id: 15, name: "لمى فيصل", phone: "054837892", performance: 11 },
+  { id: 11, name: "لمى فيصل", phone: "054837892", performance: 12 },
+  { id: 12, name: "لمى فيصل", phone: "054837892", performance: 13 },
+  { id: 13, name: "لمى فيصل", phone: "054837892", performance: 14 },
+  { id: 14, name: "لمى فيصل", phone: "054837892", performance: 45 },
+  { id: 15, name: "لمى فيصل", phone: "054837892", performance: 12 },
   { id: 16, name: "لمى فيصل", phone: "054837892", performance: 11 },
+  { id: 17, name: "لمى فيصل", phone: "054837892", performance: 11 },
+  { id: 18, name: "لمى فيصل", phone: "054837892", performance: 11 },
 ];
 
 const Clients: React.FC<ClientsPageProps> = ({
   initialClients = mockClients,
 }) => {
-  const [performanceRange] = useState({ min: 0, max: 14 }); // مش بنستخدمها دلوقتي
   const [clients] = useState(initialClients);
-
-  // فلترة البيانات (لو عاوز تستخدم performanceRange)
-  const filteredClients = useMemo(() => {
-    return clients.filter(client => {
-      return client.performance >= performanceRange.min && 
-             client.performance <= performanceRange.max;
-    });
-  }, [clients, performanceRange]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleClientClick = (client: Client) => {
     console.log("Client clicked:", client);
@@ -56,7 +50,9 @@ const Clients: React.FC<ClientsPageProps> = ({
   return (
     <div className="pt-6" dir="rtl">
       <ClientsTable
-        clients={filteredClients}
+        clients={clients}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
         onClientClick={handleClientClick}
         onViewDetails={handleViewDetails}
         onEdit={handleEdit}

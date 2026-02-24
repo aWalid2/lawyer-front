@@ -1,12 +1,12 @@
 // src/components/clients/table/TableRow.tsx
 import React from "react";
-import { Eye, Edit2, Trash2 } from "lucide-react";
 import type { TableRowProps } from "../../types";
-
+import view from '../../../../../public/images/view.svg';
+import edit from '../../../../../public/images/edit.svg';
+import deleteIcon from '../../../../../public/images/delete.svg';
 export const TableRow: React.FC<TableRowProps> = ({
   client,
   index,
-  isSelected,
   onRowClick,
   onEdit,
   onDelete,
@@ -14,9 +14,7 @@ export const TableRow: React.FC<TableRowProps> = ({
 }) => {
   return (
     <tr
-      className={`hover:bg-gray-50 cursor-pointer transition-colors ${
-        index % 2 === 0 ? "bg-white" : "bg-gray-50"
-      } ${isSelected ? "bg-blue-50" : ""} border-b border-gray-200`}
+      className=" cursor-pointer transition-colors bg-white border-b border-gray-200"
       onClick={() => onRowClick(client)}
     >
       {/* # */}
@@ -44,41 +42,39 @@ export const TableRow: React.FC<TableRowProps> = ({
 
       {/* عدد القضايا */}
       <td className="p-3 text-sm text-gray-600 border-l border-gray-200 text-center">
-        {client.casesCount || Math.floor(Math.random() * 10) + 1}
+        <span className="bg-gray-400 text-white inline-flex items-center justify-center w-[35px] h-[35px] rounded-lg">
+          {client.casesCount || Math.floor(Math.random() * 10) + 1}
+        </span>
       </td>
-
       {/* الإجراءات - أزرار بأيقونات في النص */}
       <td className="p-3 text-sm">
-        <div className="flex items-center justify-center gap-1">
+        <div className="flex items-center justify-center gap-3">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onViewDetails?.(client);
             }}
-            className="p-1.5 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors border border-blue-200"
             title="عرض التفاصيل"
           >
-            <Eye size={16} />
+            <img src={view} />
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
               onEdit?.(client);
             }}
-            className="p-1.5 bg-green-50 text-green-600 rounded hover:bg-green-100 transition-colors border border-green-200"
             title="تعديل"
           >
-            <Edit2 size={16} />
+            <img src={edit} />
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
               onDelete?.(client.id);
             }}
-            className="p-1.5 bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors border border-red-200"
             title="حذف"
           >
-            <Trash2 size={16} />
+            <img src={deleteIcon} />
           </button>
         </div>
       </td>

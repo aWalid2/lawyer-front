@@ -1,11 +1,12 @@
 // src/components/clients/ClientsSearch.tsx
 import React, { useState, useEffect } from 'react';
-import { Search, Plus } from 'lucide-react';
+import { Search } from 'lucide-react';
 import type { ClientsSearchProps } from './types';
+import { Link } from 'react-router-dom';
 
-export const ClientsSearch: React.FC<ClientsSearchProps> = ({ 
-  onSearch, 
-  onAddNew 
+export const ClientsSearch: React.FC<ClientsSearchProps> = ({
+  onSearch,
+  onAddNew
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
@@ -36,32 +37,34 @@ export const ClientsSearch: React.FC<ClientsSearchProps> = ({
   return (
     <div className="flex items-center justify-between gap-4 w-full">
       {/* العنوان على اليمين */}
-      <h1 className="text-2xl font-Cairo tracking-tight whitespace-nowrap">
+      <h1 className="text-xl tracking-tight whitespace-nowrap">
         الموكلين
       </h1>
 
       {/* السيرش في النص - HTML عادي */}
       <div className="relative flex-1 max-w-md">
-        <div className="relative">
-          <Search className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="بحث ..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className= "w-full pr-9 h-9 text-sm border rounded-xl px-3 py-1 focus:outline-none  "
-          />
-          
-          {/* زر المسح - يظهر لما يكون في قيمة */}
-          {searchTerm && (
-            <button
-              type="button"
-              onClick={handleClearSearch}
-              className="absolute left-2 top-1.5 text-gray-400 hover:text-gray-600 text-sm"
-            >
-              ✕
-            </button>
-          )}
+        <div className="flex items-center justify-center w-full">
+          <div className="relative w-[440px]">
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="بحث ..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="w-full h-[50px] text-sm border rounded-xl px-4 pr-12 focus:outline-none "
+            />
+
+            {/* زر المسح - يظهر لما يكون في قيمة */}
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={handleClearSearch}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm"
+              >
+                ✕
+              </button>
+            )}
+          </div>
         </div>
 
         {/* رسالة الخطأ */}
@@ -72,13 +75,17 @@ export const ClientsSearch: React.FC<ClientsSearchProps> = ({
         )}
       </div>
 
-      <button
+      <Link
+        to="/add-client"
         onClick={onAddNew}
-        className="flex items-center gap-2 px-6 py-3 bg-primary text-white font-cairo rounded-[12px] hover:bg-primary/90 transition-colors whitespace-nowrap w-[137px] h-[50px] justify-center"
+        className="flex items-center gap-2 px-6 py-3 text-white font-cairo rounded-[12px] transition-all whitespace-nowrap w-[137px] h-[50px] justify-center relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, #E3C086 0%, #CBA462 100%)',
+        }}
       >
-        <Plus className="h-4 w-4" />
-        موكل جديد
-      </button>
+        <span className="relative z-10">+ موكل جديد</span>
+        <div className="absolute inset-0 opacity-0 hover:opacity-20 transition-opacity bg-black"></div>
+      </Link>
     </div>
   );
 };
