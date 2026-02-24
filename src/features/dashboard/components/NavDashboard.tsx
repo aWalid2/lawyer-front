@@ -15,7 +15,7 @@ import { NavLink } from "react-router-dom";
 import { UsersIcon } from "@/components/shared/icons/Users";
 import { SettingsIcon } from "@/components/shared/icons/Settings";
 
-const linkClass = ({ isActive }) =>
+const linkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center justify-between p-4 rounded-lg transition
      ${isActive ? "bg-primary text-white" : "text-[#727272]  hover:bg-primary hover:text-white"}`;
 

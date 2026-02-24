@@ -1,16 +1,4 @@
-import { NavLink } from "react-router-dom";
-import { useState } from "react";
-import {
-  Calendar,
-  ChevronsLeftRight,
-  FileBarChart2,
-  FileChartColumnIncreasing,
-  Filter,
-  Menu,
-  Settings,
-  User,
-  UsersIcon,
-} from "lucide-react";
+import { Menu } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -22,16 +10,6 @@ import {
 import NavDashboard from "./NavDashboard";
 
 const SidebarDashboard = () => {
-  const [open, setOpen] = useState(null);
-
-  const toggle = (name) => {
-    setOpen(open === name ? null : name);
-  };
-
-  const linkClass = ({ isActive }) =>
-    `flex items-center justify-between p-4 rounded-lg transition
-     ${isActive ? "bg-primary text-white" : "text-[#727272]  hover:bg-primary hover:text-white"}`;
-
   return (
     <>
       <aside className=" ">
@@ -58,8 +36,8 @@ const SidebarDashboard = () => {
             قائمة التنقل الخاصة بالموقع
           </SheetDescription>
 
-          <SheetContent side="left" className="w-72 bg-white pt-3 px-4">
-            <div className="h-fit min:h-fit w-70 md:bg-gray-50  p-4   ">
+          <SheetContent side="left" className="w-83 bg-white pt-3 px-4 ">
+            <div className="h-fit min:h-fit w-80 md:bg-gray-50  p-4   overflow-y-scroll  ">
               <div className="flex items-center gap-3">
                 <img
                   src="/public/images/logo.webp"

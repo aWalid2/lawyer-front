@@ -1,9 +1,7 @@
 // src/components/clients/table/TableRow.tsx
-import React from 'react';
-import { Eye, Edit2, Trash2 } from 'lucide-react';
-import type { TableRowProps } from '../../types';
-
-
+import React from "react";
+import { Eye, Edit2, Trash2 } from "lucide-react";
+import type { TableRowProps } from "../../types";
 
 export const TableRow: React.FC<TableRowProps> = ({
   client,
@@ -12,21 +10,23 @@ export const TableRow: React.FC<TableRowProps> = ({
   onRowClick,
   onEdit,
   onDelete,
-  onViewDetails
+  onViewDetails,
 }) => {
   return (
     <tr
       className={`hover:bg-gray-50 cursor-pointer transition-colors ${
-        index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-      } ${isSelected ? 'bg-blue-50' : ''} border-b border-gray-200`}
+        index % 2 === 0 ? "bg-white" : "bg-gray-50"
+      } ${isSelected ? "bg-blue-50" : ""} border-b border-gray-200`}
       onClick={() => onRowClick(client)}
     >
       {/* # */}
-      <td className="p-3 text-sm text-gray-600 border-l border-gray-200 text-center">{index }</td>
+      <td className="p-3 text-sm text-gray-600 border-l border-gray-200 text-center">
+        {index}
+      </td>
 
       {/* كود الموكل */}
       <td className="p-3 text-sm text-gray-600 border-l border-gray-200 text-center">
-        #{String(client.id).padStart(4, '0')}
+        #{String(client.id).padStart(4, "0")}
       </td>
 
       {/* اسم الموكل */}
@@ -35,7 +35,10 @@ export const TableRow: React.FC<TableRowProps> = ({
       </td>
 
       {/* رقم الهاتف */}
-      <td className="p-3 text-sm text-gray-600 border-l border-gray-200 text-center" dir="ltr">
+      <td
+        className="p-3 text-sm text-gray-600 border-l border-gray-200 text-center"
+        dir="ltr"
+      >
         {client.phone}
       </td>
 
