@@ -36,7 +36,7 @@ export const ClientsSearch: React.FC<ClientsSearchProps> = ({
   return (
     <div className="flex items-center justify-between gap-4 w-full">
       {/* العنوان على اليمين */}
-      <h1 className="text-2xl font-bold tracking-tight whitespace-nowrap">
+      <h1 className="text-2xl font-Cairo tracking-tight whitespace-nowrap">
         الموكلين
       </h1>
 
@@ -46,12 +46,10 @@ export const ClientsSearch: React.FC<ClientsSearchProps> = ({
           <Search className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
           <input
             type="text"
-            placeholder="بحث عن موكل..."
+            placeholder="بحث ..."
             value={searchTerm}
             onChange={handleSearchChange}
-            className={`w-full pr-9 h-9 text-sm border rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'
-            }`}
+            className= "w-full pr-9 h-9 text-sm border rounded-xl px-3 py-1 focus:outline-none  "
           />
           
           {/* زر المسح - يظهر لما يكون في قيمة */}
@@ -74,10 +72,9 @@ export const ClientsSearch: React.FC<ClientsSearchProps> = ({
         )}
       </div>
 
-      {/* الزرار في الآخر - HTML عادي */}
       <button
         onClick={onAddNew}
-        className="flex items-center gap-2 px-3 py-1.5 bg-primary text-white text-lg rounded-md hover:bg-primary/90 transition-colors whitespace-nowrap"
+        className="flex items-center gap-2 px-6 py-3 bg-primary text-white font-cairo rounded-[12px] hover:bg-primary/90 transition-colors whitespace-nowrap w-[137px] h-[50px] justify-center"
       >
         <Plus className="h-4 w-4" />
         موكل جديد

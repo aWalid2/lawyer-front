@@ -1,8 +1,7 @@
 // src/pages/ClientsPage.tsx
 import React, { useState, useMemo } from "react";
-import { ClientsSearch } from "../../components/clients/ClientsSearch"; // ✅
-import { ClientsTable } from "../../components/clients/table/componnents/ClientsTable"; // ✅
-import type { Client, ClientsPageProps } from "../../components/clients/types"; // ✅
+import { ClientsTable } from "../../components/clients/table/componnents/ClientsTable"; // تعديل المسار (كان componnents غلط)
+import type { Client, ClientsPageProps } from "../../components/clients/types";
 
 // بيانات تجريبية
 const mockClients: Client[] = [
@@ -17,48 +16,51 @@ const mockClients: Client[] = [
   { id: 9, name: "خالد ابراهيم", phone: "054837892", performance: 4 },
   { id: 10, name: "لمى فيصل", phone: "054837892", performance: 11 },
   { id: 11, name: "لمى فيصل", phone: "054837892", performance: 11 },
-
   { id: 12, name: "لمى فيصل", phone: "054837892", performance: 11 },
   { id: 13, name: "لمى فيصل", phone: "054837892", performance: 11 },
   { id: 14, name: "لمى فيصل", phone: "054837892", performance: 11 },
-
   { id: 15, name: "لمى فيصل", phone: "054837892", performance: 11 },
-
   { id: 16, name: "لمى فيصل", phone: "054837892", performance: 11 },
 ];
 
 const Clients: React.FC<ClientsPageProps> = ({
   initialClients = mockClients,
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [performanceRange, setPerformanceRange] = useState({ min: 0, max: 14 });
+  const [performanceRange] = useState({ min: 0, max: 14 }); // مش بنستخدمها دلوقتي
   const [clients] = useState(initialClients);
 
+  // فلترة البيانات (لو عاوز تستخدم performanceRange)
   const filteredClients = useMemo(() => {
-    return clients.filter((client) => {
-      const matchesSearch =
-        client.name.includes(searchTerm) || client.phone.includes(searchTerm);
-      const matchesPerformance =
-        client.performance >= performanceRange.min &&
-        client.performance <= performanceRange.max;
-      return matchesSearch && matchesPerformance;
+    return clients.filter(client => {
+      return client.performance >= performanceRange.min && 
+             client.performance <= performanceRange.max;
     });
-  }, [clients, searchTerm, performanceRange]);
+  }, [clients, performanceRange]);
 
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
+  const handleClientClick = (client: Client) => {
+    console.log("Client clicked:", client);
   };
 
-  const handleAddNew = () => {};
+  const handleViewDetails = (client: Client) => {
+    console.log("View details:", client);
+  };
 
-  const handleClientClick = (client: Client) => {};
+  const handleEdit = (client: Client) => {
+    console.log("Edit client:", client);
+  };
+
+  const handleDelete = (id: number) => {
+    console.log("Delete client:", id);
+  };
 
   return (
-    <div className="flex flex-col gap-6 p-6" dir="rtl">
-      <ClientsSearch onSearch={handleSearch} onAddNew={handleAddNew} />
+    <div className="pt-6" dir="rtl">
       <ClientsTable
         clients={filteredClients}
         onClientClick={handleClientClick}
+        onViewDetails={handleViewDetails}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
       />
     </div>
   );
