@@ -198,5 +198,16 @@ body {
 
 @theme {
   --color-primary: #cba462;
+  --color-primary-light: #e3c086;
   --color-secondary: #153b4d;
+}
+
+@layer utilities {
+  .bg-primary-gradient {
+    background: linear-gradient(
+      to left,
+      var(--color-primary),
+      var(--color-primary-light)
+    );
+  }
 }

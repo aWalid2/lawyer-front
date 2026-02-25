@@ -6,6 +6,15 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import Clients from "./pages/dashboard/Clients";
 import CaseMangement from "./pages/dashboard/CaseMangement";
+import Legislation from "./pages/dashboard/Legislation";
+import Calendar from "./pages/dashboard/Calendar";
+import Roll from "./pages/dashboard/Roll";
+import Documents from "./pages/dashboard/Documents";
+import UserTasks from "./pages/dashboard/UserTasks";
+import Consultations from "./pages/dashboard/Consultations";
+import Contracts from "./pages/dashboard/Contracts";
+import AboutOffice from "./pages/dashboard/AboutOffice";
+import Settings from "./pages/dashboard/Settings";
 
 // Reports
 import ReportsClients from "./pages/dashboard/reports/ReportsClients";
@@ -36,6 +45,16 @@ function App() {
         <Route path="clients" element={<Clients />} />
         <Route path="clients/add-client" element={<AddClient />} />
         <Route path="case-management" element={<CaseMangement />} />
+        <Route path="legislation-rulings" element={<Legislation />} />
+        <Route path="calendar" element={<Calendar />} />
+        <Route path="roll" element={<Roll />} />
+        <Route path="documents" element={<Documents />} />
+        <Route path="user-tasks" element={<UserTasks />} />
+        <Route path="consultaions" element={<Consultations />} />
+        <Route path="contracts" element={<Contracts />} />
+        <Route path="contracts" element={<Contracts />} />
+        <Route path="about-office" element={<AboutOffice />} />
+        <Route path="settings" element={<Settings />} />
 
         {/* Reports Routes */}
         <Route path="reports">

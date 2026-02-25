@@ -68,20 +68,20 @@ const financeLinks = [
 ];
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
-  `flex items-center justify-between p-4 rounded-lg transition
+  `flex items-center justify-between p-4 h-15  rounded-lg transition
   ${
     isActive
-      ? "bg-gradient-to-l from-[#CBA462] to-[#E3C086] text-white"
+      ? "bg-primary-gradient text-white"
       : "text-[#727272] hover:bg-primary hover:text-white"
   }`;
 
 const NavDashboard = () => {
   return (
-    <nav className="space-y-2 text-sm">
+    <nav className="space-y-4 text-sm">
       <NavLink end to="/dashboard" className={linkClass}>
         <div className="flex items-center gap-3 ">
           <MainIcon />
-          <p className=" text-base font-normal">الرئيسية</p>
+          <p className=" text-base font-normal ">الرئيسية</p>
         </div>
       </NavLink>
       <NavLink to="/dashboard/clients" className={linkClass}>
