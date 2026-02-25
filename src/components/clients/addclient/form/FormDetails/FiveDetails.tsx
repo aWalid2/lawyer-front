@@ -24,7 +24,9 @@ export default function FiveDetails() {
                             placeholder="**************"
                         />
                     </div>
+
                 </div>
+
             </div>
         </div>
     )

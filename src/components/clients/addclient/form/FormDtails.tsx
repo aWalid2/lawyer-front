@@ -68,6 +68,17 @@ const FormDetails = () => {
             {addClients &&
               <FiveDetails />}
           </Form>
+          <div className="w-full pt-8" >
+            <button
+              className=" w-full flex items-center gap-2 px-6 py-3 text-white font-cairo rounded-[12px] transition-all whitespace-nowrap w-[137px] h-[50px] justify-center relative overflow-hidden"
+              style={{
+                background: "linear-gradient(135deg, #E3C086 0%, #CBA462 100%)",
+              }}
+            >
+              <span className="relative z-10">إضافة الموكل</span>
+              <div className="absolute inset-0 opacity-0 hover:opacity-20 transition-opacity bg-black"></div>
+            </button>
+          </div>
         </div>
       </div>
     </Formik>
