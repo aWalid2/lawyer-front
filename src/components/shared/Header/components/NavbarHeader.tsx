@@ -30,25 +30,25 @@ export default function NavbarHeader() {
               <AlertIcon className="h-3 w-3 sm:h-5 sm:w-5" />
             </Link>
             <Link
-              to={"notifications"}
+              to={"chat-bot"}
               className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition"
             >
               <ChatBotIcon className="h-3 w-3 sm:h-5 sm:w-5" />
             </Link>
             <Link
-              to={"notifications"}
+              to={"#"}
               className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition"
             >
               <LangIcon className="h-3 w-3 sm:h-5 sm:w-5" />
             </Link>
             <Link
-              to={"notifications"}
+              to={"messages"}
               className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition"
             >
               <MessagesIcon className="h-3 w-3 sm:h-5 sm:w-5" />
             </Link>
             <Link
-              to={"notifications"}
+              to={"legislation-rulings"}
               className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition"
             >
               <SearchIcon className="h-3 w-3 sm:h-5 sm:w-5" />

@@ -2,6 +2,12 @@
 import { Route, Routes } from "react-router-dom";
 import DashboardLayout from "./layouts/DashboardLayout";
 
+//Header routes
+import Notifications from "./pages/dashboard/Notifications";
+import ChatBot from "./pages/dashboard/ChatBot";
+import Messages from "./pages/dashboard/Messages";
+import Profile from "./pages/dashboard/Profile";
+
 // Main pages
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import Clients from "./pages/dashboard/Clients";
@@ -38,6 +44,12 @@ function App() {
   return (
     <Routes>
       <Route path="/dashboard" element={<DashboardLayout />}>
+        {/* Header routes */}
+        <Route path="notifications" element={<Notifications />} />
+        <Route path="chat-bot" element={<ChatBot />} />
+        <Route path="messages" element={<Messages />} />
+        <Route path="profile" element={<Profile />} />
+
         {/* Dashboard Home */}
         <Route index element={<DashboardHome />} />
 
