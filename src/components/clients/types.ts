@@ -52,3 +52,10 @@ export interface TableRowProps {
   onDelete?: (id: number) => void;
   onViewDetails?: (client: Client) => void;
 }
+
+export type FormValues = {
+    firstName: string;
+    secondName: string;
+    countryCode: string;
+    phone: string;
+};

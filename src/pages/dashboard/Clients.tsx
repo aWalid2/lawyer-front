@@ -48,7 +48,7 @@ const Clients: React.FC<ClientsPageProps> = ({
   };
 
   return (
-    <div className="pt-6" dir="rtl">
+    <div  >
       <ClientsTable
         clients={clients}
         currentPage={currentPage}
