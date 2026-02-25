@@ -79,14 +79,14 @@ const handleSearch = useCallback((term: string) => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm">
-        <div className="container pt-6">
+    <div className="space-y-6 pt-6  ">
+      <div className="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-gray-400 shadow-2xl"> 
+        <div className=" p-6">
           <ClientsSearch onSearch={handleSearch} />
         </div>
 
-        <div className="container pt-6">
-          <table className="w-full border-collapse">
+        <div className=" p-6  ">
+          <table className="w-full border-collapse  border border-gray-200  ">
             <TableHeader />
             <tbody>
               {currentClients.map((client, index) => (
