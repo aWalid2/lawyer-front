@@ -1,24 +1,24 @@
-
-import React from "react";
+import React, { useState } from "react";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { ClientCases } from "@/features/clients/components/clientDetails/components/ClientCases";
-import { ClientInfo } from "@/features/clients/components/clientDetails/components/ClientInfo";
+import { ClientCases } from "@/features/clients/components/clientDetails/components/ClientCases/ClientCases";
+import { ClientInfo } from "@/features/clients/components/clientDetails/components/ClientInfo/ClientInfo";
 import { HeaderUserDetails } from "@/features/clients/components/clientDetails/components/HeaderUserDetails";
 import PageLayout from "@/components/shared/components/PageLayout";
 
 const UserDetails: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("cases");
 
   return (
 
         <PageLayout>
-      <HeaderUserDetails />
+      <HeaderUserDetails activeTab={activeTab} />
 
-        <Tabs defaultValue="cases" className="w-full" dir="rtl">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full" dir="rtl">
     
             <TabsList className="bg-white rounded-full flex items-center border h-13! border-primary/50 p-0 overflow-hidden mb-6">
               <TabsTrigger

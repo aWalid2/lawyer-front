@@ -1,6 +1,6 @@
 // src/components/clients/table/TableRow.tsx
 import React from "react";
-import type { TableRowProps } from "../../clientDetails/components/typesClientDetails";
+import type { TableRowProps } from "./typesClients";
 import view from '../../../../../../public/images/view.svg';
 import edit from '../../../../../../public/images/edit.svg';
 import deleteIcon from '../../../../../../public/images/delete.svg';
@@ -11,7 +11,6 @@ export const TableRow: React.FC<TableRowProps> = ({
   onRowClick,
   onEdit,
   onDelete,
-  onViewDetails,
 }) => {
   return (
     <tr
