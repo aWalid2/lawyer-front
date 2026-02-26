@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
-import { ClientsTable } from "../../components/clients/table/componnents/ClientsTable";
-import type { Client, ClientsPageProps } from "../../components/clients/types";
+import { ClientsTable } from "@/features/clients/components/table/componnents/ClientsTable";
+import type { Client, ClientsPageProps } from "../../features/clients/components/clientDetails/components/typesClients";
 
 // بيانات تجريبية
 const mockClients: Client[] = [

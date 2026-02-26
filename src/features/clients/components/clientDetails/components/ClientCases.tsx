@@ -1,5 +1,5 @@
 import React from "react";
-import { type ClientCase } from "./types";
+import { type ClientCase } from "./typesClientDetails";
 import { ClientsCasesTable } from "./casesClientTable/componnents/ClientsCasesTable";
 
 const mockCases: ClientCase[] = [

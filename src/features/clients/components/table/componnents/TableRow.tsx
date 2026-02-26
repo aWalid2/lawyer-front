@@ -1,9 +1,9 @@
 // src/components/clients/table/TableRow.tsx
 import React from "react";
-import type { TableRowProps } from "../../types";
-import view from '../../../../../public/images/view.svg';
-import edit from '../../../../../public/images/edit.svg';
-import deleteIcon from '../../../../../public/images/delete.svg';
+import type { TableRowProps } from "../../clientDetails/components/typesClientDetails";
+import view from '../../../../../../public/images/view.svg';
+import edit from '../../../../../../public/images/edit.svg';
+import deleteIcon from '../../../../../../public/images/delete.svg';
 import { Link } from "react-router-dom";
 export const TableRow: React.FC<TableRowProps> = ({
   client,

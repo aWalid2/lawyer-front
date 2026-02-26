@@ -1,7 +1,7 @@
 // src/components/clients/ClientsSearch.tsx
 import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
-import type { ClientsSearchProps } from "./types";
+import type { ClientsSearchProps } from "../../clientDetails/components/typesClientDetails";
 import { Link } from "react-router-dom";
 
 export const ClientsSearch: React.FC<ClientsSearchProps> = ({

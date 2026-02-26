@@ -1,6 +1,6 @@
 
 import React from "react";
-import type { TableRowProps} from '../../types'
+import type { TableRowProps} from '../../typesClientDetails'
 import { TableCasesActions } from "./TableCasesActions";
 export const TableCasesRow: React.FC<TableRowProps> = ({
   client,

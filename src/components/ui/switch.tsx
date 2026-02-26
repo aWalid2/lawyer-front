@@ -10,7 +10,7 @@ const Switch = React.forwardRef<
     dir="rtl"
     className={cn(
       "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors",
-      "bg-gray-300 data-[state=checked]:bg-amber-500",
+      "bg-gray-300 data-[state=checked]:bg-primary",
       className
     )}
     {...props}

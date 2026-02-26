@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useEffect } from "react";
-import type { ClientsTableProps } from "../../types";
+import type { ClientsTableProps } from "../../clientDetails/components/typesClients";
 import { TableHeader } from "./TableHeader";
 import { TableRow } from "./TableRow";
 import { EmptyState } from "./EmptyState";
 import { Pagination } from "./Pagination";
-import { ClientsSearch } from "../../ClientsSearch";
+import { ClientsSearch } from "../../table/componnents/ClientsSearch";
 import { useCallback } from "react";
 
 

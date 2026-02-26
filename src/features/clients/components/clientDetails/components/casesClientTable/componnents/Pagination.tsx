@@ -1,7 +1,7 @@
 // src/components/clients/table/Pagination.tsx
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import type { PaginationProps} from '../../types'
+import type { PaginationProps} from '../../typesClientDetails'
 
 export const Pagination: React.FC<PaginationProps> = ({
   currentPage,

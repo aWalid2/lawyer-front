@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-import type { ClientsTableProps} from "../../types";
+import type { ClientsTableProps} from "../../typesClientDetails";
 import { TableCasesHeader } from "./TableCasesHeader";
 import { TableCasesRow } from "./TableCasesRow";
 import { EmptyState } from "./EmptyState";

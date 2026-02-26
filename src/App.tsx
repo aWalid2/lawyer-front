@@ -39,7 +39,7 @@ import UsersEmployees from "./pages/dashboard/users/UsersEmployees";
 // Finance
 import FinanceExpenses from "./pages/dashboard/finance/FinanceExpenses";
 import FinancePayments from "./pages/dashboard/finance/FinancePayments";
-import AddClient from "./components/clients/addclient/AddClient";
+import AddClient from "./features/clients/components/addclient/AddClient";
 import UserDetails from "./pages/dashboard/UserDetails";
 
 function App() {

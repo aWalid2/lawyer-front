@@ -1,7 +1,7 @@
 import { Formik, Form } from "formik";
 import { useState } from "react";
 
-import type { FormValues } from "../../types";
+import type { FormValues } from "../../clientDetails/components/typesClients";
 import { validationSchema } from "./ValidationSchema";
 import FirstDetails from "./FormDetails/FirstDetails";
 import SecondDetails from "./FormDetails/SecondDetails";
@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import AddContract from "./Add Contract/AddContract";
 import FourDetails from "./FormDetails/FourDetails";
 import FiveDetails from "./FormDetails/FiveDetails";
-import arrow from "../../../../../public/images/arrow.svg";
+import arrow from "../../../../../../public/images/arrow.svg";
 
 
 const FormDetails = () => {
