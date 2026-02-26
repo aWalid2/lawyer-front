@@ -21,6 +21,7 @@ import Consultations from "./pages/dashboard/Consultations";
 import Contracts from "./pages/dashboard/Contracts";
 import AboutOffice from "./pages/dashboard/AboutOffice";
 import Settings from "./pages/dashboard/Settings";
+import AddCase from "./pages/dashboard/AddCase";
 
 // Reports
 import ReportsClients from "./pages/dashboard/reports/ReportsClients";
@@ -39,6 +40,7 @@ import UsersEmployees from "./pages/dashboard/users/UsersEmployees";
 import FinanceExpenses from "./pages/dashboard/finance/FinanceExpenses";
 import FinancePayments from "./pages/dashboard/finance/FinancePayments";
 import AddClient from "./components/clients/addclient/AddClient";
+import UserDetails from "./pages/dashboard/UserDetails";
 
 function App() {
   return (
@@ -56,6 +58,8 @@ function App() {
         {/* Main Routes */}
         <Route path="clients" element={<Clients />} />
         <Route path="clients/add-client" element={<AddClient />} />
+      <Route path="cases/new" element={<AddCase />} />
+        <Route path="clients/:id" element={<UserDetails />} />
         <Route path="case-management" element={<CaseMangement />} />
         <Route path="legislation-rulings" element={<Legislation />} />
         <Route path="calendar" element={<Calendar />} />

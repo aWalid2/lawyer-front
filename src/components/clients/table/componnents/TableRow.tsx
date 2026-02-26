@@ -4,6 +4,7 @@ import type { TableRowProps } from "../../types";
 import view from '../../../../../public/images/view.svg';
 import edit from '../../../../../public/images/edit.svg';
 import deleteIcon from '../../../../../public/images/delete.svg';
+import { Link } from "react-router-dom";
 export const TableRow: React.FC<TableRowProps> = ({
   client,
   index,
@@ -49,15 +50,12 @@ export const TableRow: React.FC<TableRowProps> = ({
       {/* الإجراءات - أزرار بأيقونات في النص */}
       <td className="p-3 text-sm">
         <div className="flex items-center justify-center gap-3">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onViewDetails?.(client);
-            }}
+          <Link
+            to={`/dashboard/clients/${client.id}`}
             title="عرض التفاصيل"
           >
             <img src={view} />
-          </button>
+          </Link>
           <button
             onClick={(e) => {
               e.stopPropagation();

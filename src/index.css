@@ -200,14 +200,17 @@ body {
   --color-primary: #cba462;
   --color-primary-light: #e3c086;
   --color-secondary: #153b4d;
+  --spacing-13: 3.25rem;
+
+  --background-image-primary-gradient: linear-gradient(
+    to left,
+    #cba462,
+    #e3c086
+  );
 }
 
 @layer utilities {
-  .bg-primary-gradient {
-    background: linear-gradient(
-      to left,
-      var(--color-primary),
-      var(--color-primary-light)
-    );
+    .shadow-primary {
+    box-shadow: 0 0 24px 0 rgba(21, 58, 77, 0.16);
   }
 }
