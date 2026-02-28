@@ -68,7 +68,7 @@ export default function NavbarHeader() {
               </div>
               <p> علاء</p>
 
-              <CheveronDownIcon className="h-3 w-3 sm:h-5 sm:w-5" />
+              <CheveronDownIcon className={`h-3 w-3 sm:h-5 sm:w-5`} />
             </Link>
           </div>
         </div>

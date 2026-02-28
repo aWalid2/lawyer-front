@@ -5,8 +5,8 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { ClientCases } from "@/features/clients/components/clientDetails/components/ClientCases/ClientCases";
-import { ClientInfo } from "@/features/clients/components/clientDetails/components/ClientInfo/ClientInfo";
+import { ClientCases } from "@/features/clients/components/clientDetails/components/ClientCases";
+import { ClientInfo } from "@/features/clients/components/clientDetails/components/ClientInfo";
 import { HeaderUserDetails } from "@/features/clients/components/clientDetails/components/HeaderUserDetails";
 import PageLayout from "@/components/shared/components/PageLayout";
 
