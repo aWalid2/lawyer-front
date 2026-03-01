@@ -1,21 +1,32 @@
 import { Form, Formik } from "formik";
-import { useState } from "react";
 
-import type { FormValues } from "../../../../../table/componnents/typesClients";
-import FirstDetails from "./components/FirstDetails";
-import FourDetails from "./components/FourDetails";
+import type { FormValues } from "./components/typesClientsInfo";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { InputForm } from "./components/InputForm";
+import ImageFormDetails from "./components/ImageFormDetails";
 import { validationSchema } from "../ValidationSchema";
+import { ButtonSubmit } from "./components/ButtonSubmit";
 
 const FormDetails = () => {
   const validationSchem = validationSchema;
 
-  const [hasContract, setHasContract] = useState(false);
-
   const initialValues: FormValues = {
-    firstName: "",
-    secondName: "",
-    countryCode: "+20",
+    clientCode: "",
+    clientName: "",
     phone: "",
+    countryCode: "+20",
+    civilId: "",
+    nationality: "",
+    country: "",
+    address: "",
+    email: "",
+    registrationDate: "",
   };
 
   return (
@@ -26,20 +37,123 @@ const FormDetails = () => {
     >
       <div className="border border-[#E8E8E8] p-4 rounded-xl ">
         <Form>
-          <FirstDetails />
-          <FourDetails />
+          <div>
+            <div className="mb-4 ">
+              <InputForm
+                name="clientCode"
+                placeholder="#123456789"
+                disabled
+                label="كود الموكل"
+                type="text"
+              />
+            </div>
+            <div className="flex gap-3 items-end">
+              <div className="flex-1">
+                <InputForm
+                  name="clientName"
+                  placeholder="أحمد"
+                  disabled={false}
+                  label="اسم الموكل"
+                  type="text"
+                />
+              </div>
+              <div className="flex-1">
+                <InputForm
+                  dir="ltr"
+                  name="phone"
+                  placeholder="5xxxxxxxxxxxx"
+                  disabled={false}
+                  label="رقم الهاتف"
+                  type="text"
+                />
+              </div>
+              <div className="w-28">
+                <Select
+                  dir="rtl"
+                  defaultValue="+20"
+                  onValueChange={(value) => {
+                    console.log(value);
+                  }}
+                >
+                  <SelectTrigger className="w-full border border-[#DBDBDB]/32 rounded-md p-2 bg-[#FBFBFB] h-[50px] text-[#828282]  text-base placeholder:text-[#B5B5B5] ">
+                    <SelectValue placeholder="الكود" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectItem value="+20">🇪🇬 +20</SelectItem>
+                    <SelectItem value="+966">🇸🇦 +966</SelectItem>
+                    <SelectItem value="+971">🇦🇪 +971</SelectItem>
+                    <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="flex gap-3 pt-5">
+              <div className="flex-1">
+                <InputForm
+                  name="civilId"
+                  placeholder="019389384"
+                  disabled={false}
+                  label="الرقم المدني"
+                  type="text"
+                />
+              </div>
+              <div className="flex-1">
+                <InputForm
+                  name="nationality"
+                  placeholder="سعودي"
+                  disabled={false}
+                  label="الجنسية"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 pt-5">
+              <div className="flex-1">
+                <InputForm
+                  name="country"
+                  placeholder="المملكة العربية السعودية"
+                  disabled={false}
+                  label="الدولة"
+                  type="text"
+                />
+              </div>
+
+              <div className="flex-1">
+                <InputForm
+                  name="address"
+                  placeholder="عنوان1"
+                  disabled={false}
+                  label="العنوان"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 pt-5">
+              <div className="flex-1">
+                <InputForm
+                  name="email"
+                  placeholder="example@gmail.com"
+                  disabled={false}
+                  label="البريد الإلكتروني"
+                  type="text"
+                />
+              </div>
+
+              <div className="flex-1">
+                <InputForm
+                  name="registrationDate"
+                  disabled={false}
+                  label="تاريخ التسجيل"
+                  type="date"
+                  value={new Date().toISOString().split("T")[0]}
+                />
+              </div>
+            </div>
+          </div>
+          <ImageFormDetails />
+          <ButtonSubmit />
         </Form>
-        <div className="w-full pt-8">
-          <button
-            className=" w-full flex items-center gap-2 px-6 py-3 text-white font-cairo rounded-[12px] transition-all whitespace-nowrap  h-[50px] justify-center relative overflow-hidden"
-            style={{
-              background: "linear-gradient(135deg, #E3C086 0%, #CBA462 100%)",
-            }}
-          >
-            <span className="relative z-10">إضافة الموكل</span>
-            <div className="absolute inset-0 opacity-0 hover:opacity-20 transition-opacity bg-black"></div>
-          </button>
-        </div>
       </div>
     </Formik>
   );

@@ -1,4 +1,4 @@
-export default function FourDetails() {
+export default function ImageFormDetails() {
   return (
     <div className="pt-14">
       <div className="flex flex-col gap-7">
