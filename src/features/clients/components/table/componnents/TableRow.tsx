@@ -1,10 +1,10 @@
-// src/components/clients/table/TableRow.tsx
 import React from "react";
-import type { TableRowProps } from "../../clientDetails/components/typesClientDetails";
+import type { TableRowProps } from "./typesClients";
 import view from '../../../../../../public/images/view.svg';
 import edit from '../../../../../../public/images/edit.svg';
 import deleteIcon from '../../../../../../public/images/delete.svg';
 import { Link } from "react-router-dom";
+
 export const TableRow: React.FC<TableRowProps> = ({
   client,
   index,
@@ -15,46 +15,33 @@ export const TableRow: React.FC<TableRowProps> = ({
 }) => {
   return (
     <tr
-      className=" cursor-pointer transition-colors bg-white border-b border-gray-200"
+      className="cursor-pointer transition-colors bg-white border-b border-gray-200 hover:bg-gray-50"
       onClick={() => onRowClick(client)}
     >
-      {/* # */}
-      <td className="p-3 text-sm text-gray-600 border-l border-gray-200 text-center">
+      <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base text-gray-600 border-l border-gray-200 text-center">
         {index}
       </td>
-
-      {/* كود الموكل */}
-      <td className="p-3 text-sm text-gray-600 border-l border-gray-200 text-center">
+      <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base text-gray-600 border-l border-gray-200 text-center">
         #{String(client.id).padStart(4, "0")}
       </td>
-
-      {/* اسم الموكل */}
-      <td className="p-3 text-sm font-medium text-gray-800 border-l border-gray-200 text-center">
+      <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base font-medium text-gray-800 border-l border-gray-200 text-center">
         {client.name}
       </td>
-
-      {/* رقم الهاتف */}
       <td
-        className="p-3 text-sm text-gray-600 border-l border-gray-200 text-center"
+        className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base text-gray-600 border-l border-gray-200 text-center"
         dir="ltr"
       >
         {client.phone}
       </td>
-
-      {/* عدد القضايا */}
-      <td className="p-3 text-sm text-gray-600 border-l border-gray-200 text-center">
-        <span className="bg-gray-400 text-white inline-flex items-center justify-center w-[35px] h-[35px] rounded-lg">
+      <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base text-gray-600 border-l border-gray-200 text-center">
+        <span className="bg-gray-400 text-white inline-flex items-center justify-center w-7 sm:w-8 md:w-[35px] h-7 sm:h-8 md:h-[35px] rounded-lg text-xs md:text-sm">
           {client.casesCount || Math.floor(Math.random() * 10) + 1}
         </span>
       </td>
-      {/* الإجراءات - أزرار بأيقونات في النص */}
-      <td className="p-3 text-sm">
-        <div className="flex items-center justify-center gap-3">
-          <Link
-            to={`/dashboard/clients/${client.id}`}
-            title="عرض التفاصيل"
-          >
-            <img src={view} />
+      <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base">
+        <div className="flex items-center justify-center gap-2 md:gap-3">
+          <Link to={`/dashboard/clients/${client.id}`} title="عرض التفاصيل">
+            <img src={view} alt="view"  />
           </Link>
           <button
             onClick={(e) => {
@@ -62,8 +49,9 @@ export const TableRow: React.FC<TableRowProps> = ({
               onEdit?.(client);
             }}
             title="تعديل"
+            className="hover:scale-110 transition"
           >
-            <img src={edit} />
+            <img src={edit} alt="edit" />
           </button>
           <button
             onClick={(e) => {
@@ -71,8 +59,9 @@ export const TableRow: React.FC<TableRowProps> = ({
               onDelete?.(client.id);
             }}
             title="حذف"
+            className="hover:scale-110 transition"
           >
-            <img src={deleteIcon} />
+            <img src={deleteIcon} alt="delete"  />
           </button>
         </div>
       </td>

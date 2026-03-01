@@ -13,6 +13,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
+    dir="rtl"
     className={cn(
       "flex h-[50px] w-full items-center justify-between rounded-md border border-input bg-gray-50 px-3 py-2 text-sm",
       className
@@ -33,6 +34,7 @@ const SelectContent = React.forwardRef<
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       ref={ref}
+      dir="rtl"
       className={cn(
         "relative z-50 min-w-[8rem] overflow-hidden rounded-md border bg-white shadow-md",
         className
@@ -65,7 +67,7 @@ const SelectItem = React.forwardRef<
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </span>
 
-    <span className="absolute right-2 flex items-center">
+    <span className="absolute left-2 flex items-center">
       <Check className="h-4 w-4 opacity-0 data-[state=checked]:opacity-100" />
     </span>
   </SelectPrimitive.Item>

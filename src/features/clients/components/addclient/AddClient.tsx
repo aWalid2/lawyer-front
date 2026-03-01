@@ -1,4 +1,4 @@
-import FormDetails from "./form/FormDtails";
+import FormDetails from "./form/FormDetails/FormDtails";
 
 function AddClient() {
   return (

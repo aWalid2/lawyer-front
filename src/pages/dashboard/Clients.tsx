@@ -1,7 +1,8 @@
 
 import React, { useState } from "react";
 import { ClientsTable } from "@/features/clients/components/table/componnents/ClientsTable";
-import type { Client, ClientsPageProps } from "../../features/clients/components/clientDetails/components/typesClients";
+import type { Client, ClientsPageProps } from "../../features/clients/components/table/componnents/typesClients";
+import { EditClientModal } from "@/features/clients/components/table/componnents/EdidModel/EditClientModal";
 
 // بيانات تجريبية
 const mockClients: Client[] = [
@@ -30,6 +31,10 @@ const Clients: React.FC<ClientsPageProps> = ({
 }) => {
   const [clients] = useState(initialClients);
   const [currentPage, setCurrentPage] = useState(1);
+  
+  // حالات المودال
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
   const handleClientClick = (client: Client) => {
     console.log("Client clicked:", client);
@@ -39,24 +44,47 @@ const Clients: React.FC<ClientsPageProps> = ({
     console.log("View details:", client);
   };
 
+  // دالة التعديل - بتفتح المودال
   const handleEdit = (client: Client) => {
-    console.log("Edit client:", client);
+    setSelectedClient(client);      // حفظ بيانات العميل
+    setIsEditModalOpen(true);       // فتح المودال
   };
 
   const handleDelete = (id: number) => {
     console.log("Delete client:", id);
   };
 
+  // دالة إغلاق المودال
+  const handleCloseModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedClient(null);
+  };
+
+  // دالة حفظ التعديلات
+  const handleSaveEdit = (updatedData: any) => {
+    console.log("تم حفظ التعديلات:", updatedData);
+    // هنا هنحدث البيانات في الجدول بعد التعديل
+    // handleCloseModal();
+  };
+
   return (
-    <div  >
+    <div>
       <ClientsTable
         clients={clients}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         onClientClick={handleClientClick}
         onViewDetails={handleViewDetails}
-        onEdit={handleEdit}
+        onEdit={handleEdit}           // تمرير دالة التعديل
         onDelete={handleDelete}
+      />
+      
+      {/* مودال التعديل */}
+      <EditClientModal
+        isOpen={isEditModalOpen}
+        onClose={handleCloseModal}
+        clientData={selectedClient}
+        onSave={handleSaveEdit}
       />
     </div>
   );

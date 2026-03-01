@@ -1,7 +1,7 @@
 // src/components/clients/table/Pagination.tsx
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import type { PaginationProps } from '../../types';
+import type { PaginationProps } from '../componnents/typesClients';
 
 export const Pagination: React.FC<PaginationProps> = ({
   currentPage,
@@ -44,8 +44,8 @@ export const Pagination: React.FC<PaginationProps> = ({
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <div className="flex items-center justify-end px-4 py-3">
-      <div className="flex items-center gap-2 justify-end">
+    <div className="flex items-center justify-end px-2 sm:px-3 md:px-6 py-2 md:py-4 overflow-x-auto">
+      <div className="flex items-center gap-1 justify-end flex-shrink-0">
         {/* السهم لليسار */}
         <button
           onClick={() => {
@@ -54,18 +54,18 @@ export const Pagination: React.FC<PaginationProps> = ({
             }
           }}
           disabled={currentPage === 1}
-          className={`p-2 rounded-xl border ${
+          className={`p-1 md:p-2 rounded-lg md:rounded-xl border ${
             currentPage === 1
               ? 'bg-gray-200 text-black cursor-not-allowed'
-              : 'bg-gray-200 text-black'
+              : 'bg-gray-200 text-black hover:bg-gray-300'
           }`}
           title="السابق"
         >
-          <ChevronRight size={18} className="text-black" />
+          <ChevronRight size={16} className="text-black md:w-5 md:h-5" />
         </button>
 
         {/* أرقام الصفحات */}
-        <div className="flex items-center gap-1" dir="ltr">
+        <div className="flex items-center gap-0.5 md:gap-1" dir="ltr">
           {getPageNumbers().map((page, index) => (
             <button
               key={index}
@@ -75,12 +75,12 @@ export const Pagination: React.FC<PaginationProps> = ({
                 }
               }}
               disabled={page === '...'}
-              className={`min-w-[36px] h-9 px-2 rounded-xl text-sm font-medium ${
+              className={`min-w-7 md:min-w-9 h-7 md:h-9 px-1 md:px-2 rounded-lg md:rounded-xl text-xs md:text-sm font-medium ${
                 page === currentPage
                   ? 'bg-primary text-white'
                   : page === '...'
                   ? 'cursor-default bg-transparent'
-                  : 'bg-gray-200 text-black'
+                  : 'bg-gray-200 text-black hover:bg-gray-300'
               }`}
             >
               {page}
@@ -96,14 +96,14 @@ export const Pagination: React.FC<PaginationProps> = ({
             }
           }}
           disabled={currentPage === totalPages}
-          className={`p-2 rounded-xl border ${
+          className={`p-1 md:p-2 rounded-lg md:rounded-xl border ${
             currentPage === totalPages
               ? 'bg-gray-200 text-black cursor-not-allowed'
-              : 'bg-gray-200 text-black'
+              : 'bg-gray-200 text-black hover:bg-gray-300'
           }`}
           title="التالي"
         >
-          <ChevronLeft size={18} className="text-black" />
+          <ChevronLeft size={16} className="text-black md:w-5 md:h-5" />
         </button>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import type { ClientsTableProps } from "../../clientDetails/components/typesClients";
+import type { ClientsTableProps } from "./typesClients";
 import { TableHeader } from "./TableHeader";
 import { TableRow } from "./TableRow";
 import { EmptyState } from "./EmptyState";
@@ -79,14 +79,14 @@ const handleSearch = useCallback((term: string) => {
   }
 
   return (
-    <div className="space-y-6 pt-6  ">
-      <div className="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-gray-400 shadow-2xl"> 
-        <div className=" p-6">
+    <div className="space-y-2 md:space-y-4 pt-2 md:pt-6 px-1.5 sm:px-2 md:px-0 w-full">
+      <div className=" bg-white rounded-lg md:rounded-xl border border-gray-200 shadow-sm md:shadow-gray-400 md:shadow-2xl w-full">
+        <div className="p-2 sm:p-3 md:p-6 w-full">
           <ClientsSearch onSearch={handleSearch} />
         </div>
 
-        <div className=" p-6  ">
-          <table className="w-full border-collapse  border border-gray-200  ">
+        <div className="p-2 sm:p-3 md:p-6 overflow-x-auto w-full">
+          <table className="w-full border-collapse border border-gray-200  border-l-0 text-xs sm:text-lg  md:text-lg">
             <TableHeader />
             <tbody>
               {currentClients.map((client, index) => (
@@ -118,3 +118,5 @@ const handleSearch = useCallback((term: string) => {
     </div>
   );
 };
+
+

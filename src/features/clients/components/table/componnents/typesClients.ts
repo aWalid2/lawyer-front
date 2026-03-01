@@ -53,9 +53,23 @@ export interface TableRowProps {
   onViewDetails?: (client: Client) => void;
 }
 
-export type FormValues = {
-    firstName: string;
-    secondName: string;
-    countryCode: string;
-    phone: string;
-};
+export interface FormValues {
+  clientType: string;
+  firstName: string;
+  secondName: string;
+  countryCode: string;
+  phone: string;
+  civilId: string;
+  nationality: string;
+  country: string;
+  address: string;
+  email: string;
+  contractStartDate: string;
+  contractValue: string;
+  contractDuration: string;
+  contractImage: File | null;
+  powerOfAttorneyImage: File | null;
+  notes: string;
+  password: string;
+  confirmPassword: string;
+}
