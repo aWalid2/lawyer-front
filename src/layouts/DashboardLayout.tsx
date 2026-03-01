@@ -12,7 +12,7 @@ const DashboardLayout = () => {
              md:p-6 md:gap-6"
     >
       <SidebarDashboard />
-      <main className="flex-1    ">
+      <main className="flex-1 overflow-hidden    ">
         <Header />
         <Outlet />
       </main>

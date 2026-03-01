@@ -64,4 +64,15 @@ export type FormValues = {
     address: string;
     email: string;
     registrationDate: string;
+    image?: string | File;
 };
+
+export interface FormDetailsProps {
+    isEditing: boolean;
+    clientData?: FormValues;
+}
+
+export interface ClientInfoProps {
+    isEditing: boolean;
+    clientData?: FormValues;
+}

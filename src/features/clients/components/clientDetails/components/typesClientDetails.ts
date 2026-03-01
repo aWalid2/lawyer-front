@@ -1,4 +1,4 @@
-// src/components/clients/types.ts
+
 export interface ClientCase {
   id: number;
   code: string;
