@@ -4,6 +4,7 @@ import { Plus, X } from "lucide-react";
 import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 import { EditIcon } from "@/components/shared/icons/Edit";
 import { TrashIcon } from "@/components/shared/icons/Trash";
+import { AddContractDialog } from "./AddContractDialog";
 
 interface HeaderUserDetailsProps {
   activeTab?: string;
@@ -37,10 +38,7 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
             <TrashIcon />
           </button>
 
-          <button className="bg-primary-gradient text-white px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 shadow-lg h-12.5 hover:shadow-xl transition-all">
-            <Plus size={20} />
-            اضافة عقد
-          </button>
+          <AddContractDialog />
         </div>
       ) : (
         <Link

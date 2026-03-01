@@ -6,7 +6,7 @@ import { ClientInfo } from "@/features/clients/components/clientDetails/componen
 import { HeaderUserDetails } from "@/features/clients/components/clientDetails/components/HeaderUserDetails";
 import PageLayout from "@/components/shared/components/PageLayout";
 
-const UserDetails: React.FC = () => {
+const ClientDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState("cases");
   const [isEditing, setIsEditing] = useState(false);
@@ -69,4 +69,4 @@ const UserDetails: React.FC = () => {
   );
 };
 
-export default UserDetails;
+export default ClientDetails;

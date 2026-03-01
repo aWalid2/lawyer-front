@@ -41,7 +41,7 @@ import UsersEmployees from "./pages/dashboard/users/UsersEmployees";
 import FinanceExpenses from "./pages/dashboard/finance/FinanceExpenses";
 import FinancePayments from "./pages/dashboard/finance/FinancePayments";
 import AddClient from "./features/clients/components/addclient/AddClient";
-import UserDetails from "./pages/dashboard/UserDetails";
+import ClientDetails from "./pages/dashboard/ClientDetails";
 
 function App() {
   return (
@@ -59,7 +59,7 @@ function App() {
         {/* Main Routes */}
         <Route path="clients" element={<Clients />} />
         <Route path="clients/add-client" element={<AddClient />} />
-        <Route path="clients/:id" element={<UserDetails />} />
+        <Route path="clients/:id" element={<ClientDetails />} />
         <Route path="case-management" element={<CaseMangement />} />
         <Route path="case-management/add-case" element={<AddCase />} />
         <Route path="case-management/:id" element={<CaseDetails />} />
@@ -70,7 +70,7 @@ function App() {
         <Route path="user-tasks" element={<UserTasks />} />
         <Route path="consultaions" element={<Consultations />} />
         <Route path="contracts" element={<Contracts />} />
-        <Route path="contracts" element={<Contracts />} />
+        <Route path="client-details/:id" element={<ClientDetails />} />
         <Route path="about-office" element={<AboutOffice />} />
         <Route path="settings" element={<Settings />} />
 

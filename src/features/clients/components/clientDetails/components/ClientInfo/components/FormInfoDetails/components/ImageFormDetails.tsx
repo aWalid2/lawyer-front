@@ -1,28 +1,35 @@
 import { useFormikContext } from "formik";
 import React, { useRef, useState, useEffect } from "react";
-import type { FormValues } from "./typesClientsInfo";
 
 interface ImageFormDetailsProps {
   isEditing?: boolean;
+  title?: string;
+  name?: string;
 }
 
-export default function ImageFormDetails({ isEditing }: ImageFormDetailsProps) {
-  const { setFieldValue, values } = useFormikContext<FormValues>();
+export default function ImageFormDetails({
+  isEditing,
+  title = "صورة التوكيل",
+  name = "image",
+}: ImageFormDetailsProps) {
+  const { setFieldValue, values } = useFormikContext<any>();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
+  const imageValue = values[name];
+
   // Sync preview with Formik value
   useEffect(() => {
-    if (values.image) {
-      if (typeof values.image === "string") {
-        setPreview(values.image);
-      } else if (values.image instanceof File) {
-        setPreview(URL.createObjectURL(values.image));
+    if (imageValue) {
+      if (typeof imageValue === "string") {
+        setPreview(imageValue);
+      } else if (imageValue instanceof File) {
+        setPreview(URL.createObjectURL(imageValue));
       }
     } else {
       setPreview(null);
     }
-  }, [values.image]);
+  }, [imageValue]);
 
   const handleDivClick = () => {
     if (isEditing) {
@@ -33,7 +40,7 @@ export default function ImageFormDetails({ isEditing }: ImageFormDetailsProps) {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.currentTarget.files?.[0];
     if (file) {
-      setFieldValue("image", file);
+      setFieldValue(name, file);
       // Local preview update
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -44,9 +51,9 @@ export default function ImageFormDetails({ isEditing }: ImageFormDetailsProps) {
   };
 
   return (
-    <div className="pt-14">
-      <div className="flex flex-col gap-7">
-        <h1 className="text-xl font-bold">صورة التوكيل</h1>
+    <div className="pt-4">
+      <div className="flex flex-col gap-4">
+        <h1 className="text-sm font-normal text-secondary/70">{title}</h1>
 
         <div className="flex ">
           <input
@@ -68,7 +75,7 @@ export default function ImageFormDetails({ isEditing }: ImageFormDetailsProps) {
             {preview ? (
               <img
                 src={preview}
-                alt="Proxy"
+                alt="Preview"
                 className="w-full h-full object-cover"
               />
             ) : (
