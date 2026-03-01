@@ -1,28 +1,27 @@
-
-export interface ClientCase {
+// src/components/clients/types.ts
+export interface Client {
   id: number;
-  code: string;
-  autoNumber: string;
-  subject: string;
-  status: string;
-  role: string;
-  date: string;
+  name: string;
+  phone: string;
+  performance: number;
+  email?: string;
+  casesCount?: number;
 }
 
-
 export interface ClientsPageProps {
-  initialClients?: ClientCase[];
+  initialClients?: Client[];
 }
 
 export interface ClientsTableProps {
-  clients: ClientCase[];
-  onClientClick?: (client: ClientCase) => void;
-  onEdit?: (client: ClientCase) => void;
+  clients: Client[];
+  onClientClick?: (client: Client) => void;
+  onEdit?: (client: Client) => void;
   onDelete?: (id: number) => void;
+  onViewDetails?: (client: Client) => void;  // ✅ أضفناها هنا
 }
 
 export interface ClientsStatsProps {
-  clients: ClientCase[];
+  clients: Client[];
 }
 
 export interface ClientsSearchProps {
@@ -45,11 +44,18 @@ export interface PaginationProps {
 
 
 export interface TableRowProps {
-  client: ClientCase;
+  client: Client;
   index: number;
   isSelected: boolean;
-  onRowClick: (client: ClientCase) => void;
-  onEdit?: (client: ClientCase) => void;
+  onRowClick: (client: Client) => void;
+  onEdit?: (client: Client) => void;
   onDelete?: (id: number) => void;
-  onViewDetails?: (client: ClientCase) => void;
+  onViewDetails?: (client: Client) => void;
 }
+
+export type FormValues = {
+    firstName: string;
+    secondName: string;
+    countryCode: string;
+    phone: string;
+};

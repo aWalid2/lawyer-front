@@ -1,7 +1,9 @@
-
 import React, { useState } from "react";
 import { ClientsTable } from "@/features/clients/components/table/componnents/ClientsTable";
-import type { Client, ClientsPageProps } from "../../features/clients/components/table/componnents/typesClients";
+import type {
+  Client,
+  ClientsPageProps,
+} from "../../features/clients/components/table/componnents/typesClients";
 import { EditClientModal } from "@/features/clients/components/table/componnents/EdidModel/EditClientModal";
 
 // بيانات تجريبية
@@ -31,7 +33,7 @@ const Clients: React.FC<ClientsPageProps> = ({
 }) => {
   const [clients] = useState(initialClients);
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   // حالات المودال
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
@@ -46,8 +48,8 @@ const Clients: React.FC<ClientsPageProps> = ({
 
   // دالة التعديل - بتفتح المودال
   const handleEdit = (client: Client) => {
-    setSelectedClient(client);      // حفظ بيانات العميل
-    setIsEditModalOpen(true);       // فتح المودال
+    setSelectedClient(client); // حفظ بيانات العميل
+    setIsEditModalOpen(true); // فتح المودال
   };
 
   const handleDelete = (id: number) => {
@@ -75,10 +77,10 @@ const Clients: React.FC<ClientsPageProps> = ({
         setCurrentPage={setCurrentPage}
         onClientClick={handleClientClick}
         onViewDetails={handleViewDetails}
-        onEdit={handleEdit}           // تمرير دالة التعديل
+        onEdit={handleEdit} // تمرير دالة التعديل
         onDelete={handleDelete}
       />
-      
+
       {/* مودال التعديل */}
       <EditClientModal
         isOpen={isEditModalOpen}

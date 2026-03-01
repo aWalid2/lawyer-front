@@ -3,7 +3,6 @@ import SidebarDashboard from "@/features/dashboard/components/SidebarDashboard";
 import { Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
-
   return (
     <div
       className="flex p-0 gap-0 h-full min-h-screen relative
@@ -14,7 +13,7 @@ const DashboardLayout = () => {
       {/* Sidebar للشاشات الكبيرة - ثابت */}
       <div className="">
         <SidebarDashboard />
-      </div>  
+      </div>
 
       <main className="flex-1 flex flex-col min-w-0">
         <Header />
@@ -25,4 +24,3 @@ const DashboardLayout = () => {
 };
 
 export default DashboardLayout;
-

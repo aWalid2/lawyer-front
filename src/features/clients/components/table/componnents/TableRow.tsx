@@ -11,7 +11,6 @@ export const TableRow: React.FC<TableRowProps> = ({
   onRowClick,
   onEdit,
   onDelete,
-  onViewDetails,
 }) => {
   return (
     <tr

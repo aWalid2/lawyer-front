@@ -1,6 +1,6 @@
 
 import React from "react";
-import type { TableRowProps} from '../../typesClientDetails'
+import type { TableRowProps} from '../../../../typesClientDetails'
 import { TableCasesActions } from "./TableCasesActions";
 export const TableCasesRow: React.FC<TableRowProps> = ({
   client,
@@ -51,7 +51,7 @@ export const TableCasesRow: React.FC<TableRowProps> = ({
 
 
       <td className="p-3 text-sm">
-    <TableCasesActions client={client} onEdit ={onEdit} onDelete={onDelete} />
+    <TableCasesActions clientCases={client} onEdit ={onEdit}  />
       </td>
     </tr>
   );

@@ -13,7 +13,7 @@ const SidebarDashboard = () => {
   return (
     <>
       <aside className=" bg-white ">
-        <div className="hidden md:block bg-white h-fit min:h-fit w-70 md:bg-white md:min-h-screen p-4 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] rounded-[12px]   ">
+        <div className="hidden lg:block bg-white h-fit min:h-fit w-70 md:bg-white md:min-h-screen p-4 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] rounded-[12px]   ">
           <div className="mb-10">
             <img
               src="/public/images/logo.webp"
@@ -25,8 +25,8 @@ const SidebarDashboard = () => {
         </div>
         <Sheet>
           <SheetTrigger asChild>
-            <button className="md:hidden fixed top-[16%] bg-white h-8 w-7 rounded-e-sm">
-              <Menu className="w-6 h-6 ps-1 text-gray-700" />
+            <button className="lg:hidden fixed top-[16%] z-50 inset-s-0 inset-e-0 bg-primary-gradient h-8 w-7 rounded-e-sm">
+              <Menu className="w-5 h-5 ps-1 text-white" />
             </button>
           </SheetTrigger>
           <SheetHeader className="hidden">
