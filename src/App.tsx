@@ -23,6 +23,13 @@ import AboutOffice from "./pages/dashboard/AboutOffice";
 import Settings from "./pages/dashboard/Settings";
 import AddCase from "./pages/dashboard/AddCase";
 import CaseDetails from "./pages/dashboard/CaseDetails";
+import CaseInfo from "./features/cases-mangement/CaseInfo";
+import Sessions from "./pages/dashboard/CaseInfo/Sessions";
+import RelatedCases from "./pages/dashboard/CaseInfo/RelatedCases";
+import CaseDocuments from "./pages/dashboard/CaseInfo/Documents";
+import Expenses from "./pages/dashboard/CaseInfo/Expenses";
+import Procedures from "./pages/dashboard/CaseInfo/Procedures";
+import Employees from "./pages/dashboard/CaseInfo/Employees";
 
 // Reports
 import ReportsClients from "./pages/dashboard/reports/ReportsClients";
@@ -62,7 +69,15 @@ function App() {
         <Route path="clients/:id" element={<ClientDetails />} />
         <Route path="case-management" element={<CaseMangement />} />
         <Route path="case-management/add-case" element={<AddCase />} />
-        <Route path="case-management/:id" element={<CaseDetails />} />
+        <Route path="case-management/:id" element={<CaseDetails />}>
+          <Route index element={<CaseInfo />} />
+          <Route path="sessions" element={<Sessions />} />
+          <Route path="related" element={<RelatedCases />} />
+          <Route path="documents" element={<CaseDocuments />} />
+          <Route path="expenses" element={<Expenses />} />
+          <Route path="procedures" element={<Procedures />} />
+          <Route path="employees" element={<Employees />} />
+        </Route>
         <Route path="legislation-rulings" element={<Legislation />} />
         <Route path="calendar" element={<Calendar />} />
         <Route path="roll" element={<Roll />} />
@@ -73,7 +88,6 @@ function App() {
         <Route path="client-details/:id" element={<ClientDetails />} />
         <Route path="about-office" element={<AboutOffice />} />
         <Route path="settings" element={<Settings />} />
-
         {/* Reports Routes */}
         <Route path="reports">
           <Route path="clients" element={<ReportsClients />} />
@@ -83,14 +97,12 @@ function App() {
           <Route path="expenses" element={<ReportsExpenses />} />
           <Route path="payments" element={<ReportsPayments />} />
         </Route>
-
         {/* Users Routes */}
         <Route path="users">
           <Route path="clients" element={<UsersClients />} />
           <Route path="lawyers" element={<UsersLawyers />} />
           <Route path="employees" element={<UsersEmployees />} />
         </Route>
-
         {/* Finance Routes */}
         <Route path="finance">
           <Route path="expences" element={<FinanceExpenses />} />
