@@ -15,8 +15,8 @@ export const HeaderPageCase: React.FC<HeaderPageCaseProps> = ({
   searchTerm,
 }) => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 mb-6 bg-white p-4 md:p-0 rounded-xl md:rounded-none">
-      <h1 className="text-xl font-semibold text-secondary whitespace-nowrap self-start md:self-center">
+    <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 w-full pb-6">
+      <h1 className="text-xl font-semibold text-secondary font-cairo whitespace-nowrap self-start md:self-center">
         القضايا
       </h1>
 

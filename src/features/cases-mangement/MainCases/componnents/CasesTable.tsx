@@ -59,7 +59,7 @@ export const CasesTable: React.FC<CasesTableProps> = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ">
       <div className="overflow-x-auto bg-white  ">
         <table className="w-full border-collapse">
           <TableCasesHeader />

@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { CasesTable } from "./componnents/CasesTable";
 import { HeaderPageCase } from "./componnents/HeaderPageCase";
 import type { Case } from "./componnents/casesTypes";
@@ -13,6 +14,7 @@ const MOCK_CASES: Case[] = Array.from({ length: 19 }, (_, i) => ({
 }));
 
 const MainCases = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -26,7 +28,7 @@ const MainCases = () => {
   };
 
   const handleCaseClick = (caseItem: Case) => {
-    console.log("Case clicked:", caseItem);
+    navigate(`/dashboard/case-management/${caseItem.id}`);
   };
 
   const filteredCases = useMemo(() => {
@@ -44,20 +46,23 @@ const MainCases = () => {
   }, [searchTerm, statusFilter]);
 
   return (
-    <div className="w-full space-y-4">
-      <HeaderPageCase
-        searchTerm={searchTerm}
-        onSearch={setSearchTerm}
-        onFilterChange={setStatusFilter}
-      />
-      <CasesTable
-        cases={filteredCases}
-        currentPage={currentPage}
-        onPageChange={setCurrentPage}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        onCaseClick={handleCaseClick}
-      />
+    <div className="w-full pt-6 space-y-6">
+      <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
+        <HeaderPageCase
+          searchTerm={searchTerm}
+          onSearch={setSearchTerm}
+          onFilterChange={setStatusFilter}
+        />
+
+        <CasesTable
+          cases={filteredCases}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onCaseClick={handleCaseClick}
+        />
+      </div>
     </div>
   );
 };
