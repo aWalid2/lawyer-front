@@ -312,11 +312,11 @@ const FormCase = () => {
                                                 className="hidden"
                                             />
                                             <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all max-sm:w-5 max-sm:h-5 flex-shrink-0 ${feeType === option.value
-                                                    ? "border-[#C5A473]"
-                                                    : "border-gray-300"
+                                                    ? "border-[#DBDBDB]/32"
+                                                    : "border-[#DBDBDB]"
                                                 }`}>
                                                 {feeType === option.value && (
-                                                    <div className="w-7 h-7 rounded-full bg-[#C5A473] max-sm:w-4 max-sm:h-4 flex-shrink-0"></div>
+                                                    <div className="w-5 h-5 rounded-full bg-primary max-sm:w-4 max-sm:h-4 flex-shrink-0"></div>
                                                 )}
                                             </div>
                                             <span className="max-sm:text-[12px] flex-shrink-0">{option.label}</span>
