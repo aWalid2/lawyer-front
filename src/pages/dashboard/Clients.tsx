@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ClientsTable } from "@/features/clients/components/table/componnents/ClientsTable";
 import type {
   Client,
@@ -26,13 +26,28 @@ const mockClients: Client[] = [
   { id: 16, name: "لمى فيصل", phone: "054837892", performance: 11 },
   { id: 17, name: "لمى فيصل", phone: "054837892", performance: 11 },
   { id: 18, name: "لمى فيصل", phone: "054837892", performance: 11 },
+  
 ];
 
 const Clients: React.FC<ClientsPageProps> = ({
   initialClients = mockClients,
 }) => {
   const [clients] = useState(initialClients);
-  const [currentPage, setCurrentPage] = useState(1);
+  
+  // استخدام localStorage للصفحة الحالية
+  const [currentPage, setCurrentPage] = useState<number>(() => {
+    const savedPage = localStorage.getItem('clientsTablePage');
+    return savedPage ? parseInt(savedPage, 10) : 1;
+  });
+
+  // حفظ الصفحة في localStorage عند التغيير
+  useEffect(() => {
+    console.log("Saving to localStorage:", currentPage); // للتأكد
+    localStorage.setItem('clientsTablePage', currentPage.toString());
+  }, [currentPage]);
+
+  // للتأكد من القيمة الحالية
+  console.log("Current page in Clients:", currentPage);
 
   // حالات المودال
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -46,27 +61,22 @@ const Clients: React.FC<ClientsPageProps> = ({
     console.log("View details:", client);
   };
 
-  // دالة التعديل - بتفتح المودال
   const handleEdit = (client: Client) => {
-    setSelectedClient(client); // حفظ بيانات العميل
-    setIsEditModalOpen(true); // فتح المودال
+    setSelectedClient(client);
+    setIsEditModalOpen(true);
   };
 
   const handleDelete = (id: number) => {
     console.log("Delete client:", id);
   };
 
-  // دالة إغلاق المودال
   const handleCloseModal = () => {
     setIsEditModalOpen(false);
     setSelectedClient(null);
   };
 
-  // دالة حفظ التعديلات
   const handleSaveEdit = (updatedData: any) => {
     console.log("تم حفظ التعديلات:", updatedData);
-    // هنا هنحدث البيانات في الجدول بعد التعديل
-    // handleCloseModal();
   };
 
   return (
@@ -77,11 +87,10 @@ const Clients: React.FC<ClientsPageProps> = ({
         setCurrentPage={setCurrentPage}
         onClientClick={handleClientClick}
         onViewDetails={handleViewDetails}
-        onEdit={handleEdit} // تمرير دالة التعديل
+        onEdit={handleEdit}
         onDelete={handleDelete}
       />
 
-      {/* مودال التعديل */}
       <EditClientModal
         isOpen={isEditModalOpen}
         onClose={handleCloseModal}

@@ -17,7 +17,7 @@ export const TableRow: React.FC<TableRowProps> = ({
       className="cursor-pointer transition-colors bg-white border-b border-gray-200 hover:bg-gray-50"
       onClick={() => onRowClick(client)}
     >
-      <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base text-gray-600 border-l border-gray-200 text-center">
+      <td className=" text-gray-600 border-l border-gray-200 text-center">
         {index}
       </td>
       <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base text-gray-600 border-l border-gray-200 text-center">
@@ -33,7 +33,7 @@ export const TableRow: React.FC<TableRowProps> = ({
         {client.phone}
       </td>
       <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base text-gray-600 border-l border-gray-200 text-center">
-        <span className="bg-gray-400 text-white inline-flex items-center justify-center w-7 sm:w-8 md:w-[35px] h-7 sm:h-8 md:h-[35px] rounded-lg text-xs md:text-sm">
+        <span className="bg-[#A6A6A6] text-white inline-flex items-center justify-center w-7 sm:w-8 md:w-[35px] h-7 sm:h-8 md:h-[35px] rounded-lg text-xs md:text-sm">
           {client.casesCount || Math.floor(Math.random() * 10) + 1}
         </span>
       </td>
