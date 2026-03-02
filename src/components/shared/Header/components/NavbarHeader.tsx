@@ -1,17 +1,58 @@
+import { useMemo } from "react";
 import { SearchIcon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AlertIcon } from "../../icons/Alert";
 import { ChatBotIcon } from "../../icons/ChatBot";
 import { CheveronDownIcon } from "../../icons/CheveronDown";
 import { LangIcon } from "../../icons/Lang";
 import { MessagesIcon } from "../../icons/Messages";
 
+const ROUTE_TITLES: Record<string, string> = {
+  "/dashboard": "الرئيسية",
+  "/dashboard/clients": "الموكلين",
+  "/dashboard/clients/add-client": "إضافة موكل",
+  "/dashboard/case-management": "إدارة القضايا",
+  "/dashboard/case-management/add-case": "إضافة قضية",
+  "/dashboard/legislation-rulings": "التشريعات والأحكام",
+  "/dashboard/calendar": "التقويم",
+  "/dashboard/roll": "الرول",
+  "/dashboard/documents": "الوثائق",
+  "/dashboard/user-tasks": "مهامي",
+  "/dashboard/consultaions": "الاستشارات",
+  "/dashboard/contracts": "العقود",
+  "/dashboard/about-office": "عن المكتب",
+  "/dashboard/settings": "الإعدادات",
+  "/dashboard/notifications": "الإشعارات",
+  "/dashboard/chat-bot": "المساعد الذكي",
+  "/dashboard/messages": "الرسائل",
+  "/dashboard/profile": "الملف الشخصي",
+};
+
 export default function NavbarHeader() {
+  const { pathname } = useLocation();
+
+  const currentTitle = useMemo(() => {
+    // Check for exact matches first
+    if (ROUTE_TITLES[pathname]) return ROUTE_TITLES[pathname];
+
+    // Check for dynamic routes (e.g., clients/:id or case-management/:id)
+    if (pathname.includes("/dashboard/clients/")) return "تفاصيل الموكل";
+    if (pathname.includes("/dashboard/case-management/"))
+      return "تفاصيل القضية";
+    if (pathname.includes("/dashboard/reports/")) return "التقارير";
+    if (pathname.includes("/dashboard/users/")) return "المستخدمين";
+    if (pathname.includes("/dashboard/finance/")) return "المالية";
+
+    return "لوحة التحكم";
+  }, [pathname]);
+
   return (
     <header className="w-full bg-white rounded-0  md:rounded-[12px] px-6 shadow-[0_0_24px_0_rgba(21,58,77,0.16)]   ">
       <div className="h-20 flex justify-between   ">
         <div className="flex flex-wrap items-center justify-between w-full  ">
-          <h1>الموكلين</h1>
+          <h1 className="text-xl font-semibold text-secondary">
+            {currentTitle}
+          </h1>
           <div className=" flex gap-3">
             <Link
               to={"notifications"}
