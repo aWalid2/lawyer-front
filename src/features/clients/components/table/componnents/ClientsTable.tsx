@@ -1,12 +1,10 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import type { ClientsTableProps } from "./typesClients";
 import { TableHeader } from "./TableHeader";
 import { TableRow } from "./TableRow";
 import { EmptyState } from "./EmptyState";
 import { Pagination } from "./Pagination";
 import { ClientsSearch } from "../../table/componnents/ClientsSearch";
-import { useCallback } from "react";
-
 
 export const ClientsTable: React.FC<
   ClientsTableProps & {
@@ -46,10 +44,10 @@ export const ClientsTable: React.FC<
 
   // نحافظ إن الصفحة متعديش العدد
   useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages || 1);
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
     }
-  }, [totalPages]);
+  }, [totalPages, currentPage, setCurrentPage]);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentClients = filteredClients.slice(
@@ -63,16 +61,15 @@ export const ClientsTable: React.FC<
   };
 
   useEffect(() => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}, [currentPage]);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }, [currentPage]);
 
-const handleSearch = useCallback((term: string) => {
-  setSearchTerm(term);
-  setCurrentPage(1);
-}, []);
+  const handleSearch = useCallback((term: string) => {
+    setSearchTerm(term);
+  }, [setCurrentPage]);
 
   if (clients.length === 0) {
     return <EmptyState />;
@@ -80,13 +77,13 @@ const handleSearch = useCallback((term: string) => {
 
   return (
     <div className="space-y-2 md:space-y-4 pt-2 md:pt-6 px-1.5 sm:px-2 md:px-0 w-full">
-      <div className=" bg-white rounded-lg md:rounded-xl border border-gray-200 shadow-sm md:shadow-gray-400 md:shadow-2xl w-full">
+      <div className="bg-white rounded-lg md:rounded-xl border border-gray-200 shadow-sm md:shadow-gray-400 md:shadow-2xl w-full">
         <div className="p-2 sm:p-3 md:p-6 w-full">
           <ClientsSearch onSearch={handleSearch} />
         </div>
 
         <div className="p-2 sm:p-3 md:p-6 overflow-x-auto w-full">
-          <table className="w-full border-collapse border border-gray-200  border-l-0 text-xs sm:text-lg  md:text-lg">
+          <table className="w-full border-collapse border border-gray-200 border-l-0 ">
             <TableHeader />
             <tbody>
               {currentClients.map((client, index) => (
@@ -118,5 +115,3 @@ const handleSearch = useCallback((term: string) => {
     </div>
   );
 };
-
-
