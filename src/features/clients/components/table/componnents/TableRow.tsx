@@ -17,7 +17,7 @@ export const TableRow: React.FC<TableRowProps> = ({
       className="cursor-pointer transition-colors bg-white border-b border-gray-200 hover:bg-gray-50"
       onClick={() => onRowClick(client)}
     >
-      <td className=" text-gray-600 border-l border-gray-200 text-center">
+      <td className="text-gray-600 border-l border-gray-200 text-center">
         {index}
       </td>
       <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base text-gray-600 border-l border-gray-200 text-center">
@@ -40,7 +40,7 @@ export const TableRow: React.FC<TableRowProps> = ({
       <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base">
         <div className="flex items-center justify-center gap-2 md:gap-3">
           <Link to={`/dashboard/clients/${client.id}`} title="عرض التفاصيل">
-            <img src={view} alt="view"  />
+            <img src={view} alt="view" />
           </Link>
           <button
             onClick={(e) => {
@@ -60,7 +60,7 @@ export const TableRow: React.FC<TableRowProps> = ({
             title="حذف"
             className="hover:scale-110 transition"
           >
-            <img src={deleteIcon} alt="delete"  />
+            <img src={deleteIcon} alt="delete" />
           </button>
         </div>
       </td>

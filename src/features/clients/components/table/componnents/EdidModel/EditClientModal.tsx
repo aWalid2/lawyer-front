@@ -50,7 +50,7 @@ export function EditClientModal({
 
   return createPortal(
     <div
-      className="fixed inset-0  bg-black/50 grid place-items-center p-3 sm:p-6 "
+      className="fixed inset-0  bg-black/50 grid  place-items-center p-3 sm:p-6 "
 
     >
       <div
@@ -64,6 +64,7 @@ export function EditClientModal({
           mx-auto
           relative
           max-h-[98dvh] sm:max-h-[95dvh] md:max-h-[90dvh]
+          overflow-y-auto
           
         "
         onClick={(e) => e.stopPropagation()}
@@ -88,7 +89,7 @@ export function EditClientModal({
         </div>
 
         {/* Body */}
-        <div className="flex-grow overflow-y-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+        <div className="flex-grow  px-3 sm:px-4 md:px-6 py-3 sm:py-4">
           <Formik
             initialValues={{
               clientType: clientData?.clientType || "شركات",

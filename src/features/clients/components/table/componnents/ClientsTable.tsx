@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-import type { ClientsTableProps } from "./typesClients";
+import type { ClientsTableProps} from "./typesClients";
 import { TableHeader } from "./TableHeader";
 import { TableRow } from "./TableRow";
 import { EmptyState } from "./EmptyState";
@@ -42,9 +42,8 @@ export const ClientsTable: React.FC<
 
   const totalPages = Math.ceil(filteredClients.length / itemsPerPage);
 
-  // نحافظ إن الصفحة متعديش العدد
   useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
+    if (totalPages > 0 && currentPage > totalPages) {
       setCurrentPage(totalPages);
     }
   }, [totalPages, currentPage, setCurrentPage]);
@@ -69,6 +68,7 @@ export const ClientsTable: React.FC<
 
   const handleSearch = useCallback((term: string) => {
     setSearchTerm(term);
+
   }, [setCurrentPage]);
 
   if (clients.length === 0) {
@@ -76,30 +76,32 @@ export const ClientsTable: React.FC<
   }
 
   return (
-    <div className="space-y-2 md:space-y-4 pt-2 md:pt-6 px-1.5 sm:px-2 md:px-0 w-full">
-      <div className="bg-white rounded-lg md:rounded-xl border border-gray-200 shadow-sm md:shadow-gray-400 md:shadow-2xl w-full">
-        <div className="p-2 sm:p-3 md:p-6 w-full">
+    <div className="space-y-6 mt-6 ">
+      <div className="overflow-x-auto bg-white rounded-lg md:rounded-xl border border-gray-200 shadow-sm md:shadow-gray-400 md:shadow-2xl ">
+        <div className="p-2 sm:p-3 md:p-6  ">
           <ClientsSearch onSearch={handleSearch} />
         </div>
 
-        <div className="p-2 sm:p-3 md:p-6 overflow-x-auto w-full">
-          <table className="w-full border-collapse border border-gray-200 border-l-0 ">
-            <TableHeader />
-            <tbody>
-              {currentClients.map((client, index) => (
-                <TableRow
-                  key={client.id}
-                  client={client}
-                  index={startIndex + index + 1}
-                  isSelected={selectedId === client.id}
-                  onRowClick={handleRowClick}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                  onViewDetails={onViewDetails}
-                />
-              ))}
-            </tbody>
-          </table>
+        <div className="overflow-x-auto p-6">
+          
+            <table className="w-full  border-collapse  border-r border-[#E6E6E6]  table-fixed">
+              <TableHeader />
+              <tbody>
+                {currentClients.map((client, index) => (
+                  <TableRow
+                    key={client.id}
+                    client={client}
+                    index={startIndex + index + 1}
+                    isSelected={selectedId === client.id}
+                    onRowClick={handleRowClick}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                    onViewDetails={onViewDetails}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {totalPages > 1 && (
@@ -112,6 +114,5 @@ export const ClientsTable: React.FC<
           />
         )}
       </div>
-    </div>
   );
 };

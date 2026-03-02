@@ -1,6 +1,6 @@
 import { Formik, Form, Field } from "formik";
 import { useState } from "react";
-import x from "../../../../../public/images/x.svg";
+import x from "../../../../public/images/x.svg";
 import type { FormValues } from "./typseCase";
 import { validationSchema } from "./ValidationSchema";
 import {
@@ -11,8 +11,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import arrow from "../../../../../public/images/arrow.svg";
-import { Eye, EyeOff } from "lucide-react";
+import arrow from "../../../../public/images/arrow.svg";
 
 // ثوابت الكلاسات
 const CLASSES = {

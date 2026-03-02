@@ -1,4 +1,4 @@
-import FormCase from "@/features/cases-mangement/mainCase/AddCase/FormCase";
+import FormCase from "@/features/cases-mangement/AddCase/FormCase";
 function AddCase() {
   return (
     <div className="space-y-6  pt-6   ">
