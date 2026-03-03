@@ -4,7 +4,7 @@ import React from "react";
 type InputFormProps = {
   name: string;
   placeholder?: string;
-  disabled: boolean;
+  disabled?: boolean;
   label: string;
   type: string;
   dir?: string;
