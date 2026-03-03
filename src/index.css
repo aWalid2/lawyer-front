@@ -210,7 +210,7 @@ body {
 }
 
 @layer utilities {
-    .shadow-primary {
+  .shadow-primary {
     box-shadow: 0 0 24px 0 rgba(21, 58, 77, 0.16);
   }
 }
