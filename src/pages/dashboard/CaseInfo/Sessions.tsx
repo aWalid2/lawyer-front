@@ -20,7 +20,7 @@ const Sessions: React.FC = () => {
         dir="rtl"
         className="w-full flex flex-col gap-4"
       >
-        <TabsList className="bg-transparent gap-4 p-0 h-auto mb-8 flex-wrap justify-start">
+        <TabsList className="bg-transparent gap-4 p-0 h-auto  flex-wrap justify-start">
           <TabsTrigger
             value="police"
             className="border-primary/40 border text-primary/70 data-[state=active]:bg-[#DDB77E] data-[state=active]:text-white data-[state=active]:border-[#DDB77E] rounded-[12px] px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
