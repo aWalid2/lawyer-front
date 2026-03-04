@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PageLayout from "@/components/shared/components/PageLayout";
 import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,16 +9,28 @@ import ExpertSessions from "@/features/sessions/components/ExpertSessions";
 import OtherSessions from "@/features/sessions/components/OtherSessions";
 
 const Sessions: React.FC = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 776);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const orientation = isMobile ? "vertical" : "horizontal";
+
   return (
     <PageLayout innerPage>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex  items-center justify-between mb-6">
         <HeaderTitle title="إدارة الجلسات" />
       </div>
 
       <Tabs
         defaultValue="police"
         dir="rtl"
-        className="w-full flex flex-col gap-4"
+        orientation={orientation}
+        className="flex-col"
       >
         <TabsList className="bg-transparent gap-4 p-0 h-auto mb-8 flex-wrap justify-start">
           <TabsTrigger
