@@ -1,13 +1,15 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
 import { FirstDegreeSessions } from "./components/FirstDegreeSessions";
+import { AppealSessions } from "./components/AppealSessions";
+import { DistinctionSessions } from "./components/DistinctionSessions";
 import { HeaderFirstDegreeSessionsTable } from "./components/FirstDegreeSessions/HeaderFirstDegreeSessionsTable";
 import { FirstDegreeTable } from "./components/FirstDegreeSessions/components/FirstDegreeTable";
 
 const CourtSessions: React.FC = () => {
   return (
     <div className="space-y-6">
-      <div className="rounded-[12px] border border-[#eeeeee] p-6">
+      <div className="bg-white rounded-2xl p-4 md:p-6 border border-[#eeeeee]">
         <Tabs
           defaultValue="first"
           dir="rtl"
@@ -38,12 +40,16 @@ const CourtSessions: React.FC = () => {
             <TabsContent value="first">
               <FirstDegreeSessions />
             </TabsContent>
-            <TabsContent value="appeal">ddddddddddddd</TabsContent>
-            <TabsContent value="distinction">eeeeeeeeeeeee</TabsContent>
+            <TabsContent value="appeal">
+              <AppealSessions />
+            </TabsContent>
+            <TabsContent value="distinction">
+              <DistinctionSessions />
+            </TabsContent>
           </div>
         </Tabs>
       </div>
-      <div className="rounded-[12px] border border-[#eeeeee] p-6">
+      <div className="bg-white mt-7">
         <HeaderFirstDegreeSessionsTable />
         <FirstDegreeTable />
       </div>

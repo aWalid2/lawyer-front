@@ -33,7 +33,7 @@ export const FormFirstDegreeDialog: React.FC = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='bg-[#f1f1f3] text-[#3D3C48] text-base h-12.5   font-semibold'> <EditIcon className="w-4 h-4" /> تعديل </Button>
+        <Button className='bg-[#f1f1f3] text-[#3D3C48] text-base h-12.5   font-semibold hover:text-white'> <EditIcon className="w-4 h-4" /> تعديل </Button>
       </DialogTrigger>
       <DialogContent
         className="sm:max-w-[772px] max-h-[90vh] overflow-y-auto sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none custom-scrollbar"
