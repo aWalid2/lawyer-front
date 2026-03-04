@@ -1,17 +1,15 @@
 export interface FirstDegreeFormValues {
-  autoNumber: string;
-  complaintNumber: string;
-  clientName: string;
-  caseTitle: string;
-  court: string;
-  litigationLevel: string;
-  status: string;
-  caseType: string;
-  clientRelation: string;
-  statusOnReceipt: string;
-  creationDate: string;
-  receiptDate: string;
-  notes: string;
+  courtName: string;
+  courtRole: string;
+  courtRoomNumber: string;
+  courtCircleNumber: string;
+  courtType: string;
+  courtJudge: string;
+  courtSecretary: string;
+  courtSecretaryRole: string;
+  courtSecretaryNumber: string;
+  caseRegistrationDate: string;
+  nextSessionDate: string;
 }
 
 export interface FormFirsDegreeProps {

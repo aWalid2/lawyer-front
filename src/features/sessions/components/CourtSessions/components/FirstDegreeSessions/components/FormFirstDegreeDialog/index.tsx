@@ -12,35 +12,28 @@ import { XIcon } from "lucide-react";
 import { EditIcon } from "@/components/shared/icons/Edit";
 import { InputForm } from "./components/InputForm";
 import type { FirstDegreeFormValues } from "./components/typesCaseInfo";
+import { Button } from "@/components/ui/button";
 
 
 export const FormFirstDegreeDialog: React.FC = () => {
   const initialValues: FirstDegreeFormValues = {
-    autoNumber: "7363",
-    complaintNumber: "543257",
-    clientName: "خليل محمد",
-    caseTitle: "خليل محمد",
-    court: "محكمة1",
-    litigationLevel: "اول درجة",
-    status: "متداولة",
-    caseType: "جنائي",
-    clientRelation: "مدعي عليه",
-    statusOnReceipt: "متداولة",
-    creationDate: "2026-01-20",
-    receiptDate: "2026-01-20",
-    notes: "-",
+    courtName: "نيابة",
+    courtRole: "نيابة",
+    courtRoomNumber: "نيابة",
+    courtCircleNumber: "نيابة",
+    courtType: "نيابة",
+    courtJudge: "نيابة",
+    courtSecretary: "نيابة",
+    courtSecretaryRole: "نيابة",
+    courtSecretaryNumber: "نيابة",
+    caseRegistrationDate: "sdfsdf",
+    nextSessionDate: "sdfsdf",
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button
-          type="button"
-          className="flex items-center gap-2 bg-primary-gradient text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium h-12.5 hover:opacity-90"
-        >
-          <EditIcon />
-          تعديل
-        </button>
+        <Button className='bg-[#f1f1f3] text-[#3D3C48] text-base h-12.5   font-semibold'> <EditIcon className="w-4 h-4" /> تعديل </Button>
       </DialogTrigger>
       <DialogContent
         className="sm:max-w-[772px] max-h-[90vh] overflow-y-auto sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none custom-scrollbar"
@@ -54,14 +47,14 @@ export const FormFirstDegreeDialog: React.FC = () => {
         </DialogClose>
         <DialogHeader className="mb-2 mt-15">
           <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
-            تعديل معلومات القضية
+            تعديل معلومات أول درجة
           </DialogTitle>
         </DialogHeader>
 
         <Formik
           initialValues={initialValues}
           onSubmit={(values) => {
-            console.log("Adding contract:", values);
+            console.log("Saving first degree sessions:", values);
           }}
         >
           {() => (
@@ -71,58 +64,65 @@ export const FormFirstDegreeDialog: React.FC = () => {
                 dir="rtl"
               >
                 <InputForm
-                  name="autoNumber"
-                  label="الرقم الآلي للقضية"
+                  name="courtName"
+                  label="اسم المحكمة"
                   type="text"
                 />
                 <InputForm
-                  name="complaintNumber"
-                  label="رقم الشكوى"
-                  type="text"
-                />
-
-                <InputForm name="clientName" label="اسم الموكل" type="text" />
-                <InputForm name="caseTitle" label="عنوان القضية" type="text" />
-
-                <InputForm name="court" label="المحكمة" type="text" />
-                <InputForm
-                  name="litigationLevel"
-                  label="درجة التقاضي الحالية"
-                  type="text"
-                />
-
-                <InputForm name="status" label="حالة القضية" type="text" />
-                <InputForm name="caseType" label="نوع القضية" type="text" />
-
-                <InputForm
-                  name="clientRelation"
-                  label="صفة الموكل"
-                  type="text"
-                />
-                <InputForm
-                  name="statusOnReceipt"
-                  label="وضع القضية عند الاستلام"
+                  name="courtRole"
+                  label="الدور في المحكمة"
                   type="text"
                 />
 
                 <InputForm
-                  name="creationDate"
-                  label="تاريخ إنشاء القضية"
-                  type="date"
+                  name="courtRoomNumber"
+                  label="رقم القاعة في المحكمة"
+                  type="text"
                 />
                 <InputForm
-                  name="receiptDate"
-                  label="تاريخ ورود القضية في المكتب"
-                  type="date"
+                  name="courtCircleNumber"
+                  label="رقم الدائرة"
+                  type="text"
                 />
 
-                <div className="md:col-span-2 mt-2 flex flex-col w-full">
-                  <label className="block mb-2 text-sm font-medium text-secondary text-right pr-2">
-                    ملاحظات
-                  </label>
-                  <textarea
-                    name="notes"
-                    className="w-full border border-[#E8E8E8] rounded-xl p-4 bg-[#FBFBFB] min-h-[50px] text-secondary text-sm text-right pr-6 disabled:opacity-70"
+                <InputForm
+                  name="courtType"
+                  label="نوع الدائرة"
+                  type="text"
+                />
+                <InputForm
+                  name="courtJudge"
+                  label="اسم قاضي الدائرة"
+                  type="text"
+                />
+
+                <InputForm
+                  name="courtSecretary"
+                  label="اسم سكرتير الدائرة"
+                  type="text"
+                />
+                <InputForm
+                  name="courtSecretaryRole"
+                  label="دور مكتب السكرتير"
+                  type="text"
+                />
+
+                <InputForm
+                  name="courtSecretaryNumber"
+                  label="رقم مكتب السكرتير"
+                  type="text"
+                />
+                <InputForm
+                  name="caseRegistrationDate"
+                  label="تاريخ تسجيل القضية بالمحكمة"
+                  type="text"
+                />
+
+                <div className="md:col-span-2">
+                  <InputForm
+                    name="nextSessionDate"
+                    label="تاريخ ووقت الجلسة القادمة"
+                    type="text"
                   />
                 </div>
               </div>

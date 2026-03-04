@@ -1,12 +1,12 @@
 
-import { HeaderSessions } from '../HeaderSessions'
+import { HeaderFirstDegreeSessionsInfo } from './HeaderFirstDegreeSessionsInfo'
 import { FirstDegreeInfoSessions } from './components/FirstDegreeInfoSessions'
 
 
 export const FirstDegreeSessions = () => {
     return (
-        <div>
-            <HeaderSessions />
+        <>
+            <HeaderFirstDegreeSessionsInfo />
             <FirstDegreeInfoSessions firstDegreeData={{
                 courtName: "نيابة",
                 courtRole: "نيابة",
@@ -20,6 +20,7 @@ export const FirstDegreeSessions = () => {
                 caseRegistrationDate: "sdfsdf",
                 nextSessionDate: "sdfsdf",
             }} />
-        </div>
+
+        </>
     )
 }
