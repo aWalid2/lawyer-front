@@ -30,5 +30,4 @@ jobs:
             cd /lawyer/lawyer-front
             git pull origin main
             npm install
-            pm2 restart react-app || pm2 start "serve -s build -l 5174" --name react-app
-            pm2 save            
+            npm run build           
