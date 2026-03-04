@@ -8,17 +8,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import { EditIcon } from "@/components/shared/icons/Edit";
 import { InputForm } from "./components/InputForm";
 import type { CaseFormValues } from "./components/typesCaseInfo";
-
-interface AddContractFormValues {
-  startDate: string;
-  agreedValue: string;
-  duration: string;
-  contractImage: string | File;
-}
 
 export const FormCaseDialog: React.FC = () => {
   const initialValues: CaseFormValues = {

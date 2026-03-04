@@ -9,7 +9,7 @@ export const TableCasesRow: React.FC<{
   onRowClick: (caseItem: Case) => void;
   onEdit?: (caseItem: Case) => void;
   onDelete?: (caseItem: Case) => void;
-}> = ({ caseItem, index, isSelected, onRowClick, onEdit, onDelete }) => {
+}> = ({ caseItem, index, isSelected, onRowClick, onEdit }) => {
   const getStatusStyles = (status: string) => {
     switch (status) {
       case "متداولة":
@@ -23,9 +23,8 @@ export const TableCasesRow: React.FC<{
 
   return (
     <tr
-      className={`cursor-pointer border-b border-[#F1F1F4] transition-colors hover:bg-gray-50 ${
-        isSelected ? "bg-blue-50" : "bg-white"
-      }`}
+      className={`cursor-pointer border-b border-[#F1F1F4] transition-colors hover:bg-gray-50 ${isSelected ? "bg-blue-50" : "bg-white"
+        }`}
       onClick={() => onRowClick(caseItem)}
     >
       <td className="p-4 text-center text-sm text-gray-600 border-x border-[#F1F1F4]">

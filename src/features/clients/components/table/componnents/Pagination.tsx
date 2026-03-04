@@ -7,8 +7,6 @@ export const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
-  totalItems,
-  itemsPerPage
 }) => {
   // حساب نطاق الأرقام المعروضة (عكس الترتيب)
   const getPageNumbers = (): (number | string)[] => {
@@ -40,8 +38,6 @@ export const Pagination: React.FC<PaginationProps> = ({
     return rangeWithDots;
   };
 
-  const startItem = (currentPage - 1) * itemsPerPage + 1;
-  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
     <div className="flex items-center justify-end px-2 sm:px-3 md:px-6 py-2 md:py-4 overflow-x-auto">
@@ -54,11 +50,10 @@ export const Pagination: React.FC<PaginationProps> = ({
             }
           }}
           disabled={currentPage === 1}
-          className={`p-1 md:p-2 rounded-lg md:rounded-xl border ${
-            currentPage === 1
+          className={`p-1 md:p-2 rounded-lg md:rounded-xl border ${currentPage === 1
               ? 'bg-gray-200 text-black cursor-not-allowed'
               : 'bg-gray-200 text-black hover:bg-gray-300'
-          }`}
+            }`}
           title="السابق"
         >
           <ChevronRight size={16} className="text-black md:w-5 md:h-5" />
@@ -75,13 +70,12 @@ export const Pagination: React.FC<PaginationProps> = ({
                 }
               }}
               disabled={page === '...'}
-              className={`min-w-7 md:min-w-9 h-7 md:h-9 px-1 md:px-2 rounded-lg md:rounded-xl text-xs md:text-sm font-medium ${
-                page === currentPage
+              className={`min-w-7 md:min-w-9 h-7 md:h-9 px-1 md:px-2 rounded-lg md:rounded-xl text-xs md:text-sm font-medium ${page === currentPage
                   ? 'bg-primary text-white'
                   : page === '...'
-                  ? 'cursor-default bg-transparent'
-                  : 'bg-gray-200 text-black hover:bg-gray-300'
-              }`}
+                    ? 'cursor-default bg-transparent'
+                    : 'bg-gray-200 text-black hover:bg-gray-300'
+                }`}
             >
               {page}
             </button>
@@ -96,11 +90,10 @@ export const Pagination: React.FC<PaginationProps> = ({
             }
           }}
           disabled={currentPage === totalPages}
-          className={`p-1 md:p-2 rounded-lg md:rounded-xl border ${
-            currentPage === totalPages
+          className={`p-1 md:p-2 rounded-lg md:rounded-xl border ${currentPage === totalPages
               ? 'bg-gray-200 text-black cursor-not-allowed'
               : 'bg-gray-200 text-black hover:bg-gray-300'
-          }`}
+            }`}
           title="التالي"
         >
           <ChevronLeft size={16} className="text-black md:w-5 md:h-5" />

@@ -1,13 +1,11 @@
-import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import React from "react";
 import type { PaginationProps } from "./casesTypes";
 
 export const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
-  totalItems,
-  itemsPerPage,
 }) => {
   const getPageNumbers = (): (number | string)[] => {
     const delta = 2;
@@ -42,9 +40,6 @@ export const Pagination: React.FC<PaginationProps> = ({
     return rangeWithDots;
   };
 
-  const startItem = (currentPage - 1) * itemsPerPage + 1;
-  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
-
   return (
     <div className="flex items-center justify-end px-4 py-3">
       <div className="flex items-center gap-2 justify-end">
@@ -55,11 +50,10 @@ export const Pagination: React.FC<PaginationProps> = ({
             }
           }}
           disabled={currentPage === 1}
-          className={`p-2 rounded-xl border ${
-            currentPage === 1
-              ? "bg-gray-200 text-black cursor-not-allowed"
-              : "bg-gray-200 text-black"
-          }`}
+          className={`p-2 rounded-xl border ${currentPage === 1
+            ? "bg-gray-200 text-black cursor-not-allowed"
+            : "bg-gray-200 text-black"
+            }`}
           title="السابق"
         >
           <ChevronRight size={18} className="text-black" />
@@ -75,13 +69,12 @@ export const Pagination: React.FC<PaginationProps> = ({
                 }
               }}
               disabled={page === "..."}
-              className={`min-w-[36px] h-9 px-2 rounded-xl text-sm font-medium ${
-                page === currentPage
-                  ? "bg-primary text-white"
-                  : page === "..."
-                    ? "cursor-default bg-transparent"
-                    : "bg-gray-200 text-black"
-              }`}
+              className={`min-w-[36px] h-9 px-2 rounded-xl text-sm font-medium ${page === currentPage
+                ? "bg-primary text-white"
+                : page === "..."
+                  ? "cursor-default bg-transparent"
+                  : "bg-gray-200 text-black"
+                }`}
             >
               {page}
             </button>
@@ -95,11 +88,10 @@ export const Pagination: React.FC<PaginationProps> = ({
             }
           }}
           disabled={currentPage === totalPages}
-          className={`p-2 rounded-xl border ${
-            currentPage === totalPages
-              ? "bg-gray-200 text-black cursor-not-allowed"
-              : "bg-gray-200 text-black"
-          }`}
+          className={`p-2 rounded-xl border ${currentPage === totalPages
+            ? "bg-gray-200 text-black cursor-not-allowed"
+            : "bg-gray-200 text-black"
+            }`}
           title="التالي"
         >
           <ChevronLeft size={18} className="text-black" />

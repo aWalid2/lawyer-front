@@ -1,6 +1,6 @@
-import { Formik, Form, Field } from "formik";
+import { Field, Form, Formik } from "formik";
+import { useState } from "react";
 import close from "../../../../../public/images/close.svg";
-import { useState, useEffect } from "react";
 import { validationSchema } from "./ValidationSchema";
 
 // تعريف الـ interface للـ props
@@ -94,7 +94,7 @@ function EditModel({ initialValues, onClose, onSave }: EditModelProps) {
                       name="caseTitle"
                       type="text"
                       className={modalClasses.input}
-                        placeholder="رقم القضية في المخفر"
+                      placeholder="رقم القضية في المخفر"
                     />
                   </div>
 
@@ -106,7 +106,7 @@ function EditModel({ initialValues, onClose, onSave }: EditModelProps) {
                       name="notes"
                       as="textarea"
                       className={modalClasses.textarea}
-                        placeholder="المخفر التابع له القضية"
+                      placeholder="المخفر التابع له القضية"
                     />
                   </div>
 
@@ -118,7 +118,7 @@ function EditModel({ initialValues, onClose, onSave }: EditModelProps) {
                       name="clientName"
                       type="text"
                       className={modalClasses.input}
-                        placeholder="اسم المحقق"
+                      placeholder="اسم المحقق"
                     />
                   </div>
 
@@ -130,7 +130,7 @@ function EditModel({ initialValues, onClose, onSave }: EditModelProps) {
                       name="investigationSource"
                       type="text"
                       className={modalClasses.input}
-                        placeholder="جهة التحقيق المحول منها"
+                      placeholder="جهة التحقيق المحول منها"
                     />
                   </div>
 
@@ -142,7 +142,7 @@ function EditModel({ initialValues, onClose, onSave }: EditModelProps) {
                       name="caseReceiptDate"
                       type="date"
                       className={modalClasses.input}
-                        placeholder="تاريخ ورود القضية داخل المكتب"
+                      placeholder="تاريخ ورود القضية داخل المكتب"
                     />
                   </div>
                 </div>

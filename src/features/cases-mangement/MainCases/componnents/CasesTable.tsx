@@ -1,9 +1,9 @@
-import React, { useState, useMemo, useEffect, useCallback } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Case, CasesTableProps } from "./casesTypes";
-import { TableCasesHeader } from "./TableCasesHeader";
-import { TableCasesRow } from "./TableCasesRow";
 import { EmptyState } from "./EmptyState";
 import { Pagination } from "./Pagination";
+import { TableCasesHeader } from "./TableCasesHeader";
+import { TableCasesRow } from "./TableCasesRow";
 
 export const CasesTable: React.FC<CasesTableProps> = ({
   cases,
@@ -14,7 +14,7 @@ export const CasesTable: React.FC<CasesTableProps> = ({
   onDelete,
 }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+const searchTerm="";
 
   const itemsPerPage = 15;
 

@@ -1,13 +1,12 @@
 
 import React from "react";
-import type { TableRowProps} from '../../../../typesClientDetails'
+import type { TableRowProps } from '../../../../typesClientDetails'
 import { TableCasesActions } from "./TableCasesActions";
 export const TableCasesRow: React.FC<TableRowProps> = ({
   client,
   index,
   onRowClick,
   onEdit,
-  onDelete,
 }) => {
   return (
     <tr
@@ -27,7 +26,7 @@ export const TableCasesRow: React.FC<TableRowProps> = ({
         {client.autoNumber}
       </td>
 
- 
+
       <td className="p-3 text-sm font-medium text-gray-600 border-l border-gray-200 text-center">
         {client.subject}
       </td>
@@ -51,7 +50,7 @@ export const TableCasesRow: React.FC<TableRowProps> = ({
 
 
       <td className="p-3 text-sm">
-    <TableCasesActions clientCases={client} onEdit ={onEdit}  />
+        <TableCasesActions clientCases={client} onEdit={onEdit} />
       </td>
     </tr>
   );
