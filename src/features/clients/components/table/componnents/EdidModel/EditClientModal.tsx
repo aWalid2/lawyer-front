@@ -70,7 +70,7 @@ export function EditClientModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="relative flex-shrink-0 px-3 sm:px-4 md:px-6 py-2 sm:py-3  rounded-2xl sm:rounded-tl-3xl">
+        <div className="relative shrink-0 px-3 sm:px-4 md:px-6 py-2 sm:py-3  rounded-2xl sm:rounded-tl-3xl">
           <button
             onClick={onClose}
             className="absolute pt-6 px-[40px] left-2 sm:left-4 md:left-6 top-2 sm:top-3 text-gray-400 hover:text-gray-600 transition-colors"
@@ -89,7 +89,7 @@ export function EditClientModal({
         </div>
 
         {/* Body */}
-        <div className="flex-grow  px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+        <div className="grow  px-3 sm:px-4 md:px-6 py-3 sm:py-4">
           <Formik
             initialValues={{
               clientType: clientData?.clientType || "شركات",
