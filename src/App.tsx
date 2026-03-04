@@ -1,116 +1,121 @@
-// export default App;
-import { Route, Routes } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import DashboardLayout from "./layouts/DashboardLayout";
+import Loading from "./components/shared/Loading";
 
 //Header routes
-import Notifications from "./pages/dashboard/Notifications";
-import ChatBot from "./pages/dashboard/ChatBot";
-import Messages from "./pages/dashboard/Messages";
-import Profile from "./pages/dashboard/Profile";
+const Notifications = lazy(() => import("./pages/dashboard/Notifications"));
+const ChatBot = lazy(() => import("./pages/dashboard/ChatBot"));
+const Messages = lazy(() => import("./pages/dashboard/Messages"));
+const Profile = lazy(() => import("./pages/dashboard/Profile"));
 
 // Main pages
-import DashboardHome from "./pages/dashboard/DashboardHome";
-import Clients from "./pages/dashboard/Clients";
-import CaseMangement from "./pages/dashboard/CaseMangement";
-import Legislation from "./pages/dashboard/Legislation";
-import Calendar from "./pages/dashboard/Calendar";
-import Roll from "./pages/dashboard/Roll";
-import Documents from "./pages/dashboard/Documents";
-import UserTasks from "./pages/dashboard/UserTasks";
-import Consultations from "./pages/dashboard/Consultations";
-import Contracts from "./pages/dashboard/Contracts";
-import AboutOffice from "./pages/dashboard/AboutOffice";
-import Settings from "./pages/dashboard/Settings";
-import AddCase from "./pages/dashboard/AddCase";
-import CaseDetails from "./pages/dashboard/CaseDetails";
-import CaseInfo from "./features/cases-mangement/CaseInfo";
-import Sessions from "./pages/dashboard/CaseInfo/Sessions";
-import RelatedCases from "./pages/dashboard/CaseInfo/RelatedCases";
-import CaseDocuments from "./pages/dashboard/CaseInfo/Documents";
-import Expenses from "./pages/dashboard/CaseInfo/Expenses";
-import Procedures from "./pages/dashboard/CaseInfo/Procedures";
-import Employees from "./pages/dashboard/CaseInfo/Employees";
+const DashboardHome = lazy(() => import("./pages/dashboard/DashboardHome"));
+const Clients = lazy(() => import("./pages/dashboard/Clients"));
+const CaseMangement = lazy(() => import("./pages/dashboard/CaseMangement"));
+const Legislation = lazy(() => import("./pages/dashboard/Legislation"));
+const Calendar = lazy(() => import("./pages/dashboard/Calendar"));
+const Roll = lazy(() => import("./pages/dashboard/Roll"));
+const Documents = lazy(() => import("./pages/dashboard/Documents"));
+const UserTasks = lazy(() => import("./pages/dashboard/UserTasks"));
+const Consultations = lazy(() => import("./pages/dashboard/Consultations"));
+const Contracts = lazy(() => import("./pages/dashboard/Contracts"));
+const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
+const Settings = lazy(() => import("./pages/dashboard/Settings"));
+const AddCase = lazy(() => import("./pages/dashboard/AddCase"));
+const CaseDetails = lazy(() => import("./pages/dashboard/CaseDetails"));
+const CaseInfo = lazy(() => import("./features/cases-mangement/CaseInfo"));
+const Sessions = lazy(() => import("./pages/dashboard/CaseInfo/Sessions"));
+const RelatedCases = lazy(() => import("./pages/dashboard/CaseInfo/RelatedCases"));
+const CaseDocuments = lazy(() => import("./pages/dashboard/CaseInfo/Documents"));
+const Expenses = lazy(() => import("./pages/dashboard/CaseInfo/Expenses"));
+const Procedures = lazy(() => import("./pages/dashboard/CaseInfo/Procedures"));
+const Employees = lazy(() => import("./pages/dashboard/CaseInfo/Employees"));
 
 // Reports
-import ReportsClients from "./pages/dashboard/reports/ReportsClients";
-import ReportsCases from "./pages/dashboard/reports/ReportsCases";
-import ReportsSitting from "./pages/dashboard/reports/ReportsSitting";
-import ReportsUsers from "./pages/dashboard/reports/ReportsUsers";
-import ReportsExpenses from "./pages/dashboard/reports/ReportsExpenses";
-import ReportsPayments from "./pages/dashboard/reports/ReportsPayments";
+const ReportsClients = lazy(() => import("./pages/dashboard/reports/ReportsClients"));
+const ReportsCases = lazy(() => import("./pages/dashboard/reports/ReportsCases"));
+const ReportsSitting = lazy(() => import("./pages/dashboard/reports/ReportsSitting"));
+const ReportsUsers = lazy(() => import("./pages/dashboard/reports/ReportsUsers"));
+const ReportsExpenses = lazy(() => import("./pages/dashboard/reports/ReportsExpenses"));
+const ReportsPayments = lazy(() => import("./pages/dashboard/reports/ReportsPayments"));
 
 // Users
-import UsersClients from "./pages/dashboard/users/UsersClients";
-import UsersLawyers from "./pages/dashboard/users/UsersLawyers";
-import UsersEmployees from "./pages/dashboard/users/UsersEmployees";
+const UsersClients = lazy(() => import("./pages/dashboard/users/UsersClients"));
+const UsersLawyers = lazy(() => import("./pages/dashboard/users/UsersLawyers"));
+const UsersEmployees = lazy(() => import("./pages/dashboard/users/UsersEmployees"));
 
 // Finance
-import FinanceExpenses from "./pages/dashboard/finance/FinanceExpenses";
-import FinancePayments from "./pages/dashboard/finance/FinancePayments";
-import AddClient from "./pages/dashboard/AddClient";
-import ClientDetails from "./pages/dashboard/ClientDetails";
+const FinanceExpenses = lazy(() => import("./pages/dashboard/finance/FinanceExpenses"));
+const FinancePayments = lazy(() => import("./pages/dashboard/finance/FinancePayments"));
+const AddClient = lazy(() => import("./pages/dashboard/AddClient"));
+const ClientDetails = lazy(() => import("./pages/dashboard/ClientDetails"));
 
 function App() {
   return (
-    <Routes>
-      <Route path="/dashboard" element={<DashboardLayout />}>
-        {/* Header routes */}
-        <Route path="notifications" element={<Notifications />} />
-        <Route path="chat-bot" element={<ChatBot />} />
-        <Route path="messages" element={<Messages />} />
-        <Route path="profile" element={<Profile />} />
+    <Suspense fallback={<Loading />}>
+      <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          {/* Header routes */}
+          <Route path="notifications" element={<Notifications />} />
+          <Route path="chat-bot" element={<ChatBot />} />
+          <Route path="messages" element={<Messages />} />
+          <Route path="profile" element={<Profile />} />
 
-        {/* Dashboard Home */}
-        <Route index element={<DashboardHome />} />
+          {/* Dashboard Home */}
+          <Route index element={<DashboardHome />} />
 
-        {/* Main Routes */}
-        <Route path="clients" element={<Clients />} />
-        <Route path="clients/add-client" element={<AddClient />} />
-        <Route path="clients/:id" element={<ClientDetails />} />
-        <Route path="case-management" element={<CaseMangement />} />
-        <Route path="case-management/add-case" element={<AddCase />} />
-        <Route path="case-management/:id" element={<CaseDetails />}>
-          <Route index element={<CaseInfo />} />
-          <Route path="sessions" element={<Sessions />} />
-          <Route path="related" element={<RelatedCases />} />
-          <Route path="documents" element={<CaseDocuments />} />
-          <Route path="expenses" element={<Expenses />} />
-          <Route path="procedures" element={<Procedures />} />
-          <Route path="employees" element={<Employees />} />
+          {/* Main Routes */}
+          <Route path="clients" element={<Clients />} />
+          <Route path="clients/add-client" element={<AddClient />} />
+          <Route path="clients/:id" element={<ClientDetails />} />
+          <Route path="case-management" element={<CaseMangement />} />
+          <Route path="case-management/add-case" element={<AddCase />} />
+          <Route path="case-management/:id" element={<CaseDetails />}>
+            <Route index element={<CaseInfo />} />
+            <Route path="sessions" element={<Sessions />} />
+            <Route path="related" element={<RelatedCases />} />
+            <Route path="documents" element={<CaseDocuments />} />
+            <Route path="expenses" element={<Expenses />} />
+            <Route path="procedures" element={<Procedures />} />
+            <Route path="employees" element={<Employees />} />
+          </Route>
+          <Route path="legislation-rulings" element={<Legislation />} />
+          <Route path="calendar" element={<Calendar />} />
+          <Route path="roll" element={<Roll />} />
+          <Route path="documents" element={<Documents />} />
+          <Route path="user-tasks" element={<UserTasks />} />
+          <Route path="consultaions" element={<Consultations />} />
+          <Route path="contracts" element={<Contracts />} />
+          <Route path="client-details/:id" element={<ClientDetails />} />
+          <Route path="about-office" element={<AboutOffice />} />
+          <Route path="settings" element={<Settings />} />
+          {/* Reports Routes */}
+          <Route path="reports">
+            <Route path="clients" element={<ReportsClients />} />
+            <Route path="cases" element={<ReportsCases />} />
+            <Route path="sitting" element={<ReportsSitting />} />
+            <Route path="users" element={<ReportsUsers />} />
+            <Route path="expenses" element={<ReportsExpenses />} />
+            <Route path="payments" element={<ReportsPayments />} />
+          </Route>
+          {/* Users Routes */}
+          <Route path="users">
+            <Route path="clients" element={<UsersClients />} />
+            <Route path="lawyers" element={<UsersLawyers />} />
+            <Route path="employees" element={<UsersEmployees />} />
+          </Route>
+          {/* Finance Routes */}
+          <Route path="finance">
+            <Route path="expences" element={<FinanceExpenses />} />
+            <Route path="payments" element={<FinancePayments />} />
+          </Route>
         </Route>
-        <Route path="legislation-rulings" element={<Legislation />} />
-        <Route path="calendar" element={<Calendar />} />
-        <Route path="roll" element={<Roll />} />
-        <Route path="documents" element={<Documents />} />
-        <Route path="user-tasks" element={<UserTasks />} />
-        <Route path="consultaions" element={<Consultations />} />
-        <Route path="contracts" element={<Contracts />} />
-        <Route path="client-details/:id" element={<ClientDetails />} />
-        <Route path="about-office" element={<AboutOffice />} />
-        <Route path="settings" element={<Settings />} />
-        {/* Reports Routes */}
-        <Route path="reports">
-          <Route path="clients" element={<ReportsClients />} />
-          <Route path="cases" element={<ReportsCases />} />
-          <Route path="sitting" element={<ReportsSitting />} />
-          <Route path="users" element={<ReportsUsers />} />
-          <Route path="expenses" element={<ReportsExpenses />} />
-          <Route path="payments" element={<ReportsPayments />} />
-        </Route>
-        {/* Users Routes */}
-        <Route path="users">
-          <Route path="clients" element={<UsersClients />} />
-          <Route path="lawyers" element={<UsersLawyers />} />
-          <Route path="employees" element={<UsersEmployees />} />
-        </Route>
-        {/* Finance Routes */}
-        <Route path="finance">
-          <Route path="expences" element={<FinanceExpenses />} />
-          <Route path="payments" element={<FinancePayments />} />
-        </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 }
 
 export default App;
+
