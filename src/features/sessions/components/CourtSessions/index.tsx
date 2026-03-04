@@ -1,12 +1,14 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React from "react";
-import { FirstDegreeSessions } from "./components/FirstDegreeSessions";
+import React, { useState } from "react";
 import { AppealSessions } from "./components/AppealSessions";
 import { DistinctionSessions } from "./components/DistinctionSessions";
-import { HeaderFirstDegreeSessionsTable } from "./components/FirstDegreeSessions/HeaderFirstDegreeSessionsTable";
-import { FirstDegreeTable } from "./components/FirstDegreeSessions/components/FirstDegreeTable";
+import { FirstDegreeSessions } from "./components/FirstDegreeSessions";
+import { SesstionsFooter } from "./components/SesstionsFooter";
+import { HeaderSessions } from "./HeaderSessions";
+
 
 const CourtSessions: React.FC = () => {
+  const [tab, setTab] = useState("first");
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-2xl p-4 md:p-6 border border-[#eeeeee]">
@@ -14,6 +16,7 @@ const CourtSessions: React.FC = () => {
           defaultValue="first"
           dir="rtl"
           className="flex w-full flex-col gap-2"
+          onValueChange={(value) => setTab(value)}
         >
           <TabsList className="mb-8 h-auto flex-wrap justify-start gap-4 bg-transparent p-0">
             <TabsTrigger
@@ -37,6 +40,7 @@ const CourtSessions: React.FC = () => {
           </TabsList>
 
           <div className="">
+            <HeaderSessions tab={tab} />
             <TabsContent value="first">
               <FirstDegreeSessions />
             </TabsContent>
@@ -49,10 +53,8 @@ const CourtSessions: React.FC = () => {
           </div>
         </Tabs>
       </div>
-      <div className="bg-white mt-7">
-        <HeaderFirstDegreeSessionsTable />
-        <FirstDegreeTable />
-      </div>
+
+      <SesstionsFooter tab={tab} />
     </div>
   );
 };

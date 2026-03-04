@@ -1,8 +1,5 @@
-import React from "react";
-import { HeaderDistinctionSessionsInfo } from "./HeaderDistinctionSessionsInfo";
-import { HeaderDistinctionSessionsTable } from "./HeaderDistinctionSessionsTable";
+
 import { DistinctionInfoSessions } from "./components/DistinctionInfoSessions";
-import { DistinctionTable } from "./components/DistinctionTable";
 
 const MOCK_DISTINCTION_DATA = {
     courtName: "نيابة",
@@ -21,12 +18,8 @@ const MOCK_DISTINCTION_DATA = {
 export const DistinctionSessions = () => {
     return (
         <>
-            <HeaderDistinctionSessionsInfo />
             <DistinctionInfoSessions distinctionData={MOCK_DISTINCTION_DATA} />
-            <div className="mt-8">
-                <HeaderDistinctionSessionsTable />
-                <DistinctionTable />
-            </div>
+
         </>
     );
 };

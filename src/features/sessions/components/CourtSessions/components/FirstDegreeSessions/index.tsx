@@ -1,14 +1,10 @@
 
-import { HeaderFirstDegreeSessionsInfo } from './HeaderFirstDegreeSessionsInfo'
-import { HeaderFirstDegreeSessionsTable } from './HeaderFirstDegreeSessionsTable'
 import { FirstDegreeInfoSessions } from './components/FirstDegreeInfoSessions'
-import { FirstDegreeTable } from './components/FirstDegreeTable'
 
 
 export const FirstDegreeSessions = () => {
     return (
         <>
-            <HeaderFirstDegreeSessionsInfo />
             <FirstDegreeInfoSessions firstDegreeData={{
                 courtName: "نيابة",
                 courtRole: "نيابة",

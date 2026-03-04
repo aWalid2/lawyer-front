@@ -1,8 +1,4 @@
-import React from "react";
-import { HeaderAppealSessionsInfo } from "./HeaderAppealSessionsInfo";
-import { HeaderAppealSessionsTable } from "./HeaderAppealSessionsTable";
 import { AppealInfoSessions } from "./components/AppealInfoSessions";
-import { AppealTable } from "./components/AppealTable";
 
 const MOCK_APPEAL_DATA = {
     courtName: "نيابة",
@@ -21,12 +17,8 @@ const MOCK_APPEAL_DATA = {
 export const AppealSessions = () => {
     return (
         <>
-            <HeaderAppealSessionsInfo />
             <AppealInfoSessions appealData={MOCK_APPEAL_DATA} />
-            <div className="mt-8">
-                <HeaderAppealSessionsTable />
-                <AppealTable />
-            </div>
+
         </>
     );
 };

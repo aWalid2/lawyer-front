@@ -15,20 +15,8 @@ import type { FirstDegreeFormValues } from "./components/typesCaseInfo";
 import { Button } from "@/components/ui/button";
 
 
-export const FormFirstDegreeDialog: React.FC = () => {
-  const initialValues: FirstDegreeFormValues = {
-    courtName: "نيابة",
-    courtRole: "نيابة",
-    courtRoomNumber: "نيابة",
-    courtCircleNumber: "نيابة",
-    courtType: "نيابة",
-    courtJudge: "نيابة",
-    courtSecretary: "نيابة",
-    courtSecretaryRole: "نيابة",
-    courtSecretaryNumber: "نيابة",
-    caseRegistrationDate: "sdfsdf",
-    nextSessionDate: "sdfsdf",
-  };
+export const FormSessionDialog: React.FC<{ title: string, initialValues: FirstDegreeFormValues }> = ({ title, initialValues }) => {
+
 
   return (
     <Dialog>
@@ -47,7 +35,7 @@ export const FormFirstDegreeDialog: React.FC = () => {
         </DialogClose>
         <DialogHeader className="mb-2 mt-15">
           <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
-            تعديل معلومات أول درجة
+            {title}
           </DialogTitle>
         </DialogHeader>
 
