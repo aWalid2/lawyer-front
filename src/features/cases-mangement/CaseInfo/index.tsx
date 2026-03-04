@@ -1,31 +1,17 @@
 import React from "react";
 import PageLayout from "@/components/shared/components/PageLayout";
-import { FormCaseDetails } from "./components/FormCaseDetails";
-import { useState } from "react";
-
-import { useNavigate } from "react-router-dom";
+import { CaseDetails } from "./components/FormCaseDetails";
 import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
-import { EditIcon } from "@/components/shared/icons/Edit";
+import { FormCaseDialog } from "./components/FormCaseDialog";
 
 const CaseInfo: React.FC = () => {
-  const [isEditing, setIsEditing] = useState(false);
   return (
     <PageLayout innerPage>
       <div className="flex items-center justify-between mb-6">
         <HeaderTitle title="معلومات القضية" />
-
-        <button
-          type="button"
-          className="flex items-center gap-2 bg-primary-gradient text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium h-12.5 hover:opacity-90"
-          onClick={() => setIsEditing(!isEditing)}
-        >
-          <EditIcon />
-          تعديل
-        </button>
+        <FormCaseDialog />
       </div>
-      <FormCaseDetails
-        isEditing={isEditing}
-        setIsEditing={setIsEditing}
+      <CaseDetails
         caseData={{
           autoNumber: "7363",
           complaintNumber: "234234",

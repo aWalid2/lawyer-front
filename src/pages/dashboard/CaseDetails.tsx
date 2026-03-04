@@ -6,8 +6,8 @@ const CaseDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 w-full min-h-screen mt-6">
-      <div className="w-full lg:w-fit">
+    <div className="flex flex-col xl:flex-row gap-6 w-full min-h-screen mt-6">
+      <div className="w-full xl:w-fit">
         <CaseSidebar />
       </div>
 

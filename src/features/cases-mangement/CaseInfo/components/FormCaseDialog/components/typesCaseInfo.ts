@@ -16,5 +16,6 @@ export interface CaseFormValues {
 
 export interface FormCaseDetailsProps {
   caseData: CaseFormValues;
-
+  isEditing: boolean;
+  setIsEditing: (value: boolean) => void;
 }
