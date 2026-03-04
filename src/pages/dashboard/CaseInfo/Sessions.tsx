@@ -3,10 +3,10 @@ import PageLayout from "@/components/shared/components/PageLayout";
 import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PoliceSessions from "@/features/sessions/components/PoliceSessions";
-import ProsecutionSessions from "@/features/sessions/components/ProsecutionSessions";
 import CourtSessions from "@/features/sessions/components/CourtSessions";
 import ExpertSessions from "@/features/sessions/components/ExpertSessions";
 import OtherSessions from "@/features/sessions/components/OtherSessions";
+import ProsecutionSessions from "@/features/sessions/components/ProsecutionSessions/index";
 
 const Sessions: React.FC = () => {
   return (
@@ -58,7 +58,7 @@ const Sessions: React.FC = () => {
             <PoliceSessions />
           </TabsContent>
           <TabsContent value="prosecution">
-            <ProsecutionSessions />
+            <ProsecutionSessions/>
           </TabsContent>
           <TabsContent value="court">
             <CourtSessions />
