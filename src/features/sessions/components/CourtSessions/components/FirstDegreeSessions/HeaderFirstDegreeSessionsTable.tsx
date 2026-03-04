@@ -5,9 +5,13 @@ import { PlusIcon } from 'lucide-react'
 
 export const HeaderFirstDegreeSessionsTable = () => {
     return (
-        <div className='flex justify-between items-center mb-4'>
-            <h2 className='text-lg  font-semibold text-secondary'>جلسات أول درجة</h2>
-            <Button className='bg-primary/15 text-primary px-8 py-2.5 max-w-[144px] h-12.5 rounded-[12px] font-semibold text-base hover:opacity-90 transition-opacity hover:text-white'> <PlusIcon className="w-4 h-4" /> إضافة جلسة </Button>
+        <div className="flex flex-wrap items-center justify-between gap-2 w-full pb-6">
+            <h2 className="text-xl font-semibold text-secondary font-cairo whitespace-nowrap self-start md:self-center">
+                جلسات أول درجة
+            </h2>
+            <Button className="bg-[#BF9A61] hover:bg-[#A68654] text-white shadow-[0_4px_14px_0_rgba(191,154,97,0.39)] h-12.5 px-8 rounded-[12px] flex items-center gap-2 text-sm font-semibold transition-all active:scale-95 whitespace-nowrap">
+                <PlusIcon className="w-4 h-4" /> إضافة جلسة
+            </Button>
         </div>
-    )
-}
+    );
+};
