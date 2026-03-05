@@ -1,6 +1,6 @@
 import React from "react";
 import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { EmployeesActions } from "./EmployeesActions";
+import { EmployeesActions } from "./components/EmployeesActions";
 import { Pagination } from "@/components/shared/components/Pagination";
 
 interface Employee {
