@@ -65,12 +65,12 @@ const Sessions: React.FC = () => {
           </TabsTrigger>
         </TabsList>
 
-        <div className="mt-20 sm:mt-9 md:mt-3">
+        <div className="mt-2 sm:mt-6">
           <TabsContent value="police">
             <PoliceSessions />
           </TabsContent>
           <TabsContent value="prosecution">
-            <ProsecutionSessions/>
+            <ProsecutionSessions />
           </TabsContent>
           <TabsContent value="court">
             <CourtSessions />

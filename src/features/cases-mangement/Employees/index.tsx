@@ -1,6 +1,7 @@
 import React from "react";
 import { DataTable, type Column } from "@/components/shared/components/DataTable";
 import { EmployeesActions } from "./EmployeesActions";
+import { Pagination } from "@/components/shared/components/Pagination";
 
 interface Employee {
     id: string;
@@ -20,6 +21,16 @@ const mockData: Employee[] = [
 ];
 
 export const Employees: React.FC = () => {
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const itemsPerPage = 15;
+
+    const totalPages = Math.ceil(mockData.length / itemsPerPage);
+
+    const currentData = React.useMemo(() => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return mockData.slice(startIndex, startIndex + itemsPerPage);
+    }, [currentPage]);
+
     const columns: Column<Employee>[] = [
         {
             header: "#",
@@ -29,7 +40,6 @@ export const Employees: React.FC = () => {
         {
             header: "اسم الموظف",
             accessor: "name",
-            className: "font-medium text-black",
         },
         {
             header: "رقم الهاتف",
@@ -53,12 +63,19 @@ export const Employees: React.FC = () => {
     ];
 
     return (
-        <div className="mt-4">
+        <div className="mt-4 bg-white">
             <DataTable
-                data={mockData}
+                data={currentData}
                 columns={columns}
                 rowIdField="id"
             />
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
+            )}
         </div>
     );
 };

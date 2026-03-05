@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Case, CasesTableProps } from "./casesTypes";
 import { EmptyState } from "./EmptyState";
-import { Pagination } from "./Pagination";
+import { Pagination } from "@/components/shared/components/Pagination";
 import { TableCasesHeader } from "./TableCasesHeader";
 import { TableCasesRow } from "./TableCasesRow";
 
@@ -14,7 +14,7 @@ export const CasesTable: React.FC<CasesTableProps> = ({
   onDelete,
 }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-const searchTerm="";
+  const searchTerm = "";
 
   const itemsPerPage = 15;
 
@@ -59,8 +59,8 @@ const searchTerm="";
   }
 
   return (
-    <div className="space-y-6 ">
-      <div className="overflow-x-auto bg-white  ">
+    <div className="space-y-6">
+      <div className="">
         <table className="w-full border-collapse">
           <TableCasesHeader />
           <tbody>
@@ -77,17 +77,18 @@ const searchTerm="";
             ))}
           </tbody>
         </table>
-      </div>
+        {totalPages > 1 && (
 
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-          totalItems={filteredCases.length}
-          itemsPerPage={itemsPerPage}
-        />
-      )}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+            totalItems={filteredCases.length}
+            itemsPerPage={itemsPerPage}
+          />
+
+        )}
+      </div>
     </div>
   );
 };
