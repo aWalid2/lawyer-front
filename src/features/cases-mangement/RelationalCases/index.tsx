@@ -2,6 +2,7 @@ import React from 'react'
 import { HeaderRelationalCases } from './components/HeaderRelationalCases'
 import { DataTable, type Column } from '@/components/shared/components/DataTable'
 import { RelationalCasesActions } from './components/RelationalCasesActions';
+import { Pagination } from '@/components/shared/components/Pagination';
 
 
 
@@ -27,19 +28,34 @@ const mockData: CasesRelatedT[] = [
 
 export const RelationalCases: React.FC<RelationalCasesTypes> = () => {
 
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const itemsPerPage = 15;
+
+    const totalPages = Math.ceil(mockData.length / itemsPerPage);
+
+    const currentData = React.useMemo(() => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return mockData.slice(startIndex, startIndex + itemsPerPage);
+    }, [currentPage]);
+
     const columns: Column<any>[] = [
         {
             header: "#",
             accessor: (item) => mockData.findIndex((e) => e.id === item.id) + 1,
-            headerClassName: "w-16",
+            headerClassName: "w-13",
+            className: "w-13",
         },
         {
             header: "كود القضية",
             accessor: "caseCode",
+            headerClassName: "w-35",
+            className: "w-35",
         },
         {
             header: "الرقم الآلي",
             accessor: "autoNumber",
+            headerClassName: "w-35",
+            className: "w-35",
         },
         {
             header: "إجراء",
@@ -50,16 +66,25 @@ export const RelationalCases: React.FC<RelationalCasesTypes> = () => {
                     onView={(caseItem) => console.log("View", caseItem)}
                 />
             ),
+            headerClassName: "w-35",
+            className: "w-35",
         },
     ];
     return (
         <div>
             <HeaderRelationalCases title="القضايا ذات الصلة" buttonTitle=" إضافة قضية مرتبطه" />
             <DataTable
-                data={mockData}
+                data={currentData}
                 columns={columns}
                 rowIdField="id"
             />
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
+            )}
         </div>
     )
 }

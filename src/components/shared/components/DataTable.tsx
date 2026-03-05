@@ -38,7 +38,7 @@ export const DataTable = <T,>({
                         {columns.map((column, index) => (
                             <TableHead
                                 key={index}
-                                className={`p-2 text-center text-sm font-semibold text-[#4B5675] border-r border-[#F1F1F4] h-[37px] ${column.headerClassName || ""}`}
+                                className={`p-2 text-center text-sm font-semibold text-[#4B5675]  border-r border-[#F1F1F4] h-[37px] ${column.headerClassName || ""}`}
                             >
                                 {column.header}
                             </TableHead>
