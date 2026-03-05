@@ -11,7 +11,7 @@ const caseData = {
 
 export const CaseSidebar: React.FC = () => {
   return (
-    <aside className="w-full sm:w-[273px] bg-white rounded-[12px] shadow-primary py-6 px-4 flex flex-col gap-6 h-fit">
+    <aside className="w-full xl:w-[273px] bg-white rounded-[12px] shadow-primary py-6 px-4 flex flex-col gap-6 h-fit">
       <CaseSummaryCard caseData={caseData} />
 
       <NavigationMenu />
