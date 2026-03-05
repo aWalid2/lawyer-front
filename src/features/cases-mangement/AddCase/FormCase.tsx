@@ -12,8 +12,12 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import arrow from "../../../../public/images/arrow.svg";
+import { UnderTheRift } from "./Undertheift";
+import { PublicProsecution } from "./PublicProsecution";
+import { InProsecution } from "./InProsecution";
+import { initialValues } from "./initialValues";
 
-// ثوابت الكلاسات
+// ثوابت الكلاسات (بدون تغيير)
 const CLASSES = {
   inputBase: "w-full border rounded-md p-2 bg-[#FBFBFB]",
   inputMedium: "h-10 md:h-[50px]",
@@ -47,8 +51,9 @@ const CLASSES = {
 const FormCase = () => {
   const validationSchem = validationSchema;
 
-  const [hasContract, setHasContract] = useState(false);
+  const [Discount, setHasDiscount] = useState(false);
   const [feeType, setFeeType] = useState<string>("");
+  const [caseType, setCaseType] = useState<string>("");
 
   // مصفوفة الخيارات
   const feeOptions = [
@@ -57,32 +62,9 @@ const FormCase = () => {
     { value: "contract", label: "تابعة للعقد" },
   ];
 
-  const initialValues: FormValues = {
-    // حقول القضية الجديدة
-    caseStatus: "pending",
-    caseTitle: "",
-    clientName: "",
 
-    // باقي الحقول
-    clientType: "individual",
-    firstName: "",
-    secondName: "",
-    countryCode: "+20",
-    phone: "",
-    civilId: "",
-    nationality: "",
-    country: "",
-    address: "",
-    email: "",
-    contractStartDate: "",
-    contractValue: "",
-    contractDuration: "",
-    contractImage: null,
-    powerOfAttorneyImage: null,
-    notes: "",
-    password: "",
-    confirmPassword: "",
-  };
+ 
+
   return (
     <Formik<FormValues>
       initialValues={initialValues}
@@ -105,8 +87,11 @@ const FormCase = () => {
                   وضع القضية عند الاستلام
                 </label>
                 <Select
-                  value={values.caseStatus}
-                  onValueChange={(value) => setFieldValue("caseStatus", value)}
+                  value={values.caseType}
+                  onValueChange={(value) => {
+                    setFieldValue("caseType", value);
+                    setCaseType(value);
+                  }}
                   dir="rtl"
                 >
                   <SelectTrigger className={CLASSES.selectTrigger}>
@@ -116,151 +101,33 @@ const FormCase = () => {
                     className={`${CLASSES.selectContent} lg:w-[907px] sm:w-[400px] md:w-[500px] w-full`}
                   >
                     <SelectItem value="pending">تحت الرفع</SelectItem>
-                    <SelectItem value="inProgress">تحت التنفيذ</SelectItem>
-                    <SelectItem value="review">تحت النظر</SelectItem>
+                    <SelectItem value="inProgress"> الادعاء العام</SelectItem>
+                    <SelectItem value="review"> في النيابة</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              {/* عنوان القضية + اسم الموكل */}
-              <div className={CLASSES.flexRow + " mb-4"}>
-                <div className="flex-1">
-                  <label className={CLASSES.labelText}>عنوان القضية</label>
-                  <Field
-                    name="caseTitle"
-                    type="text"
-                    className={CLASSES.inputField}
-                    placeholder="عنوان القضية"
-                  />
-                </div>
-                <div className="flex-1">
-                  <label className={CLASSES.labelText}>اسم الموكل</label>
-                  <Select
-                    value={values.clientName}
-                    onValueChange={(value) =>
-                      setFieldValue("clientName", value)
-                    }
-                  >
-                    <SelectTrigger className={CLASSES.selectTrigger}>
-                      <SelectValue placeholder="اختر الموكل" />
-                    </SelectTrigger>
-                    <SelectContent
-                      className={`${CLASSES.selectContent} lg:w-[447px] sm:w-[250px] md:w-[300px] w-full`}
-                    >
-                      <SelectItem value="Ahmed">احمد</SelectItem>
-                      <SelectItem value="Mohammed">محمد</SelectItem>
-                      <SelectItem value="Ali">علي</SelectItem>
-                      <SelectItem value="Khalid">خالد</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              {/* نوع القضية + صفه الموكل */}
-              <div className={CLASSES.flexRow + " mb-4"}>
-                <div className="flex-1">
-                  <label className={CLASSES.labelText}>
-                    وضع القضية عند الاستلام
-                  </label>
-                  <Select
-                    value={values.caseStatus}
-                    onValueChange={(value) =>
-                      setFieldValue("caseStatus", value)
-                    }
-                    dir="rtl"
-                  >
-                    <SelectTrigger className={CLASSES.selectTrigger}>
-                      <SelectValue placeholder="اختر وضع القضية" />
-                    </SelectTrigger>
-                    <SelectContent
-                      className={`${CLASSES.selectContent} lg:w-[447px] sm:w-[250px] md:w-[300px] w-full`}
-                    >
-                      <SelectItem value="pending">تحت الرفع</SelectItem>
-                      <SelectItem value="inProgress">تحت التنفيذ</SelectItem>
-                      <SelectItem value="review">تحت النظر</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex-1">
-                  <label className={CLASSES.labelText}>صفه الموكل</label>
-                  <Select
-                    value={values.clientType}
-                    onValueChange={(value) =>
-                      setFieldValue("clientType", value)
-                    }
-                    dir="rtl"
-                  >
-                    <SelectTrigger className={CLASSES.selectTrigger}>
-                      <SelectValue placeholder="  الموكل" />
-                    </SelectTrigger>
-                    <SelectContent
-                      className={`${CLASSES.selectContent} lg:w-[447px] sm:w-[250px] md:w-[300px] w-full`}
-                    >
-                      <SelectItem value="individual">مدعي</SelectItem>
-                      <SelectItem value="company">شركة</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              {/* نوع القضيه +تاريخ ورود القضية داخل المكتب */}
-              <div className={CLASSES.flexRow + " mb-4"}>
-                <div className="flex-1">
-                  <label className={CLASSES.labelText}>نوع القضية</label>
-                  <Select
-                    value={values.caseStatus}
-                    onValueChange={(value) =>
-                      setFieldValue("caseStatus", value)
-                    }
-                    dir="rtl"
-                  >
-                    <SelectTrigger className={CLASSES.selectTrigger}>
-                      <SelectValue placeholder="اختر نوع القضية" />
-                    </SelectTrigger>
-                    <SelectContent
-                      className={`${CLASSES.selectContent} lg:w-[447px] sm:w-[250px] md:w-[300px] w-full`}
-                    >
-                      <SelectItem value="pending">حنائي</SelectItem>
-                      <SelectItem value="inProgress">مدني</SelectItem>
-                      <SelectItem value="review">تجاري</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex-1">
-                  <label className={CLASSES.labelText}>
-                    تاريخ ورود القضية داخل المكتب
-                  </label>
-                  <Field
-                    name="caseReceiptDate"
-                    type="date"
-                    className={`${CLASSES.inputField} appearance-none text-left`}
-                  />
-                </div>
-              </div>
-              {/* ملاحظات */}
-              <div className="flex flex-col" dir="rtl">
-                <h1
-                  className={`${CLASSES.sectionTitle} pb-3 md:pb-5 text-right`}
-                >
-                  ملاحظات
-                </h1>
-                <Field
-                  name="notes"
-                  as="textarea"
-                  className="w-full border rounded-md p-2 text-sm bg-[#FBFBFB] h-20 md:h-[102px] resize-none text-right"
-                />
-              </div>
+              {/* الحقول التي تظهر فقط عند اختيار "تحت الرفع" */}
+              {caseType === "pending" && (<UnderTheRift /> )}
+
+              {/* الحقول التي تظهر عند اختيار "الادعاء العام" أو "في النيابة" */}
+              {(caseType === "inProgress") && ( <PublicProsecution />)}
+
+              {/* باقي الحقل (الخصم، الأتعاب، زر الإرسال) - تظهر في جميع الحالات */}
+              {(caseType === "review") && ( <InProsecution/> )}
               {/* Switch الخصم */}
               <div
                 className={`${CLASSES.flexBetween} ${CLASSES.extraLargeSectionPadding}`}
               >
                 <h1 className="text-sm font-medium p-6">إضافة خصم </h1>
                 <Switch
-                  checked={hasContract}
-                  onCheckedChange={setHasContract}
+                  checked={Discount}
+                  onCheckedChange={setHasDiscount}
                 />
               </div>
 
-              {/* بيانات الخصم - تظهر فقط إذا hasContract = true */}
-              {hasContract && (
+              {/* بيانات الخصم - تظهر فقط إذا Discount = true */}
+              {Discount && (
                 <div className="pt-6">
                   <div className={CLASSES.formSection}>
                     <div className="flex items-center justify-between">
@@ -356,11 +223,10 @@ const FormCase = () => {
                         className="hidden"
                       />
                       <div
-                        className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all max-sm:w-5 max-sm:h-5 shrink-0 ${
-                          feeType === option.value
-                            ? "border-[#DBDBDB]/32"
-                            : "border-[#DBDBDB]"
-                        }`}
+                        className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all max-sm:w-5 max-sm:h-5 shrink-0 ${feeType === option.value
+                          ? "border-[#DBDBDB]/32"
+                          : "border-[#DBDBDB]"
+                          }`}
                       >
                         {feeType === option.value && (
                           <div className="w-5 h-5 rounded-full bg-primary max-sm:w-4 max-sm:h-4 shrink-0"></div>
