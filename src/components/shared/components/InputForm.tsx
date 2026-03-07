@@ -1,5 +1,12 @@
-import { Field } from "formik";
 import React from "react";
+import { useField, useFormikContext } from "formik";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
 
 type InputFormProps = {
   name: string;
@@ -18,17 +25,75 @@ export const InputForm: React.FC<InputFormProps> = ({
   type,
   dir,
 }) => {
+  const [field, meta] = useField(name);
+  const { setFieldValue } = useFormikContext();
+
+  if (type === "date") {
+    return (
+      <div className="flex flex-col w-full">
+        <label className="block mb-4 text-sm font-normal text-[#1A1A1A]">
+          {label}
+        </label>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={cn(
+                "w-full justify-between gap-2 items-center text-left font-normal h-[50px] border-[#E8E8E8] rounded-[10px] bg-[#FBFBFB] px-4",
+                !field.value && "text-muted-foreground",
+                meta.touched && meta.error && "border-red-500"
+              )}
+              disabled={disabled}
+            >
+              <CalendarIcon className="h-4 w-4 opacity-50 text-gray-500" />
+              <span>
+                {field.value ? (
+                  format(new Date(field.value), "yyyy-MM-dd")
+                ) : (
+                  <span>{placeholder || "اختر تاريخ"}</span>
+                )}
+              </span>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={field.value ? new Date(field.value) : undefined}
+              onSelect={(date) => {
+                if (date) {
+                  setFieldValue(name, format(date, "yyyy-MM-dd"));
+                }
+              }}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+        {meta.touched && meta.error && (
+          <span className="text-xs text-red-500 mt-1">{meta.error}</span>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col w-full">
-      <label className="block mb-4 text-sm font-normal ">{label}</label>
-      <Field
-        dir={dir}
-        name={name}
+      <label className="block mb-4 text-sm font-normal text-[#1A1A1A]">
+        {label}
+      </label>
+      <Input
+        {...field}
         type={type}
-        className="w-full border border-[#E8E8E8] rounded-[10px] p-3 bg-[#FBFBFB] h-12.5 text-[#464646] text-base font-normal  disabled:opacity-70"
         placeholder={placeholder}
         disabled={disabled}
+        dir={dir}
+        className={cn(
+          "text-right",
+          meta.touched && meta.error && "border-red-500"
+        )}
       />
+      {meta.touched && meta.error && (
+        <span className="text-xs text-red-500 mt-1">{meta.error}</span>
+      )}
     </div>
   );
 };

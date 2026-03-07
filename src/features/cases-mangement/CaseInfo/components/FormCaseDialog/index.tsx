@@ -11,6 +11,7 @@ import {
 import { XIcon } from "lucide-react";
 import { EditIcon } from "@/components/shared/icons/Edit";
 import { InputForm } from "../../../../../components/shared/components/InputForm";
+import { SelectForm } from "../../../../../components/shared/components/SelectForm";
 import type { CaseFormValues } from "./components/typesCaseInfo";
 
 export const FormCaseDialog: React.FC = () => {
@@ -18,17 +19,56 @@ export const FormCaseDialog: React.FC = () => {
     autoNumber: "7363",
     complaintNumber: "543257",
     clientName: "خليل محمد",
-    caseTitle: "خليل محمد",
-    court: "محكمة1",
-    litigationLevel: "اول درجة",
-    status: "متداولة",
-    caseType: "جنائي",
+    caseTitle: "مدعي",
+    court: "محكمة ابتدائية",
+    status: "جديد",
+    litigationLevel: "أول درجة",
+    caseType: "مدني",
     clientRelation: "مدعي عليه",
-    statusOnReceipt: "متداولة",
+    statusOnReceipt: "مستلم",
     creationDate: "2026-01-20",
     receiptDate: "2026-01-20",
     notes: "-",
   };
+
+  const clientNameOptions = [
+    { label: "خليل محمد", value: "خليل محمد" },
+    { label: "أحمد علي", value: "أحمد علي" },
+    { label: "سارة محمود", value: "سارة محمود" },
+  ];
+
+  const caseTitleOptions = [
+    { label: "مدعي", value: "مدعي" },
+    { label: "مدعي عليه", value: "مدعي عليه" },
+    { label: "مستأنف", value: "مستأنف" },
+    { label: "مستأنف ضده", value: "مستأنف ضده" },
+  ];
+
+  const courtOptions = [
+    { label: "محكمة ابتدائية", value: "محكمة ابتدائية" },
+    { label: "محكمة استئناف", value: "محكمة استئناف" },
+    { label: "محكمة النقض", value: "محكمة النقض" },
+    { label: "محكمة الأسرة", value: "محكمة الأسرة" },
+  ];
+
+  const litigationLevelOptions = [
+    { label: "أول درجة", value: "أول درجة" },
+    { label: "استئناف", value: "استئناف" },
+    { label: "نقض", value: "نقض" },
+  ];
+
+  const statusOptions = [
+    { label: "جديد", value: "جديد" },
+    { label: "قيد المراجعة", value: "قيد المراجعة" },
+    { label: "مستلم", value: "مستلم" },
+  ];
+
+  const caseTypeOptions = [
+    { label: "مدني", value: "مدني" },
+    { label: "جنائي", value: "جنائي" },
+    { label: "تجاري", value: "تجاري" },
+    { label: "عمالي", value: "عمالي" },
+  ];
 
   return (
     <Dialog>
@@ -67,49 +107,56 @@ export const FormCaseDialog: React.FC = () => {
             <Form className="space-y-4">
               <div
                 className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4"
-                dir="rtl"
+
               >
+                <InputForm name="autoNumber" label="كود القضية" type="text" />
                 <InputForm
-                  name="autoNumber"
+                  name="complaintNumber"
                   label="الرقم الآلي للقضية"
                   type="text"
                 />
-                <InputForm
-                  name="complaintNumber"
-                  label="رقم الشكوى"
-                  type="text"
+
+                <SelectForm
+                  name="clientName"
+                  label="اسم الموكل"
+                  options={clientNameOptions}
                 />
-
-                <InputForm name="clientName" label="اسم الموكل" type="text" />
-                <InputForm name="caseTitle" label="عنوان القضية" type="text" />
-
-                <InputForm name="court" label="المحكمة" type="text" />
-                <InputForm
-                  name="litigationLevel"
-                  label="درجة التقاضي الحالية"
-                  type="text"
-                />
-
-                <InputForm name="status" label="حالة القضية" type="text" />
-                <InputForm name="caseType" label="نوع القضية" type="text" />
-
-                <InputForm
-                  name="clientRelation"
+                <SelectForm
+                  name="caseTitle"
                   label="صفة الموكل"
-                  type="text"
+                  options={caseTitleOptions}
                 />
-                <InputForm
-                  name="statusOnReceipt"
+
+                <SelectForm
+                  name="court"
+                  label="نوع القضية"
+                  options={courtOptions}
+                />
+                <SelectForm
+                  name="litigationLevel"
+                  label="حالة القضية"
+                  options={litigationLevelOptions}
+                />
+
+                <SelectForm
+                  name="status"
                   label="وضع القضية عند الاستلام"
-                  type="text"
+                  options={statusOptions}
+                />
+                <SelectForm
+                  name="caseType"
+                  label="درجة التقاضي"
+                  options={caseTypeOptions}
                 />
 
                 <InputForm
+                  dir="ltr"
                   name="creationDate"
                   label="تاريخ إنشاء القضية"
                   type="date"
                 />
                 <InputForm
+                  dir="ltr"
                   name="receiptDate"
                   label="تاريخ ورود القضية في المكتب"
                   type="date"

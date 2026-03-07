@@ -1,6 +1,6 @@
 import React from "react";
 import PageLayout from "@/components/shared/components/PageLayout";
-import { CaseDetails } from "./components/FormCaseDetails";
+import { CaseDetailsInfo } from "./components/CaseDetailsInfo";
 import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 import { FormCaseDialog } from "./components/FormCaseDialog";
 
@@ -11,7 +11,7 @@ const CaseInfo: React.FC = () => {
         <HeaderTitle title="معلومات القضية" />
         <FormCaseDialog />
       </div>
-      <CaseDetails
+      <CaseDetailsInfo
         caseData={{
           autoNumber: "7363",
           complaintNumber: "234234",

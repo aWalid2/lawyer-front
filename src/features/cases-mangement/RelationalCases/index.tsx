@@ -17,12 +17,12 @@ interface CasesRelatedT {
 }
 
 const mockData: CasesRelatedT[] = [
-    { id: "1", caseCode: "محمد علي", autoNumber: "073972983" },
-    { id: "2", caseCode: "محمد علي", autoNumber: "073972983" },
-    { id: "3", caseCode: "محمد علي", autoNumber: "073972983" },
-    { id: "4", caseCode: "محمد علي", autoNumber: "073972983" },
-    { id: "5", caseCode: "محمد علي", autoNumber: "073972983" },
-    { id: "6", caseCode: "محمد علي", autoNumber: "073972983" },
+    { id: "1", caseCode: "#6341", autoNumber: "#6341" },
+    { id: "2", caseCode: "#6341", autoNumber: "#6341" },
+    { id: "3", caseCode: "#6341", autoNumber: "#6341" },
+    { id: "4", caseCode: "#6341", autoNumber: "#6341" },
+    { id: "5", caseCode: "#6341", autoNumber: "#6341" },
+    { id: "6", caseCode: "#6341", autoNumber: "#6341" },
 
 ];
 
