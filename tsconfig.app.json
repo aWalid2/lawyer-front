@@ -9,6 +9,9 @@
     "skipLibCheck": true,
         "baseUrl": ".",
     "paths": {
+      "@/public/*": [
+        "./public/*"
+      ],
       "@/*": [
         "./src/*"
       ]

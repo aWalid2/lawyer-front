@@ -1,4 +1,5 @@
 import { Menu } from "lucide-react";
+import logo from "@/public/images/logo.webp";
 import {
   Sheet,
   SheetContent,
@@ -16,7 +17,7 @@ const SidebarDashboard = () => {
         <div className="hidden lg:block bg-white h-fit min:h-fit w-70 md:bg-white md:min-h-screen p-4 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] rounded-[12px]   ">
           <div className="mb-10">
             <img
-              src="/public/images/logo.webp"
+              src={logo}
               alt="logo"
               className="h-12 w-auto object-contain"
             />
@@ -40,7 +41,7 @@ const SidebarDashboard = () => {
             <div className="h-fit min:h-fit w-80 md:bg-gray-50  p-4   overflow-y-scroll  ">
               <div className="flex items-center gap-3">
                 <img
-                  src="/public/images/logo.webp"
+                  src={logo}
                   alt="logo"
                   className="h-12 w-auto object-contain"
                 />

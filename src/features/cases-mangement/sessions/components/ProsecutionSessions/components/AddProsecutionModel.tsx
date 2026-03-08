@@ -1,5 +1,5 @@
 import { Formik, Form } from "formik";
-import close from "../../../../../public/images/close.svg";
+import close from "@/public/images/close.svg";
 import { useState } from "react";
 import * as Yup from "yup";
 import {

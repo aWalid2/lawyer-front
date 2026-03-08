@@ -1,7 +1,8 @@
 import { useState } from "react";
-import edit from '../../../../../public/images/edit.svg';
-import deleteIcon from '../../../../../public/images/delete.svg';
-import AddPoliceModel from "./AddPoliceModel";
+import edit from '@/public/images/edit.svg'
+import deleteIcon from '@/public/images/delete.svg'
+import type { SessionFormValues } from '../components/typseProsecution';
+import AddProsecutionModel from "./AddProsecutionModel";
 
 // واجهة بيانات الجلسات
 interface SessionData {
@@ -12,7 +13,9 @@ interface SessionData {
     decision: string;
 }
 
-const AddPoliceStationsession = () => {
+
+
+const TableProsecution = () => {
     // بيانات مؤقتة للجدول
     const [sessionsData, setSessionsData] = useState<SessionData[]>([
         {
@@ -45,8 +48,6 @@ const AddPoliceStationsession = () => {
         },
     ]);
 
-
-    
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingSession, setEditingSession] = useState<SessionData | null>(null);
 
@@ -65,18 +66,12 @@ const AddPoliceStationsession = () => {
         setEditingSession(null);
     };
 
-    const handleSaveSession = (values: any) => {
+    const handleSaveSession = (values: SessionFormValues) => {
         if (editingSession) {
             // تعديل جلسة موجودة
             const updatedSessions = sessionsData.map(session =>
                 session.id === editingSession.id
-                    ? { 
-                        ...session, 
-                        sessionDate: values.sessionDate,
-                        sessionTime: values.sessionTime,
-                        lawyer: values.lawyer,
-                        decision: values.decision 
-                      }
+                    ? { ...session, ...values }
                     : session
             );
             setSessionsData(updatedSessions);
@@ -85,10 +80,7 @@ const AddPoliceStationsession = () => {
             // إضافة جلسة جديدة
             const newSession = {
                 id: sessionsData.length > 0 ? Math.max(...sessionsData.map(s => s.id)) + 1 : 1,
-                sessionDate: values.sessionDate,
-                sessionTime: values.sessionTime,
-                lawyer: values.lawyer,
-                decision: values.decision,
+                ...values,
             };
             setSessionsData([...sessionsData, newSession]);
             console.log("تم إضافة الجلسة:", newSession);
@@ -105,30 +97,30 @@ const AddPoliceStationsession = () => {
         }
     };
 
+
     return (
         <div className="border border-gray-300 p-4 rounded-xl">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4">
-                <h1 className="text-xl font-cairo">جلسات المخفر</h1>
+                <h1 className="text-xl font-cairo">جلسات النيابة</h1>
                 <button
                     type="button"
                     onClick={handleOpenModal}
                     className="flex shrink-0 items-center justify-center gap-2 bg-[#CBA46226] rounded-md w-full sm:w-[180px] md:w-[200px] h-[50px] transition-colors duration-200 px-2 hover:bg-[#CBA46240]"
                 >
-                    <span className="text-[14px] sm:text-[16px] font-medium whitespace-nowrap text-[#CBA462]">+ إضافة جلسة مخفر</span>
+                    <span className="text-[14px] sm:text-[16px] font-medium whitespace-nowrap text-[#CBA462]">+ إضافة جلسة نيابة</span>
                 </button>
             </div>
 
             {/* الجدول */}
             <div className="overflow-x-auto">
-                <table className="w-full border-collapse border-r border-[#E6E6E6]">
+                <table className="w-full border-collapse">
                     <thead>
                         <tr className="bg-[#FCFCFC] border-b-2 border-[#F1F1F4]">
                             <th className="p-3 text-center text-sm font-semibold text-[#4B5675] border-l border-[#F1F1F4] w-[60px]">#</th>
-                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] border-l border-[#F1F1F4] w-[150px]">تاريخ الجلسة</th>
-                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] border-l border-[#F1F1F4] w-[120px]">وقت الجلسة</th>
-                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] border-l border-[#F1F1F4] w-[200px]">المحامي المتابع</th>
+                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] border-l border-[#F1F1F4] w-[150px]">تاريخ ووقت الجلسة</th>
+                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] border-l border-[#F1F1F4] w-[200px]">المحامي المسؤول</th>
                             <th className="p-3 text-center text-sm font-semibold text-[#4B5675] border-l border-[#F1F1F4] w-[150px]">قرار الجلسة</th>
-                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] w-[150px]">الإجراءات</th>
+                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] w-[150px]">إجراء</th>
                         </tr>
                     </thead>
 
@@ -142,28 +134,31 @@ const AddPoliceStationsession = () => {
                                     {index + 1}
                                 </td>
                                 <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base text-gray-600 border-l border-gray-200 text-center whitespace-nowrap">
-                                    {session.sessionDate}
-                                </td>
-                                <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base text-gray-600 border-l border-gray-200 text-center whitespace-nowrap">
-                                    {session.sessionTime}
+                                    <div className="flex items-center justify-center gap-5">
+                                        <span>{session.sessionTime}</span>
+
+                                        <span>{session.sessionDate}</span>
+                                    </div>
                                 </td>
                                 <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base font-medium text-gray-800 border-l border-gray-200 text-center whitespace-nowrap">
                                     {session.lawyer}
                                 </td>
                                 <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base border-l border-gray-200 text-center whitespace-nowrap">
+                                    <span className="*inline-flex items-center justify-center px-3 py-1 rounded-lg text-xs md:text-sm whitespace-nowrap" >
                                         {session.decision}
+                                    </span>
                                 </td>
                                 <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base">
                                     <div className="flex items-center justify-center gap-2 md:gap-3 flex-nowrap">
-                                        <button 
-                                            title="تعديل" 
+                                        <button
+                                            title="تعديل"
                                             onClick={() => handleEditSession(session)}
                                             className="hover:scale-110 transition shrink-0"
                                         >
                                             <img src={edit} alt="edit" className="max-sm:w-5 max-sm:h-5 max-md:w-5 max-md:h-5" />
                                         </button>
-                                        <button 
-                                            title="حذف" 
+                                        <button
+                                            title="حذف"
                                             onClick={() => handleDeleteSession(session.id)}
                                             className="hover:scale-110 transition shrink-0"
                                         >
@@ -186,7 +181,7 @@ const AddPoliceStationsession = () => {
 
             {/* مودال إضافة/تعديل جلسة */}
             {isModalOpen && (
-                <AddPoliceModel
+                <AddProsecutionModel
                     onClose={handleCloseModal}
                     onSave={handleSaveSession}
                     initialValues={editingSession || undefined}
@@ -196,4 +191,4 @@ const AddPoliceStationsession = () => {
     );
 };
 
-export default AddPoliceStationsession;
+export default TableProsecution;

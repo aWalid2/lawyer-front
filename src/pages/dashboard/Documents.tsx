@@ -1,6 +1,7 @@
+import DocumentsFeature from "@/features/documents";
 
 const Documents = () => {
-  return <div>Documents</div>;
+  return <DocumentsFeature />;
 };
 
 export default Documents;

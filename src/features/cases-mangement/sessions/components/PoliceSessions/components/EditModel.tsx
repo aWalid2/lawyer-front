@@ -1,17 +1,25 @@
-import { Formik, Form, Field } from "formik";
-import close from "../../../../../public/images/close.svg";
+import { Field, Form, Formik } from "formik";
 import { useState } from "react";
-import { validationSchema } from "./ValidationSchema";
-import type { FormValues } from "./typseProsecution";
+import close from "@/public/images/close.svg";
+import { validationSchema } from "../ValidationSchema";
 
 // تعريف الـ interface للـ props
 interface EditModelProps {
-  initialValues: FormValues;  // الآن يستخدم FormValues الكامل
+  initialValues: FormValues;
   onClose: () => void;
   onSave: (values: FormValues) => void;
 }
 
-  const modalClasses = {
+interface FormValues {
+  caseTitle: string;
+  notes: string;
+  clientName: string;
+  investigationSource: string;
+  caseReceiptDate: string;
+}
+
+// تعريف CSS classes مجمعة
+const modalClasses = {
   overlay: "fixed inset-0 z-50 flex items-center justify-center px-3 sm:px-6",
   backdrop: "absolute inset-0 bg-black/30",
   container: "relative w-full max-w-[520px] rounded-2xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.18)] overflow-hidden",
@@ -29,25 +37,29 @@ interface EditModelProps {
   submitButton: "w-full h-11 sm:h-12 rounded-xl text-sm sm:text-base font-medium text-white bg-[linear-gradient(to_right,#E3C086,#CBA462)] hover:brightness-95 transition"
 };
 
-function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps) {
+function EditModel({ initialValues, onClose, onSave }: EditModelProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);
+
+  const validationSchem = validationSchema;
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    onClose();
+    onClose(); // استدعاء onClose من props
   };
 
   const handleSaveChanges = (values: FormValues) => {
     console.log("تم حفظ التغييرات:", values);
     setIsModalOpen(false);
-    onSave(values);
+    onSave(values); // استدعاء onSave من props مع القيم الجديدة
   };
 
   if (!isModalOpen) return null;
 
   return (
     <div className={modalClasses.overlay}>
-      <div className={modalClasses.backdrop} onClick={handleCloseModal} />
+      <div
+        className={modalClasses.backdrop}
+      />
 
       <div dir="rtl" className={modalClasses.container}>
         <div className={modalClasses.header}>
@@ -61,70 +73,77 @@ function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps
           </button>
 
           <h2 className={modalClasses.title}>
-            تعديل بيانات النيابة
+            تعديل بيانات المخفر
           </h2>
         </div>
 
         <Formik<FormValues>
-          initialValues={initialValues}
-          validationSchema={validationSchema}
+          initialValues={initialValues} // استخدام initialValues من props
+          validationSchema={validationSchem}
           onSubmit={handleSaveChanges}
         >
-          {({ handleSubmit, errors, touched }) => (
+          {({ handleSubmit }) => (
             <Form onSubmit={handleSubmit}>
               <div className={modalClasses.body}>
                 <div className={modalClasses.formContainer}>
-                  {/* النيابة */}
                   <div className={modalClasses.fieldWrapper}>
                     <label className={modalClasses.label}>
-                      النيابة
+                      رقم القضية في المخفر
                     </label>
                     <Field
-                      name="prosecutionName"
+                      name="caseTitle"
                       type="text"
-                      className={`${modalClasses.input} ${
-                        errors.prosecutionName && touched.prosecutionName ? "border-red-500" : ""
-                      }`}
-                      placeholder="النيابة"
+                      className={modalClasses.input}
+                      placeholder="رقم القضية في المخفر"
                     />
-                    {errors.prosecutionName && touched.prosecutionName && (
-                      <div className="text-red-500 text-xs mt-1">{errors.prosecutionName}</div>
-                    )}
                   </div>
 
-                  {/* رقم القضية في النيابة */}
                   <div className={modalClasses.fieldWrapper}>
                     <label className={modalClasses.label}>
-                      رقم القضية في النيابة
+                      المخفر التابع له القضية
                     </label>
                     <Field
-                      name="caseNumberInProsecution"
-                      type="text"
-                      className={`${modalClasses.input} ${
-                        errors.caseNumberInProsecution && touched.caseNumberInProsecution ? "border-red-500" : ""
-                      }`}
-                      placeholder="رقم القضية في النيابة"
+                      name="notes"
+                      as="textarea"
+                      className={modalClasses.textarea}
+                      placeholder="المخفر التابع له القضية"
                     />
-                    {errors.caseNumberInProsecution && touched.caseNumberInProsecution && (
-                      <div className="text-red-500 text-xs mt-1">{errors.caseNumberInProsecution}</div>
-                    )}
                   </div>
 
-                  {/* تاريخ تسجيل القضية داخل النيابة */}
                   <div className={modalClasses.fieldWrapper}>
                     <label className={modalClasses.label}>
-                      تاريخ تسجيل القضية داخل النيابة
+                      اسم المحقق
                     </label>
                     <Field
-                      name="prosecutionRegistrationDate"
+                      name="clientName"
+                      type="text"
+                      className={modalClasses.input}
+                      placeholder="اسم المحقق"
+                    />
+                  </div>
+
+                  <div className={modalClasses.fieldWrapper}>
+                    <label className={modalClasses.label}>
+                      جهة التحقيق المحول منها
+                    </label>
+                    <Field
+                      name="investigationSource"
+                      type="text"
+                      className={modalClasses.input}
+                      placeholder="جهة التحقيق المحول منها"
+                    />
+                  </div>
+
+                  <div className={modalClasses.fieldWrapper}>
+                    <label className={modalClasses.label}>
+                      تاريخ ورود القضية داخل المكتب
+                    </label>
+                    <Field
+                      name="caseReceiptDate"
                       type="date"
-                      className={`${modalClasses.input} ${
-                        errors.prosecutionRegistrationDate && touched.prosecutionRegistrationDate ? "border-red-500" : ""
-                      }`}
+                      className={modalClasses.input}
+                      placeholder="تاريخ ورود القضية داخل المكتب"
                     />
-                    {errors.prosecutionRegistrationDate && touched.prosecutionRegistrationDate && (
-                      <div className="text-red-500 text-xs mt-1">{errors.prosecutionRegistrationDate}</div>
-                    )}
                   </div>
                 </div>
               </div>
@@ -134,7 +153,7 @@ function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps
                   type="submit"
                   className={modalClasses.submitButton}
                 >
-                إضافة 
+                  إضافة
                 </button>
               </div>
             </Form>
@@ -145,4 +164,4 @@ function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps
   );
 }
 
-export default EditModelProsecution;
+export default EditModel;

@@ -2,7 +2,7 @@ import { Formik } from "formik";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import * as Yup from "yup";
-import close from "../../../../../../../public/images/close.svg";
+import close from "@/public/images/close.svg";
 import FormEdit from "./FormEdit";
 
 interface EditClientModalProps {

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import view from '../../../../../../../../public/images/view.svg'
-import edit from '../../../../../../../../public/images/edit.svg';
-import deleteIcon from '../../../../../../../../public/images/delete.svg';
+import view from '@/public/images/view.svg'
+import edit from '@/public/images/edit.svg';
+import deleteIcon from '@/public/images/delete.svg';
 import type { ClientCase } from '../../typesClientDetails';
 
 export const TableCasesActions: React.FC<{ client: ClientCase, onEdit?: (client: ClientCase) => void, onDelete?: (id: number) => void }> = ({ client, onEdit, onDelete }) => {
