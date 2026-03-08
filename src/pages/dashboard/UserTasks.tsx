@@ -1,6 +1,14 @@
+import PageLayout from "@/components/shared/components/PageLayout";
+import { UsersTask } from "@/features/UserTasks";
 
 const UserTasks = () => {
-  return <div>User Tasks</div>;
+  return (
+    <PageLayout >
+      <UsersTask />
+    </PageLayout>
+
+
+  )
 };
 
 export default UserTasks;

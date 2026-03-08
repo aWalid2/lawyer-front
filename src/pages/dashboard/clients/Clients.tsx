@@ -3,7 +3,7 @@ import { ClientsTable } from "@/features/clients/components/table/componnents/Cl
 import type {
   Client,
   ClientsPageProps,
-} from "../../features/clients/components/table/componnents/typesClients";
+} from "../../../features/clients/components/table/componnents/typesClients";
 import { EditClientModal } from "@/features/clients/components/table/componnents/EdidModel/EditClientModal";
 
 // بيانات تجريبية
