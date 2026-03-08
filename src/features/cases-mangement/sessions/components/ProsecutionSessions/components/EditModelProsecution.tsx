@@ -1,5 +1,5 @@
 import { Formik, Form, Field } from "formik";
-import close from "../../../../../../../public/images/close.svg";
+import close from "@/public/images/close.svg";
 import { useState } from "react";
 import { validationSchema } from "./ValidationSchema";
 import type { FormValues } from "./typseProsecution";

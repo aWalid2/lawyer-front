@@ -2,7 +2,7 @@ import { Formik, Form, Field } from "formik";
 import { useState } from "react";
 import type { FormValues } from "../typsePolice";
 import { validationSchema } from "../ValidationSchema";
-import Frame from "../../../../../../../public/images/Frame.svg";
+import Frame from "@/public/images/Frame.svg";
 import EditModel from "../components/EditModel";
 
 

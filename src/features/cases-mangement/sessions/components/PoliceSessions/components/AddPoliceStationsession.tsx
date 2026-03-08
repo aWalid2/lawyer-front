@@ -1,6 +1,6 @@
 import { useState } from "react";
-import edit from '../../../../../../../public/images/edit.svg';
-import deleteIcon from '../../../../../../../public/images/delete.svg';
+import edit from '@/public/images/edit.svg';
+import deleteIcon from '@/public/images/delete.svg';
 import AddPoliceModel from "./AddPoliceModel";
 
 

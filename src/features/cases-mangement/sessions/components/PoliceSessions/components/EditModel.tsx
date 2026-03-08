@@ -1,6 +1,6 @@
 import { Field, Form, Formik } from "formik";
 import { useState } from "react";
-import close from "../../../../../../../public/images/close.svg";
+import close from "@/public/images/close.svg";
 import { validationSchema } from "../ValidationSchema";
 
 // تعريف الـ interface للـ props
