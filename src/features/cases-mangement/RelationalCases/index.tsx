@@ -6,10 +6,6 @@ import { Pagination } from '@/components/shared/components/Pagination';
 
 
 
-interface RelationalCasesTypes {
-
-}
-
 interface CasesRelatedT {
     id: string;
     caseCode: string;
@@ -26,7 +22,7 @@ const mockData: CasesRelatedT[] = [
 
 ];
 
-export const RelationalCases: React.FC<RelationalCasesTypes> = () => {
+export const RelationalCases: React.FC = () => {
 
     const [currentPage, setCurrentPage] = React.useState(1);
     const itemsPerPage = 15;
@@ -72,7 +68,7 @@ export const RelationalCases: React.FC<RelationalCasesTypes> = () => {
     ];
     return (
         <div>
-            <HeaderRelationalCases title="القضايا ذات الصلة" buttonTitle=" إضافة قضية مرتبطه" />
+            <HeaderRelationalCases title="القضايا ذات الصلة" />
             <DataTable
                 data={currentData}
                 columns={columns}
