@@ -1,5 +1,5 @@
 import { Menu } from "lucide-react";
-import logo from "../../../../../public/images/logo.webp";
+import logo from "@/public/images/logo.webp";
 import {
   Sheet,
   SheetContent,
