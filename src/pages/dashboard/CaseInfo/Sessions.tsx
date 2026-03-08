@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import PageLayout from "@/components/shared/components/PageLayout";
 import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import PoliceSessions from "@/features/sessions/components/PoliceSessions";
-import CourtSessions from "@/features/sessions/components/CourtSessions";
-import ExpertSessions from "@/features/sessions/components/ExpertSessions";
-import OtherSessions from "@/features/sessions/components/OtherSessions";
-import ProsecutionSessions from "@/features/sessions/components/ProsecutionSessions/index";
+import PoliceSessions from "@/features/cases-mangement/sessions/components/PoliceSessions";
+import CourtSessions from "@/features/cases-mangement/sessions/components/CourtSessions";
+import ExpertSessions from "@/features/cases-mangement/sessions/components/ExpertSessions";
+import OtherSessions from "@/features/cases-mangement/sessions/components/OtherSessions";
+import ProsecutionSessions from "@/features/cases-mangement/sessions/components/ProsecutionSessions/index";
 
 const Sessions: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);

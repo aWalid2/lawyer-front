@@ -1,5 +1,5 @@
 import { Formik, Form, Field } from "formik";
-import close from "../../../../../public/images/close.svg";
+import close from "../../../../../../../public/images/close.svg";
 import { useState } from "react";
 import { validationSchema } from "./ValidationSchema";
 import type { FormValues } from "./typseProsecution";
@@ -11,7 +11,7 @@ interface EditModelProps {
   onSave: (values: FormValues) => void;
 }
 
-  const modalClasses = {
+const modalClasses = {
   overlay: "fixed inset-0 z-50 flex items-center justify-center px-3 sm:px-6",
   backdrop: "absolute inset-0 bg-black/30",
   container: "relative w-full max-w-[520px] rounded-2xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.18)] overflow-hidden",
@@ -82,9 +82,8 @@ function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps
                     <Field
                       name="prosecutionName"
                       type="text"
-                      className={`${modalClasses.input} ${
-                        errors.prosecutionName && touched.prosecutionName ? "border-red-500" : ""
-                      }`}
+                      className={`${modalClasses.input} ${errors.prosecutionName && touched.prosecutionName ? "border-red-500" : ""
+                        }`}
                       placeholder="النيابة"
                     />
                     {errors.prosecutionName && touched.prosecutionName && (
@@ -100,9 +99,8 @@ function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps
                     <Field
                       name="caseNumberInProsecution"
                       type="text"
-                      className={`${modalClasses.input} ${
-                        errors.caseNumberInProsecution && touched.caseNumberInProsecution ? "border-red-500" : ""
-                      }`}
+                      className={`${modalClasses.input} ${errors.caseNumberInProsecution && touched.caseNumberInProsecution ? "border-red-500" : ""
+                        }`}
                       placeholder="رقم القضية في النيابة"
                     />
                     {errors.caseNumberInProsecution && touched.caseNumberInProsecution && (
@@ -118,9 +116,8 @@ function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps
                     <Field
                       name="prosecutionRegistrationDate"
                       type="date"
-                      className={`${modalClasses.input} ${
-                        errors.prosecutionRegistrationDate && touched.prosecutionRegistrationDate ? "border-red-500" : ""
-                      }`}
+                      className={`${modalClasses.input} ${errors.prosecutionRegistrationDate && touched.prosecutionRegistrationDate ? "border-red-500" : ""
+                        }`}
                     />
                     {errors.prosecutionRegistrationDate && touched.prosecutionRegistrationDate && (
                       <div className="text-red-500 text-xs mt-1">{errors.prosecutionRegistrationDate}</div>
@@ -134,7 +131,7 @@ function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps
                   type="submit"
                   className={modalClasses.submitButton}
                 >
-                إضافة 
+                  إضافة
                 </button>
               </div>
             </Form>

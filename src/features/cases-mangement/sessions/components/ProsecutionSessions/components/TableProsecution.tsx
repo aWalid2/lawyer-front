@@ -1,7 +1,7 @@
 import { useState } from "react";
-import edit from '../../../../../public/images/edit.svg';
-import deleteIcon from '../../../../../public/images/delete.svg';
-import type { SessionFormValues } from "./typseProsecution";
+import edit from '../../../../../../../public/images/edit.svg'
+import deleteIcon from '../../../../../../../public/images/delete.svg'
+import type { SessionFormValues } from '../components/typseProsecution';
 import AddProsecutionModel from "./AddProsecutionModel";
 
 // واجهة بيانات الجلسات
@@ -13,7 +13,6 @@ interface SessionData {
     decision: string;
 }
 
-// واجهة بيانات الفورم
 
 
 const TableProsecution = () => {

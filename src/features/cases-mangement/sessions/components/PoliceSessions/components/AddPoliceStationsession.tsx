@@ -1,7 +1,8 @@
 import { useState } from "react";
-import edit from '../../../../../public/images/edit.svg';
-import deleteIcon from '../../../../../public/images/delete.svg';
+import edit from '../../../../../../../public/images/edit.svg';
+import deleteIcon from '../../../../../../../public/images/delete.svg';
 import AddPoliceModel from "./AddPoliceModel";
+
 
 // واجهة بيانات الجلسات
 interface SessionData {
@@ -46,7 +47,7 @@ const AddPoliceStationsession = () => {
     ]);
 
 
-    
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingSession, setEditingSession] = useState<SessionData | null>(null);
 
@@ -70,13 +71,13 @@ const AddPoliceStationsession = () => {
             // تعديل جلسة موجودة
             const updatedSessions = sessionsData.map(session =>
                 session.id === editingSession.id
-                    ? { 
-                        ...session, 
+                    ? {
+                        ...session,
                         sessionDate: values.sessionDate,
                         sessionTime: values.sessionTime,
                         lawyer: values.lawyer,
-                        decision: values.decision 
-                      }
+                        decision: values.decision
+                    }
                     : session
             );
             setSessionsData(updatedSessions);
@@ -151,19 +152,19 @@ const AddPoliceStationsession = () => {
                                     {session.lawyer}
                                 </td>
                                 <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base border-l border-gray-200 text-center whitespace-nowrap">
-                                        {session.decision}
+                                    {session.decision}
                                 </td>
                                 <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base">
                                     <div className="flex items-center justify-center gap-2 md:gap-3 flex-nowrap">
-                                        <button 
-                                            title="تعديل" 
+                                        <button
+                                            title="تعديل"
                                             onClick={() => handleEditSession(session)}
                                             className="hover:scale-110 transition shrink-0"
                                         >
                                             <img src={edit} alt="edit" className="max-sm:w-5 max-sm:h-5 max-md:w-5 max-md:h-5" />
                                         </button>
-                                        <button 
-                                            title="حذف" 
+                                        <button
+                                            title="حذف"
                                             onClick={() => handleDeleteSession(session.id)}
                                             className="hover:scale-110 transition shrink-0"
                                         >

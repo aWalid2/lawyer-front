@@ -1,5 +1,5 @@
 import { Formik, Form } from "formik";
-import close from "../../../../../public/images/close.svg";
+import close from "../../../../../../../public/images/close.svg";
 import { useState } from "react";
 import * as Yup from "yup";
 import {
@@ -81,7 +81,7 @@ function AddPoliceModel({ onClose, onSave, initialValues = defaultValues }: AddP
 
   return (
     <div className={modalClasses.overlay}>
-      <div className={modalClasses.backdrop}  />
+      <div className={modalClasses.backdrop} />
 
       <div dir="rtl" className={modalClasses.container}>
         <div className={modalClasses.header}>
@@ -118,9 +118,8 @@ function AddPoliceModel({ onClose, onSave, initialValues = defaultValues }: AddP
                       type="date"
                       value={values.sessionDate}
                       onChange={(e) => setFieldValue("sessionDate", e.target.value)}
-                      className={`${modalClasses.input} ${
-                        errors.sessionDate && touched.sessionDate ? "border-red-500" : ""
-                      }`}
+                      className={`${modalClasses.input} ${errors.sessionDate && touched.sessionDate ? "border-red-500" : ""
+                        }`}
                     />
                     {errors.sessionDate && touched.sessionDate && (
                       <div className="text-red-500 text-xs mt-1">{errors.sessionDate}</div>
@@ -137,9 +136,8 @@ function AddPoliceModel({ onClose, onSave, initialValues = defaultValues }: AddP
                       type="time"
                       value={values.sessionTime}
                       onChange={(e) => setFieldValue("sessionTime", e.target.value)}
-                      className={`${modalClasses.input} ${
-                        errors.sessionTime && touched.sessionTime ? "border-red-500" : ""
-                      }`}
+                      className={`${modalClasses.input} ${errors.sessionTime && touched.sessionTime ? "border-red-500" : ""
+                        }`}
                     />
                     {errors.sessionTime && touched.sessionTime && (
                       <div className="text-red-500 text-xs mt-1">{errors.sessionTime}</div>
@@ -157,9 +155,8 @@ function AddPoliceModel({ onClose, onSave, initialValues = defaultValues }: AddP
                       placeholder="أدخل اسم المحامي"
                       value={values.lawyer}
                       onChange={(e) => setFieldValue("lawyer", e.target.value)}
-                      className={`${modalClasses.input} ${
-                        errors.lawyer && touched.lawyer ? "border-red-500" : ""
-                      }`}
+                      className={`${modalClasses.input} ${errors.lawyer && touched.lawyer ? "border-red-500" : ""
+                        }`}
                     />
                     {errors.lawyer && touched.lawyer && (
                       <div className="text-red-500 text-xs mt-1">{errors.lawyer}</div>
@@ -175,9 +172,8 @@ function AddPoliceModel({ onClose, onSave, initialValues = defaultValues }: AddP
                       value={values.decision}
                       onValueChange={(value) => setFieldValue("decision", value)}
                     >
-                      <SelectTrigger className={`${modalClasses.select} ${
-                        errors.decision && touched.decision ? "border-red-500" : ""
-                      }`}>
+                      <SelectTrigger className={`${modalClasses.select} ${errors.decision && touched.decision ? "border-red-500" : ""
+                        }`}>
                         <SelectValue placeholder="اختر قرار الجلسة" />
                       </SelectTrigger>
                       <SelectContent>
@@ -200,7 +196,7 @@ function AddPoliceModel({ onClose, onSave, initialValues = defaultValues }: AddP
                   type="submit"
                   className={modalClasses.submitButton}
                 >
-                  إضافة 
+                  إضافة
                 </button>
               </div>
             </Form>
