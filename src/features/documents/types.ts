@@ -1,9 +1,13 @@
 export interface Document {
   id: string;
-  autoNumber: string;
-  caseNumber: string;
-  caseTitle: string;
+  autoNumber?: string;
+  caseNumber?: string;
+  caseTitle?: string;
+  clientCode?: string;
+  clientName?: string;
+  phone?: string;
   date: string;
+  type: string;
 }
 
 export interface DocumentsTableProps {

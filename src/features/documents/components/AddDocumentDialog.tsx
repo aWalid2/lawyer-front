@@ -10,18 +10,27 @@ import {
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
 import { InputForm } from "@/components/shared/components/InputForm";
+import { FileUpload } from "@/components/shared/components/FileUpload";
+import { TextAreaForm } from "@/components/shared/components/TextAreaForm";
 import { Button } from "@/components/ui/button";
 import { SelectForm } from "@/components/shared/components/SelectForm";
 import { cn } from "@/lib/utils";
 
 
-export const AddDocumentDialog: React.FC = () => {
+interface AddDocumentDialogProps {
+    filter: string;
+}
+
+export const AddDocumentDialog: React.FC<AddDocumentDialogProps> = ({ filter }) => {
+    const isCases = filter === "cases";
+
     const initialValues = {
-        documentType: "",
-        autoNumber: "",
-        caseNumber: "",
-        caseTitle: "",
+        documentType: isCases ? "case_doc1" : "client_doc1",
+        code: isCases ? "1249" : "12143",
+        name: isCases ? "قضية" : "محمد احمد",
+        details: isCases ? "عقد ايجار مكان" : "01012345678",
         uploadFiles: null,
+        notes: isCases ? "ملاحظات قضية" : "ملاحظات موكل",
     };
 
     return (
@@ -38,7 +47,7 @@ export const AddDocumentDialog: React.FC = () => {
                 </Button>
             </DialogTrigger>
             <DialogContent
-                className="sm:max-w-[634px] max-h-[90vh] overflow-y-auto sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none custom-scrollbar"
+                className="sm:max-w-[715px] max-h-[90vh] overflow-y-auto sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none custom-scrollbar"
                 dir="rtl"
                 showCloseButton={false}
             >
@@ -55,6 +64,7 @@ export const AddDocumentDialog: React.FC = () => {
 
                 <Formik
                     initialValues={initialValues}
+                    enableReinitialize
                     onSubmit={(values) => {
                         console.log("Adding contract:", values);
                     }}
@@ -65,35 +75,42 @@ export const AddDocumentDialog: React.FC = () => {
                             <SelectForm
                                 name="documentType"
                                 label="نوع المستند"
-                                options={[
-                                    { value: "type1", label: "نوع المستند 1" },
-                                    { value: "type2", label: "نوع المستند 2" },
-                                    { value: "type3", label: "نوع المستند 3" },
+                                options={isCases ? [
+                                    { value: "case_doc1", label: "قضية" },
+                                    { value: "case_doc2", label: "مستند قضية" },
+                                ] : [
+                                    { value: "client_doc1", label: " موكل 1" },
+                                    { value: "client_doc2", label: "موكل   2" },
                                 ]}
                             />
 
                             <InputForm
-                                name="autoNumber"
-                                label="الرقم الآلي للقضية"
+                                name="code"
+                                label={isCases ? "الرقم الآلي للقضية" : "كود الموكل"}
                                 type="text"
                             />
 
                             <InputForm
-                                name="caseNumber"
-                                label="كود القضية"
+                                name="name"
+                                label={isCases ? "كود القضية" : "اسم الموكل"}
                                 type="text"
                             />
 
                             <InputForm
-                                name="caseTitle"
-                                label="عنوان القضية"
+                                name="details"
+                                label={isCases ? "عنوان القضية" : "رقم الهاتف"}
                                 type="text"
                             />
 
-                            <InputForm
+                            <FileUpload
                                 name="uploadFiles"
                                 label="رفع الملفات"
-                                type="file"
+                            />
+
+                            <TextAreaForm
+                                name="notes"
+                                label="ملاحظات"
+                                placeholder="ملاحظات"
                             />
 
 
@@ -101,7 +118,7 @@ export const AddDocumentDialog: React.FC = () => {
                                 type="submit"
                                 className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
                             >
-                                إضافة
+                                إضافة مستند
                             </button>
                         </Form>
                     )}

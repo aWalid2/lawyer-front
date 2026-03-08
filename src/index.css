@@ -198,6 +198,7 @@ body {
 
 @theme {
   --color-primary: #cba462;
+  --color-primary-text: #3d3c48;
   --color-primary-light: #e3c086;
   --color-secondary: #153b4d;
   --spacing-13: 3.25rem;

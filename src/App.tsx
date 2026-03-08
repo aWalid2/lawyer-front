@@ -18,6 +18,7 @@ const Calendar = lazy(() => import("./pages/dashboard/Calendar"));
 const Roll = lazy(() => import("./pages/dashboard/Roll"));
 const Documents = lazy(() => import("./pages/dashboard/Documents"));
 const UserTasks = lazy(() => import("./pages/dashboard/UserTasks"));
+const UserTasksDetails = lazy(() => import("./pages/dashboard/UserTasksDetails.tsx"));
 const Consultations = lazy(() => import("./pages/dashboard/Consultations"));
 const Contracts = lazy(() => import("./pages/dashboard/Contracts"));
 const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
@@ -86,6 +87,7 @@ function App() {
           <Route path="roll" element={<Roll />} />
           <Route path="documents" element={<Documents />} />
           <Route path="user-tasks" element={<UserTasks />} />
+          <Route path="user-tasks/:id" element={<UserTasksDetails />} />
           <Route path="consultaions" element={<Consultations />} />
           <Route path="contracts" element={<Contracts />} />
           <Route path="client-details/:id" element={<ClientDetails />} />
