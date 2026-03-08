@@ -3,7 +3,7 @@ import { ClientsTable } from "@/features/clients/components/table/componnents/Cl
 import type {
   Client,
   ClientsPageProps,
-} from "../../features/clients/components/table/componnents/typesClients";
+} from "../../../features/clients/components/table/componnents/typesClients";
 import { EditClientModal } from "@/features/clients/components/table/componnents/EdidModel/EditClientModal";
 
 // بيانات تجريبية
@@ -26,14 +26,14 @@ const mockClients: Client[] = [
   { id: 16, name: "لمى فيصل", phone: "054837892", performance: 11 },
   { id: 17, name: "لمى فيصل", phone: "054837892", performance: 11 },
   { id: 18, name: "لمى فيصل", phone: "054837892", performance: 11 },
-  
+
 ];
 
 const Clients: React.FC<ClientsPageProps> = ({
   initialClients = mockClients,
 }) => {
   const [clients] = useState(initialClients);
-  
+
   // استخدام localStorage للصفحة الحالية
   const [currentPage, setCurrentPage] = useState<number>(() => {
     const savedPage = localStorage.getItem('clientsTablePage');

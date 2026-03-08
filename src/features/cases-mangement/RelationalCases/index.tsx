@@ -72,7 +72,7 @@ export const RelationalCases: React.FC<RelationalCasesTypes> = () => {
     ];
     return (
         <div>
-            <HeaderRelationalCases title="القضايا ذات الصلة" buttonTitle=" إضافة قضية مرتبطه" />
+            <HeaderRelationalCases title="القضايا ذات الصلة" />
             <DataTable
                 data={currentData}
                 columns={columns}
