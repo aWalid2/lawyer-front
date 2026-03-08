@@ -1,37 +1,12 @@
-<<<<<<< HEAD
-=======
 # compiled output
 /dist
 /node_modules
 /build
 
->>>>>>> 5c645cd5622a83230c351398fe9422f328ec086b
 # Logs
 logs
 *.log
 npm-debug.log*
-<<<<<<< HEAD
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-=======
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -79,4 +54,3 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
->>>>>>> 5c645cd5622a83230c351398fe9422f328ec086b
