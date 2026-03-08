@@ -4,16 +4,17 @@ import { Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
   return (
+
     <div
+
       className="flex p-0 gap-0 h-full min-h-screen relative
              bg-[url('/images/background.png')] 
              bg-cover bg-center bg-no-repeat
-             md:p-6 md:gap-6"
+             md:p-6 md:gap-6 container "
     >
-      {/* Sidebar للشاشات الكبيرة - ثابت */}
-      <div className="">
-        <SidebarDashboard />
-      </div>
+
+      <SidebarDashboard />
+
 
       <main className="flex-1 flex flex-col min-w-0">
         <Header />

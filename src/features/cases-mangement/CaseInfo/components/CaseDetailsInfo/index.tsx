@@ -2,7 +2,7 @@ import React from "react";
 import { InputBox } from "./components/InputBox";
 import type { FormCaseDetailsProps } from "./components/typesCaseInfo";
 
-export const CaseDetails: React.FC<FormCaseDetailsProps> = ({ caseData }) => {
+export const CaseDetailsInfo: React.FC<FormCaseDetailsProps> = ({ caseData }) => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
