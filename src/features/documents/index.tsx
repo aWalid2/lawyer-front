@@ -37,11 +37,11 @@ const DocumentsFeature = () => {
       const matchesSearch =
         filter === "clients"
           ? (doc.clientName?.toLowerCase() || "").includes(searchStr) ||
-            (doc.clientCode?.toLowerCase() || "").includes(searchStr) ||
-            (doc.phone?.toLowerCase() || "").includes(searchStr)
+          (doc.clientCode?.toLowerCase() || "").includes(searchStr) ||
+          (doc.phone?.toLowerCase() || "").includes(searchStr)
           : (doc.caseTitle?.toLowerCase() || "").includes(searchStr) ||
-            (doc.caseNumber?.toLowerCase() || "").includes(searchStr) ||
-            (doc.autoNumber?.toLowerCase() || "").includes(searchStr);
+          (doc.caseNumber?.toLowerCase() || "").includes(searchStr) ||
+          (doc.autoNumber?.toLowerCase() || "").includes(searchStr);
 
       const matchesFilter = doc.type === filter;
 
@@ -64,37 +64,37 @@ const DocumentsFeature = () => {
     {
       header: "#",
       accessor: (item) => filteredDocuments.findIndex((d) => d.id === item.id) + 1,
-      headerClassName: "w-16",
+      headerClassName: "w-15",
     },
     ...(filter === "clients"
       ? [
-          {
-            header: "كود الموكل",
-            accessor: "clientCode" as keyof Document,
-          },
-          {
-            header: "اسم الموكل",
-            accessor: "clientName" as keyof Document,
-          },
-          {
-            header: "رقم الهاتف",
-            accessor: "phone" as keyof Document,
-          },
-        ]
+        {
+          header: "كود الموكل",
+          accessor: "clientCode" as keyof Document,
+        },
+        {
+          header: "اسم الموكل",
+          accessor: "clientName" as keyof Document,
+        },
+        {
+          header: "رقم الهاتف",
+          accessor: "phone" as keyof Document,
+        },
+      ]
       : [
-          {
-            header: "الرقم الآلي للقضية",
-            accessor: "autoNumber" as keyof Document,
-          },
-          {
-            header: "كود القضية",
-            accessor: "caseNumber" as keyof Document,
-          },
-          {
-            header: "عنوان القضية",
-            accessor: "caseTitle" as keyof Document,
-          },
-        ]),
+        {
+          header: "الرقم الآلي للقضية",
+          accessor: "autoNumber" as keyof Document,
+        },
+        {
+          header: "كود القضية",
+          accessor: "caseNumber" as keyof Document,
+        },
+        {
+          header: "عنوان القضية",
+          accessor: "caseTitle" as keyof Document,
+        },
+      ]),
     {
       header: "إجراء",
       accessor: (item) => (
