@@ -2,6 +2,10 @@
 /dist
 /node_modules
 /build
+*.tsbuildinfo
+vite.config.ts.timestamp-*
+vite.config.js.timestamp-*
+
 
 # Logs
 logs
@@ -14,6 +18,10 @@ lerna-debug.log*
 
 # OS
 .DS_Store
+Thumbs.db
+*.swp
+*~
+
 
 # Tests
 /coverage
@@ -41,6 +49,9 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 .env.local
+*.env.local
+!*.env.local.example
+
 
 # temp directory
 .temp
@@ -54,3 +65,7 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Linter
+.eslintcache
+
