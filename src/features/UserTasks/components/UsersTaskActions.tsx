@@ -3,6 +3,7 @@ import view from '../../../../public/images/view.svg';
 import edit from '../../../../public/images/edit.svg';
 import deleteIcon from '../../../../public/images/delete.svg';
 import AddTaskModal from './AddTaskModal';
+import { Link } from 'react-router-dom';
 
 interface UsersTaskActionsProps {
     caseItem: any;
@@ -39,13 +40,13 @@ export const UsersTaskActions: React.FC<UsersTaskActionsProps> = ({ caseItem, on
     return (
         <>
             <div className="flex items-center justify-center gap-2">
-                <button
-                    type="button"
+                <Link
+                    to={`/dashboard/user-tasks/${caseItem.id}`}
                     title="عرض"
                     className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F0F6FF] transition-colors hover:bg-[#e0eaff]"
                 >
                     <img src={view} alt="view" />
-                </button>
+                </Link>
 
                 <button
                     onClick={handleEditClick}

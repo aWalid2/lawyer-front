@@ -26,12 +26,12 @@ const Settings = lazy(() => import("./pages/dashboard/Settings"));
 const AddCase = lazy(() => import("./pages/dashboard/cases/AddCase"));
 const CaseDetails = lazy(() => import("./pages/dashboard/cases/CaseDetails"));
 const CaseInfo = lazy(() => import("./features/cases-mangement/CaseInfo"));
-const Sessions = lazy(() => import("./pages/dashboard/caseInfo/Sessions"));
-const RelatedCases = lazy(() => import("./pages/dashboard/caseInfo/RelatedCases"));
-const CaseDocuments = lazy(() => import("./pages/dashboard/caseInfo/Documents"));
-const Expenses = lazy(() => import("./pages/dashboard/caseInfo/Expenses"));
-const Procedures = lazy(() => import("./pages/dashboard/caseInfo/Procedures"));
-const Employees = lazy(() => import("./pages/dashboard/caseInfo/Employees"));
+const Sessions = lazy(() => import("./pages/dashboard/CaseInfo/Sessions"));
+const RelatedCases = lazy(() => import("./pages/dashboard/CaseInfo/RelatedCases"));
+const CaseDocuments = lazy(() => import("./pages/dashboard/CaseInfo/Documents"));
+const Expenses = lazy(() => import("./pages/dashboard/CaseInfo/Expenses"));
+const Procedures = lazy(() => import("./pages/dashboard/CaseInfo/Procedures"));
+const Employees = lazy(() => import("./pages/dashboard/CaseInfo/Employees"));
 
 // Reports
 const ReportsClients = lazy(() => import("./pages/dashboard/reports/ReportsClients"));

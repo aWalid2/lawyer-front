@@ -108,7 +108,8 @@ export const UsersTask: React.FC<UsersTaskTypes> = () => {
                 onSearch={setSearchTerm}
                 onFilterChange={setStatusFilter}
                 statusFilter={statusFilter}
-            />            <DataTable
+            />         
+               <DataTable
                 data={tasks.filter(task => statusFilter === "all" || task.status === statusFilter).filter(task => task.TaskTitle.includes(searchTerm) || task.TaskType.includes(searchTerm) || task.PersonInCharge.includes(searchTerm))}
                 columns={columns}
                 rowIdField="id"
