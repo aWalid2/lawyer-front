@@ -16,7 +16,7 @@ export const TableDocumentsActions: React.FC<{
   return (
     <div className="flex items-center justify-center gap-2">
       <Link
-        to={`#`}
+        to={`/dashboard/documents/${document.id}`}
         title="عرض"
         className="h-9 w-9 flex items-center justify-center rounded-[12px] bg-[#F0F6FF]"
       >
