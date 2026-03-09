@@ -214,4 +214,22 @@ body {
   .shadow-primary {
     box-shadow: 0 0 24px 0 rgba(21, 58, 77, 0.16);
   }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f3;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cba462;
+    border-radius: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #a68654;
+  }
 }

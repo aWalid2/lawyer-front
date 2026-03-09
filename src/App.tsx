@@ -23,6 +23,8 @@ const Consultations = lazy(() => import("./pages/dashboard/Consultations"));
 const Contracts = lazy(() => import("./pages/dashboard/Contracts"));
 const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
 const Settings = lazy(() => import("./pages/dashboard/Settings"));
+const DocumentDetails = lazy(() => import("./pages/dashboard/DocumentDetails"));
+
 const AddCase = lazy(() => import("./pages/dashboard/cases/AddCase"));
 const CaseDetails = lazy(() => import("./pages/dashboard/cases/CaseDetails"));
 const CaseInfo = lazy(() => import("./features/cases-mangement/CaseInfo"));
@@ -86,6 +88,7 @@ function App() {
           <Route path="calendar" element={<Calendar />} />
           <Route path="roll" element={<Roll />} />
           <Route path="documents" element={<Documents />} />
+          <Route path="documents/:id" element={<DocumentDetails />} />
           <Route path="user-tasks" element={<UserTasks />} />
           <Route path="user-tasks/:id" element={<UserTasksDetails />} />
           <Route path="consultaions" element={<Consultations />} />
