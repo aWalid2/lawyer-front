@@ -5,6 +5,9 @@ import { ViewIcon } from "@/components/shared/icons/View";
 import { EditIcon } from "@/components/shared/icons/Edit";
 import { TrashIcon } from "@/components/shared/icons/Trash";
 
+import { EditDocumentDialog } from "./EditDocumentDialog";
+import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
+
 export const TableDocumentsActions: React.FC<{
   document: Document;
   onEdit?: (doc: Document) => void;
@@ -20,28 +23,43 @@ export const TableDocumentsActions: React.FC<{
         <ViewIcon className="size-[16px] text-[#63A4F9]" />
       </Link>
 
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onEdit?.(document);
-        }}
-        title="تعديل"
-        className="h-9 w-9 flex items-center justify-center rounded-[12px] bg-[#F1F1F3]"
-      >
-        <EditIcon className="size-[14px] text-[#3D3C48]" />
-      </button>
+      <EditDocumentDialog
+        document={document}
+        trigger={
+            <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit?.(document);
+            }}
+            title="تعديل"
+            className="h-9 w-9 flex items-center justify-center rounded-[12px] bg-[#F1F1F3]"
+          >
+            <EditIcon className="size-[14px] text-[#3D3C48]" />
+          </button>
+        }
+      />
 
 
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onDelete?.(document);
+      <ConfirmDeleteDialog
+        title="حذف المستند"
+        description={`هل أنت متأكد من حذف المستند ${document.type === 'cases' ? document.caseTitle : document.clientName}؟`}
+        onConfirm={() => {
+            if (onDelete) {
+                onDelete(document);
+            }
         }}
-        title="حذف"
-        className="h-9 w-9 flex items-center justify-center rounded-[12px] bg-[#C60000]/8"
-      >
-        <TrashIcon className="size-[16px] text-[#C60000]" />
-      </button>
+        trigger={
+            <button
+                onClick={(e) => {
+                e.stopPropagation();
+                }}
+                title="حذف"
+                className="h-9 w-9 flex items-center justify-center rounded-[12px] bg-[#C60000]/8"
+            >
+                <TrashIcon className="size-[16px] text-[#C60000]" />
+            </button>
+        }
+      />
 
     </div>
   );

@@ -69,10 +69,9 @@ const financeLinks = [
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center justify-between p-4 h-15  rounded-lg transition
-  ${
-    isActive
-      ? "bg-primary-gradient text-white"
-      : "text-[#727272] hover:bg-primary hover:text-white"
+  ${isActive
+    ? "bg-primary-gradient text-white"
+    : "text-[#727272] hover:bg-primary hover:text-white"
   }`;
 
 const NavDashboard = () => {
