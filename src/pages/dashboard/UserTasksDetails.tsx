@@ -18,7 +18,6 @@ interface TaskRelatedT {
     DeliveryDate: string;
 }
 
-// بيانات تجريبية
 const tasks: TaskRelatedT[] = [
     {
         id: "1",
@@ -81,16 +80,12 @@ export default function UserTasksDetails() {
         }
     }, [id]);
 
-    // بيانات تجريبية للملاحظات
     const comments = [
         { date: "22/01/2026", text: "تم الانتهاء من مراجعة البنود الأساسية." },
         { date: "22/01/2026", text: "بانتظار توقيع العميل على النسخة النهائية." },
     ];
-
-    // نص الوصف التجريبي
     const description = "و سأعرض مثال حي لهذا، من منا لم يتحمل جهد بدني شاق إلا من أجل الحصول على ميزة أو فائدة؟ ولكن من لديه الحق أن ينتقد شخص ما أراد أن يشعر بالسعادة التي لا تشوبها عواقب أليمة أو آخر أراد أن يتجنب الألم الذي ربما تنجم عنه بعض المتعة";
 
-    // لو لسه البيانات مجتش
     if (!task) {
         return (
             <PageLayout>
@@ -105,18 +100,13 @@ export default function UserTasksDetails() {
     return (
         <PageLayout>
             <HeaderTitle title="تفاصيل المهمة" />
-            
-            {/* قسم الهيدر مع العنوان والحالة */}
+
             <HeaderSection title={task.TaskTitle} status={task.status} />
-            
-            {/* قسم تفاصيل المهمة */}
             <TaskDetailsForm task={task} />
-            
-            {/* قسم الجدول الزمني */}
+
             <TimelineForm startDate={task.DeliveryDate} endDate={task.DeliveryDate} />
-            
-            {/* قسم الوصف والمستندات والملاحظات */}
-            <CommentsSection 
+
+            <CommentsSection
                 description={description}
                 comments={comments}
             />
