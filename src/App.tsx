@@ -23,15 +23,17 @@ const Consultations = lazy(() => import("./pages/dashboard/Consultations"));
 const Contracts = lazy(() => import("./pages/dashboard/Contracts"));
 const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
 const Settings = lazy(() => import("./pages/dashboard/Settings"));
+const DocumentDetails = lazy(() => import("./pages/dashboard/DocumentDetails"));
+
 const AddCase = lazy(() => import("./pages/dashboard/cases/AddCase"));
 const CaseDetails = lazy(() => import("./pages/dashboard/cases/CaseDetails"));
 const CaseInfo = lazy(() => import("./features/cases-mangement/CaseInfo"));
-const Sessions = lazy(() => import("./pages/dashboard/CaseInfo/Sessions"));
-const RelatedCases = lazy(() => import("./pages/dashboard/CaseInfo/RelatedCases"));
-const CaseDocuments = lazy(() => import("./pages/dashboard/CaseInfo/Documents"));
-const Expenses = lazy(() => import("./pages/dashboard/CaseInfo/Expenses"));
-const Procedures = lazy(() => import("./pages/dashboard/CaseInfo/Procedures"));
-const Employees = lazy(() => import("./pages/dashboard/CaseInfo/Employees"));
+const Sessions = lazy(() => import("./pages/dashboard/caseinfo/Sessions"));
+const RelatedCases = lazy(() => import("./pages/dashboard/caseinfo/RelatedCases"));
+const CaseDocuments = lazy(() => import("./pages/dashboard/caseinfo/Documents"));
+const Expenses = lazy(() => import("./pages/dashboard/caseinfo/Expenses"));
+const Procedures = lazy(() => import("./pages/dashboard/caseinfo/Procedures"));
+const Employees = lazy(() => import("./pages/dashboard/caseinfo/Employees"));
 
 // Reports
 const ReportsClients = lazy(() => import("./pages/dashboard/reports/ReportsClients"));
@@ -86,6 +88,7 @@ function App() {
           <Route path="calendar" element={<Calendar />} />
           <Route path="roll" element={<Roll />} />
           <Route path="documents" element={<Documents />} />
+          <Route path="documents/:id" element={<DocumentDetails />} />
           <Route path="user-tasks" element={<UserTasks />} />
           <Route path="user-tasks/:id" element={<UserTasksDetails />} />
           <Route path="consultaions" element={<Consultations />} />
