@@ -1,5 +1,4 @@
-import React from "react";
-import { Formik, Form } from "formik";
+import { InputForm } from "@/components/shared/components/InputForm";
 import {
     Dialog,
     DialogClose,
@@ -8,26 +7,28 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, XIcon } from "lucide-react";
-import { InputForm } from "@/components/shared/components/InputForm";
-import { Button } from "@/components/ui/button";
+import { Form, Formik } from "formik";
+import { XIcon } from "lucide-react";
+import React from "react";
 
 
-export const RelationalAddCaseDialog: React.FC = () => {
+interface RelationalCaseDialogProps {
+    trigger: React.ReactNode;
+    title: string;
+    caseItem?: any;
+}
+
+
+export const RelationalCaseDialog: React.FC<RelationalCaseDialogProps> = ({ trigger, title, caseItem }) => {
     const initialValues = {
-        relatedCaseNumber: "",
+        relatedCaseNumber: caseItem?.caseCode || "",
 
     };
 
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button
-                    className="rounded-[12px] h-12.5 px-6 bg-primary-gradient font-semibold text-white flex items-center gap-2"
-                >
-                    <Plus />
-                    إضافة قضية مرتبطة
-                </Button>
+                {trigger}
             </DialogTrigger>
             <DialogContent
                 className="sm:max-w-[634px] max-h-[90vh] overflow-y-auto sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none custom-scrollbar"
@@ -41,7 +42,7 @@ export const RelationalAddCaseDialog: React.FC = () => {
                 </DialogClose>
                 <DialogHeader className="mb-2 mt-15">
                     <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
-                        إضافة قضية مرتبطة
+                        {title}
                     </DialogTitle>
                 </DialogHeader>
 
@@ -51,25 +52,24 @@ export const RelationalAddCaseDialog: React.FC = () => {
                         console.log("Adding contract:", values);
                     }}
                 >
-                    {() => (
-                        <Form className="space-y-4">
 
-                            <InputForm
-                                name="relatedCaseNumber"
-                                label="رقم القضية المرتبطة"
-                                type="text"
-                            />
+                    <Form className="space-y-4">
+
+                        <InputForm
+                            name="relatedCaseNumber"
+                            label="رقم القضية المرتبطة"
+                            type="text"
+                        />
 
 
+                        <button
+                            type="submit"
+                            className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
+                        >
+                            إضافة
+                        </button>
+                    </Form>
 
-                            <button
-                                type="submit"
-                                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
-                            >
-                                إضافة
-                            </button>
-                        </Form>
-                    )}
                 </Formik>
             </DialogContent>
         </Dialog>
