@@ -3,6 +3,7 @@ import { HeaderRelationalCases } from './components/HeaderRelationalCases'
 import { DataTable, type Column } from '@/components/shared/components/DataTable'
 import { RelationalCasesActions } from './components/RelationalCasesActions';
 import { Pagination } from '@/components/shared/components/Pagination';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -14,8 +15,8 @@ interface CasesRelatedT {
 
 const mockData: CasesRelatedT[] = [
     { id: "1", caseCode: "#6341", autoNumber: "#6341" },
-    { id: "2", caseCode: "#6341", autoNumber: "#6341" },
-    { id: "3", caseCode: "#6341", autoNumber: "#6341" },
+    { id: "2", caseCode: "#4444", autoNumber: "#6341" },
+    { id: "3", caseCode: "#6341", autoNumber: "#3333" },
     { id: "4", caseCode: "#6341", autoNumber: "#6341" },
     { id: "5", caseCode: "#6341", autoNumber: "#6341" },
     { id: "6", caseCode: "#6341", autoNumber: "#6341" },
@@ -23,7 +24,7 @@ const mockData: CasesRelatedT[] = [
 ];
 
 export const RelationalCases: React.FC = () => {
-
+    const navigate = useNavigate();
     const [currentPage, setCurrentPage] = React.useState(1);
     const itemsPerPage = 15;
 
@@ -59,7 +60,8 @@ export const RelationalCases: React.FC = () => {
                 <RelationalCasesActions
                     caseItem={item}
                     onEdit={(caseItem) => console.log("Edit", caseItem)}
-                    onView={(caseItem) => console.log("View", caseItem)}
+                    onView={(caseItem) => navigate(`/dashboard/case-management/${caseItem.id}`)}
+                    onDelete={(caseItem) => console.log("Delete", caseItem)}
                 />
             ),
             headerClassName: "w-35",
