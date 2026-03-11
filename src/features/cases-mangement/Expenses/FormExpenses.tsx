@@ -1,13 +1,13 @@
-import { Formik, Form, Field } from "formik";
-import { useState } from "react";
-import Frame from "@/public/images/Frame.svg";
-import { EditModelExpenses } from "./EditModelExpenses";
 import { InputForm } from "@/components/shared/components/InputForm";
 import { TextAreaForm } from "@/components/shared/components/TextAreaForm";
+import Frame from "@/public/images/Frame.svg";
+import { Form, Formik } from "formik";
+import { useState } from "react";
+import { EditModelExpenses } from "./EditModelExpenses";
 
 const CLASSES = {
   formSection: "border border-gray-300 p-4 rounded-xl mb-6",
- 
+
 };
 
 export const FormExpenses = () => {
@@ -77,7 +77,7 @@ export const FormExpenses = () => {
             </div>
 
             <Form>
-              <div className= "mb-4">
+              <div className="mb-4">
                 <div className="grid  md:grid-cols-2 gap-4">
                   <InputForm
                     name="caseReceiptDate"
@@ -95,7 +95,7 @@ export const FormExpenses = () => {
                 </div>
               </div>
 
-              <div className= "mb-4">
+              <div className="mb-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <InputForm
                     name="caseType"
@@ -114,7 +114,7 @@ export const FormExpenses = () => {
                 </div>
               </div>
 
-              <div className= "mb-4">
+              <div className="mb-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <InputForm
                     name="currentDegree"

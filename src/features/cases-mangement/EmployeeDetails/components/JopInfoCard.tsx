@@ -1,5 +1,4 @@
 import { Briefcase, Calendar } from 'lucide-react'
-import React from 'react'
 
 export const JopInfoCard = ({ employeeData }: { employeeData: any }) => {
     return (
