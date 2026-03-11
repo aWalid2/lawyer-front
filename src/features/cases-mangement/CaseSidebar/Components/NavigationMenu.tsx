@@ -47,7 +47,6 @@ export const NavigationMenu = () => {
       label: "إجراءات",
       icon: <BarChartIcon className="w-5 h-5" />,
       to: `/dashboard/case-management/${id}/procedures`,
-      hasDropdown: true,
     },
     {
       label: "الموظفين",
@@ -64,10 +63,9 @@ export const NavigationMenu = () => {
           to={item.to}
           end={item.end}
           className={({ isActive }) =>
-            `flex items-center justify-between p-3.5 rounded-[12px] transition-all duration-300 w-full group h-13.5 ${
-              isActive
-                ? "bg-primary-gradient text-white shadow-[0_8px_16px_rgba(203,164,98,0.25)]"
-                : "text-[#727272] hover:bg-gray-50 hover:text-secondary"
+            `flex items-center justify-between p-3.5 rounded-[12px] transition-all duration-300 w-full group h-13.5 ${isActive
+              ? "bg-primary-gradient text-white shadow-[0_8px_16px_rgba(203,164,98,0.25)]"
+              : "text-[#727272] hover:bg-gray-50 hover:text-secondary"
             }`
           }
         >
@@ -75,11 +73,10 @@ export const NavigationMenu = () => {
             <>
               <div className="flex items-center gap-3.5">
                 <span
-                  className={`transition-colors duration-300 ${
-                    isActive
+                  className={`transition-colors duration-300 ${isActive
                       ? "text-white"
                       : "text-[#727272] group-hover:text-primary"
-                  }`}
+                    }`}
                 >
                   {item.icon}
                 </span>
@@ -89,9 +86,8 @@ export const NavigationMenu = () => {
               </div>
               {item.hasDropdown && (
                 <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-300 ${
-                    isActive ? "text-white" : "text-[#727272]"
-                  }`}
+                  className={`w-4 h-4 transition-transform duration-300 ${isActive ? "text-white" : "text-[#727272]"
+                    }`}
                 />
               )}
             </>
