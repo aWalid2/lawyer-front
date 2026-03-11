@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { DataTable, type Column } from "@/components/shared/components/DataTable";
 import { EmployeesActions } from "./components/EmployeesActions";
 import { Pagination } from "@/components/shared/components/Pagination";
+import { HeaderEmployee } from "./components/HeaderEmployee";
 
 interface Employee {
     id: string;
@@ -21,6 +23,8 @@ const mockData: Employee[] = [
 ];
 
 export const Employees: React.FC = () => {
+    const navigate = useNavigate();
+    const { id: caseId } = useParams<{ id: string }>();
     const [currentPage, setCurrentPage] = React.useState(1);
     const itemsPerPage = 15;
 
@@ -56,26 +60,30 @@ export const Employees: React.FC = () => {
                     employee={item}
                     onEdit={(emp) => console.log("Edit", emp)}
                     onDelete={(emp) => console.log("Delete", emp)}
-                    onView={(emp) => console.log("View", emp)}
+                    onView={(emp) => navigate(`/dashboard/case-management/${caseId}/employees/${emp.id}`)}
                 />
             ),
         },
     ];
 
     return (
-        <div className="mt-4 bg-white">
-            <DataTable
-                data={currentData}
-                columns={columns}
-                rowIdField="id"
-            />
-            {totalPages > 1 && (
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
+
+        <>
+            <HeaderEmployee title="الموظفين" buttonText="تعيين موظف" />
+            <div className="mt-4 bg-white">
+                <DataTable
+                    data={currentData}
+                    columns={columns}
+                    rowIdField="id"
                 />
-            )}
-        </div>
+                {totalPages > 1 && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
+                )}
+            </div>
+        </>
     );
 };

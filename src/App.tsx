@@ -34,6 +34,7 @@ const CaseDocuments = lazy(() => import("./pages/dashboard/caseinfo/Documents"))
 const Expenses = lazy(() => import("./pages/dashboard/caseinfo/Expenses"));
 const Procedures = lazy(() => import("./pages/dashboard/caseinfo/Procedures"));
 const Employees = lazy(() => import("./pages/dashboard/caseinfo/Employees"));
+const EmployeeDetails = lazy(() => import("./pages/dashboard/caseinfo/EmployeeDetails"));
 
 // Reports
 const ReportsClients = lazy(() => import("./pages/dashboard/reports/ReportsClients"));
@@ -83,6 +84,7 @@ function App() {
             <Route path="expenses" element={<Expenses />} />
             <Route path="procedures" element={<Procedures />} />
             <Route path="employees" element={<Employees />} />
+            <Route path="employees/:employeeId" element={<EmployeeDetails />} />
           </Route>
           <Route path="legislation-rulings" element={<Legislation />} />
           <Route path="calendar" element={<Calendar />} />
