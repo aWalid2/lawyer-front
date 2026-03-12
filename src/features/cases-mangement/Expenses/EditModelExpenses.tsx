@@ -21,11 +21,11 @@ interface EditModelExpensesProps {
     onSave: (values: any) => void;
 }
 
-export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({ 
-    document, 
-    open, 
+export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
+    document,
+    open,
     onOpenChange,
-    onSave 
+    onSave
 }) => {
     const initialValues = {
         caseReceiptDate: document.caseReceiptDate || "",
@@ -78,7 +78,7 @@ export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
                 >
                     {() => (
                         <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
-                            {/* صف مكون من عمودين - السطر الأول */}
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="caseReceiptDate"

@@ -41,7 +41,8 @@ export const TableSessionsRow: React.FC<TableSessionsRowProps> = ({
             </td>
             <td className="p-4 text-center ">
                 <TableSessionsActions
-                    onEdit={() => onEdit?.(session)}
+                    item={session}
+                    onSave={(values: any) => onEdit?.(values)}
                     onDelete={() => onDelete?.(session)}
                 />
             </td>
