@@ -27,7 +27,6 @@ export const FormExpenses = () => {
 
   const handleSaveChanges = (values: any) => {
     console.log("تم الحفظ:", values);
-    // هنا بتحدث القيم في الفورم الرئيسي
     setFormValues({
       caseReceiptDate: values.caseReceiptDate,
       receiptStatus: values.receiptStatus,
@@ -38,7 +37,6 @@ export const FormExpenses = () => {
     });
   };
 
-  // تحضير الـ document object للمودال
   const documentForModal = {
     id: "1",
     caseReceiptDate: formValues.caseReceiptDate,
@@ -54,7 +52,7 @@ export const FormExpenses = () => {
     <>
       <Formik
         initialValues={formValues}
-        enableReinitialize // عشان الفورم يتحدث لما يتغير formValues
+        enableReinitialize
         onSubmit={(values) => {
           console.log(values);
         }}
@@ -83,14 +81,14 @@ export const FormExpenses = () => {
                     name="caseReceiptDate"
                     label="تاريخ ورود القضية"
                     type="date"
-                    disabled
+                    readonly
                   />
                   <InputForm
                     name="receiptStatus"
                     label="وضع القضية عند الاستلام"
                     type="text"
                     placeholder="أدخل وضع القضية عند الاستلام"
-                    disabled
+                    readonly
                   />
                 </div>
               </div>
@@ -102,14 +100,14 @@ export const FormExpenses = () => {
                     label="نوع القضية"
                     type="text"
                     placeholder="أدخل نوع القضية"
-                    disabled
+                    readonly
                   />
                   <InputForm
                     name="caseStatus"
                     label="حالة القضية"
                     type="text"
                     placeholder="أدخل حالة القضية"
-                    disabled
+                    readonly
                   />
                 </div>
               </div>
@@ -121,14 +119,14 @@ export const FormExpenses = () => {
                     label="درجة التقاضي الحالية"
                     type="text"
                     placeholder="أدخل درجة التقاضي الحالية"
-                    disabled
+                    readonly
                   />
                   <InputForm
                     name="fees"
                     label="الاتعاب"
                     type="text"
                     placeholder="أدخل قيمة الاتعاب"
-                    disabled
+                    readonly
                   />
                 </div>
               </div>
@@ -137,11 +135,10 @@ export const FormExpenses = () => {
                 name="notes"
                 label="ملاحظات"
                 placeholder="أدخل أي ملاحظات إضافية"
-                disabled
+                readonly
               />
             </Form>
 
-            {/* Modal واحد بس وبالطريقة الصحيحة */}
             <EditModelExpenses
               document={documentForModal}
               open={isModalOpen}
