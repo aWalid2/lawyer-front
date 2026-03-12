@@ -31,7 +31,7 @@ export const DataTable = <T,>({
     rowIdField,
 }: DataTableProps<T>) => {
     return (
-        <div className="bg-white overflow-hidden border-b border-[#F1F1F4] relative">
+        <div className="bg-white overflow-hidden   border-b border-[#F1F1F4] relative">
             <Table className="border-collapse ring-0 outline-none">
                 <TableHeader className="bg-[#FCFCFC] sticky top-0 z-20">
                     <TableRow className="border-b border-[#F1F1F4] hover:bg-transparent">

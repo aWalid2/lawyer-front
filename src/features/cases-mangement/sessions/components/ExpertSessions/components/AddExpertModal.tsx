@@ -9,35 +9,30 @@ import {
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
 import { InputForm } from "@/components/shared/components/InputForm";
-import { TextAreaForm } from "@/components/shared/components/TextAreaForm";
-import type { ExpertDocument } from "./typs";
-
+import { SelectForm } from "@/components/shared/components/SelectForm"; // استيراد SelectForm
 import * as Yup from "yup";
 
-interface EditModelExpertsProps {
-    document: ExpertDocument;
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
+interface AddExpertModalProps {
+    onClose: () => void;
     onSave: (values: any) => void;
+    initialValues?: any;
 }
 
-export const EditModelExperts: React.FC<EditModelExpertsProps> = ({ 
-    document, 
-    open, 
-    onOpenChange,
-    onSave 
+const AddExpertModal: React.FC<AddExpertModalProps> = ({
+    onClose,
+    onSave,
+    initialValues
 }) => {
-    const initialValues = {
-        expertReportNumber: document.expertReportNumber || "",
-        assignedAuthority: document.assignedAuthority || "",
-        assignmentDate: document.assignmentDate || "",
-        expertOfficeName: document.expertOfficeName || "",
-        taskStartDate: document.taskStartDate || "",
-        subjectOfExpertise: document.subjectOfExpertise || "",
-        finalOpinion: document.finalOpinion || "",
-        reportSubmissionDate: document.reportSubmissionDate || "",
-        objections: document.objections || "",
-        notes: document.notes || "",
+    const defaultValues = {
+        expertReportNumber: initialValues?.expertReportNumber || "",
+        assignedAuthority: initialValues?.assignedAuthority || "",
+        assignmentDate: initialValues?.assignmentDate || "",
+        expertOfficeName: initialValues?.expertOfficeName || "",
+        taskStartDate: initialValues?.taskStartDate || "",
+        subjectOfExpertise: initialValues?.subjectOfExpertise || "",
+        finalOpinion: initialValues?.finalOpinion || "",
+        reportSubmissionDate: initialValues?.reportSubmissionDate || "",
+        status: initialValues?.status || "قيد المراجعة",
     };
 
     const validationSchema = Yup.object().shape({
@@ -49,40 +44,36 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
         subjectOfExpertise: Yup.string().required("موضوع الخبرة مطلوب"),
         finalOpinion: Yup.string().required("الرأي النهائي للخبير مطلوب"),
         reportSubmissionDate: Yup.string().required("تاريخ إيداع التقرير مطلوب"),
-        objections: Yup.string().nullable(),
-        notes: Yup.string().nullable(),
+        status: Yup.string().required("الحالة مطلوبة"),
     });
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={true} onOpenChange={onClose}>
             <DialogContent
                 className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none"
                 dir="rtl"
                 showCloseButton={false}
             >
-                <DialogClose asChild onClick={() => onOpenChange(false)}>
+                <DialogClose asChild onClick={onClose}>
                     <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all">
-                        <XIcon size={23} className="text-gray-500 " />
+                        <XIcon size={23} className="text-gray-500" />
                     </button>
                 </DialogClose>
                 <DialogHeader className="mb-2 mt-15">
                     <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
-                        تعديل بيانات الخبراء
+                        {initialValues ? "تعديل بيانات الخبير" : "إضافة خبير جديد"}
                     </DialogTitle>
                 </DialogHeader>
 
                 <Formik
-                    initialValues={initialValues}
+                    initialValues={defaultValues}
                     validationSchema={validationSchema}
-                    enableReinitialize
                     onSubmit={(values) => {
                         onSave(values);
-                        onOpenChange(false);
                     }}
                 >
                     {() => (
                         <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
-                            {/* صف مكون من عمودين - السطر الأول */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="expertReportNumber"
@@ -98,7 +89,6 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
                                 />
                             </div>
 
-                            {/* صف مكون من عمودين - السطر الثاني */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="assignmentDate"
@@ -113,7 +103,6 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
                                 />
                             </div>
 
-                            {/* صف مكون من عمودين - السطر الثالث */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="taskStartDate"
@@ -128,7 +117,6 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
                                 />
                             </div>
 
-                            {/* صف مكون من عمودين - السطر الرابع */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="finalOpinion"
@@ -143,21 +131,15 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
                                 />
                             </div>
 
-                            {/* صف كامل - الاعتراضات */}
                             <div className="grid grid-cols-1 gap-4">
-                                <TextAreaForm
-                                    name="objections"
-                                    label="الاعتراضات"
-                                    placeholder="اعتراضات الخصوم على التقرير"
-                                />
-                            </div>
-
-                            {/* صف كامل - الملاحظات الإضافية */}
-                            <div className="grid grid-cols-1 gap-4">
-                                <TextAreaForm
-                                    name="notes"
-                                    label="ملاحظات إضافية"
-                                    placeholder="أدخل أي ملاحظات إضافية عن الخبرة"
+                                <SelectForm
+                                    name="status"
+                                    label="الحالة"
+                                    options={[
+                                        { value: "قيد المراجعة", label: "قيد المراجعة" },
+                                        { value: "مُعتمد", label: "مُعتمد" },
+                                        { value: "مُعترض عليه", label: "مُعترض عليه" },
+                                    ]}
                                 />
                             </div>
 
@@ -165,7 +147,7 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
                                 type="submit"
                                 className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
                             >
-                                حفظ التغييرات
+                                {initialValues ? "حفظ التعديلات" : "إضافة خبير"}
                             </button>
                         </Form>
                     )}
@@ -174,3 +156,5 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
         </Dialog>
     );
 };
+
+export default AddExpertModal;
