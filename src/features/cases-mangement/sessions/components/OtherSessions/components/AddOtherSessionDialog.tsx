@@ -1,35 +1,34 @@
-import React from "react";
-import { Formik, Form } from "formik";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
-import { XIcon } from "lucide-react";
 import { InputForm } from "@/components/shared/components/InputForm";
 import { SelectForm } from "@/components/shared/components/SelectForm";
-import type { ExpertSessionFormValues } from "./typesExpert";
+import type { OtherSession, OtherSessionFormValues } from "./typesOther";
+import { XIcon } from "lucide-react";
+import React from "react";
+import { Formik, Form } from "formik";
 
-interface AddExpertSessionDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onSave: (values: ExpertSessionFormValues) => void;
-  initialValues?: ExpertSessionFormValues;
+interface AddOtherSessionDialogProps {
+  onSave: (values: OtherSessionFormValues) => void;
+  initialValues?: OtherSession;
+  trigger: React.ReactNode;
 }
 
-export const AddExpertSessionDialog: React.FC<AddExpertSessionDialogProps> = ({
-  open,
-  onClose,
+export const AddOtherSessionDialog: React.FC<AddOtherSessionDialogProps> = ({
+  trigger,
   onSave,
   initialValues,
 }) => {
-  const defaultValues: ExpertSessionFormValues = {
-    sessionDate: "",
-    sessionTime: "",
-    lawyer: "",
-    decision: "",
+  const defaultValues: OtherSessionFormValues = {
+    sessionDate: initialValues?.sessionDate || "",
+    sessionTime: initialValues?.sessionTime || "",
+    lawyer: initialValues?.lawyer || "",
+    decision: initialValues?.decision || "",
   };
 
   const decisionOptions = [
@@ -40,7 +39,8 @@ export const AddExpertSessionDialog: React.FC<AddExpertSessionDialogProps> = ({
   ];
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
         className="sm:max-w-[772px] max-h-[90vh] overflow-y-auto sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none custom-scrollbar"
         dir="rtl"
@@ -53,15 +53,14 @@ export const AddExpertSessionDialog: React.FC<AddExpertSessionDialogProps> = ({
         </DialogClose>
         <DialogHeader className="mb-2 mt-15">
           <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
-            {initialValues ? "تعديل جلسة خبراء" : "إضافة جلسة خبراء"}
+            {initialValues ? "تعديل الجلسة الإدارية" : "إضافة جلسة إدارية"}
           </DialogTitle>
         </DialogHeader>
 
         <Formik
-          initialValues={initialValues || defaultValues}
+          initialValues={defaultValues}
           onSubmit={(values) => {
             onSave(values);
-            onClose();
           }}
         >
           {() => (
@@ -70,14 +69,20 @@ export const AddExpertSessionDialog: React.FC<AddExpertSessionDialogProps> = ({
                 <InputForm name="sessionDate" label="تاريخ الجلسة" type="date" />
                 <InputForm name="sessionTime" label="وقت الجلسة" type="time" />
                 <InputForm name="lawyer" label="المحامي المسؤول" type="text" />
-                <SelectForm name="decision" label="قرار الجلسة" options={decisionOptions} />
+                <SelectForm
+                  name="decision"
+                  label="قرار الجلسة"
+                  options={decisionOptions}
+                />
               </div>
-              <button
-                type="submit"
-                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity font-cairo"
-              >
-                {initialValues ? "حفظ التغييرات" : "إضافة الجلسة"}
-              </button>
+              <DialogClose asChild>
+                <button
+                  type="submit"
+                  className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity font-cairo"
+                >
+                  {initialValues ? "حفظ التغييرات" : "إضافة الجلسة"}
+                </button>
+              </DialogClose>
             </Form>
           )}
         </Formik>

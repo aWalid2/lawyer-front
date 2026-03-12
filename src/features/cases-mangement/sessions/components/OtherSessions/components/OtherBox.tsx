@@ -1,12 +1,12 @@
 import React from "react";
 
-interface ExpertBoxProps {
+interface OtherBoxProps {
   label: string;
   text: string;
   icon?: React.ReactNode;
 }
 
-export const ExpertBox: React.FC<ExpertBoxProps> = ({ label, text, icon }) => {
+export const OtherBox: React.FC<OtherBoxProps> = ({ label, text, icon }) => {
   return (
     <div className="flex flex-col w-full">
       <label className="block mb-4 text-sm font-normal text-secondary pr-2">{label}</label>
