@@ -1,7 +1,8 @@
 import React from "react";
+import { FormExperts } from "./FormExperts";
 
 const ExpertSessions: React.FC = () => {
-  return <div className="">محتوى الخبراء سيظهر هنا</div>;
+  return <div className=""><FormExperts /></div>;
 };
 
 export default ExpertSessions;
