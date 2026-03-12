@@ -15,6 +15,7 @@ type InputFormProps = {
   label: string;
   type: string;
   dir?: string;
+  readonly?: boolean;
 };
 
 export const InputForm: React.FC<InputFormProps> = ({
@@ -24,6 +25,7 @@ export const InputForm: React.FC<InputFormProps> = ({
   label,
   type,
   dir,
+  readonly
 }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
@@ -41,7 +43,9 @@ export const InputForm: React.FC<InputFormProps> = ({
               className={cn(
                 "w-full justify-between gap-2 items-center text-left font-normal h-[50px] border-[#E8E8E8] rounded-[10px] bg-[#FBFBFB] px-4",
                 !field.value && "text-muted-foreground",
-                meta.touched && meta.error && "border-red-500"
+                meta.touched && meta.error && "border-red-500",
+                readonly && "bg-gray-100",
+                disabled && "opacity-70 cursor-not-allowed"
               )}
               disabled={disabled}
             >
@@ -57,6 +61,7 @@ export const InputForm: React.FC<InputFormProps> = ({
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
             <Calendar
+
               mode="single"
               selected={field.value ? new Date(field.value) : undefined}
               onSelect={(date) => {
@@ -86,6 +91,7 @@ export const InputForm: React.FC<InputFormProps> = ({
         placeholder={placeholder}
         disabled={disabled}
         dir={dir}
+        readOnly={readonly}
         className={cn(
           "text-right",
           meta.touched && meta.error && "border-red-500"

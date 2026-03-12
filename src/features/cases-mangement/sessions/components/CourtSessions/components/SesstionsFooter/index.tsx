@@ -36,8 +36,7 @@ const mockSessions3 = [
 
 export const SesstionsFooter = ({ tab }: { tab: string }) => {
     return (
-        <div className="overflow-x-auto
-         bg-white rounded-2xl p-4 md:p-6 border border-[#eeeeee]">
+        <div className="overflow-x-auto bg-white rounded-2xl p-4 md:p-6 border border-[#eeeeee]">
             <HeaderSessionsTable title={tab === "first" ? "جلسات أول درجة" : tab === "appeal" ? "جلسات الاستئناف" : "جلسات التمييز"} />
             <SessionsTable data={tab === "first" ? mockSessions1 : tab === "appeal" ? mockSessions2 : mockSessions3} />
         </div>
