@@ -1,8 +1,6 @@
-import React from 'react';
-import view from '@/public/images/view.svg';
-import edit from '@/public/images/edit.svg';
 import deleteIcon from '@/public/images/delete.svg';
-import { Link } from 'react-router-dom';
+import edit from '@/public/images/edit.svg';
+import React from 'react';
 
 interface ExpertsActionsProps {
     expertItem: any;
@@ -10,10 +8,9 @@ interface ExpertsActionsProps {
     onDelete?: () => void;
 }
 
-export const ExpertsActions: React.FC<ExpertsActionsProps> = ({ 
-    expertItem, 
-    onEdit, 
-    onDelete 
+export const ExpertsActions: React.FC<ExpertsActionsProps> = ({
+    onEdit,
+    onDelete
 }) => {
     return (
         <div className="flex items-center justify-center gap-2">
