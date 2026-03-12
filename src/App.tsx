@@ -35,6 +35,7 @@ const Expenses = lazy(() => import("./pages/dashboard/caseinfo/Expenses"));
 const Procedures = lazy(() => import("./pages/dashboard/caseinfo/Procedures"));
 const Employees = lazy(() => import("./pages/dashboard/caseinfo/Employees"));
 const EmployeeDetails = lazy(() => import("./pages/dashboard/caseinfo/EmployeeDetails"));
+const CaseDocumentDetails = lazy(() => import("@/features/cases-mangement/Documents/components/CaseDocumentDetails").then(m => ({ default: m.CaseDocumentDetails })));
 
 // Reports
 const ReportsClients = lazy(() => import("./pages/dashboard/reports/ReportsClients"));
@@ -81,6 +82,7 @@ function App() {
             <Route path="sessions" element={<Sessions />} />
             <Route path="related" element={<RelatedCases />} />
             <Route path="documents" element={<CaseDocuments />} />
+            <Route path="documents/:docId" element={<CaseDocumentDetails />} />
             <Route path="expenses" element={<Expenses />} />
             <Route path="procedures" element={<Procedures />} />
             <Route path="employees" element={<Employees />} />

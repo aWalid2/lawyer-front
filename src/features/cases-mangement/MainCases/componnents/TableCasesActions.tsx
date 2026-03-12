@@ -12,7 +12,7 @@ export const TableCasesActions: React.FC<{
   return (
     <div className="flex items-center justify-center gap-2">
       <Link
-        to={`/dashboard/case-details/${caseItem?.id}`}
+        to={`/dashboard/case-management/${caseItem?.id}`}
         title="عرض التفاصيل"
         className="h-9 w-9 flex items-center justify-center rounded-lg bg-[#F0F6FF]"
       >

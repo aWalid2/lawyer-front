@@ -8,7 +8,7 @@ const CaseInfo: React.FC = () => {
   return (
     <PageLayout innerPage>
       <div className="flex items-center justify-between mb-6">
-        <HeaderTitle title="معلومات القضية" />
+        <HeaderTitle title="معلومات القضية" to="/dashboard/case-management" />
         <FormCaseDialog />
       </div>
       <CaseDetailsInfo
