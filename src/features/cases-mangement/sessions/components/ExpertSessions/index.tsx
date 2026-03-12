@@ -1,9 +1,11 @@
 import React from "react";
-
+import { FormExperts } from "./components/FormExperts";
+import { TableExpert } from "./components/TableExpert";
 const ExpertSessions: React.FC = () => {
   return (
-    <div className="space-y-6">
-      fdgd
+    <div className="" >
+      <FormExperts />
+      <TableExpert />
     </div>
   );
 };
