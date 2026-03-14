@@ -1,6 +1,5 @@
-import React from "react";
-import { DocumentsSearch } from "./components/DocumentsSearch";
-import { DocumentsFilter } from "./components/DocumentsFilter";
+import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
+import { HeaderFilter } from "@/components/shared/components/HeaderFilter";
 import { AddDocumentDialog } from "../AddDocumentDialog";
 
 interface HeaderPageDocumentsProps {
@@ -22,10 +21,18 @@ export const HeaderPageDocuments: React.FC<HeaderPageDocumentsProps> = ({
         المستندات
       </h1>
 
-      <DocumentsSearch value={searchTerm} onChange={onSearch} />
+      <HeaderSearch value={searchTerm} onChange={onSearch} />
 
       <div className="flex items-center gap-3 w-full md:w-auto justify-end">
-        <DocumentsFilter onFilterChange={onFilterChange} />
+        <HeaderFilter
+          placeholder="نسخة من المستندات"
+          defaultValue="clients"
+          onFilterChange={onFilterChange}
+          options={[
+            { value: "clients", label: "موكلين" },
+            { value: "cases", label: "قضايا" },
+          ]}
+        />
         <AddDocumentDialog filter={filter} />
       </div>
     </div>

@@ -49,12 +49,12 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({ document
                 {trigger}
             </DialogTrigger>
             <DialogContent
-                className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none"
+                className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
                 dir="rtl"
                 showCloseButton={false}
             >
                 <DialogClose asChild>
-                    <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all">
+                    <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all">
                         <XIcon size={23} className="text-gray-500 " />
                     </button>
                 </DialogClose>

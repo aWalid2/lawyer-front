@@ -1,0 +1,50 @@
+import { HeaderActionButton } from "@/components/shared/components/HeaderActionButton";
+import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
+import { HeaderFilter } from "@/components/shared/components/HeaderFilter";
+import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayout";
+
+interface HeaderPageReportsClientsProps {
+  onSearch: (term: string) => void;
+  onFilterChange: (status: string) => void;
+  searchTerm: string;
+  filter: string;
+}
+
+export const HeaderPageReportsClients: React.FC<HeaderPageReportsClientsProps> = ({
+  onSearch,
+  onFilterChange,
+  searchTerm,
+  filter,
+}) => {
+  return (
+    <HeaderPageLayout>
+      <HeaderTitle innerPage title="تقارير الموكلين" />
+
+      <HeaderSearch
+        value={searchTerm}
+        onChange={onSearch}
+        placeholder="بحث باسم الموكل أو كود الموكل ..."
+      />
+
+      <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+        <HeaderFilter
+          placeholder="الحالة"
+          value={filter}
+          onFilterChange={onFilterChange}
+          options={[
+            { value: "all", label: "الكل" },
+            { value: "active", label: "نشط" },
+            { value: "inactive", label: "غير نشط" },
+          ]}
+          className="md:w-[120px]"
+        />
+        <HeaderActionButton
+          label="تصدير"
+          variant="gradient"
+          className="rounded-main h-12.5 px-8"
+        />
+      </div>
+    </HeaderPageLayout>
+  );
+};

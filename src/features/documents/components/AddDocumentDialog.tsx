@@ -12,9 +12,8 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/components/shared/components/InputForm";
 import { FileUpload } from "@/components/shared/components/FileUpload";
 import { TextAreaForm } from "@/components/shared/components/TextAreaForm";
-import { Button } from "@/components/ui/button";
+import { HeaderActionButton } from "@/components/shared/components/HeaderActionButton";
 import { SelectForm } from "@/components/shared/components/SelectForm";
-import { cn } from "@/lib/utils";
 
 
 interface AddDocumentDialogProps {
@@ -36,23 +35,21 @@ export const AddDocumentDialog: React.FC<AddDocumentDialogProps> = ({ filter }) 
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button
-                    className={cn(
-                        "h-12.5 px-8 rounded-[12px] flex items-center gap-2 text-sm font-semibold transition-all active:scale-95 whitespace-nowrap",
-                        "bg-primary-gradient  hover:bg-primary-gradient  text-white",
-                    )}
-                >
-                    <span className="text-xl">+</span>
-                    <span>مستند جديد</span>
-                </Button>
+                <HeaderActionButton
+                    label="مستند جديد"
+                    variant="primary"
+                    icon={<span className="text-xl">+</span>}
+                    iconPosition="left"
+                    className="rounded-main h-12.5 px-8"
+                />
             </DialogTrigger>
             <DialogContent
-                className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none"
+                className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none text-right"
                 dir="rtl"
                 showCloseButton={false}
             >
                 <DialogClose asChild>
-                    <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all">
+                    <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all">
                         <XIcon size={23} className="text-gray-500 " />
                     </button>
                 </DialogClose>
@@ -116,7 +113,7 @@ export const AddDocumentDialog: React.FC<AddDocumentDialogProps> = ({ filter }) 
 
                             <button
                                 type="submit"
-                                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
+                                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity"
                             >
                                 إضافة مستند
                             </button>
