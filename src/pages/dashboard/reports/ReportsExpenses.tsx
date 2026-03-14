@@ -1,6 +1,7 @@
+import ReportsExpensesFeature from "@/features/reports/expenses";
 
 const ReportsExpenses = () => {
-  return <div>Reports Expenses</div>;
+  return <ReportsExpensesFeature />
 };
 
 export default ReportsExpenses;
