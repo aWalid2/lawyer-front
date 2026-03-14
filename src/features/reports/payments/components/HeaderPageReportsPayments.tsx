@@ -6,7 +6,7 @@ import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayout";
 import { HeaderDatePicker } from "@/components/shared/components/HeaderDatePicker";
 
-interface HeaderPageReportsExpensesProps {
+interface HeaderPageReportsPaymentsProps {
   onSearch: (term: string) => void;
   onFilterChange: (key: string, value: any) => void;
   searchTerm: string;
@@ -16,7 +16,7 @@ interface HeaderPageReportsExpensesProps {
   };
 }
 
-export const HeaderPageReportsExpenses: React.FC<HeaderPageReportsExpensesProps> = ({
+export const HeaderPageReportsPayments: React.FC<HeaderPageReportsPaymentsProps> = ({
   onSearch,
   onFilterChange,
   searchTerm,
@@ -24,7 +24,7 @@ export const HeaderPageReportsExpenses: React.FC<HeaderPageReportsExpensesProps>
 }) => {
   return (
     <HeaderPageLayout>
-      <HeaderTitle innerPage title="تقارير المصروفات" />
+      <HeaderTitle innerPage title="تقارير المدفوعات" />
 
       <HeaderSearch
         value={searchTerm}

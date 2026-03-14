@@ -1,6 +1,7 @@
+import ReportsPaymentsFeature from "@/features/reports/payments";
 
 const ReportsPayments = () => {
-  return <div>Reports payments</div>;
+  return <ReportsPaymentsFeature />;
 };
 
 export default ReportsPayments;
