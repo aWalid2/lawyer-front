@@ -1,7 +1,7 @@
-
+import ReportsCasesFeature from "@/features/reports/cases";
 
 const ReportsCases = () => {
-  return <div>Reprts cases</div>;
+  return <ReportsCasesFeature />;
 };
 
 export default ReportsCases;

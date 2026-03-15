@@ -4,7 +4,7 @@ import { FileText, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 
-// Mock data (matching the one in CaseDocuments)
+
 const mockDocuments = [
   { id: "1", name: "عقد تأسيس.pdf", type: "PDF", date: "2024-01-10", size: "1.2 MB", description: "عقد تأسيس الشركة مصدق من وزارة العدل" },
   { id: "2", name: "هوية الموكل.jpg", type: "Image", date: "2024-01-15", size: "2.5 MB", description: "نسخة ضوئية من البطاقة المدنية للموكل" },
@@ -38,7 +38,7 @@ export const CaseDocumentDetails: React.FC = () => {
   return (
     <div className="space-y-6">
       <HeaderTitle title={`عرض المستند: ${document.name}`} to={`/dashboard/case-management/${id}/documents`} />
-      
+
       <div className="bg-white rounded-[24px] shadow-primary p-6 md:p-8">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-100 pb-6 mb-8 gap-4">

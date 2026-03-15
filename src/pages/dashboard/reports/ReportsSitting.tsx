@@ -1,6 +1,9 @@
 
+import ReportsSessionsFeature from "@/features/reports/sessions";
+
 const ReportsSitting = () => {
-  return <div>Reports sitttings</div>;
+  return <ReportsSessionsFeature />;
 };
 
 export default ReportsSitting;
+

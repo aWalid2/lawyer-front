@@ -1,6 +1,7 @@
+import RollFeature from "@/features/roll";
 
 const Roll = () => {
-  return <div>Roll</div>;
+  return <RollFeature />;
 };
 
 export default Roll;

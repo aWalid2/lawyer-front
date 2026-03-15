@@ -1,6 +1,7 @@
+import ReportsClientsFeature from "@/features/reports/clients";
 
 const ReportsClients = () => {
-  return <div>ReportsClients</div>;
+  return <ReportsClientsFeature />;
 };
 
 export default ReportsClients;

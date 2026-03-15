@@ -16,7 +16,7 @@ const ROUTE_TITLES: Record<string, string> = {
   "/dashboard/legislation-rulings": "التشريعات والأحكام",
   "/dashboard/calendar": "التقويم",
   "/dashboard/roll": "الرول",
-  "/dashboard/documents": "الوثائق",
+  "/dashboard/documents": "المستندات",
   "/dashboard/user-tasks": "مهامي",
   "/dashboard/consultaions": "الاستشارات",
   "/dashboard/contracts": "العقود",
@@ -26,28 +26,47 @@ const ROUTE_TITLES: Record<string, string> = {
   "/dashboard/chat-bot": "المساعد الذكي",
   "/dashboard/messages": "الرسائل",
   "/dashboard/profile": "الملف الشخصي",
+
+  // Reports
+  "/dashboard/reports": "التقارير",
+  "/dashboard/reports/clients": "التقارير > تقارير الموكلين",
+  "/dashboard/reports/cases": "التقارير > تقارير القضايا",
+  "/dashboard/reports/sitting": "التقارير > تقارير الجلسات",
+  "/dashboard/reports/users": "التقارير > تقارير المستخدمين",
+  "/dashboard/reports/expenses": "التقارير > تقارير المصروفات",
+  "/dashboard/reports/payments": "التقارير > تقارير المدفوعات",
+
+  // Users
+  "/dashboard/users": "المستخدمين",
+  "/dashboard/users/clients": "المستخدمين > الموكلين",
+  "/dashboard/users/lawyers": "المستخدمين > العقود",
+  "/dashboard/users/employees": "المستخدمين > الموظفين",
+
+  // Finance
+  "/dashboard/finance": "المالية",
+  "/dashboard/finance/expences": "المالية > المصروفات",
+  "/dashboard/finance/payments": "المالية > المدفوعات",
 };
 
 export default function NavbarHeader() {
   const { pathname } = useLocation();
 
   const currentTitle = useMemo(() => {
-    // Check for exact matches first
     if (ROUTE_TITLES[pathname]) return ROUTE_TITLES[pathname];
 
-    // Check for dynamic routes (e.g., clients/:id or case-management/:id)
-    if (pathname.includes("/dashboard/clients/")) return "تفاصيل الموكل";
+    if (pathname.includes("/dashboard/clients/"))
+      return "الموكلين > تفاصيل الموكل";
     if (pathname.includes("/dashboard/case-management/"))
-      return "تفاصيل القضية";
-    if (pathname.includes("/dashboard/reports/")) return "التقارير";
-    if (pathname.includes("/dashboard/users/")) return "المستخدمين";
-    if (pathname.includes("/dashboard/finance/")) return "المالية";
+      return "إدارة القضايا > تفاصيل القضية";
+    if (pathname.startsWith("/dashboard/reports/")) return "التقارير";
+    if (pathname.startsWith("/dashboard/users/")) return "المستخدمين";
+    if (pathname.startsWith("/dashboard/finance/")) return "المالية";
 
     return "لوحة التحكم";
   }, [pathname]);
 
   return (
-    <header className="w-full bg-white rounded-0  md:rounded-[12px] px-6 shadow-[0_0_24px_0_rgba(21,58,77,0.16)]   ">
+    <header className="w-full bg-white rounded-0  md:rounded-main px-6 shadow-[0_0_24px_0_rgba(21,58,77,0.16)]   ">
       <div className="h-20 flex justify-between   ">
         <div className="flex flex-wrap items-center justify-between w-full  ">
           <h1 className="text-xl font-semibold text-secondary">

@@ -201,6 +201,9 @@ body {
   --color-primary-text: #3d3c48;
   --color-primary-light: #e3c086;
   --color-secondary: #153b4d;
+  --color-error: #c60000;
+  --color-success: #11b324;
+  --radius-main: 12px;
   --spacing-13: 3.25rem;
 
   --background-image-primary-gradient: linear-gradient(

@@ -1,7 +1,8 @@
-import React from "react";
+import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
 import { NewCaseLink } from "./components/NewCaseLink";
-import { CasesSearch } from "./components/CasesSearch";
 import { CasesFilter } from "./components/CasesFilter";
+import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayout";
 
 interface HeaderPageCaseProps {
   onSearch: (term: string) => void;
@@ -15,17 +16,14 @@ export const HeaderPageCase: React.FC<HeaderPageCaseProps> = ({
   searchTerm,
 }) => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 w-full pb-6">
-      <h1 className="text-xl font-semibold text-secondary font-cairo whitespace-nowrap self-start md:self-center">
-        القضايا
-      </h1>
-
-      <CasesSearch value={searchTerm} onChange={onSearch} />
-
+    <HeaderPageLayout>
+      <HeaderTitle innerPage title="القضايا" />
+      <HeaderSearch value={searchTerm} onChange={onSearch} />
       <div className="flex items-center gap-3 w-full md:w-auto justify-end">
         <CasesFilter onFilterChange={onFilterChange} />
         <NewCaseLink />
       </div>
-    </div>
+    </HeaderPageLayout  >
+
   );
 };

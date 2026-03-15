@@ -1,6 +1,7 @@
+import ReportsUsersFeature from "@/features/reports/users";
 
 const ReportsUsers = () => {
-  return <div>Reports users</div>;
+  return <ReportsUsersFeature />
 };
 
 export default ReportsUsers;

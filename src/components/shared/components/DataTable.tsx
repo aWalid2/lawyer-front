@@ -9,10 +9,12 @@ import {
 } from "@/components/ui/table";
 
 export interface Column<T> {
-    header: string;
+    header: React.ReactNode;
     accessor: keyof T | ((item: T) => React.ReactNode);
     className?: string;
     headerClassName?: string;
+    colSpan?: number;
+    hideHeader?: boolean;
 }
 
 interface DataTableProps<T> {
@@ -35,14 +37,18 @@ export const DataTable = <T,>({
             <Table className="border-collapse ring-0 outline-none">
                 <TableHeader className="bg-[#FCFCFC] sticky top-0 z-20">
                     <TableRow className="border-b border-[#F1F1F4] hover:bg-transparent">
-                        {columns.map((column, index) => (
-                            <TableHead
-                                key={index}
-                                className={`p-2 text-center text-sm font-semibold text-[#4B5675]  border-r border-[#F1F1F4] h-[37px] ${column.headerClassName || ""}`}
-                            >
-                                {column.header}
-                            </TableHead>
-                        ))}
+                        {columns.map((column, index) => {
+                            if (column.hideHeader) return null;
+                            return (
+                                <TableHead
+                                    key={index}
+                                    colSpan={column.colSpan}
+                                    className={`p-2 text-center text-sm font-semibold text-[#4B5675]  border-r border-[#F1F1F4] h-[37px] ${column.headerClassName || ""}`}
+                                >
+                                    {column.header}
+                                </TableHead>
+                            );
+                        })}
                     </TableRow>
                 </TableHeader>
                 <TableBody>
