@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Loading from "./components/shared/Loading";
+import LawyerDetail from "./features/users/users-lawyers/lawyers/LawyerDetail.tsx";
 
 //Header routes
 const Notifications = lazy(() => import("./pages/dashboard/Notifications"));
@@ -49,6 +50,8 @@ const ReportsPayments = lazy(() => import("./pages/dashboard/reports/ReportsPaym
 const UsersClients = lazy(() => import("./pages/dashboard/users/UsersClients"));
 const UsersLawyers = lazy(() => import("./pages/dashboard/users/UsersLawyers"));
 const UsersEmployees = lazy(() => import("./pages/dashboard/users/UsersEmployees"));
+const EmployeeDetail = lazy(() => import("./features/users/users-employees/employees/EmployeeDetail.tsx"))
+
 
 // Finance
 const FinanceExpenses = lazy(() => import("./pages/dashboard/finance/FinanceExpenses"));
@@ -113,7 +116,9 @@ function App() {
           <Route path="users">
             <Route path="clients" element={<UsersClients />} />
             <Route path="lawyers" element={<UsersLawyers />} />
+            <Route path="lawyers/:id" element={<LawyerDetail />} />
             <Route path="employees" element={<UsersEmployees />} />
+            <Route path="employees/:id" element={<EmployeeDetail/>} />
           </Route>
           {/* Finance Routes */}
           <Route path="finance">

@@ -1,6 +1,12 @@
+import PageLayout from "@/components/shared/components/PageLayout";
+import { UsersEmployee } from "@/features/users/users-employees";
 
 const UsersEmployees = () => {
-  return <div>Users Employees</div>;
+  return (
+    <PageLayout>
+      <UsersEmployee />
+    </PageLayout>
+  )
 };
 
 export default UsersEmployees;
