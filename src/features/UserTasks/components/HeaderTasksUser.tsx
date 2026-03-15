@@ -17,14 +17,14 @@ export const HeaderTasksUser: React.FC<HeaderTasksUser> = ({
   statusFilter,
 }) => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 w-full pb-6">
+    <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 w-full pb-6 sm:flex sm:flex-col ">
       <h1 className="text-xl font-semibold text-secondary font-cairo whitespace-nowrap self-start md:self-center">
         مهام المستخدم
       </h1>
 
       <TaskUserSearch value={searchTerm} onChange={onSearch} />
 
-      <div className="flex items-center gap-3 w-full md:w-auto justify-end max-sm:justify-center">
+      <div className="flex items-center gap-3 w-full md:w-auto justify-end max-sm:justify-center  max-sm:flex-col">
         <UserTaskFilter 
           onFilterChange={onFilterChange}
           currentFilter={statusFilter}  
