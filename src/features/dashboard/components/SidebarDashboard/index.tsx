@@ -14,7 +14,7 @@ const SidebarDashboard = () => {
   return (
     <>
       <aside className=" bg-white ">
-        <div className="hidden lg:block bg-white h-fit min:h-fit w-70 md:bg-white md:min-h-screen p-4 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] rounded-[12px]   ">
+        <div className="hidden lg:block bg-white h-fit min:h-fit w-70 md:bg-white md:min-h-screen p-4 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] rounded-main   ">
           <div className="mb-10">
             <img
               src={logo}
