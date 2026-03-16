@@ -138,7 +138,7 @@ const NavDashboard = () => {
         title={"المستخدمين"}
         icon={<UsersIcon />}
       />
-      <NavLink to="/dashboard/consultaions" className={linkClass}>
+      <NavLink to="/dashboard/consultations" className={linkClass}>
         <div className="flex items-center gap-3 ">
           <ConsultationsIcon />
           <p className=" text-base font-normal">الاستشارات</p>
