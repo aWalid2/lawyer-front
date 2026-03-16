@@ -21,6 +21,7 @@ const Documents = lazy(() => import("./pages/dashboard/Documents"));
 const UserTasks = lazy(() => import("./pages/dashboard/UserTasks"));
 const UserTasksDetails = lazy(() => import("./pages/dashboard/UserTasksDetails.tsx"));
 const Consultations = lazy(() => import("./pages/dashboard/Consultations"));
+const ConsultationDetails = lazy(() => import("./pages/dashboard/ConsultationDetails"));
 const Contracts = lazy(() => import("./pages/dashboard/Contracts"));
 const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
 const Settings = lazy(() => import("./pages/dashboard/Settings"));
@@ -98,7 +99,8 @@ function App() {
           <Route path="documents/:id" element={<DocumentDetails />} />
           <Route path="user-tasks" element={<UserTasks />} />
           <Route path="user-tasks/:id" element={<UserTasksDetails />} />
-          <Route path="consultaions" element={<Consultations />} />
+          <Route path="consultations" element={<Consultations />} />
+          <Route path="consultations/:id" element={<ConsultationDetails />} />
           <Route path="contracts" element={<Contracts />} />
           <Route path="client-details/:id" element={<ClientDetails />} />
           <Route path="about-office" element={<AboutOffice />} />
@@ -118,7 +120,7 @@ function App() {
             <Route path="lawyers" element={<UsersLawyers />} />
             <Route path="lawyers/:id" element={<LawyerDetail />} />
             <Route path="employees" element={<UsersEmployees />} />
-            <Route path="employees/:id" element={<EmployeeDetail/>} />
+            <Route path="employees/:id" element={<EmployeeDetail />} />
           </Route>
           {/* Finance Routes */}
           <Route path="finance">

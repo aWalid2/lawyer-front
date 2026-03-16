@@ -1,6 +1,7 @@
+import ConsultationsFeature from "@/features/consultations/MainConsultations";
 
 const Consultations = () => {
-  return <div>Consultations</div>;
+  return <ConsultationsFeature />;
 };
 
 export default Consultations;

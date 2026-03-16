@@ -18,7 +18,6 @@ const ROUTE_TITLES: Record<string, string> = {
   "/dashboard/roll": "الرول",
   "/dashboard/documents": "المستندات",
   "/dashboard/user-tasks": "مهام المستخدم",
-  "/dashboard/consultaions": "الاستشارات",
   "/dashboard/contracts": "العقود",
   "/dashboard/about-office": "عن المكتب",
   "/dashboard/settings": "الإعدادات",
@@ -26,6 +25,10 @@ const ROUTE_TITLES: Record<string, string> = {
   "/dashboard/chat-bot": "المساعد الذكي",
   "/dashboard/messages": "الرسائل",
   "/dashboard/profile": "الملف الشخصي",
+
+
+  //consultations
+  "/dashboard/consultations": "الاستشارات",
 
   // Reports
   "/dashboard/reports": "التقارير",
@@ -54,6 +57,8 @@ export default function NavbarHeader() {
   const currentTitle = useMemo(() => {
     if (ROUTE_TITLES[pathname]) return ROUTE_TITLES[pathname];
 
+    if (pathname.includes("/dashboard/consultations/"))
+      return "الاستشارات > تفاصيل الاستشارة";
     if (pathname.includes("/dashboard/clients/"))
       return "الموكلين > تفاصيل الموكل";
     if (pathname.includes("/dashboard/case-management/"))

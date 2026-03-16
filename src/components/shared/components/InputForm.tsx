@@ -32,7 +32,7 @@ export const InputForm: React.FC<InputFormProps> = ({
 
   if (type === "date") {
     return (
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full col-span-2">
         <label className="block mb-4 text-sm font-normal text-[#1A1A1A]">
           {label}
         </label>
