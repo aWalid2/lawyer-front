@@ -11,7 +11,6 @@ import {
 import { XIcon } from "lucide-react";
 import { InputForm } from "@/components/shared/components/InputForm";
 import { FileUpload } from "@/components/shared/components/FileUpload";
-import { TextAreaForm } from "@/components/shared/components/TextAreaForm";
 import { SelectForm } from "@/components/shared/components/SelectForm";
 import type { Client } from "./types";
 

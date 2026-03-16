@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link} from 'react-router-dom';
 import { HeaderTitle } from '@/components/shared/components/HeaderTitle';
 import PageLayout from '@/components/shared/components/PageLayout';
 // تعريف نوع الموظف
@@ -73,7 +73,6 @@ const employeesData: Employee[] = [
 
 const EmployeeDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
     const [employee, setEmployee] = useState<Employee | null>(null);
     const [loading, setLoading] = useState(true);
 

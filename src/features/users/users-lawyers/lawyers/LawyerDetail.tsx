@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link} from 'react-router-dom';
 import { HeaderTitle } from '@/components/shared/components/HeaderTitle';
 import PageLayout from '@/components/shared/components/PageLayout';
 
@@ -102,7 +102,6 @@ const lawyersData: Lawyer[] = [
 
 const LawyerDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
     const [lawyer, setLawyer] = useState<Lawyer | null>(null);
     const [loading, setLoading] = useState(true);
 
