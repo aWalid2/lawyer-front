@@ -11,7 +11,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import arrow from "@/public/images/arrow.svg";
 import { Eye, EyeOff } from "lucide-react"; 
 import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 
