@@ -10,10 +10,9 @@ import { NavLink } from "react-router-dom";
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center justify-between p-4 rounded-lg transition
-  ${
-    isActive
-      ? "bg-gradient-to-l from-[#CBA462] to-[#E3C086] text-white"
-      : "text-[#727272] hover:bg-primary hover:text-white"
+  ${isActive
+    ? "bg-gradient-to-l from-[#CBA462] to-[#E3C086] text-white"
+    : "text-[#727272] hover:bg-primary hover:text-white"
   }`;
 
 type Item = {
@@ -45,14 +44,13 @@ const CollapsibleNavDashboard: React.FC<CollapsibleNavDashboardProps> = ({
             <span className="text-base font-normal">{title}</span>
           </div>
           <ChevronDown
-            className={`h-4 w-4 transition-transform ${
-              open ? "rotate-180" : ""
-            }`}
+            className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""
+              }`}
           />
         </button>
       </CollapsibleTrigger>
 
-      <CollapsibleContent className="space-y-1 pr-8">
+      <CollapsibleContent className="space-y-1 pr-8 mt-2">
         {data.map((item) => (
           <NavLink key={item.to} to={item.to} className={linkClass}>
             - {item.label}

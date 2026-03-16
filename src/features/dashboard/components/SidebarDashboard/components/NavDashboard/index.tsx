@@ -48,7 +48,7 @@ const usersLinks = [
     to: "/dashboard/users/clients",
   },
   {
-    label: "العقود",
+    label: "المحامين",
     to: "/dashboard/users/lawyers",
   },
   {
