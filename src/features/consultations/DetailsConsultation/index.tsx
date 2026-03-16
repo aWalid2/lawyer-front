@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { ConsultationHeaderCard } from "./components/ConsultationHeaderCard";
-import { ConsultationDescriptionCard } from "./components/ConsultationDescriptionCard";
-import { ClientDetailsCard } from "./components/ClientDetailsCard";
-import type { Consultation, ConsultationStatus } from "../MainConsultations/types";
 import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 import PageLayout from "@/components/shared/components/PageLayout";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import type { Consultation, ConsultationStatus } from "../MainConsultations/types";
+import { ClientDetailsCard } from "./components/ClientDetailsCard";
+import { ConsultationDescriptionCard } from "./components/ConsultationDescriptionCard";
+import { ConsultationHeaderCard } from "./components/ConsultationHeaderCard";
 
 // Fallback mock data if ID not found or while loading
 const MOCK_CONSULTATIONS: Consultation[] = Array.from({ length: 45 }, (_, i) => ({
