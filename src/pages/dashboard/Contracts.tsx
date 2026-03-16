@@ -1,7 +1,8 @@
+import ContractsFeature from "@/features/contracts";
 
 
 const Contracts = () => {
-  return <div>Contracts</div>;
+  return <ContractsFeature />;
 };
 
 export default Contracts;

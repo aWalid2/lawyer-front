@@ -1,5 +1,7 @@
 import React from "react";
-import { TaskUserSearch } from "@/features/UserTasks/components/TaskUserSerch";
+import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
+import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayout";
+import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 
 interface HeaderEmployeesProps {
     onSearch: (value: string) => void;
@@ -13,18 +15,11 @@ export const HeaderEmployees: React.FC<HeaderEmployeesProps> = ({
     onAddClick
 }) => {
     return (
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 w-full pb-6">
-            {/* العنوان على اليمين */}
-            <h1 className="text-xl font-semibold text-secondary font-cairo whitespace-nowrap order-1">
-                الموظفين
-            </h1>
-
-            {/* السيرش في المنتصف */}
-            <div className="flex-1 max-w-md order-2">
-                <TaskUserSearch value={searchTerm} onChange={onSearch} />
-            </div>
-
-            {/* الزر على اليسار */}
+        <HeaderPageLayout >
+        <HeaderTitle innerPage title="الموظفين" />
+       <div className="flex-1 order-2">
+         <HeaderSearch value={searchTerm} onChange={onSearch} />
+       </div>
             <div className="flex items-center gap-3 order-3">
                 <button
                     onClick={onAddClick}
@@ -36,6 +31,6 @@ export const HeaderEmployees: React.FC<HeaderEmployeesProps> = ({
                     <span>+ موظف جديد</span>
                 </button>
             </div>
-        </div>
+        </HeaderPageLayout>
     );
 };
