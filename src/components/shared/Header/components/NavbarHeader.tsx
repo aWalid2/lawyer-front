@@ -17,7 +17,7 @@ const ROUTE_TITLES: Record<string, string> = {
   "/dashboard/calendar": "التقويم",
   "/dashboard/roll": "الرول",
   "/dashboard/documents": "المستندات",
-  "/dashboard/user-tasks": "مهامي",
+  "/dashboard/user-tasks": "مهام المستخدم",
   "/dashboard/consultaions": "الاستشارات",
   "/dashboard/contracts": "العقود",
   "/dashboard/about-office": "عن المكتب",
@@ -39,7 +39,7 @@ const ROUTE_TITLES: Record<string, string> = {
   // Users
   "/dashboard/users": "المستخدمين",
   "/dashboard/users/clients": "المستخدمين > الموكلين",
-  "/dashboard/users/lawyers": "المستخدمين > العقود",
+  "/dashboard/users/lawyers": "المستخدمين > المحامين",
   "/dashboard/users/employees": "المستخدمين > الموظفين",
 
   // Finance
