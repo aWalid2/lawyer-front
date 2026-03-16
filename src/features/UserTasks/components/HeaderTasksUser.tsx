@@ -1,7 +1,9 @@
 import React from "react";
 import { UserTaskFilter } from "./UserTasksFilter";
-import { TaskUserSearch } from "./TaskUserSerch";
 import { AddTask } from "./AddTask";
+import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
+import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayout";
 
 interface HeaderTasksUser {
   onSearch: (term: string) => void;
@@ -17,20 +19,19 @@ export const HeaderTasksUser: React.FC<HeaderTasksUser> = ({
   statusFilter,
 }) => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 w-full pb-6 sm:flex sm:flex-col ">
-      <h1 className="text-xl font-semibold text-secondary font-cairo whitespace-nowrap self-start md:self-center">
-        مهام المستخدم
-      </h1>
+    <HeaderPageLayout>
+      <HeaderTitle innerPage title="مهام المستخدم" />
 
-      <TaskUserSearch value={searchTerm} onChange={onSearch} />
+      
+        <HeaderSearch value={searchTerm} onChange={onSearch} className="lg:ms-15"/>
 
-      <div className="flex items-center gap-3 w-full md:w-auto justify-end max-sm:justify-center  max-sm:flex-col">
-        <UserTaskFilter 
+      <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
+        <UserTaskFilter
           onFilterChange={onFilterChange}
-          currentFilter={statusFilter}  
+          currentFilter={statusFilter}
         />
-          <AddTask />
+        <AddTask />
       </div>
-    </div>
+    </HeaderPageLayout>
   );
 };

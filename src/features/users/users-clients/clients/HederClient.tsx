@@ -1,4 +1,4 @@
-import { TaskUserSearch } from "@/features/UserTasks/components/TaskUserSerch";
+import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
 import { Link } from "react-router-dom";
 
 interface HeaderClientProps {
@@ -18,8 +18,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({
       </h1>
 
       {/* السيرش في المنتصف */}
-      <div className="flex-1 max-w-md order-2">
-        <TaskUserSearch value={searchTerm} onChange={onSearch} />
+      <div className="flex-1 order-2">
+        <HeaderSearch value={searchTerm} onChange={onSearch} />
       </div>
       {/* الزر على اليسار */}
       <div className="flex items-center gap-3 order-3">

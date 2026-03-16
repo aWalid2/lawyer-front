@@ -1,7 +1,7 @@
 import { Formik, Form, Field } from "formik";
 import { useState } from "react";
 
-import type { FormValues } from "../../../table/componnents/typesClients";
+import type { FormValues } from "../types";
 import { validationSchema } from "../ValidationSchema";
 import {
   Select,
@@ -13,6 +13,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import arrow from "@/public/images/arrow.svg";
 import { Eye, EyeOff } from "lucide-react"; 
+import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 
 // ثوابت الكلاسات
 const CLASSES = {
@@ -98,9 +99,9 @@ const FormDetails = () => {
       {({ values, setFieldValue }) => (
         <div className="p-6 shadow-gray-400 shadow-2xl">
           <div className="flex items-center gap-2 pb-8">
-            <img src={arrow} alt="arrow" />
-            <h1 className="text-xl font-cairo">إضافة موكل جديد</h1>
+           <HeaderTitle title="إضافة موكل جديد" />
           </div>
+          
           <div className={CLASSES.formSection}>
             <Form>
               <div>
