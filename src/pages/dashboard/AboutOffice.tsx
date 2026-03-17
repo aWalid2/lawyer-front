@@ -1,7 +1,8 @@
+import About from "@/features/about-office";
 
 
 const AboutOffice = () => {
-  return <div>AboutOffice</div>;
+  return <About />;
 };
 
 export default AboutOffice;
