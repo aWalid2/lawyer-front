@@ -25,6 +25,15 @@ const ConsultationDetails = lazy(() => import("./pages/dashboard/ConsultationDet
 const Contracts = lazy(() => import("./pages/dashboard/Contracts"));
 const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
 const Settings = lazy(() => import("./pages/dashboard/Settings"));
+const GeneralSettings = lazy(() => import("./pages/dashboard/settings/GeneralSettings"));
+const UserManagement = lazy(() => import("./pages/dashboard/settings/UserManagement"));
+const Permissions = lazy(() => import("./pages/dashboard/settings/Permissions"));
+const Courts = lazy(() => import("./pages/dashboard/settings/Courts"));
+const CaseManagementSettings = lazy(() => import("./pages/dashboard/settings/CaseManagementSettings"));
+const SessionManagement = lazy(() => import("./pages/dashboard/settings/SessionManagement"));
+const CaseStatuses = lazy(() => import("./pages/dashboard/settings/CaseStatuses"));
+const PoliceStations = lazy(() => import("./pages/dashboard/settings/PoliceStations"));
+const PublicProsecutions = lazy(() => import("./pages/dashboard/settings/PublicProsecutions"));
 const DocumentDetails = lazy(() => import("./pages/dashboard/DocumentDetails"));
 
 const AddCase = lazy(() => import("./pages/dashboard/cases/AddCase"));
@@ -105,6 +114,15 @@ function App() {
           <Route path="client-details/:id" element={<ClientDetails />} />
           <Route path="about-office" element={<AboutOffice />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="settings/general" element={<GeneralSettings />} />
+          <Route path="settings/users" element={<UserManagement />} />
+          <Route path="settings/permissions" element={<Permissions />} />
+          <Route path="settings/courts" element={<Courts />} />
+          <Route path="settings/cases" element={<CaseManagementSettings />} />
+          <Route path="settings/sessions" element={<SessionManagement />} />
+          <Route path="settings/case-statuses" element={<CaseStatuses />} />
+          <Route path="settings/police-stations" element={<PoliceStations />} />
+          <Route path="settings/prosecutions" element={<PublicProsecutions />} />
           {/* Reports Routes */}
           <Route path="reports">
             <Route path="clients" element={<ReportsClients />} />
