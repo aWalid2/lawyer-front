@@ -32,7 +32,7 @@ const TeamSection = () => {
                                     form.values.teamMembers?.map((member: TeamMember, index: number) => (
                                         <div key={index} className="w-full p-4 rounded-lg border border-gray-200">
                                             <div className="flex justify-between p-4">
-                                                <h1>بينات العضو</h1>
+                                                <h1 className="text-sm md:text-base font-medium">بيانات العضو: {member.name}</h1>
                                                 <button
                                                     type="button"
                                                     onClick={() => remove(index)}
