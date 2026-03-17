@@ -6,6 +6,7 @@ import { ChatBotIcon } from "../../icons/ChatBot";
 import { CheveronDownIcon } from "../../icons/CheveronDown";
 import { LangIcon } from "../../icons/Lang";
 import { MessagesIcon } from "../../icons/Messages";
+import { SettingsIcon } from "../../icons/Settings";
 
 const ROUTE_TITLES: Record<string, string> = {
   "/dashboard": "الرئيسية",
@@ -21,6 +22,15 @@ const ROUTE_TITLES: Record<string, string> = {
   "/dashboard/contracts": "العقود",
   "/dashboard/about-office": "عن المكتب",
   "/dashboard/settings": "الإعدادات",
+  "/dashboard/settings/general": "الإعدادات > الإعدادات العامة",
+  "/dashboard/settings/users": "الإعدادات > إدارة المستخدمين",
+  "/dashboard/settings/permissions": "الإعدادات > الصلاحيات",
+  "/dashboard/settings/courts": "الإعدادات > المحاكم",
+  "/dashboard/settings/cases": "الإعدادات > إدارة القضايا",
+  "/dashboard/settings/sessions": "الإعدادات > إدارة الجلسات",
+  "/dashboard/settings/case-statuses": "الإعدادات > حالات القضايا",
+  "/dashboard/settings/police-stations": "الإعدادات > المخافر",
+  "/dashboard/settings/prosecutions": "الإعدادات > النيابات",
   "/dashboard/notifications": "الإشعارات",
   "/dashboard/chat-bot": "المساعد الذكي",
   "/dashboard/messages": "الرسائل",
@@ -101,6 +111,12 @@ export default function NavbarHeader() {
               className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition"
             >
               <MessagesIcon className="h-3 w-3 sm:h-5 sm:w-5" />
+            </Link>
+            <Link
+              to={"settings"}
+              className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition"
+            >
+              <SettingsIcon className="h-3 w-3 sm:h-5 sm:w-5" />
             </Link>
             <Link
               to={"legislation-rulings"}
