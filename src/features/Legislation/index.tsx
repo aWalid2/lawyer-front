@@ -75,6 +75,7 @@ const legislations: LegislationRelatedT[] = [
         legislationTitle: "حكم في الدعوى 312 لسنة 2022",
         issuingBody: "محكمة استئناف القاهرة",
         issueDate: "2022-09-15",
+        effectiveDate: "2024-03-01",
         courtLevel: "محكمة استئناف",
         status: "مبدأ قضائي",
         summary: "مبدأ حول مسئولية المهندس في العقود الهندسية"
