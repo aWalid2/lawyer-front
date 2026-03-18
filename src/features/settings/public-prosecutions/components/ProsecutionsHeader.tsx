@@ -4,45 +4,43 @@ import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
 import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayout";
 import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 import { HeaderActionButton } from "@/components/shared/components/HeaderActionButton";
-import { CourtFormDialog } from "./CourtFormDialog";
+import { ProsecutionFormDialog } from "./ProsecutionFormDialog";
 
-interface CourtsHeaderProps {
+interface ProsecutionsHeaderProps {
   onSearch: (value: string) => void;
   searchTerm: string;
-  onCourtAdded?: () => void;
+  onProsecutionAdded?: () => void;
 }
 
-export const CourtsHeader: React.FC<CourtsHeaderProps> = ({
+export const ProsecutionsHeader: React.FC<ProsecutionsHeaderProps> = ({
   onSearch,
   searchTerm,
-  onCourtAdded,
+  onProsecutionAdded,
 }) => {
   return (
     <HeaderPageLayout>
-      <HeaderTitle title="إدارة المحاكم" />
+      <HeaderTitle title="النيابات" />
 
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
         placeholder="بحث ..."
-
       />
 
-      <CourtFormDialog
+      <ProsecutionFormDialog
         onSave={(values) => {
-          console.log("Saving court:", values);
-          onCourtAdded && onCourtAdded();
+          console.log("Saving prosecution:", values);
+          onProsecutionAdded && onProsecutionAdded();
         }}
         trigger={
           <HeaderActionButton
-            label="محكمة جديدة"
+            label="نيابة جديدة"
             icon={<Plus size={18} />}
             variant="gradient"
             className="rounded-main h-12.5 px-8"
           />
         }
       />
-
     </HeaderPageLayout>
   );
 };
