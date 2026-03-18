@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { usePagination } from "@/hooks/usePagination";
 import { HeaderPageCase } from "./componnents/HeaderPageCase";
 import type { Case } from "./componnents/casesTypes";
 import { DataTable, type Column } from "@/components/shared/components/DataTable";
@@ -17,10 +18,8 @@ const MOCK_CASES: Case[] = Array.from({ length: 19 }, (_, i) => ({
 
 const MainCases = () => {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const itemsPerPage = 15;
 
   const handleEdit = (caseItem: Case) => {
     console.log("Edit case:", caseItem);
@@ -45,12 +44,12 @@ const MainCases = () => {
     });
   }, [searchTerm, statusFilter]);
 
-  const totalPages = Math.ceil(filteredCases.length / itemsPerPage);
-
-  const currentCases = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredCases.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredCases, currentPage]);
+  const {
+    currentData,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination<Case>(filteredCases, 15);
 
   const getStatusStyles = (status: string) => {
     switch (status) {
@@ -91,7 +90,7 @@ const MainCases = () => {
       header: "الحالة",
       accessor: (item) => (
         <span
-          className={`px-3 py-1 rounded-[12px] text-xs font-medium whitespace-nowrap ${getStatusStyles(
+          className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(
             item.status
           )}`}
         >
@@ -121,7 +120,7 @@ const MainCases = () => {
 
 
         <DataTable
-          data={currentCases}
+          data={currentData}
           columns={columns}
           rowIdField="id"
           onRowClick={handleCaseClick}
@@ -131,8 +130,6 @@ const MainCases = () => {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
-            totalItems={filteredCases.length}
-            itemsPerPage={itemsPerPage}
           />
         )}
 

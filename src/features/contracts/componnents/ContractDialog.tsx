@@ -71,7 +71,7 @@ export const ContractDialog: React.FC<ContractDialogProps> = ({
         >
           {() => (
             <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
-              {/* اسم الموكل */}
+
               <InputForm
                 name="clientName"
                 label="اسم الموكل"
@@ -79,7 +79,6 @@ export const ContractDialog: React.FC<ContractDialogProps> = ({
                 placeholder="أدخل اسم الموكل"
               />
 
-              {/* نوع العقد والحالة - جنب بعض */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <SelectForm
                   name="contractType"
@@ -105,14 +104,13 @@ export const ContractDialog: React.FC<ContractDialogProps> = ({
                 />
               </div>
 
-              {/* تاريخ بداية العقد */}
               <InputForm
                 name="startDate"
                 label="تاريخ بداية العقد"
                 type="date"
               />
 
-              {/* تاريخ نهاية العقد */}
+
               <InputForm
                 name="endDate"
                 label="تاريخ نهاية العقد"

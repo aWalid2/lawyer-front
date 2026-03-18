@@ -14,7 +14,7 @@ export const HeaderTitle: React.FC<HeaderTitleProps> = ({ title, to, innerPage }
     <>
       {!innerPage ? <div
         onClick={() => (to ? navigate(to) : navigate(-1))}
-        className="flex items-center gap-2 text-secondary cursor-pointer"
+        className="flex flex-nowrap items-center gap-2 text-secondary cursor-pointer"
       >
         <ArrowRightIcon className="text-secondary" />
         <h2 className="text-[20px] font-semibold">{title}</h2>
