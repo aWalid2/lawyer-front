@@ -3,67 +3,59 @@ import { CaseStatusesHeader } from "./components/CaseStatusesHeader";
 import { DataTable, type Column } from "@/components/shared/components/DataTable";
 import { Pagination } from "@/components/shared/components/Pagination";
 import { CaseStatusesAction } from "./components/CaseStatusesAction";
+import { usePagination } from "@/hooks/usePagination";
 import type { CaseStatusT } from "./types";
 
 const initialStatuses: CaseStatusT[] = [
-  { id: "1", name: "متداولة", count: 3 },
-  { id: "2", name: "تحت الرفع", count: 3 },
-  { id: "3", name: "منتهية", count: 3 },
-  { id: "4", name: "قيد التنفيذ", count: 3 },
-  { id: "5", name: "موقوفة", count: 3 },
-  { id: "6", name: "مضمونة", count: 3 },
-  { id: "7", name: "مشطوبة", count: 3 },
-  { id: "8", name: "محجوزة للحكم", count: 3 },
-  { id: "9", name: "بدون متابعة", count: 3 },
-  { id: "10", name: "تحقيقات", count: 3 },
+  {
+    id: "1",
+    name: "قيد الانتظار",
+    count: 0,
+  },
+  {
+    id: "2",
+    name: "منتهي",
+    count: 0,
+  },
+  ...Array.from({ length: 10 }).map((_, i) => ({
+    id: (i + 3).toString(),
+    name: `حالة اختبار ${i + 3}`,
+    count: 0,
+  })),
 ];
 
 export const CaseStatusesFeature: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
   const [statuses, setStatuses] = useState<CaseStatusT[]>(initialStatuses);
 
-  const filteredStatuses = statuses.filter((s) =>
-    s.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredStatuses = statuses.filter((p) =>
+    p.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredStatuses.length / itemsPerPage);
-  const currentStatuses = filteredStatuses.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const {
+    currentData,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(filteredStatuses, 15);
 
   const handleDelete = (id: string) => {
-    setStatuses(statuses.filter((s) => s.id !== id));
+    setStatuses(statuses.filter((p) => p.id !== id));
   };
 
   const handleUpdate = (id: string, values: Partial<CaseStatusT>) => {
-    setStatuses(
-      statuses.map((s) => (s.id === id ? { ...s, ...values } : s))
-    );
+    setStatuses(statuses.map((p) => (p.id === id ? { ...p, ...values } : p)));
   };
 
   const columns: Column<CaseStatusT>[] = [
     {
       header: "#",
-      accessor: (status: CaseStatusT) =>
-        statuses.indexOf(status) + 1 + (currentPage - 1) * itemsPerPage,
+      accessor: (p: CaseStatusT) =>
+        statuses.indexOf(p) + 1 + (currentPage - 1) * 15,
     },
     {
-      header: "حالة القضية",
+      header: "اسم الحالة",
       accessor: "name" as keyof CaseStatusT,
-    },
-    {
-      header: "عدد القضايا",
-      accessor: (status: CaseStatusT) => (
-        <div className="flex justify-center">
-          <span className="flex items-center justify-center size-8 bg-[#94A3B8] text-white rounded-md text-xs font-bold leading-none">
-            {status.count}
-          </span>
-        </div>
-      ),
     },
     {
       header: "الحالة",
@@ -85,7 +77,7 @@ export const CaseStatusesFeature: React.FC = () => {
         onStatusAdded={() => console.log("Status added")}
       />
 
-      <DataTable data={currentStatuses} columns={columns} rowIdField="id" />
+      <DataTable data={currentData} columns={columns} rowIdField="id" />
 
       <Pagination
         currentPage={currentPage}

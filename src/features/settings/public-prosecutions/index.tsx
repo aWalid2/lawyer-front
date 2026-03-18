@@ -3,6 +3,7 @@ import { ProsecutionsHeader } from "./components/ProsecutionsHeader";
 import { DataTable, type Column } from "@/components/shared/components/DataTable";
 import { Pagination } from "@/components/shared/components/Pagination";
 import { ProsecutionsAction } from "./components/ProsecutionsAction";
+import { usePagination } from "@/hooks/usePagination";
 import type { PublicProsecutionT } from "./types";
 import PageLayout from "@/components/shared/components/PageLayout";
 
@@ -27,8 +28,6 @@ const initialProsecutions: PublicProsecutionT[] = [
 
 export const PublicProsecutionsFeature: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
 
   const [prosecutions, setProsecutions] = useState<PublicProsecutionT[]>(initialProsecutions);
 
@@ -38,11 +37,12 @@ export const PublicProsecutionsFeature: React.FC = () => {
       p.address.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredProsecutions.length / itemsPerPage);
-  const currentProsecutions = filteredProsecutions.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const {
+    currentData,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(filteredProsecutions, 15);
 
   const handleDelete = (id: string) => {
     setProsecutions(prosecutions.filter((p) => p.id !== id));
@@ -58,7 +58,7 @@ export const PublicProsecutionsFeature: React.FC = () => {
     {
       header: "#",
       accessor: (p: PublicProsecutionT) =>
-        prosecutions.indexOf(p) + 1 + (currentPage - 1) * itemsPerPage,
+        prosecutions.indexOf(p) + 1 + (currentPage - 1) * 15,
     },
     {
       header: "اسم النيابة",
@@ -88,7 +88,7 @@ export const PublicProsecutionsFeature: React.FC = () => {
         onProsecutionAdded={() => console.log("Prosecution added")}
       />
 
-      <DataTable data={currentProsecutions} columns={columns} rowIdField="id" />
+      <DataTable data={currentData} columns={columns} rowIdField="id" />
 
       <Pagination
         currentPage={currentPage}

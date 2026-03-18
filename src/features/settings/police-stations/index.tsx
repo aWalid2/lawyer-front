@@ -4,6 +4,7 @@ import { DataTable, type Column } from "@/components/shared/components/DataTable
 import { Pagination } from "@/components/shared/components/Pagination";
 import { PoliceStationsAction } from "./components/PoliceStationsAction";
 import PageLayout from "@/components/shared/components/PageLayout";
+import { usePagination } from "@/hooks/usePagination";
 import type { PoliceStationT } from "./types";
 
 const initialStations: PoliceStationT[] = [
@@ -19,16 +20,13 @@ const initialStations: PoliceStationT[] = [
   },
   ...Array.from({ length: 10 }).map((_, i) => ({
     id: (i + 3).toString(),
-    name: `قسم اختبار ${i + 3}`,
+    name: `مخفر اختبار ${i + 3}`,
     address: `عنوان اختبار ${i + 3}`,
   })),
 ];
 
 export const PoliceStationsFeature: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
   const [stations, setStations] = useState<PoliceStationT[]>(initialStations);
 
   const filteredStations = stations.filter(
@@ -37,11 +35,12 @@ export const PoliceStationsFeature: React.FC = () => {
       p.address.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredStations.length / itemsPerPage);
-  const currentStations = filteredStations.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const {
+    currentData,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(filteredStations, 15);
 
   const handleDelete = (id: string) => {
     setStations(stations.filter((p) => p.id !== id));
@@ -57,7 +56,7 @@ export const PoliceStationsFeature: React.FC = () => {
     {
       header: "#",
       accessor: (p: PoliceStationT) =>
-        stations.indexOf(p) + 1 + (currentPage - 1) * itemsPerPage,
+        stations.indexOf(p) + 1 + (currentPage - 1) * 15,
     },
     {
       header: "اسم المخفر",
@@ -87,7 +86,7 @@ export const PoliceStationsFeature: React.FC = () => {
         onStationAdded={() => console.log("Station added")}
       />
 
-      <DataTable data={currentStations} columns={columns} rowIdField="id" />
+      <DataTable data={currentData} columns={columns} rowIdField="id" />
 
       <Pagination
         currentPage={currentPage}

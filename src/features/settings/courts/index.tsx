@@ -7,6 +7,7 @@ import { DistrictsDialog } from "./components/DistrictsDialog";
 import { Button } from "@/components/ui/button";
 import type { CourtT, DistrictT } from "./types";
 import PageLayout from "@/components/shared/components/PageLayout";
+import { usePagination } from "@/hooks/usePagination";
 
 const mockDistricts: DistrictT[] = [
   { id: "1", name: "محامي", status: "نشط" },
@@ -40,8 +41,6 @@ const initialCourts: CourtT[] = [
 
 export const CourtsFeature: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
 
   const [courts, setCourts] = useState<CourtT[]>(initialCourts);
 
@@ -51,11 +50,12 @@ export const CourtsFeature: React.FC = () => {
       c.address.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredCourts.length / itemsPerPage);
-  const currentCourts = filteredCourts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const {
+    currentData,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(filteredCourts, 15);
 
   const handleDelete = (id: string) => {
     setCourts(courts.filter((c) => c.id !== id));
@@ -70,7 +70,7 @@ export const CourtsFeature: React.FC = () => {
   const columns: Column<CourtT>[] = [
     {
       header: "#",
-      accessor: (court: CourtT) => courts.indexOf(court) + 1 + (currentPage - 1) * itemsPerPage,
+      accessor: (court: CourtT) => filteredCourts.indexOf(court) + 1 + (currentPage - 1) * 15,
     },
     {
       header: "اسم المحكمة",
@@ -121,7 +121,7 @@ export const CourtsFeature: React.FC = () => {
         onCourtAdded={() => console.log("Court added")}
       />
 
-      <DataTable data={currentCourts} columns={columns} rowIdField="id" />
+      <DataTable data={currentData} columns={columns} rowIdField="id" />
 
       <Pagination
         currentPage={currentPage}
