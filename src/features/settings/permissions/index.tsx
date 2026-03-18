@@ -40,9 +40,6 @@ export const PermissionsFeature: React.FC = () => {
     setRoles(roles.filter((p) => p.id !== id));
   };
 
-  const handleUpdate = (id: string, values: Partial<RoleT>) => {
-    setRoles(roles.map((p) => (p.id === id ? { ...p, ...values } : p)));
-  };
 
   const columns: Column<RoleT>[] = [
     {
@@ -69,7 +66,6 @@ export const PermissionsFeature: React.FC = () => {
       accessor: (role: RoleT) => (
         <PermissionsAction
           role={role}
-          onUpdate={handleUpdate}
           onDelete={handleDelete}
         />
       ),
@@ -81,7 +77,6 @@ export const PermissionsFeature: React.FC = () => {
       <PermissionsHeader
         searchTerm={searchTerm}
         onSearch={setSearchTerm}
-        onRoleAdded={() => console.log("Role added")}
       />
 
       <DataTable data={currentData} columns={columns} rowIdField="id" />

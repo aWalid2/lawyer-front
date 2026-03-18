@@ -4,21 +4,18 @@ import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 import { Plus } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { RoleFormDialog } from "./RoleFormDialog";
+
 
 interface PermissionsHeaderProps {
   searchTerm: string;
   onSearch: (term: string) => void;
-  onRoleAdded: () => void;
 }
 
 export const PermissionsHeader: React.FC<PermissionsHeaderProps> = ({
   searchTerm,
   onSearch,
-  onRoleAdded,
 }) => {
-
-
+  const navigate = useNavigate();
   return (
     <div className="space-y-6">
 
@@ -35,19 +32,12 @@ export const PermissionsHeader: React.FC<PermissionsHeaderProps> = ({
           onChange={onSearch}
           placeholder="بحث ..."
         />
-        <RoleFormDialog
-          onSave={(values) => {
-            console.log("Adding role:", values);
-            onRoleAdded();
-          }}
-          trigger={
-            <HeaderActionButton
-              label="دور جديد"
-              icon={<Plus size={18} />}
-              variant="gradient"
-              className="rounded-main h-12.5 px-8"
-            />
-          }
+        <HeaderActionButton
+          label="دور جديد"
+          icon={<Plus size={18} />}
+          variant="gradient"
+          className="rounded-main h-12.5 px-8"
+          onClick={() => navigate("/dashboard/settings/permissions/add")}
         />
 
       </div>

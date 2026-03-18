@@ -1,12 +1,11 @@
-import { Form, Formik } from "formik";
-import * as Yup from "yup";
-import { ArrowRight } from "lucide-react";
-import { SelectForm } from "@/components/shared/components/SelectForm";
 import { FileUpload } from "@/components/shared/components/FileUpload";
+import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import PageLayout from "@/components/shared/components/PageLayout";
+import { SelectForm } from "@/components/shared/components/SelectForm";
 import { SwitchForm } from "@/components/shared/components/SwitchForm";
 import { Button } from "@/components/ui/button";
-import PageLayout from "@/components/shared/components/PageLayout";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
 
 const GeneralSettingsSchema = Yup.object().shape({
   systemName: Yup.string().required("مطلوب"),
@@ -100,7 +99,7 @@ export const GeneralSettingsFeature = () => {
               </div>
 
               <div className="w-full pt-4 space-y-2">
-                <div className="p-4 rounded-[10px] border border-[#E8E8E8]">
+                <div className="p-4 rounded-[10px] ">
                   <SwitchForm name="notifications" label="الإشعارات" />
                   {values.notifications && (
                     <div className="mt-4 p-4 bg-[#F9F9F9] rounded-md text-sm text-[#476274]">
@@ -108,7 +107,7 @@ export const GeneralSettingsFeature = () => {
                     </div>
                   )}
                 </div>
-                <div className="p-4 rounded-[10px] border border-[#E8E8E8]">
+                <div className="p-4 rounded-[10px] ">
                   <SwitchForm name="darkMode" label="الوضع المظلم" />
                 </div>
               </div>

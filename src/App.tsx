@@ -29,6 +29,7 @@ const Settings = lazy(() => import("./pages/dashboard/Settings"));
 const GeneralSettings = lazy(() => import("./pages/dashboard/settings/GeneralSettings"));
 const UserManagement = lazy(() => import("./pages/dashboard/settings/UserManagement"));
 const Permissions = lazy(() => import("./pages/dashboard/settings/Permissions"));
+const AddRole = lazy(() => import("./pages/dashboard/settings/AddRole"));
 const Courts = lazy(() => import("./pages/dashboard/settings/Courts"));
 const CaseManagementSettings = lazy(() => import("./pages/dashboard/settings/CaseManagementSettings"));
 const SessionManagement = lazy(() => import("./pages/dashboard/settings/SessionManagement"));
@@ -119,6 +120,8 @@ function App() {
           <Route path="settings/general" element={<GeneralSettings />} />
           <Route path="settings/users" element={<UserManagement />} />
           <Route path="settings/permissions" element={<Permissions />} />
+          <Route path="settings/permissions/add" element={<AddRole />} />
+          <Route path="settings/permissions/:id" element={<AddRole />} />
           <Route path="settings/courts" element={<Courts />} />
           <Route path="settings/cases" element={<CaseManagementSettings />} />
           <Route path="settings/sessions" element={<SessionManagement />} />
