@@ -5,6 +5,7 @@ import { Pagination } from "@/components/shared/components/Pagination";
 import { CaseStatusesAction } from "./components/CaseStatusesAction";
 import { usePagination } from "@/hooks/usePagination";
 import type { CaseStatusT } from "./types";
+import PageLayout from "@/components/shared/components/PageLayout";
 
 const initialStatuses: CaseStatusT[] = [
   {
@@ -70,7 +71,7 @@ export const CaseStatusesFeature: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageLayout>
       <CaseStatusesHeader
         searchTerm={searchTerm}
         onSearch={setSearchTerm}
@@ -79,11 +80,13 @@ export const CaseStatusesFeature: React.FC = () => {
 
       <DataTable data={currentData} columns={columns} rowIdField="id" />
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
-    </div>
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
+    </PageLayout>
   );
 };

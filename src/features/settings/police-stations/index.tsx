@@ -88,11 +88,13 @@ export const PoliceStationsFeature: React.FC = () => {
 
       <DataTable data={currentData} columns={columns} rowIdField="id" />
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </PageLayout>
   );
 };
