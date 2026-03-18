@@ -1,7 +1,7 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { HeaderTitle } from '@/components/shared/components/HeaderTitle';
-import { ArrowRight, FileText, Calendar, Building2, Scale, Gavel, BookOpen } from 'lucide-react';
+import { FileText, Calendar, Building2, Scale, Gavel, BookOpen } from 'lucide-react';
 import PageLayout from '@/components/shared/components/PageLayout';
 
 // واجهة بيانات التشريع/الحكم
