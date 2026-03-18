@@ -4,6 +4,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import Loading from "./components/shared/Loading";
 import LawyerDetail from "./features/users/users-lawyers/lawyers/LawyerDetail.tsx";
 import ScrollToTop from "./components/shared/ScrollToTop";
+import { LegislationDetails } from "./features/Legislation/components/LegislationDetails.tsx";
 
 //Header routes
 const Notifications = lazy(() => import("./pages/dashboard/Notifications"));
@@ -105,6 +106,7 @@ function App() {
             <Route path="employees/:employeeId" element={<EmployeeDetails />} />
           </Route>
           <Route path="legislation-rulings" element={<Legislation />} />
+          <Route path="/dashboard/legislations/:id" element={<LegislationDetails />} />
           <Route path="calendar" element={<Calendar />} />
           <Route path="roll" element={<Roll />} />
           <Route path="documents" element={<Documents />} />
