@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
 import { InputForm } from "@/components/shared/components/InputForm";
@@ -19,6 +20,7 @@ interface UserFormDialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   onUserUpdated?: () => void;
+  trigger?: React.ReactNode;
 }
 
 export const UserFormDialog: React.FC<UserFormDialogProps> = ({
@@ -26,6 +28,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
   open,
   onOpenChange,
   onUserUpdated,
+  trigger
 }) => {
   const isEditMode = !!user;
 
@@ -52,6 +55,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
         className="sm:max-w-[600px] max-h-[90vh] flex flex-col overflow-hidden sm:px-16 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
         dir="rtl"
@@ -89,7 +93,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                 type="email"
                 placeholder="mohalia7@gmail.com"
               />
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <SelectForm
                   name="userType"

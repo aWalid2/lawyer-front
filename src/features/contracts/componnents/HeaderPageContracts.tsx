@@ -35,7 +35,7 @@ export const HeaderPageContracts: React.FC<HeaderPageContractsProps> = ({
       />
 
       <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
-        {/* فلتر نوع العقد */}
+
         <HeaderFilter
           placeholder="نوع العقد"
           value={filters.contractType}
@@ -51,7 +51,7 @@ export const HeaderPageContracts: React.FC<HeaderPageContractsProps> = ({
           className="md:w-[130px]"
         />
 
-        {/* فلتر الحالة */}
+
         <HeaderFilter
           placeholder="الحالة"
           value={filters.status}
@@ -66,7 +66,7 @@ export const HeaderPageContracts: React.FC<HeaderPageContractsProps> = ({
           className="md:w-[130px]"
         />
 
-        {/* زر إضافة عقد جديد */}
+
         <ContractDialog
           onSave={(values) => console.log("Adding contract:", values)}
           trigger={

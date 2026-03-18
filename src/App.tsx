@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Loading from "./components/shared/Loading";
 import LawyerDetail from "./features/users/users-lawyers/lawyers/LawyerDetail.tsx";
+import ScrollToTop from "./components/shared/ScrollToTop";
 
 //Header routes
 const Notifications = lazy(() => import("./pages/dashboard/Notifications"));
@@ -72,6 +73,7 @@ const ClientDetails = lazy(() => import("./pages/dashboard/clients/ClientDetails
 function App() {
   return (
     <Suspense fallback={<Loading />}>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardLayout />}>

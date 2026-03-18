@@ -31,7 +31,7 @@ export function HeaderDatePicker({
           <Button
             variant={"outline"}
             className={cn(
-              "flex items-center gap-2 px-4 h-12.5 rounded-[18px] border border-[#E2E8F0] bg-white text-[#4A5568] text-sm hover:border-[#BF9A61] transition-all min-w-[110px] justify-start font-normal",
+              "flex items-center gap-2 px-4 h-12.5 rounded-[18px] border border-[#E2E8F0] bg-white text-[#4A5568] text-sm hover:border-primary/50 hover:bg-primary/5 hover:text-primary transition-all min-w-[110px] justify-start font-normal",
               !date && "text-muted-foreground"
             )}
           >

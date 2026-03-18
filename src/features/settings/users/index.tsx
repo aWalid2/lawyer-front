@@ -3,7 +3,6 @@ import { DataTable, type Column } from "@/components/shared/components/DataTable
 import { Pagination } from "@/components/shared/components/Pagination";
 import { UserManagementHeader } from "./components/UserManagementHeader";
 import { UsersAction } from "./components/UsersAction";
-import { UserFormDialog } from "./components/UserFormDialog";
 import type { UserT } from "./types";
 
 const mockUsers: UserT[] = [
@@ -22,7 +21,6 @@ const mockUsers: UserT[] = [
 export const UserManagementFeature: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const itemsPerPage = 10;
 
   const filteredUsers = useMemo(() => {
@@ -68,7 +66,7 @@ export const UserManagementFeature: React.FC = () => {
     {
       header: "الحالة",
       accessor: (user) => (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+        <span className="inline-flex items-center px-4 py-2 rounded-main text-xs font-medium bg-success/20 text-success">
           {user.status}
         </span>
       ),
@@ -89,7 +87,7 @@ export const UserManagementFeature: React.FC = () => {
       <UserManagementHeader
         searchTerm={searchTerm}
         onSearch={setSearchTerm}
-        onAddClick={() => setIsAddModalOpen(true)}
+        onUserUpdated={() => console.log("User added")}
       />
 
       <DataTable data={currentUsers} columns={columns} rowIdField="id" />
@@ -103,12 +101,6 @@ export const UserManagementFeature: React.FC = () => {
           />
         </div>
       )}
-
-      <UserFormDialog
-        open={isAddModalOpen}
-        onOpenChange={setIsAddModalOpen}
-        onUserUpdated={() => console.log("User added")}
-      />
     </div>
   );
 };

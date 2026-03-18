@@ -1,9 +1,9 @@
+import { CourtsFeature } from "@/features/settings/courts";
 
 const Courts = () => {
   return (
     <div className="container py-8" dir="rtl">
-      <h1 className="text-2xl font-bold text-primary-text">المحاكم</h1>
-      <p className="mt-4 text-paragraph">محتوى المحاكم سيظهر هنا.</p>
+      <CourtsFeature />
     </div>
   );
 };

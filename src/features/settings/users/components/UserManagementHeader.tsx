@@ -4,17 +4,19 @@ import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayou
 import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 import { HeaderFilter } from "@/components/shared/components/HeaderFilter";
 import { HeaderActionButton } from "@/components/shared/components/HeaderActionButton";
+import { UserFormDialog } from "./UserFormDialog";
+import { Plus } from "lucide-react";
 
 interface UserManagementHeaderProps {
   onSearch: (value: string) => void;
   searchTerm: string;
-  onAddClick: () => void;
+  onUserUpdated?: () => void;
 }
 
 export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
   onSearch,
   searchTerm,
-  onAddClick,
+  onUserUpdated,
 }) => {
   return (
     <HeaderPageLayout>
@@ -24,6 +26,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
 
 
       <HeaderFilter
+        defaultValue="all"
         options={[
           { value: "all", label: "جميع المستخدمين" },
           { value: "محامي", label: "محامين" },
@@ -32,7 +35,16 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
         ]}
         onFilterChange={(val) => console.log("Filter:", val)}
       />
-      <HeaderActionButton label="مستخدم جديد" onClick={onAddClick} />
+
+      <UserFormDialog
+        onUserUpdated={onUserUpdated}
+        trigger={
+          <HeaderActionButton
+            label="مستخدم جديد"
+            icon={<Plus size={18} />}
+          />
+        }
+      />
 
     </HeaderPageLayout>
   );
