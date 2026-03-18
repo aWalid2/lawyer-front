@@ -1,11 +1,9 @@
-import React from "react";
-import { EditIcon } from "@/components/shared/icons/Edit";
-import { TrashIcon } from "@/components/shared/icons/Trash";
-import type { UserT } from "../types";
-import { UserFormDialog } from "./UserFormDialog";
 import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
 import { TableDeleteButton } from "@/components/shared/components/TableDeleteButton";
 import { TableEditButton } from "@/components/shared/components/TableEditButton";
+import React from "react";
+import type { UserT } from "../types";
+import { UserFormDialog } from "./UserFormDialog";
 
 interface UsersActionProps {
   user: UserT;

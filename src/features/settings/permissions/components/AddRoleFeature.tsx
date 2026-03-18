@@ -1,10 +1,6 @@
-import { useState } from "react";
-import { Form, Formik } from "formik";
-import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
-import { ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
-import { FormSection } from "./FormSection";
+import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 import { InputForm } from "@/components/shared/components/InputForm";
+import PageLayout from "@/components/shared/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -12,8 +8,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import PageLayout from "@/components/shared/components/PageLayout";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { Form, Formik } from "formik";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
+import { FormSection } from "./FormSection";
 
 
 const roleModules = [

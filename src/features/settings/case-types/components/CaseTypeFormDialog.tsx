@@ -1,9 +1,8 @@
-import React from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import { LayoutDialog } from "@/components/shared/components/LayoutDialog";
 import { InputForm } from "@/components/shared/components/InputForm";
-import { Button } from "@/components/ui/button";
+import { LayoutDialog } from "@/components/shared/components/LayoutDialog";
+import { Form, Formik } from "formik";
+import React from "react";
+import * as Yup from "yup";
 import type { CaseTypeT } from "../types";
 
 interface CaseTypeFormDialogProps {
@@ -40,7 +39,7 @@ export const CaseTypeFormDialog: React.FC<CaseTypeFormDialogProps> = ({
           setOpen(false);
         }}
       >
-        {({ isSubmitting }) => (
+        {() => (
           <Form className="space-y-6">
             <InputForm
               type="text"
