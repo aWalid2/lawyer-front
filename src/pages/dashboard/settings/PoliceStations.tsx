@@ -1,11 +1,8 @@
+import React from "react";
+import { PoliceStationsFeature } from "@/features/settings/police-stations";
 
-const PoliceStations = () => {
-  return (
-    <div className="container py-8" dir="rtl">
-      <h1 className="text-2xl font-bold text-primary-text">المخافر</h1>
-      <p className="mt-4 text-paragraph">محتوى المخافر سيظهر هنا.</p>
-    </div>
-  );
+const PoliceStations: React.FC = () => {
+  return <PoliceStationsFeature />;
 };
 
 export default PoliceStations;
