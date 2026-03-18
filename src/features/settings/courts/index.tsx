@@ -6,6 +6,7 @@ import { CourtsAction } from "./components/CourtsAction";
 import { DistrictsDialog } from "./components/DistrictsDialog";
 import { Button } from "@/components/ui/button";
 import type { CourtT, DistrictT } from "./types";
+import PageLayout from "@/components/shared/components/PageLayout";
 
 const mockDistricts: DistrictT[] = [
   { id: "1", name: "محامي", status: "نشط" },
@@ -113,7 +114,7 @@ export const CourtsFeature: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageLayout>
       <CourtsHeader
         searchTerm={searchTerm}
         onSearch={setSearchTerm}
@@ -127,6 +128,6 @@ export const CourtsFeature: React.FC = () => {
         totalPages={totalPages}
         onPageChange={setCurrentPage}
       />
-    </div>
+    </PageLayout>
   );
 };
