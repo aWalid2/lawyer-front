@@ -39,7 +39,7 @@ export const FormSection: React.FC<FormSectionProps> = ({
           )}
           <h2 className="text-[#476274] font-bold text-lg">{title}</h2>
         </div>
-        
+
         {headerAction && (
           <div className="flex gap-2">
             {headerAction}
@@ -47,7 +47,7 @@ export const FormSection: React.FC<FormSectionProps> = ({
         )}
       </div>
 
-      <div className={cn(number !== undefined ? "pr-6" : "", contentClassName)}>
+      <div className={cn(contentClassName)}>
         {children}
       </div>
     </div>

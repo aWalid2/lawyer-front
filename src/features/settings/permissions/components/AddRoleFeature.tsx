@@ -14,52 +14,25 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { FormSection } from "./FormSection";
+import { useRoleModulesData } from "../hooks/useRoleModulesData";
 
 
-const roleModulesData = [
-  {
-    module: "الصفحة الرئيسية",
-    permissions: ["عرض الصفحة الرئيسية", "عرض المعلومات المالية"],
-  },
-  {
-    module: "الملف الشخصي",
-    permissions: ["عرض الملف الشخصي", "تعديل الملف الشخصي"],
-  },
-  {
-    module: "إدارة القضايا",
-    permissions: ["رؤية القضايا", "إضافة قضية", "تعديل قضية", "عرض تفاصيل القضية", "تحليل القضية", "حذف قضية", "المرافعة"],
-  },
-  {
-    module: "إدارة الموكلين",
-    permissions: ["رؤية الموكلين", "إضافة موكل", "تعديل موكل", "رؤية تفاصيل الموكل", "حذف موكل"],
-  },
-  {
-    module: "الإعدادات",
-    permissions: ["رؤية صفحة الإعدادات", "إعدادات المكتب", "إدارة الصلاحيات"],
-  },
-  {
-    module: "إدارة المستخدمين",
-    permissions: ["رؤية المستخدمين", "إضافة مستخدم", "تعديل مستخدم", "حذف مستخدم"],
-  },
-  { module: "إدارة المحاكم", permissions: ["رؤية المحاكم", "إضافة محكمة", "تعديل محكمة", "حذف محكمة"] },
-  { module: "إدارة الحالات", permissions: ["رؤية الحالات", "إضافة حالة", "تعديل حالة", "حذف حالة"] },
-  { module: "أنواع القضايا", permissions: ["رؤية أنواع القضايا", "إضافة نوع قضية", "تعديل نوع قضية", "حذف نوع قضية"] },
-  { module: "إدارة الجلسات", permissions: ["رؤية الجلسات", "إضافة جلسة", "تعديل جلسة", "حذف جلسة", "رؤية تبويب الجلسات", "أنواع الجلسات"] },
-  { module: "تعيين الموظفين ", permissions: ["رؤية تبويب التعيين", "تعيين موظف", "تعديل تعيين موظف", "حذف تعيين موظف"] },
-  { module: "إدارة المدفوعات", permissions: ["إدارة المدفوعات", "تعديل مدفوعات", "إضافة مدفوعات جديده", "حذف مدفوعات"] },
-  { module: "إدارة المصروفات", permissions: ["رؤية المصروفات وأنواع المصروفات", "تعديل أنواع المصروفات", "إضافة نوع المصروفات", "حذف نوع المصروفات", "إدارة أنواع المصروفات", "إضافة مصروفات ", "حذف مصروفات", "تعديل مصروفات"] },
-  { module: "إدارة الوثائق", permissions: ["رؤية الوثائق", "إضافة وثائق", "تعديل وثائق", "حذف وثائق", "إدارة وثائق", "تحميل وثائق"] },
-  { module: "التقارير", permissions: ["تقارير الموكلين", "تقارير المستخدمين", "تقارير القضايا", "تقارير الجلسات", "تقارير المدفوعات", "تقارير المصروفات"] },
-  { module: "حلول قضية", permissions: ["رؤية الحلول", "إضافة حل", "تعديل حل", "حذف حل"] },
-  { module: "رؤية الرول", permissions: ["رؤية الرول", "إضافة رول", "تعديل رول", "حذف رول"] },
-  { module: "التقويم", permissions: ["رؤية التقويم", "إضافة حدث", "تعديل حدث", "حذف حدث"] },
-];
 
-// Using a basic state for expanded modules since we don't have standard accordion
-export const AddRoleFeature = () => {
+
+interface RoleFormProps {
+  initialData?: {
+    name?: string;
+    description?: string;
+    permissions?: Record<string, string[]>;
+  };
+  isEdit?: boolean;
+}
+
+export const AddRoleFeature = ({ initialData, isEdit }: RoleFormProps) => {
   const navigate = useNavigate();
   const [expandedModules, setExpandedModules] = useState<string[]>([]);
-  const [selectedPermissions, setSelectedPermissions] = useState<Record<string, string[]>>({});
+  const [selectedPermissions, setSelectedPermissions] = useState<Record<string, string[]>>(initialData?.permissions || {});
+  const { ruleModulesData } = useRoleModulesData();
 
   const toggleModule = (module: string) => {
     setExpandedModules((prev) =>
@@ -69,7 +42,7 @@ export const AddRoleFeature = () => {
 
   const handleSelectAll = () => {
     const allSelected: Record<string, string[]> = {};
-    roleModulesData.forEach(({ module, permissions }) => {
+    ruleModulesData.forEach(({ module, permissions }) => {
       allSelected[module] = permissions;
     });
     setSelectedPermissions(allSelected);
@@ -100,11 +73,11 @@ export const AddRoleFeature = () => {
 
   return (
     <PageLayout>
-      <HeaderTitle title="إضافة دور جديد" />
+      <HeaderTitle title={isEdit ? "تعديل دور" : "إضافة دور جديد"} />
 
       <div className="bg-white rounded-[18px] border border-[#E8E8E8] p-6 mt-6">
         <Formik
-          initialValues={{ name: "", description: "" }}
+          initialValues={{ name: initialData?.name || "", description: initialData?.description || "" }}
           validationSchema={Yup.object({
             name: Yup.string().required("مطلوب"),
             description: Yup.string(),
@@ -119,7 +92,7 @@ export const AddRoleFeature = () => {
                 <InputForm name="description" label="الوصف" type="text" placeholder="هنا يتم عرض تفاصيل الدور" />
               </FormSection>
 
-              <div className="pt-6 ]">
+              <div className="pt-6">
                 <FormSection
                   number={2}
                   title="الصلاحيات"
@@ -144,7 +117,7 @@ export const AddRoleFeature = () => {
                     </>
                   }
                 >
-                  {roleModulesData.map(({ module, permissions }) => {
+                  {ruleModulesData.map(({ module, permissions }) => {
                     const isExpanded = expandedModules.includes(module);
 
                     return (
@@ -152,7 +125,7 @@ export const AddRoleFeature = () => {
                         key={module}
                         open={isExpanded}
                         onOpenChange={() => toggleModule(module)}
-                        className="border border-[#E8E8E8] rounded-[10px] overflow-hidden transition-all duration-200 shadow-sm bg-white"
+                        className="border border-[#E8E8E8] rounded-[10px] overflow-hidden transition-all duration-200 bg-primary/3"
                       >
                         <CollapsibleTrigger asChild>
                           <button
@@ -167,7 +140,7 @@ export const AddRoleFeature = () => {
                         </CollapsibleTrigger>
 
                         <CollapsibleContent>
-                          <div className="p-6 bg-white border-t border-[#E8E8E8]">
+                          <div className="p-6 bg-primary/3 border-t border-[#E8E8E8]">
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6">
                               {permissions.map((perm) => (
                                 <div key={perm} className="flex items-center gap-3">
