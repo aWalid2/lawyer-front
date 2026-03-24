@@ -1,7 +1,7 @@
-
+import FinancePaymentsFeature from "@/features/finance/payments"
 
 const FinancePayments = () => {
-  return <div>Finance Payments</div>;
-};
+  return <FinancePaymentsFeature />
+}
 
-export default FinancePayments;
+export default FinancePayments

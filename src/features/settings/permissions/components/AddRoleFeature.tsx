@@ -14,36 +14,25 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { FormSection } from "./FormSection";
+import { useRoleModulesData } from "../hooks/useRoleModulesData";
 
 
-const roleModules = [
-  "الصفحة الرئيسية",
-  "الملف الشخصي",
-  "إدارة القضايا",
-  "إدارة الموكلين",
-  "الإعدادات",
-  "إدارة المستخدمين",
-  "إدارة المحاكم",
-  "إدارة الحالات",
-  "أنواع القضايا",
-  "إدارة الجلسات",
-  "ديون موكلك",
-  "إدارة المدفوعات",
-  "إدارة المصروفات",
-  "إدارة الوثائق",
-  "التقارير",
-  "حلول قضية",
-  "رؤية الدول",
-  "التقويم",
-];
 
-const mockPermissions = ["عرض القضايا", "إضافة قضية", "تعديل قضية", "حذف قضية", "عرض تفاصيل القضية", "تحليل القضية", "المرافعة"];
 
-// Using a basic state for expanded modules since we don't have standard accordion
-export const AddRoleFeature = () => {
+interface RoleFormProps {
+  initialData?: {
+    name?: string;
+    description?: string;
+    permissions?: Record<string, string[]>;
+  };
+  isEdit?: boolean;
+}
+
+export const AddRoleFeature = ({ initialData, isEdit }: RoleFormProps) => {
   const navigate = useNavigate();
   const [expandedModules, setExpandedModules] = useState<string[]>([]);
-  const [selectedPermissions, setSelectedPermissions] = useState<Record<string, string[]>>({});
+  const [selectedPermissions, setSelectedPermissions] = useState<Record<string, string[]>>(initialData?.permissions || {});
+  const { ruleModulesData } = useRoleModulesData();
 
   const toggleModule = (module: string) => {
     setExpandedModules((prev) =>
@@ -53,8 +42,8 @@ export const AddRoleFeature = () => {
 
   const handleSelectAll = () => {
     const allSelected: Record<string, string[]> = {};
-    roleModules.forEach(module => {
-      allSelected[module] = mockPermissions;
+    ruleModulesData.forEach(({ module, permissions }) => {
+      allSelected[module] = permissions;
     });
     setSelectedPermissions(allSelected);
   };
@@ -84,11 +73,11 @@ export const AddRoleFeature = () => {
 
   return (
     <PageLayout>
-      <HeaderTitle title="إضافة دور جديد" />
+      <HeaderTitle title={isEdit ? "تعديل دور" : "إضافة دور جديد"} />
 
       <div className="bg-white rounded-[18px] border border-[#E8E8E8] p-6 mt-6">
         <Formik
-          initialValues={{ name: "", description: "" }}
+          initialValues={{ name: initialData?.name || "", description: initialData?.description || "" }}
           validationSchema={Yup.object({
             name: Yup.string().required("مطلوب"),
             description: Yup.string(),
@@ -103,7 +92,7 @@ export const AddRoleFeature = () => {
                 <InputForm name="description" label="الوصف" type="text" placeholder="هنا يتم عرض تفاصيل الدور" />
               </FormSection>
 
-              <div className="pt-6 ]">
+              <div className="pt-6">
                 <FormSection
                   number={2}
                   title="الصلاحيات"
@@ -128,7 +117,7 @@ export const AddRoleFeature = () => {
                     </>
                   }
                 >
-                  {roleModules.map((module) => {
+                  {ruleModulesData.map(({ module, permissions }) => {
                     const isExpanded = expandedModules.includes(module);
 
                     return (
@@ -136,37 +125,37 @@ export const AddRoleFeature = () => {
                         key={module}
                         open={isExpanded}
                         onOpenChange={() => toggleModule(module)}
-                        className="border border-[#E8E8E8] rounded-md overflow-hidden transition-all duration-200 shadow-sm bg-white"
+                        className="border border-[#E8E8E8] rounded-[10px] overflow-hidden transition-all duration-200 bg-primary/3"
                       >
                         <CollapsibleTrigger asChild>
                           <button
                             type="button"
-                            className="w-full flex items-center justify-between p-4 hover:bg-[#FBFBFB] transition-colors"
+                            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
                           >
                             <span className="font-bold text-[#476274]">{module}</span>
-                            <div className="w-8 h-8 rounded-full bg-[#F4F4F4] flex items-center justify-center text-[#476274]">
+                            <div className="w-8 h-8 rounded-full bg-[#f4f4f4] flex items-center justify-center text-[#476274]">
                               {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                             </div>
                           </button>
                         </CollapsibleTrigger>
 
                         <CollapsibleContent>
-                          <div className="p-4 bg-[#FBFBFB] border-t border-[#E8E8E8]">
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                              {mockPermissions.map((perm) => (
-                                <div key={perm} className="flex items-center space-x-2 space-x-reverse justify-end flex-row-reverse w-full">
-                                  <label
-                                    htmlFor={`${module}-${perm}`}
-                                    className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-[#476274] flex-1 text-right ml-2 cursor-pointer"
-                                  >
-                                    {perm}
-                                  </label>
+                          <div className="p-6 bg-primary/3 border-t border-[#E8E8E8]">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6">
+                              {permissions.map((perm) => (
+                                <div key={perm} className="flex items-center gap-3">
                                   <Checkbox
                                     id={`${module}-${perm}`}
                                     checked={selectedPermissions[module]?.includes(perm)}
                                     onCheckedChange={() => togglePermission(module, perm)}
-                                    className="w-8 h-8"
+                                    className="w-5 h-5 rounded-[4px] border-[#D4D4D4] data-[state=checked]:bg-[#C1A063] data-[state=checked]:border-[#C1A063] data-[state=checked]:text-white"
                                   />
+                                  <label
+                                    htmlFor={`${module}-${perm}`}
+                                    className="text-[14px] font-medium text-[#7A7A7A] cursor-pointer"
+                                  >
+                                    {perm}
+                                  </label>
                                 </div>
                               ))}
                             </div>
@@ -183,7 +172,7 @@ export const AddRoleFeature = () => {
                   disabled={isSubmitting}
                   className="w-full h-[50px] bg-[#C1A063] hover:bg-[#a88a53] text-white font-medium text-base rounded-[10px] transition-colors"
                 >
-                  حفظ
+                  حفظ التغيرات
                 </Button>
               </div>
 

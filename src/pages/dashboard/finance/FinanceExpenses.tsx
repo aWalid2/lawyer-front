@@ -1,6 +1,7 @@
+import FinanceExpensesFeature from "@/features/finance/expenses"
 
 const FinanceExpenses = () => {
-  return <div>Finance Expenses</div>;
-};
+  return <FinanceExpensesFeature />
+}
 
-export default FinanceExpenses;
+export default FinanceExpenses

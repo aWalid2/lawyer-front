@@ -206,8 +206,10 @@ body {
   --color-secondary: #153b4d;
   --color-error: #c60000;
   --color-success: #11b324;
+  --color-alert: #bd4453;
   --color-paragraph: #626878;
   --color-accent: #10907b;
+  --color-accent-light: #10907b;
   --radius-main: 12px;
   --spacing-13: 3.25rem;
 

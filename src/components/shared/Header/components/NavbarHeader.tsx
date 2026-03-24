@@ -73,6 +73,8 @@ export default function NavbarHeader() {
       return "الموكلين > تفاصيل الموكل";
     if (pathname.includes("/dashboard/case-management/"))
       return "إدارة القضايا > تفاصيل القضية";
+    if (pathname.includes("/dashboard/settings/permissions/"))
+      return "الإعدادات > الصلاحيات";
     if (pathname.startsWith("/dashboard/reports/")) return "التقارير";
     if (pathname.startsWith("/dashboard/users/")) return "المستخدمين";
     if (pathname.startsWith("/dashboard/finance/")) return "المالية";
