@@ -37,6 +37,7 @@ const SessionManagement = lazy(() => import("./pages/dashboard/settings/SessionM
 const CaseStatuses = lazy(() => import("./pages/dashboard/settings/CaseStatuses"));
 const PoliceStations = lazy(() => import("./pages/dashboard/settings/PoliceStations"));
 const PublicProsecutions = lazy(() => import("./pages/dashboard/settings/PublicProsecutions"));
+const DailySchedule = lazy(() => import("./pages/dashboard/DailySchedule"));
 const DocumentDetails = lazy(() => import("./pages/dashboard/DocumentDetails"));
 
 const AddCase = lazy(() => import("./pages/dashboard/cases/AddCase"));
@@ -108,6 +109,7 @@ function App() {
           <Route path="legislation-rulings" element={<Legislation />} />
           <Route path="/dashboard/legislations/:id" element={<LegislationDetails />} />
           <Route path="calendar" element={<Calendar />} />
+          <Route path="daily-schedule" element={<DailySchedule />} />
           <Route path="roll" element={<Roll />} />
           <Route path="documents" element={<Documents />} />
           <Route path="documents/:id" element={<DocumentDetails />} />

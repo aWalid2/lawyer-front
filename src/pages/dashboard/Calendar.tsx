@@ -1,6 +1,18 @@
+import CalendarPicker from "@/features/dashboard/calendar/CalendarPicker";
+import { useState } from "react";
 
-const Calendar = () => {
-  return <div>Calendar</div>;
+const CalendarPage = () => {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+
+  return (
+
+    <CalendarPicker
+      selectedDate={selectedDate}
+      onDateSelect={setSelectedDate}
+    />
+
+
+  );
 };
 
-export default Calendar;
+export default CalendarPage;

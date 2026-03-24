@@ -12,6 +12,7 @@ import { RulingsIcon } from "@/components/shared/icons/Rulings";
 import { SettingsIcon } from "@/components/shared/icons/Settings";
 import { UsersIcon } from "@/components/shared/icons/Users";
 import { UserTasksIcon } from "@/components/shared/icons/UserTasks";
+import { DateIcon } from "@/components/shared/icons/Date";
 import { NavLink } from "react-router-dom";
 
 import CollapsibleNavDashboard from "./components/CollapsibleNavDashboard";
@@ -106,6 +107,12 @@ const NavDashboard = () => {
         <div className="flex items-center gap-3 ">
           <CalendarIcon />
           <p className=" text-base font-normal">التقويم</p>
+        </div>
+      </NavLink>
+      <NavLink to="/dashboard/daily-schedule" className={linkClass}>
+        <div className="flex items-center gap-3 ">
+          <DateIcon />
+          <p className=" text-base font-normal">جدول المواعيد</p>
         </div>
       </NavLink>
       <NavLink to="/dashboard/roll" className={linkClass}>
