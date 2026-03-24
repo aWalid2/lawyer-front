@@ -172,7 +172,7 @@ export const AddRoleFeature = ({ initialData, isEdit }: RoleFormProps) => {
                   disabled={isSubmitting}
                   className="w-full h-[50px] bg-[#C1A063] hover:bg-[#a88a53] text-white font-medium text-base rounded-[10px] transition-colors"
                 >
-                  حفظ
+                  حفظ التغيرات
                 </Button>
               </div>
 
