@@ -25,6 +25,7 @@ export const HeaderPageReportsClients: React.FC<HeaderPageReportsClientsProps> =
         value={searchTerm}
         onChange={onSearch}
         placeholder="بحث باسم الموكل أو كود الموكل ..."
+        className="lg:ms-0"
       />
 
       <div className="flex items-center gap-3 w-full md:w-auto justify-end">

@@ -1,6 +1,7 @@
+import ProfileUser from "@/features/profile";
 
 const Profile = () => {
-  return <div>Profile</div>;
+  return <ProfileUser/>;
 };
 
 export default Profile;
