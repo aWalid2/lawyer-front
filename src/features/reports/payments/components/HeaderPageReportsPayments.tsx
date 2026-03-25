@@ -30,7 +30,7 @@ export const HeaderPageReportsPayments: React.FC<HeaderPageReportsPaymentsProps>
         value={searchTerm}
         onChange={onSearch}
         placeholder="بحث ..."
-        className="lg:ms-15"
+        className="lg:ms-0"
       />
 
       <div className="flex items-center gap-3 w-full md:w-auto justify-end">
