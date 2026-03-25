@@ -16,6 +16,7 @@ const ROUTE_TITLES: Record<string, string> = {
   "/dashboard/case-management/add-case": "إضافة قضية",
   "/dashboard/legislation-rulings": "التشريعات والأحكام",
   "/dashboard/calendar": "التقويم",
+  "/dashboard/daily-schedule": "الجدول اليومي",
   "/dashboard/roll": "الرول",
   "/dashboard/documents": "المستندات",
   "/dashboard/user-tasks": "مهام المستخدم",

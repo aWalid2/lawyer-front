@@ -13,7 +13,7 @@ const mockDocuments = [
   { id: "5", name: "صور أدلة.zip", type: "Archive", date: "2024-02-20", size: "15.7 MB", description: "أدلة فوتوغرافية وفيديو لموقع الحادث" },
 ];
 
-export const CaseDocumentDetails: React.FC = () => {
+const CaseDocumentDetails: React.FC = () => {
   const { id, docId } = useParams<{ id: string; docId: string }>();
   const navigate = useNavigate();
 
@@ -91,3 +91,5 @@ export const CaseDocumentDetails: React.FC = () => {
     </div>
   );
 };
+
+export default CaseDocumentDetails;
