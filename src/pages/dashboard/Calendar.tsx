@@ -1,4 +1,4 @@
-import CalendarPicker from "@/features/dashboard/calendar/CalendarPicker";
+import CalendarPicker from "@/features/calendar/CalendarPicker";
 import { useState } from "react";
 
 const CalendarPage = () => {

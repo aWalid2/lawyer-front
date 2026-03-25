@@ -1,7 +1,8 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
+import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
+import { DayCard } from "./DayCard";
 
 interface Event {
   id: string;
@@ -17,6 +18,7 @@ interface DailyScheduleProps {
 }
 
 const times = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
+const rowsCount = 12;
 
 const mockEvents: Event[] = [
   {
@@ -57,19 +59,17 @@ const DailySchedule = ({ selectedDate }: DailyScheduleProps) => {
   const dateStr = selectedDate ? format(selectedDate, "eeee (dd/MM/yyyy)", { locale: ar }) : "";
 
   return (
-    <Card className="border-none shadow-primary h-full">
+    <Card className="border-none shadow-primary h-full mt-4">
       <CardHeader className="flex flex-row items-center justify-between  pb-4 px-6">
-        <div className="flex items-center gap-2">
-          <ArrowRight className="h-5 w-5 text-secondary cursor-pointer" />
-          <CardTitle className="text-secondary text-lg font-bold">
-            مواعيد يوم {dateStr}
-          </CardTitle>
-        </div>
+        <HeaderTitle title={`مواعيد يوم ${dateStr}`} />
       </CardHeader>
       <CardContent className="p-0 overflow-x-auto custom-scrollbar">
         <div className="min-w-[800px] p-6">
           {/* Time Headers */}
-          <div className="grid grid-cols-7  pb-4 mb-4">
+          <div
+            className="grid pb-4 mb-4"
+            style={{ gridTemplateColumns: `repeat(${times.length}, 1fr)` }}
+          >
             {times.map((time) => (
               <div key={time} className="text-center text-paragraph text-sm font-medium">
                 {time}
@@ -79,15 +79,38 @@ const DailySchedule = ({ selectedDate }: DailyScheduleProps) => {
 
           {/* Grid Rows (Time Slots) */}
           <div className="relative">
-            <div className="grid grid-cols-7 grid-rows-8 border-l ">
-              {Array.from({ length: 8 * 7 }).map((_, i) => (
-                <div key={i} className="border-r border-b h-20 bg-white"></div>
-              ))}
+            <div
+              className="grid border-l"
+              style={{
+                gridTemplateColumns: `repeat(${times.length}, 1fr)`,
+                gridTemplateRows: `repeat(${rowsCount}, minmax(80px, 1fr))`
+              }}
+            >
+              {Array.from({ length: rowsCount * times.length }).map((_, i) => {
+                const rowIndex = Math.floor(i / times.length);
+                const isLastRow = rowIndex === rowsCount - 1;
+
+                return (
+                  <div
+                    key={i}
+                    className={`
+                      border-r bg-white
+                      ${!isLastRow ? "border-b" : ""}
+                    `}
+                  ></div>
+                );
+              })}
             </div>
 
             {/* Events overlay */}
             <div className="absolute inset-0 p-0 pointer-events-none">
-              <div className="grid grid-cols-7 grid-rows-8 h-full w-full relative">
+              <div
+                className="grid h-full w-full relative"
+                style={{
+                  gridTemplateColumns: `repeat(${times.length}, 1fr)`,
+                  gridTemplateRows: `repeat(${rowsCount}, 1fr)`
+                }}
+              >
                 {mockEvents.map((event) => {
                   const colIndex = times.indexOf(event.startTime);
                   if (colIndex === -1) return null;
@@ -98,18 +121,7 @@ const DailySchedule = ({ selectedDate }: DailyScheduleProps) => {
                     .indexOf(event);
 
                   return (
-                    <div
-                      key={event.id}
-                      className="pointer-events-auto bg-[#fdf8f0] border border-primary/10 p-2 flex flex-col justify-center items-center text-center shadow-sm hover:brightness-95 transition-all"
-                      style={{
-                        gridColumnStart: colIndex + 1,
-                        gridRowStart: rowIndex + 1,
-                      }}
-                    >
-                      <h4 className="text-secondary font-bold text-xs mb-1 line-clamp-1">{event.title}</h4>
-                      <p className="text-paragraph text-[10px] line-clamp-1">{event.lawyer}</p>
-                      <p className="text-paragraph text-[10px] line-clamp-1">{event.location}</p>
-                    </div>
+                    <DayCard key={event.id} event={event} colIndex={colIndex} rowIndex={rowIndex} />
                   );
                 })}
               </div>

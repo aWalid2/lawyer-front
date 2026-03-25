@@ -18,6 +18,7 @@ const Clients = lazy(() => import("./pages/dashboard/clients/Clients"));
 const CaseMangement = lazy(() => import("./pages/dashboard/cases/CaseMangement"));
 const Legislation = lazy(() => import("./pages/dashboard/Legislation"));
 const Calendar = lazy(() => import("./pages/dashboard/Calendar"));
+const DailySchedule = lazy(() => import("./pages/dashboard/DailySchedule"));
 const Roll = lazy(() => import("./pages/dashboard/Roll"));
 const Documents = lazy(() => import("./pages/dashboard/Documents"));
 const UserTasks = lazy(() => import("./pages/dashboard/UserTasks"));
@@ -37,7 +38,6 @@ const SessionManagement = lazy(() => import("./pages/dashboard/settings/SessionM
 const CaseStatuses = lazy(() => import("./pages/dashboard/settings/CaseStatuses"));
 const PoliceStations = lazy(() => import("./pages/dashboard/settings/PoliceStations"));
 const PublicProsecutions = lazy(() => import("./pages/dashboard/settings/PublicProsecutions"));
-const DailySchedule = lazy(() => import("./pages/dashboard/DailySchedule"));
 const DocumentDetails = lazy(() => import("./pages/dashboard/DocumentDetails"));
 
 const AddCase = lazy(() => import("./pages/dashboard/cases/AddCase"));
@@ -50,7 +50,7 @@ const Expenses = lazy(() => import("./pages/dashboard/caseinfo/Expenses"));
 const Procedures = lazy(() => import("./pages/dashboard/caseinfo/Procedures"));
 const Employees = lazy(() => import("./pages/dashboard/caseinfo/Employees"));
 const EmployeeDetails = lazy(() => import("./pages/dashboard/caseinfo/EmployeeDetails"));
-const CaseDocumentDetails = lazy(() => import("@/features/cases-mangement/Documents/components/CaseDocumentDetails").then(m => ({ default: m.CaseDocumentDetails })));
+const CaseDocumentDetails = lazy(() => import("./pages/dashboard/caseinfo/DocumentDetails"));
 
 // Reports
 const ReportsClients = lazy(() => import("./pages/dashboard/reports/ReportsClients"));
