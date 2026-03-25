@@ -26,23 +26,26 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
 }) => {
   return (
     <HeaderPageLayout>
+      {/* العنوان - في الموبايل أول عنصر */}
       <HeaderTitle innerPage title="رول الجلسات" />
 
+      {/* السيرش - في الموبايل ثاني عنصر */}
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
         placeholder="بحث ..."
-        className="lg:ms-15"
+        className="lg:ms-0"
       />
 
-      <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
+      {/* مجموعة الأزرار */}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:flex lg:flex-row gap-3 w-full lg:w-auto">
+        {/* تاريخ الجلسة */}
         <HeaderDatePicker
           date={filters.date}
           onDateChange={(date) => onFilterChange("date", date)}
-          className="w-full md:w-auto"
-
         />
 
+        {/* نوع الجلسة */}
         <HeaderFilter
           placeholder="نوع الجلسة"
           value={filters.type}
@@ -52,9 +55,10 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
             { value: "court", label: "محكمة" },
             { value: "niyaba", label: "نيابة" },
           ]}
-          className="md:w-[130px]"
+          className="md:w-[110px]"
         />
 
+        {/* زر جلسة جديدة */}
         <RollSessionDialog
           onSave={(values) => console.log("Adding session:", values)}
           trigger={
@@ -62,7 +66,7 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
               label="جلسة جديدة"
               icon={<Plus size={18} />}
               variant="gradient"
-              className="rounded-main h-12.5 px-8"
+              className="rounded-main h-12.5 px-8 w-full md:w-auto"
             />
           }
         />

@@ -17,9 +17,9 @@ export const HeaderLegislations: React.FC<HeaderLegislationsProps> = ({
     return (
         <HeaderPageLayout>
             <HeaderTitle innerPage title="التشريعات والأحكام" />
-            
-                <HeaderSearch value={searchTerm} onChange={onSearch} className="lg:ms-15" />
-           
+
+            <HeaderSearch value={searchTerm} onChange={onSearch} className=" lg:mr-7 lg:ms-0" />
+
             <div className="flex items-center gap-3 order-3">
                 <button
                     onClick={onAddClick}

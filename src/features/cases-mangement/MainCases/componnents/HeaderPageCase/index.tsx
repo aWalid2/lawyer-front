@@ -18,7 +18,7 @@ export const HeaderPageCase: React.FC<HeaderPageCaseProps> = ({
   return (
     <HeaderPageLayout>
       <HeaderTitle innerPage title="القضايا" />
-      <HeaderSearch value={searchTerm} onChange={onSearch} />
+      <HeaderSearch value={searchTerm} onChange={onSearch}  className="lg:ms-0" />
       <div className="flex items-center gap-3 w-full md:w-auto justify-end">
         <CasesFilter onFilterChange={onFilterChange} />
         <NewCaseLink />

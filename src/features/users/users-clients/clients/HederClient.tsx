@@ -1,4 +1,6 @@
+import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayout";
 import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
+import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 import { Link } from "react-router-dom";
 
 interface HeaderClientProps {
@@ -11,16 +13,14 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({
   searchTerm,
 }) => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 w-full pb-6">
+    <HeaderPageLayout >
       {/* العنوان على اليمين */}
-      <h1 className="text-xl font-semibold text-secondary font-cairo whitespace-nowrap order-1">
-        الموكلين
-      </h1>
+      <HeaderTitle innerPage title=" الموكلين " />
 
-      {/* السيرش في المنتصف */}
-      <div className="flex-1 order-2">
-        <HeaderSearch value={searchTerm} onChange={onSearch} />
-      </div>
+
+      
+        <HeaderSearch value={searchTerm} onChange={onSearch}  className="lg:mr-25 lg:ms-0" />
+      
       {/* الزر على اليسار */}
       <div className="flex items-center gap-3 order-3">
         <Link
@@ -33,6 +33,6 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({
           <span>+ موكل جديد</span>
         </Link>
       </div>
-    </div>
+    </HeaderPageLayout>
   );
 };

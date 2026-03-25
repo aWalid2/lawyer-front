@@ -21,7 +21,7 @@ export const HeaderPageDocuments: React.FC<HeaderPageDocumentsProps> = ({
         المستندات
       </h1>
 
-      <HeaderSearch value={searchTerm} onChange={onSearch} />
+      <HeaderSearch value={searchTerm} onChange={onSearch} className="lg:ms-0" />
 
       <div className="flex items-center gap-3 w-full md:w-auto justify-end">
         <HeaderFilter

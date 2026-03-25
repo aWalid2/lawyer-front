@@ -23,7 +23,7 @@ export const HeaderTasksUser: React.FC<HeaderTasksUser> = ({
       <HeaderTitle innerPage title="مهام المستخدم" />
 
       
-        <HeaderSearch value={searchTerm} onChange={onSearch} className="lg:ms-15"/>
+        <HeaderSearch value={searchTerm} onChange={onSearch} className="lg:ms-0"/>
 
       <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
         <UserTaskFilter
