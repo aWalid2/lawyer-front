@@ -3,6 +3,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { ar } from "date-fns/locale";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+
 
 interface CalendarPickerProps {
   selectedDate: Date | undefined;
@@ -31,32 +33,32 @@ const CalendarPicker = ({ selectedDate, onDateSelect }: CalendarPickerProps) => 
   };
 
   return (
-    <PageLayout>
-
-      <Calendar
-        mode="single"
-        selected={selectedDate}
-        onSelect={handleSelect}
-        locale={ar}
-        modifiers={{
-          appointment: mockAppointmentDates,
-        }}
-        modifiersClassNames={{
-          appointment: "!bg-secondary !text-white !rounded-[12px]",
-        }}
-        className="w-full h-full flex flex-col items-center justify-center p-0 overflow-x-auto"
-        classNames={{
-
-          root: "w-full h-full flex flex-col items-center justify-center relative",
-          months: "w-full h-full flex flex-col items-center justify-center",
-          weekdays: "flex justify-between shadow-sm rounded-md py-6",
-          month: "w-full h-full max-w-7xl flex flex-col gap-8",
-          day: "h-12 w-12 text-2xl font-medium flex items-center justify-center rounded-[12px] transition-all border border-transparent hover:bg-secondary/5 hover:border-secondary/20 text-secondary data-[selected-single=true]:!bg-secondary data-[selected-single=true]:!text-white data-[selected-single=true]:!rounded-[12px] m-auto mb-2",
-          caption: "relative flex items-center justify-center pt-2 mb-12 h-20 w-full",
-          caption_label: "text-2xl font-bold text-secondary flex items-center gap-3",
-        }}
-      />
-
+    <PageLayout className="flex flex-col">
+      <div className="flex-1 flex flex-col items-center justify-center overflow-x-auto w-full">
+        <Calendar
+          mode="single"
+          selected={selectedDate}
+          onSelect={handleSelect}
+          locale={ar}
+          modifiers={{
+            appointment: mockAppointmentDates,
+          }}
+          modifiersClassNames={{
+            appointment: "!bg-secondary !text-white !rounded-[12px]",
+          }}
+          className="w-full p-0"
+          classNames={{
+            root: "w-full flex flex-col items-center justify-center relative",
+            months: "w-full flex flex-col items-center justify-center",
+            weekdays: "flex justify-between shadow-sm rounded-md py-6 w-full",
+            month: "w-full max-w-7xl flex flex-col gap-8",
+            day: "h-12 w-12 text-2xl font-medium flex items-center justify-center rounded-[12px] transition-all border border-transparent hover:bg-secondary/5 hover:border-secondary/20 text-secondary data-[selected-single=true]:!bg-secondary data-[selected-single=true]:!text-white data-[selected-single=true]:!rounded-[12px] m-auto mb-2",
+            caption: "relative flex items-center justify-center pt-2 mb-12 h-20 w-full",
+            caption_label: "text-2xl font-bold text-secondary flex items-center gap-3",
+          }}
+        />
+      </div>
+      <Button className="w-full mt-4">عرض كافة المواعيد</Button>
     </PageLayout>
   );
 };
