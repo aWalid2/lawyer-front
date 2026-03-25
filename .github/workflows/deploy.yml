@@ -47,5 +47,3 @@ jobs:
             git pull origin main
             npm install
             npm run build
-        retry: 3
-        retry_interval: 10s
