@@ -1,6 +1,7 @@
+import Notification from "@/features/Notifications";
 
 const Notifications = () => {
-  return <div>Notifications</div>;
+  return <Notification />
 };
 
 export default Notifications;
