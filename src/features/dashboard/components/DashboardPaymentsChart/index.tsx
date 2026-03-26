@@ -6,37 +6,39 @@ import { TrendingUp } from "lucide-react"
 import {
   Card,
   CardContent,
-  CardFooter,
+
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import {
   ChartContainer,
+  ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import type { ChartConfig } from "@/components/ui/chart"
 import { DashboardPaymentChartFooter } from "./components/DashboardPaymentChartFooter"
+import { PieChartTrendingUpIcon } from "./components/PieChartTrendingUpIcon"
 
 const chartData = [
   // Order matters for overlap! Light gray -> Gold -> Blue
-  { name: "متأخرة", value: 35, fill: "var(--color-late)" },
-  { name: "قادمة", value: 20, fill: "var(--color-upcoming)" },
-  { name: "المستلمة", value: 45, fill: "var(--color-received)" },
+  { name: "late", value: 35, fill: "var(--color-late)" },
+  { name: "upcoming", value: 20, fill: "var(--color-upcoming)" },
+  { name: "received", value: 45, fill: "var(--color-received)" },
 ]
 
 const chartConfig = {
   received: {
     label: "المستلمة",
-    color: "#4B5675", // Dark slate/blue
+    color: '#4B5675', // Dark slate/blue
   },
   late: {
     label: "متأخرة",
-    color: "#F1F1F4", // Light gray
+    color: "#F1F1F4",
   },
   upcoming: {
     label: "قادمة",
-    color: "#D1AD61", // Gold
+    color: 'var(--color-primary)', // Gold
   },
 } satisfies ChartConfig
 
@@ -102,20 +104,13 @@ export function DashboardPaymentsChart() {
               endAngle={330}
               shape={<CustomArc />}
               stroke="none"
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.fill} />
-              ))}
-            </Pie>
-          </PieChart>
-        </ChartContainer>
+            />
 
-        {/* Centered Icon Overlay */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center -mt-2">
-          <div className="w-14 h-14 rounded-full bg-[#F4F0F7] flex items-center justify-center">
-            <TrendingUp className="w-6 h-6 text-[#4A2A51]" strokeWidth={2} />
-          </div>
-        </div>
+          </PieChart>
+
+        </ChartContainer>
+        <PieChartTrendingUpIcon />
+
       </CardContent>
       <DashboardPaymentChartFooter />
     </Card>
