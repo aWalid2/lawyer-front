@@ -1,6 +1,7 @@
+import { DashboardFeature } from "@/features/dashboard";
 
 const DashboardHome = () => {
-  return <div>home</div>;
+  return <DashboardFeature />;
 };
 
 export default DashboardHome;
