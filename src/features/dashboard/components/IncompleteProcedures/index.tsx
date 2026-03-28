@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { TableIncompleteProcedures } from './components/TableIncompleteProcedures'
 import { ChartIncompleteProcedures } from './components/ChartIncompleteProcedures.tsx'
 
-export const IncompleteProcedures = () => {
+const IncompleteProcedures = () => {
     return (
         <PageLayout>
             <Tabs
@@ -12,12 +12,12 @@ export const IncompleteProcedures = () => {
                 dir="rtl"
 
             >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between flex-wrap gap-y-3 gap-x-2 mb-6">
                     <h1 className="text-xl font-semibold">الإجراءات الغير مكتملة</h1>
 
                     <TabsList
                         className="bg-white rounded-full flex items-center border w-full sm:w-fit h-13!
-         border-primary/50 p-0 overflow-hidden mb-6"
+         border-primary/50 p-0 overflow-hidden "
                     >
                         <TabsTrigger
                             value="table"
@@ -45,3 +45,5 @@ export const IncompleteProcedures = () => {
         </PageLayout>
     )
 }
+
+export default IncompleteProcedures

@@ -119,7 +119,7 @@ const columns: Column<CaseData>[] = [
   },
 ]
 
-export function DashboardLatestCases() {
+const DashboardLatestCases = () => {
   return (
     <Card className="flex flex-col border-0 shadow-sm h-full w-full col-span-1 lg:col-span-2">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -136,3 +136,5 @@ export function DashboardLatestCases() {
     </Card>
   )
 }
+
+export default DashboardLatestCases

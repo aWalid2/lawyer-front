@@ -42,7 +42,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 
-export function DashboardPaymentsChart() {
+export default function DashboardPaymentsChart() {
   return (
     <Card className="shadow-primary border-0 gap-0">
       <CardHeader >

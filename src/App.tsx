@@ -39,6 +39,7 @@ const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
 function App() {
   return (
     <Suspense fallback={<Loading />}>
+
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />

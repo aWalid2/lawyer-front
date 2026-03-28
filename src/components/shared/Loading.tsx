@@ -7,8 +7,8 @@ const Loading: React.FC = () => {
                 <img
                     src="/images/logo.webp"
                     alt="logo"
-                    className=" sm:w-70 w-40"
-
+                    className="w-40 h-[62.28px]  sm:w-70"
+                    fetchPriority="high"
                 />
 
             </div>
