@@ -1,5 +1,5 @@
 import { Menu } from "lucide-react";
-import logo from "@/public/images/logo.webp";
+
 import {
   Sheet,
   SheetContent,
@@ -9,22 +9,20 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import NavDashboard from "./components/NavDashboard";
+import { LogoSidebar } from "./components/LogoSidebar";
+import { useState } from "react";
 
 const SidebarDashboard = () => {
+  const [open, setOpen] = useState(false);
+
   return (
     <>
       <aside className=" bg-white ">
         <div className="hidden lg:block bg-white h-fit min:h-fit w-70 md:bg-white md:min-h-screen p-4 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] rounded-main   ">
-          <div className="mb-10">
-            <img
-              src={logo}
-              alt="logo"
-              className="h-12 w-auto object-contain"
-            />
-          </div>
+          <LogoSidebar />
           <NavDashboard />
         </div>
-        <Sheet>
+        <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <button className="lg:hidden fixed top-[16%] z-50 inset-s-0 inset-e-0 bg-primary-gradient h-8 w-7 rounded-e-sm">
               <Menu className="w-5 h-5 ps-1 text-white" />
@@ -39,14 +37,8 @@ const SidebarDashboard = () => {
 
           <SheetContent side="left" className="w-83 bg-white pt-3 px-4 ">
             <div className="h-fit min:h-fit w-80 md:bg-gray-50  p-4   overflow-y-scroll  ">
-              <div className="flex items-center gap-3">
-                <img
-                  src={logo}
-                  alt="logo"
-                  className="h-12 w-auto object-contain"
-                />
-              </div>
-              <NavDashboard />
+              <LogoSidebar />
+              <NavDashboard onLinkClick={() => setOpen(false)} />
             </div>
           </SheetContent>
         </Sheet>

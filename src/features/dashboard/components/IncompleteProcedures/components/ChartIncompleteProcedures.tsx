@@ -1,5 +1,4 @@
 
-import { Card, CardContent } from '@/components/ui/card'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 
@@ -14,7 +13,7 @@ const chartData = [
 
 const chartConfig = {
     total: {
-        label: "إجمالي المدفوعات",
+        label: "عدد الإجراءات",
         color: "var(--color-primary)",
     },
 }
