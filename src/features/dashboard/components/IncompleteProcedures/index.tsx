@@ -7,7 +7,7 @@ export const IncompleteProcedures = () => {
     return (
         <PageLayout>
             <Tabs
-                defaultValue='info'
+                defaultValue='table'
                 className="w-full"
                 dir="rtl"
 
@@ -20,13 +20,13 @@ export const IncompleteProcedures = () => {
          border-primary/50 p-0 overflow-hidden mb-6"
                     >
                         <TabsTrigger
-                            value="info"
+                            value="table"
                             className="rounded-full text-sm sm:text-base px-3 sm:px-12 h-full data-[state=active]:bg-primary-gradient! data-[state=active]:text-white bg-transparent transition-all text-secondary/60 font-bold"
                         >
                             عرض كجدول
                         </TabsTrigger>
                         <TabsTrigger
-                            value="cases"
+                            value="chart"
                             className="rounded-full text-sm sm:text-base px-3 sm:px-12 h-full data-[state=active]:bg-primary-gradient! data-[state=active]:text-white bg-transparent transition-all text-secondary/60 font-bold"
                         >
                             عرض كرسم بياني
@@ -34,11 +34,11 @@ export const IncompleteProcedures = () => {
                     </TabsList>
                 </div>
 
-                <TabsContent value="info" className="mt-0">
+                <TabsContent value="table" className="mt-0">
                     <TableIncompleteProcedures />
                 </TabsContent>
 
-                <TabsContent value="cases" className="mt-0">
+                <TabsContent value="chart" className="mt-0">
                     <ChartIncompleteProcedures />
                 </TabsContent>
             </Tabs>
