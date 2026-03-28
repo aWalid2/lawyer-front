@@ -74,47 +74,47 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
     : "text-[#727272] hover:bg-primary hover:text-white"
   }`;
 
-const NavDashboard = () => {
+const NavDashboard = ({ onLinkClick }: { onLinkClick?: () => void }) => {
   return (
     <nav className="space-y-4 text-sm">
-      <NavLink end to="/dashboard" className={linkClass}>
+      <NavLink end to="/dashboard" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3 ">
           <MainIcon />
           <p className=" text-base font-normal ">الرئيسية</p>
         </div>
       </NavLink>
-      <NavLink to="/dashboard/clients" className={linkClass}>
+      <NavLink to="/dashboard/clients" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3 ">
           <UsersIcon />
           <p className=" text-base font-normal">الموكلين</p>
         </div>
       </NavLink>
-      <NavLink to="/dashboard/case-management" className={linkClass}>
+      <NavLink to="/dashboard/case-management" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3 ">
           <CaseMangementIcon />
           <p className=" text-base font-normal">إدارة القضايا</p>
         </div>
       </NavLink>
 
-      <NavLink to="/dashboard/legislation-rulings" className={linkClass}>
+      <NavLink to="/dashboard/legislation-rulings" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3 ">
           <RulingsIcon />
           <p className=" text-base font-normal">التشريعات والأحكام</p>
         </div>
       </NavLink>
-      <NavLink to="/dashboard/calendar" className={linkClass}>
+      <NavLink to="/dashboard/calendar" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3 ">
           <CalendarIcon />
           <p className=" text-base font-normal">التقويم</p>
         </div>
       </NavLink>
-      <NavLink to="/dashboard/roll" className={linkClass}>
+      <NavLink to="/dashboard/roll" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3 ">
           <RollIcon />
           <p className=" text-base font-normal">الرول</p>
         </div>
       </NavLink>
-      <NavLink to="/dashboard/documents" className={linkClass}>
+      <NavLink to="/dashboard/documents" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3 ">
           <DocumentsIcon />
           <p className=" text-base font-normal">المستندات</p>
@@ -125,9 +125,10 @@ const NavDashboard = () => {
         data={reportsLinks}
         title={"التقارير"}
         icon={<ReportsIcon />}
+        onLinkClick={onLinkClick}
       />
 
-      <NavLink to="/dashboard/user-tasks" className={linkClass}>
+      <NavLink to="/dashboard/user-tasks" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3 ">
           <UserTasksIcon />
           <p className=" text-base font-normal">مهام المستخدم</p>
@@ -137,14 +138,15 @@ const NavDashboard = () => {
         data={usersLinks}
         title={"المستخدمين"}
         icon={<UsersIcon />}
+        onLinkClick={onLinkClick}
       />
-      <NavLink to="/dashboard/consultations" className={linkClass}>
+      <NavLink to="/dashboard/consultations" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3 ">
           <ConsultationsIcon />
           <p className=" text-base font-normal">الاستشارات</p>
         </div>
       </NavLink>
-      <NavLink to="/dashboard/contracts" className={linkClass}>
+      <NavLink to="/dashboard/contracts" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3 ">
           <ContractsIcon />
           <p className=" text-base font-normal">العقود</p>
@@ -154,14 +156,15 @@ const NavDashboard = () => {
         data={financeLinks}
         title={"المالية"}
         icon={<FinanceIcon />}
+        onLinkClick={onLinkClick}
       />
-      <NavLink to="/dashboard/about-office" className={linkClass}>
+      <NavLink to="/dashboard/about-office" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3 ">
           <AboutOfficeIcon />
           <p className=" text-base font-normal">عن المكتب</p>
         </div>
       </NavLink>
-      <NavLink to="/dashboard/settings" className={linkClass}>
+      <NavLink to="/dashboard/settings" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3 ">
           <SettingsIcon />
           <p className=" text-base font-normal">الاعدادات </p>

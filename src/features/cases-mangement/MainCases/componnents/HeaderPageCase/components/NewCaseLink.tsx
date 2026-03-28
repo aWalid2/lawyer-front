@@ -7,8 +7,8 @@ export const NewCaseLink: React.FC = () => {
     <Link
       to="/dashboard/case-management/add-case"
       className={cn(
-        "h-12.5 px-8 rounded-[12px] flex items-center gap-2 text-sm font-semibold transition-all active:scale-95 whitespace-nowrap",
-        "bg-primary-gradient  hover:bg-primary-gradient  text-white",
+        "h-11.5  px-4 rounded-main flex items-center gap-2 text-sm font-semibold transition-all active:scale-95 whitespace-nowrap ",
+        "bg-primary-gradient  hover:bg-primary-gradient text-white",
       )}
     >
       <span className="text-xl">+</span>

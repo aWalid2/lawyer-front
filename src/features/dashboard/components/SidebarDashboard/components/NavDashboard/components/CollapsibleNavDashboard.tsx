@@ -24,12 +24,14 @@ type CollapsibleNavDashboardProps = {
   data: Item[];
   title: string;
   icon: React.ReactNode;
+  onLinkClick?: () => void;
 };
 
 const CollapsibleNavDashboard: React.FC<CollapsibleNavDashboardProps> = ({
   data,
   title,
   icon,
+  onLinkClick
 }) => {
   const [open, setOpen] = useState(false);
   return (
@@ -52,7 +54,7 @@ const CollapsibleNavDashboard: React.FC<CollapsibleNavDashboardProps> = ({
 
       <CollapsibleContent className="space-y-1 pr-8 mt-2">
         {data.map((item) => (
-          <NavLink key={item.to} to={item.to} className={linkClass}>
+          <NavLink key={item.to} to={item.to} className={linkClass} onClick={onLinkClick}>
             - {item.label}
           </NavLink>
         ))}

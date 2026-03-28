@@ -62,6 +62,9 @@ const ROUTE_TITLES: Record<string, string> = {
   "/dashboard/finance/payments": "المالية > المدفوعات",
 };
 
+const LINK_SIZE = "h-8 w-8 md:h-10 md:w-10 xl:h-12 xl:w-12";
+const ICON_CLASSES = "h-4 w-4 md:h-5 md:w-5 xl:h-6 xl:w-6";
+
 export default function NavbarHeader() {
   const { pathname } = useLocation();
 
@@ -84,55 +87,54 @@ export default function NavbarHeader() {
   }, [pathname]);
 
   return (
-    <header className="w-full bg-white rounded-0  md:rounded-main px-6 shadow-[0_0_24px_0_rgba(21,58,77,0.16)]   ">
+    <header className="w-full bg-white rounded-0  md:rounded-main px-6 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] py-2   ">
       <div className="h-20 flex justify-between   ">
         <div className="flex flex-wrap items-center justify-between w-full  ">
-          <h1 className="text-xl font-semibold text-secondary">
+          <h1 className="text-lg lg:text-lg xl:text-xl font-semibold text-secondary mb-2 md:mb-0">
             {currentTitle}
           </h1>
-          <div className=" flex gap-3">
+          <div className=" flex gap-2 md:gap-3 ">
             <Link
               to={"notifications"}
-              className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition"
+              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
             >
-              <AlertIcon className="h-3 w-3 sm:h-5 sm:w-5" />
+              <AlertIcon className={ICON_CLASSES} />
             </Link>
             <Link
               to={"chat-bot"}
-              className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition"
+              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
             >
-              <ChatBotIcon className="h-3 w-3 sm:h-5 sm:w-5" />
+              <ChatBotIcon className={ICON_CLASSES} />
             </Link>
             <Link
               to={"#"}
-              className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition"
+              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
             >
-              <LangIcon className="h-3 w-3 sm:h-5 sm:w-5" />
+              <LangIcon className={ICON_CLASSES} />
             </Link>
             <Link
               to={"messages"}
-              className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition"
+              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
             >
-              <MessagesIcon className="h-3 w-3 sm:h-5 sm:w-5" />
+              <MessagesIcon className={ICON_CLASSES} />
             </Link>
             <Link
               to={"settings"}
-              className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition"
+              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
             >
-              <SettingsIcon className="h-3 w-3 sm:h-5 sm:w-5" />
+              <SettingsIcon className={ICON_CLASSES} />
             </Link>
             <Link
               to={"legislation-rulings"}
-              className="text-secondary h-6 w-6 sm:h-12 sm:w-12 bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition"
+              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
             >
-              <SearchIcon className="h-3 w-3 sm:h-5 sm:w-5" />
+              <SearchIcon className={ICON_CLASSES} />
             </Link>
 
             <Link to={"profile"} className="flex items-center gap-2 ">
               <div
-                className="text-secondary h-6 w-6 sm:h-12 sm:w-12 
-                bg-secondary/8 flex justify-center items-center 
-                rounded-full overflow-hidden border border-secondary"
+                className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center 
+                rounded-full overflow-hidden border border-secondary`}
               >
                 <img
                   src="/images/user-placeholder.jpg"

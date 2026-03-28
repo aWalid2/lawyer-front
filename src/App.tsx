@@ -6,11 +6,11 @@ import ScrollToTop from "./components/shared/ScrollToTop";
 import { LegislationDetails } from "./features/Legislation/components/LegislationDetails.tsx";
 
 // Modular Routes
-import CaseRoutes from "./routes/CaseRoutes";
-import SettingRoutes from "./routes/SettingRoutes";
-import ReportRoutes from "./routes/ReportRoutes";
-import UserRoutes from "./routes/UserRoutes";
-import FinanceRoutes from "./routes/FinanceRoutes";
+const CaseRoutes = lazy(() => import("./routes/CaseRoutes"));
+const SettingRoutes = lazy(() => import("./routes/SettingRoutes"));
+const ReportRoutes = lazy(() => import("./routes/ReportRoutes"));
+const UserRoutes = lazy(() => import("./routes/UserRoutes"));
+const FinanceRoutes = lazy(() => import("./routes/FinanceRoutes"));
 
 // Header routes
 const Notifications = lazy(() => import("./pages/dashboard/Notifications"));
@@ -39,6 +39,7 @@ const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
 function App() {
   return (
     <Suspense fallback={<Loading />}>
+
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -56,9 +57,9 @@ function App() {
           <Route path="clients" element={<Clients />} />
           <Route path="clients/add-client" element={<AddClient />} />
           <Route path="clients/:id" element={<ClientDetails />} />
-          
+
           <Route path="case-management/*" element={<CaseRoutes />} />
-          
+
           <Route path="legislation-rulings" element={<Legislation />} />
           <Route path="/dashboard/legislations/:id" element={<LegislationDetails />} />
           <Route path="calendar" element={<Calendar />} />
@@ -73,15 +74,15 @@ function App() {
           <Route path="contracts" element={<Contracts />} />
           <Route path="client-details/:id" element={<ClientDetails />} />
           <Route path="about-office" element={<AboutOffice />} />
-          
+
           <Route path="settings/*" element={<SettingRoutes />} />
-          
+
           {/* Reports Routes */}
           <Route path="reports/*" element={<ReportRoutes />} />
-          
+
           {/* Users Routes */}
           <Route path="users/*" element={<UserRoutes />} />
-          
+
           {/* Finance Routes */}
           <Route path="finance/*" element={<FinanceRoutes />} />
         </Route>
