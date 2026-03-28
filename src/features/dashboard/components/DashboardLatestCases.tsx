@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DataTable } from "@/components/shared/components/DataTable"
 import type { Column } from "@/components/shared/components/DataTable"
+import { NewCaseLink } from "@/features/cases-mangement/MainCases/componnents/HeaderPageCase/components/NewCaseLink"
 import { ViewIcon } from "@/components/shared/icons/View"
 
 type CaseData = {
@@ -64,6 +65,17 @@ const data: CaseData[] = [
   },
 ]
 
+const getStatusStyles = (status: string) => {
+  switch (status) {
+    case "متداولة":
+      return "bg-[#5570F1]/20 text-[#5570F1]";
+    case "تحت الرفع":
+      return "bg-[#937F12]/20 text-[#937F12]";
+    default:
+      return "bg-gray-100 text-gray-600";
+  }
+};
+
 const columns: Column<CaseData>[] = [
   {
     header: "#",
@@ -89,11 +101,9 @@ const columns: Column<CaseData>[] = [
     header: "الحالة",
     accessor: (item) => (
       <span
-        className={`px-3 py-1 rounded-full text-xs font-medium ${
-          item.statusType === "active"
-            ? "bg-blue-100 text-blue-600"
-            : "bg-orange-100 text-orange-600"
-        }`}
+        className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(
+          item.status
+        )}`}
       >
         {item.status}
       </span>
@@ -114,9 +124,7 @@ export function DashboardLatestCases() {
     <Card className="flex flex-col border-0 shadow-sm h-full w-full col-span-1 lg:col-span-2">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl">أحدث القضايا</CardTitle>
-        <Button className="bg-[#D1AD61] hover:bg-[#b09151] text-white">
-          + قضية جديدة
-        </Button>
+        <NewCaseLink />
       </CardHeader>
       <CardContent>
         <DataTable
