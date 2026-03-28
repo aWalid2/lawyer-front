@@ -1,23 +1,21 @@
-"use client"
 
-import { Cell, Legend, Pie, PieChart } from "recharts"
-import { TrendingUp } from "lucide-react"
+import { Pie, PieChart } from "recharts"
 
 import {
   Card,
   CardContent,
-
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import type { ChartConfig } from "@/components/ui/chart"
 import {
   ChartContainer,
-  ChartLegend,
   ChartTooltip,
-  ChartTooltipContent,
+  ChartTooltipContent
 } from "@/components/ui/chart"
-import type { ChartConfig } from "@/components/ui/chart"
-import { DashboardPaymentChartFooter } from "./components/DashboardPaymentChartFooter"
+import { DashboardPaymentChartLegandContent } from "./components/DashboardPaymentChartLegandContent"
+import { PaymentRatio } from "./components/PaymentRatio"
 import { PieChartTrendingUpIcon } from "./components/PieChartTrendingUpIcon"
 
 const chartData = [
@@ -112,7 +110,10 @@ export function DashboardPaymentsChart() {
         <PieChartTrendingUpIcon />
 
       </CardContent>
-      <DashboardPaymentChartFooter />
+      <DashboardPaymentChartLegandContent chartConfig={chartConfig} />
+      <CardFooter className="flex-col gap-2 text-sm pt-2 pb-6 px-6">
+        <PaymentRatio />
+      </CardFooter>
     </Card>
   )
 }
