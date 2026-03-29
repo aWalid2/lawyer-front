@@ -11,11 +11,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import arrow from "@/public/images/arrow.svg";
 import { UnderTheRift } from "./Undertheift";
 import { PublicProsecution } from "./PublicProsecution";
 import { InProsecution } from "./InProsecution";
 import { initialValues } from "./initialValues";
+import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
 
 // ثوابت الكلاسات (بدون تغيير)
 const CLASSES = {
@@ -36,7 +36,7 @@ const CLASSES = {
     "text-xs md:text-sm text-gray-400 flex flex-col gap-1 md:gap-2 px-2",
   fieldWithIcon:
     "w-full border rounded-md p-2 bg-[#FBFBFB] h-10 md:h-[50px] pr-10",
-  formSection: "border border-gray-300 p-4 rounded-xl",
+  formSection: "border border-gray-300 p-4 rounded-xl mt-6",
   flexRow: "flex flex-col md:flex-row gap-3",
   flexBetween: "flex justify-between items-center",
   sectionPadding: "pt-3 md:pt-5",
@@ -74,11 +74,8 @@ const FormCase = () => {
       }}
     >
       {({ values, setFieldValue }) => (
-        <div className="">
-          <div className="flex items-center gap-2 pb-8">
-            <img src={arrow} alt="arrow" />
-            <h1 className="text-xl font-cairo">إضافة قضية جديدة</h1>
-          </div>
+        <div >
+          <HeaderTitle title="إضافة قضية جديدة" />
           <div className={CLASSES.formSection}>
             <Form>
               {/* وضع القضية */}
@@ -87,9 +84,9 @@ const FormCase = () => {
                   وضع القضية عند الاستلام
                 </label>
                 <Select
-                  value={values.caseType}
+                  value={values.caseStatusReceived}
                   onValueChange={(value) => {
-                    setFieldValue("caseType", value);
+                    setFieldValue("caseStatusReceived", value);
                     setCaseType(value);
                   }}
                   dir="rtl"

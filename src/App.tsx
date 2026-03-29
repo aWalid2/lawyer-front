@@ -4,6 +4,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import Loading from "./components/shared/Loading";
 import ScrollToTop from "./components/shared/ScrollToTop";
 import { LegislationDetails } from "./features/Legislation/components/LegislationDetails.tsx";
+import GlobalSearch from "./features/GlobalSearch/index.tsx";
 
 // Modular Routes
 const CaseRoutes = lazy(() => import("./routes/CaseRoutes"));
@@ -49,7 +50,7 @@ function App() {
           <Route path="chat-bot" element={<ChatBot />} />
           <Route path="messages" element={<Messages />} />
           <Route path="profile" element={<Profile />} />
-
+          <Route path="global-search" element={<GlobalSearch />} />
           {/* Dashboard Home */}
           <Route index element={<DashboardHome />} />
 
