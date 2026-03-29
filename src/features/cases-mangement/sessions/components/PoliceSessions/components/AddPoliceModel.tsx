@@ -1,20 +1,23 @@
 import { Formik, Form } from "formik";
-import close from "@/public/images/close.svg";
 import { useState } from "react";
 import * as Yup from "yup";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { XIcon } from "lucide-react";
+import { InputForm } from "@/components/shared/components/InputForm";
+import { SelectForm } from "@/components/shared/components/SelectForm";
 
 // تعريف الـ interface للـ props
 interface AddPoliceModelProps {
   onClose: () => void;
   onSave?: (values: SessionFormValues) => void;
   initialValues?: SessionFormValues;
+  mode?: "add" | "edit";
 }
 
 interface SessionFormValues {
@@ -32,26 +35,6 @@ const validationSchema = Yup.object({
   decision: Yup.string().required("قرار الجلسة مطلوب"),
 });
 
-// تعريف CSS classes مجمعة
-const modalClasses = {
-  overlay: "fixed inset-0 z-50 flex items-center justify-center px-3 sm:px-6",
-  backdrop: "absolute inset-0 bg-black/30",
-  container: "relative w-full max-w-[520px] rounded-2xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.18)] overflow-hidden",
-  header: "relative px-5 sm:px-7 pt-5 sm:pt-6 pb-3",
-  closeButton: "absolute left-4 top-4  pt-4  px-16  text-gray-400 hover:text-gray-600 transition-colors",
-  closeIcon: "w-4 h-4 sm:w-5 sm:h-5",
-  title: "text-center text-[15px] pt-10 sm:pt-16 sm:text-base font-semibold text-gray-800",
-  body: "px-5 sm:px-7 pt-4 pb-24 sm:pb-28 max-h-[65vh] sm:max-h-[70vh] overflow-y-auto",
-  formContainer: "flex flex-col items-center space-y-4",
-  fieldWrapper: "w-full max-w-[420px] space-y-1.5",
-  label: "block text-xs sm:text-sm font-medium text-gray-700 text-right px-1 pb-4",
-  input: "w-full h-10 sm:h-11 rounded-xl bg-[#FBFBFB] border border-transparent px-4 text-right text-sm outline-none focus:ring-2 focus:ring-[#CBA462]/40",
-  textarea: "w-full min-h-[80px] sm:min-h-[100px] rounded-xl bg-[#FBFBFB] border border-transparent px-4 py-3 text-right text-sm resize-none outline-none focus:ring-2 focus:ring-[#CBA462]/40",
-  select: "w-full h-10 sm:h-11 rounded-xl bg-[#FBFBFB] border border-transparent px-4 text-right text-sm outline-none focus:ring-2 focus:ring-[#CBA462]/40 cursor-pointer",
-  footer: "absolute inset-x-0 bottom-0 bg-white px-5 sm:px-7 py-4 border-t border-gray-100",
-  submitButton: "w-full h-11 sm:h-12 rounded-xl text-sm sm:text-base font-medium text-white bg-[linear-gradient(to_right,#E3C086,#CBA462)] hover:brightness-95 transition"
-};
-
 // القيم الافتراضية
 const defaultValues: SessionFormValues = {
   sessionDate: "",
@@ -60,7 +43,7 @@ const defaultValues: SessionFormValues = {
   decision: "",
 };
 
-function AddPoliceModel({ onClose, onSave, initialValues = defaultValues }: AddPoliceModelProps) {
+function AddPoliceModel({ onClose, onSave, initialValues = defaultValues, mode = "add" }: AddPoliceModelProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   const handleCloseModal = () => {
@@ -80,130 +63,75 @@ function AddPoliceModel({ onClose, onSave, initialValues = defaultValues }: AddP
   if (!isModalOpen) return null;
 
   return (
-    <div className={modalClasses.overlay}>
-      <div className={modalClasses.backdrop} />
-
-      <div dir="rtl" className={modalClasses.container}>
-        <div className={modalClasses.header}>
-          <button
-            type="button"
-            className={modalClasses.closeButton}
-            aria-label="close"
-            onClick={handleCloseModal}
-          >
-            <img src={close} alt="Close" className={modalClasses.closeIcon} />
+    <Dialog open={true} onOpenChange={handleCloseModal}>
+      <DialogContent
+        className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none"
+        dir="rtl"
+        showCloseButton={false}
+      >
+        <DialogClose asChild onClick={handleCloseModal}>
+          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all">
+            <XIcon size={23} className="text-gray-500" />
           </button>
-
-          <h2 className={modalClasses.title}>
-            إضافة جلسة مخفر
-          </h2>
-        </div>
+        </DialogClose>
+        
+        <DialogHeader className="mb-2 mt-15">
+          <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
+            {mode === "add" ? "إضافة جلسة مخفر" : "تعديل جلسة المخفر"}
+          </DialogTitle>
+        </DialogHeader>
 
         <Formik<SessionFormValues>
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ errors, touched, setFieldValue, values }) => (
-            <Form>
-              <div className={modalClasses.body}>
-                <div className={modalClasses.formContainer}>
-                  {/* تاريخ الجلسة */}
-                  <div className={modalClasses.fieldWrapper}>
-                    <label className={modalClasses.label}>
-                      تاريخ الجلسة
-                    </label>
-                    <input
-                      name="sessionDate"
-                      type="date"
-                      value={values.sessionDate}
-                      onChange={(e) => setFieldValue("sessionDate", e.target.value)}
-                      className={`${modalClasses.input} ${errors.sessionDate && touched.sessionDate ? "border-red-500" : ""
-                        }`}
-                    />
-                    {errors.sessionDate && touched.sessionDate && (
-                      <div className="text-red-500 text-xs mt-1">{errors.sessionDate}</div>
-                    )}
-                  </div>
-
-                  {/* وقت الجلسة */}
-                  <div className={modalClasses.fieldWrapper}>
-                    <label className={modalClasses.label}>
-                      وقت الجلسة
-                    </label>
-                    <input
-                      name="sessionTime"
-                      type="time"
-                      value={values.sessionTime}
-                      onChange={(e) => setFieldValue("sessionTime", e.target.value)}
-                      className={`${modalClasses.input} ${errors.sessionTime && touched.sessionTime ? "border-red-500" : ""
-                        }`}
-                    />
-                    {errors.sessionTime && touched.sessionTime && (
-                      <div className="text-red-500 text-xs mt-1">{errors.sessionTime}</div>
-                    )}
-                  </div>
-
-                  {/* المحامي المتابع للجلسة */}
-                  <div className={modalClasses.fieldWrapper}>
-                    <label className={modalClasses.label}>
-                      المحامي المتابع للجلسة
-                    </label>
-                    <input
-                      name="lawyer"
-                      type="text"
-                      placeholder="أدخل اسم المحامي"
-                      value={values.lawyer}
-                      onChange={(e) => setFieldValue("lawyer", e.target.value)}
-                      className={`${modalClasses.input} ${errors.lawyer && touched.lawyer ? "border-red-500" : ""
-                        }`}
-                    />
-                    {errors.lawyer && touched.lawyer && (
-                      <div className="text-red-500 text-xs mt-1">{errors.lawyer}</div>
-                    )}
-                  </div>
-
-                  {/* قرار الجلسة */}
-                  <div className={modalClasses.fieldWrapper}>
-                    <label className={modalClasses.label}>
-                      قرار الجلسة
-                    </label>
-                    <Select
-                      value={values.decision}
-                      onValueChange={(value) => setFieldValue("decision", value)}
-                    >
-                      <SelectTrigger className={`${modalClasses.select} ${errors.decision && touched.decision ? "border-red-500" : ""
-                        }`}>
-                        <SelectValue placeholder="اختر قرار الجلسة" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="تم التأجيل">تم التأجيل</SelectItem>
-                        <SelectItem value="تم الحضور">تم الحضور</SelectItem>
-                        <SelectItem value="انتظار القرار">انتظار القرار</SelectItem>
-                        <SelectItem value="تم الصلح">تم الصلح</SelectItem>
-                        <SelectItem value="تم الحبس">تم الحبس</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {errors.decision && touched.decision && (
-                      <div className="text-red-500 text-xs mt-1">{errors.decision}</div>
-                    )}
-                  </div>
-                </div>
+          {({ values }) => (
+            <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
+              <div className="grid grid-cols-1 ">
+                <InputForm
+                  name="sessionDate"
+                  label="تاريخ الجلسة"
+                  type="date"
+                />
+                <InputForm
+                  name="sessionTime"
+                  label="وقت الجلسة"
+                  type="time"
+                />
               </div>
 
-              <div className={modalClasses.footer}>
-                <button
-                  type="submit"
-                  className={modalClasses.submitButton}
-                >
-                  إضافة
-                </button>
+              <div className="grid grid-cols-1 gap-4">
+                <InputForm
+                  name="lawyer"
+                  label="المحامي المتابع للجلسة"
+                  type="text"
+                  placeholder="أدخل اسم المحامي"
+                />
+                <SelectForm
+                  name="decision"
+                  label="قرار الجلسة"
+                  options={[
+                    { value: "تم التأجيل", label: "تم التأجيل" },
+                    { value: "تم الحضور", label: "تم الحضور" },
+                    { value: "انتظار القرار", label: "انتظار القرار" },
+                    { value: "تم الصلح", label: "تم الصلح" },
+                    { value: "تم الحبس", label: "تم الحبس" },
+                  ]}
+                />
               </div>
+
+              <button
+                type="submit"
+                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
+              >
+                {mode === "add" ? "إضافة" : "حفظ التعديلات"}
+              </button>
             </Form>
           )}
         </Formik>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
