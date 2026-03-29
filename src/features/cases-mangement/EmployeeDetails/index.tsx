@@ -1,4 +1,4 @@
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { JopInfoCard } from "./components/JopInfoCard";

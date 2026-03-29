@@ -1,4 +1,4 @@
-import PageLayout from '@/components/shared/components/PageLayout'
+import PageLayout from '@/shared/components/PageLayout.tsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { TableIncompleteProcedures } from './components/TableIncompleteProcedures'
 import { ChartIncompleteProcedures } from './components/ChartIncompleteProcedures.tsx'

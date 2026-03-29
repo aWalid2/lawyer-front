@@ -1,5 +1,5 @@
-import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
-import { HeaderFilter } from "@/components/shared/components/HeaderFilter";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderFilter } from "@/shared/components/HeaderFilter";
 import { AddDocumentDialog } from "../AddDocumentDialog";
 
 interface HeaderPageDocumentsProps {

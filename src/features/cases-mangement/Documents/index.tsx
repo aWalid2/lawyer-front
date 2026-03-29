@@ -1,6 +1,6 @@
 import React from "react";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 import { HeaderCaseDocuments } from "./components/HeaderCaseDocuments";
 import { CaseDocumentActions } from "./components/CaseDocumentActions";
 import type { CaseDocument } from "./types";

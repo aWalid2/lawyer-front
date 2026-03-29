@@ -1,4 +1,4 @@
-import { HeaderTitle } from '@/components/shared/components/HeaderTitle'
+import { HeaderTitle } from '@/shared/components/HeaderTitle'
 import { Button } from '@/components/ui/button'
 import { HiringEmployeeDialog } from '../HiringEmployeeDialog'
 

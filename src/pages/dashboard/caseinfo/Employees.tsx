@@ -1,4 +1,4 @@
-import PageLayout from "@/components/shared/components/PageLayout";
+import PageLayout from "@/shared/components/PageLayout";
 import { Employees } from "@/features/cases-mangement/Employees";
 import React from "react";
 

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 import { UserManagementHeader } from "./components/UserManagementHeader";
 import { UsersAction } from "./components/UsersAction";
 import type { UserT } from "./types";

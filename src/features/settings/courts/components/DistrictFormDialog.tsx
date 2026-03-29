@@ -10,7 +10,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { InputForm } from "@/components/shared/components/InputForm";
+import { InputForm } from "@/shared/components/InputForm";
 import type { DistrictT } from "../types";
 
 interface DistrictFormDialogProps {

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { PermissionsHeader } from "./components/PermissionsHeader";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 import { PermissionsAction } from "./components/PermissionsAction";
-import { usePagination } from "@/hooks/usePagination";
-import PageLayout from "@/components/shared/components/PageLayout";
+import { usePagination } from "@/shared/hooks/usePagination";
+import PageLayout from "@/shared/components/PageLayout";
 import type { RoleT } from "./types";
 
 const initialRoles: RoleT[] = [

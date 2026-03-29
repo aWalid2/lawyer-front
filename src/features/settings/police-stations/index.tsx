@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { PoliceStationsHeader } from "./components/PoliceStationsHeader";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 import { PoliceStationsAction } from "./components/PoliceStationsAction";
-import PageLayout from "@/components/shared/components/PageLayout";
-import { usePagination } from "@/hooks/usePagination";
+import PageLayout from "@/shared/components/PageLayout";
+import { usePagination } from "@/shared/hooks/usePagination";
 import type { PoliceStationT } from "./types";
 
 const initialStations: PoliceStationT[] = [

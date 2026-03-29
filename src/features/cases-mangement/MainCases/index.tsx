@@ -1,11 +1,11 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePagination } from "@/hooks/usePagination";
+import { usePagination } from "@/shared/hooks/usePagination";
 import { HeaderPageCase } from "./componnents/HeaderPageCase";
 import type { Case } from "./componnents/casesTypes";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
+import { DataTable, type Column } from "@/shared/components/DataTable";
 import { TableCasesActions } from "./componnents/TableCasesActions";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { Pagination } from "@/shared/components/Pagination";
 
 const MOCK_CASES: Case[] = Array.from({ length: 19 }, (_, i) => ({
   id: `${i + 1}`,

@@ -43,9 +43,6 @@ export interface FormValues {
   dateInprosecution: string;            // تاريخ القضيه في النيابة
   // ملاحظات
   notes: string;
-  caseStatusReceived: string; // وضع القضية عند الاستلام (تحت الرفع/الادعاء العام/النيابة)
+  caseStatusReceived: string; 
 
-  // حقول إضافية موجودة في الـ Interface القديم ولكن يمكن إزالتها إذا لم تكن مستخدمة
-  // password?: string;
-  // confirmPassword?: string;
 }

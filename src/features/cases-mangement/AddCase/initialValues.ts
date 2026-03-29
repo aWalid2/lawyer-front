@@ -1,6 +1,7 @@
 import type { FormValues } from "./typseCase";
 
  export const initialValues: FormValues= {
+    caseStatusReceived: "", 
     // حقول القضية الأساسية
     caseStatus: "pending",           // وضع القضية عند الاستلام
     caseTitle: "",                   // عنوان القضية

@@ -6,8 +6,6 @@ import { useAuth } from "@/context/AuthContext";
 import { loginUser } from "../services/login";
 import { toast } from "sonner";
 
-
-
 export const useLogin = () => {
   const navigate = useNavigate();
   const { saveUser } = useAuth();
@@ -15,10 +13,10 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (data: any) => {
-      const token = data?.token;
+      const token = data?.access_token;
       if (!token) return toast.error("Token not found");
 
-      Cookies.set("auth_token", token, {
+      Cookies.set("access_token", token, {
         expires: 7,
         secure: true,
         sameSite: "strict",
@@ -28,6 +26,7 @@ export const useLogin = () => {
 
       const { role }: any = jwtDecode(token);
       navigate(role === "admin" ? "/dashboard" : "/profile");
+      toast.success(data.message);
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "حدث خطأ");

@@ -1,9 +1,9 @@
 import React from "react";
-import { CaseMangementIcon } from "@/components/shared/icons/CaseManagement";
-import { ManagmentsIcon } from "@/components/shared/icons/Managments";
+import { CaseMangementIcon } from "@/shared/icons/CaseManagement";
+import { ManagmentsIcon } from "@/shared/icons/Managments";
 import { ChevronDown } from "lucide-react";
 import { NavLink, useParams } from "react-router-dom";
-import { BarChartIcon } from "@/components/shared/icons/BarChart";
+import { BarChartIcon } from "@/shared/icons/BarChart";
 
 interface NavItem {
   label: string;
@@ -74,8 +74,8 @@ export const NavigationMenu = () => {
               <div className="flex items-center gap-3.5">
                 <span
                   className={`transition-colors duration-300 ${isActive
-                      ? "text-white"
-                      : "text-[#727272] group-hover:text-primary"
+                    ? "text-white"
+                    : "text-[#727272] group-hover:text-primary"
                     }`}
                 >
                   {item.icon}

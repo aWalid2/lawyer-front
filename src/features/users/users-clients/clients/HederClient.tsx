@@ -1,6 +1,6 @@
-import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayout";
-import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { Link } from "react-router-dom";
 
 interface HeaderClientProps {
@@ -18,9 +18,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({
       <HeaderTitle innerPage title=" الموكلين " />
 
 
-      
-        <HeaderSearch value={searchTerm} onChange={onSearch}  className="lg:mr-25 lg:ms-0" />
-      
+
+      <HeaderSearch value={searchTerm} onChange={onSearch} className="lg:mr-25 lg:ms-0" />
+
       {/* الزر على اليسار */}
       <div className="flex items-center gap-3 order-3">
         <Link

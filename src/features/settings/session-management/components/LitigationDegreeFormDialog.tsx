@@ -1,8 +1,8 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { LayoutDialog } from "@/components/shared/components/LayoutDialog";
-import { InputForm } from "@/components/shared/components/InputForm";
+import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { InputForm } from "@/shared/components/InputForm";
 import type { LitigationDegreeT } from "../types";
 
 interface LitigationDegreeFormDialogProps {

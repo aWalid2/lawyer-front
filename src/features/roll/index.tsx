@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { HeaderPageRoll } from "./components/HeaderPageRoll";
 import type { RollSession } from "./types";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 import { TableRollActions } from "./components/TableRollActions";
 
 const MOCK_ROLL_SESSIONS: RollSession[] = Array.from({ length: 45 }, (_, i) => ({

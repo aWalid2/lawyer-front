@@ -1,6 +1,6 @@
 import React from "react";
-import { EditIcon } from "@/components/shared/icons/Edit";
-import { DateIcon } from "@/components/shared/icons/Date";
+import { EditIcon } from "@/shared/icons/Edit";
+import { DateIcon } from "@/shared/icons/Date";
 import type { OtherAdministrativeData } from "./typesOther";
 import { OtherBox } from "./OtherBox";
 import { EditOtherDataDialog } from "./EditOtherDataDialog";
@@ -43,7 +43,7 @@ export const OtherSessionsDataSection: React.FC = () => {
         <div className="flex flex-col md:flex-row gap-4 col-span-1 md:col-span-2">
           <OtherBox label="الجهة الإدارية" text={data.adminEntity} />
         </div>
-        
+
         <div className="col-span-1 md:col-span-2">
           <OtherBox label="ملاحظات" text={data.notes} />
         </div>

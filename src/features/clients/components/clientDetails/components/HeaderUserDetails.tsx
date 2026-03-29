@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Plus, X } from "lucide-react";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
-import { EditIcon } from "@/components/shared/icons/Edit";
-import { TrashIcon } from "@/components/shared/icons/Trash";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { EditIcon } from "@/shared/icons/Edit";
+import { TrashIcon } from "@/shared/icons/Trash";
 import { AddContractDialog } from "./AddContractDialog";
 
 interface HeaderUserDetailsProps {
@@ -25,11 +25,10 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsEditing?.(!isEditing)}
-            className={`${
-              isEditing
+            className={`${isEditing
                 ? "bg-primary text-white"
                 : "bg-[#F1F1F3] text-[#3D3C48]"
-            } hover:opacity-90 p-3 rounded-[8px] shadow-sm transition-all h-12.5 w-12.5 flex items-center justify-center`}
+              } hover:opacity-90 p-3 rounded-[8px] shadow-sm transition-all h-12.5 w-12.5 flex items-center justify-center`}
           >
             {isEditing ? <X size={20} /> : <EditIcon />}
           </button>

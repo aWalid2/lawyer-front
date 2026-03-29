@@ -1,7 +1,7 @@
 import React from "react";
 import { FirstDegreeBox } from "./components/FirstDegreeBox";
 import type { FirstDegreeInfProps } from "./components/typesFirstDegree";
-import { DateIcon } from "@/components/shared/icons/Date";
+import { DateIcon } from "@/shared/icons/Date";
 
 export const FirstDegreeInfoSessions: React.FC<FirstDegreeInfProps> = ({ firstDegreeData }) => {
   return (

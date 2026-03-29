@@ -1,10 +1,10 @@
-import PageLayout from "@/components/shared/components/PageLayout";
+import PageLayout from "@/shared/components/PageLayout";
 import { UsersClient } from "@/features/users/users-clients";
 
 const UsersClients = () => {
   return (
     <PageLayout>
-      <UsersClient/>
+      <UsersClient />
     </PageLayout>
   );
 };

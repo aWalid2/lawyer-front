@@ -1,6 +1,6 @@
 import React from "react";
-import { TableEditButton } from "@/components/shared/components/TableEditButton";
-import { TableDeleteButton } from "@/components/shared/components/TableDeleteButton";
+import { TableEditButton } from "@/shared/components/TableEditButton";
+import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
 import { DistrictFormDialog } from "./DistrictFormDialog";
 import type { DistrictT } from "../types";
 

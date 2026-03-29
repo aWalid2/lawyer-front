@@ -1,5 +1,5 @@
-import { HeaderFilter } from "@/components/shared/components/HeaderFilter";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { HeaderFilter } from "@/shared/components/HeaderFilter";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 
 interface NotificationFiltersProps {
     notificationStatus: string;

@@ -1,5 +1,5 @@
-import { InputForm } from "@/components/shared/components/InputForm";
-import { TextAreaForm } from "@/components/shared/components/TextAreaForm";
+import { InputForm } from "@/shared/components/InputForm";
+import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import Frame from "@/public/images/Frame.svg";
 import { Form, Formik } from "formik";
 import { useState } from "react";

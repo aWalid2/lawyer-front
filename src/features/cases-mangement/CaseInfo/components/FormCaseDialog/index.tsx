@@ -9,9 +9,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
-import { EditIcon } from "@/components/shared/icons/Edit";
-import { InputForm } from "../../../../../components/shared/components/InputForm";
-import { SelectForm } from "../../../../../components/shared/components/SelectForm";
+import { EditIcon } from "@/shared/icons/Edit";
+import { InputForm } from "../../../../../shared/components/InputForm";
+import { SelectForm } from "../../../../../shared/components/SelectForm";
 import type { CaseFormValues } from "./components/typesCaseInfo";
 
 export const FormCaseDialog: React.FC = () => {

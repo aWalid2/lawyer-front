@@ -1,5 +1,5 @@
 import React from "react";
-import { SearchIcon } from "@/components/shared/icons/Search";
+import { SearchIcon } from "@/shared/icons/Search";
 import { cn } from "@/lib/utils";
 
 interface HeaderSearchProps {

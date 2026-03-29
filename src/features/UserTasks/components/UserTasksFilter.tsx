@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { CheveronDownIcon } from "@/components/shared/icons/CheveronDown";
-import { HeaderActionButton } from "@/components/shared/components/HeaderActionButton";
+import { CheveronDownIcon } from "@/shared/icons/CheveronDown";
+import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
 
 interface UserTaskFilter {
   onFilterChange: (status: string) => void;
   currentFilter?: string;
 }
 
-export const UserTaskFilter: React.FC<UserTaskFilter> = ({ 
-  onFilterChange, 
+export const UserTaskFilter: React.FC<UserTaskFilter> = ({
+  onFilterChange,
   currentFilter = "all"
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +53,7 @@ export const UserTaskFilter: React.FC<UserTaskFilter> = ({
         onClick={() => setIsOpen(!isOpen)}
         className="flex-1 md:w-full md:max-w-[140px] rounded-[18px] h-12.5"
       />
-      
+
       {/* القائمة المنسدلة */}
       {isOpen && (
         <div className="absolute top-full right-0 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-100 z-50 overflow-hidden">

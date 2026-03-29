@@ -1,5 +1,5 @@
-import { DataTable, type Column } from '@/components/shared/components/DataTable'
-import { ViewIcon } from '@/components/shared/icons/View'
+import { DataTable, type Column } from '@/shared/components/DataTable'
+import { ViewIcon } from '@/shared/icons/View'
 import { Button } from '@/components/ui/button'
 
 type CaseData = {

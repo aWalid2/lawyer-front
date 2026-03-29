@@ -1,10 +1,10 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { ViewIcon } from "@/components/shared/icons/View";
-import { TrashIcon } from "@/components/shared/icons/Trash";
+import { ViewIcon } from "@/shared/icons/View";
+import { TrashIcon } from "@/shared/icons/Trash";
 import { DownloadIcon } from "lucide-react";
 import type { CaseDocument } from "../types";
-import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 
 interface CaseDocumentActionsProps {
   document: CaseDocument;

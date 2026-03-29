@@ -1,7 +1,7 @@
-import { ActiveCaseIcon } from "@/components/shared/icons/ActiveCase";
-import { SettingsLawIcon } from "@/components/shared/icons/SettingsLaw";
-import { TextIcon } from "@/components/shared/icons/Text";
-import { WalletIcon } from "@/components/shared/icons/Wallet";
+import { ActiveCaseIcon } from "@/shared/icons/ActiveCase";
+import { SettingsLawIcon } from "@/shared/icons/SettingsLaw";
+import { TextIcon } from "@/shared/icons/Text";
+import { WalletIcon } from "@/shared/icons/Wallet";
 import { Card } from "@/components/ui/card";
 
 const stats = [

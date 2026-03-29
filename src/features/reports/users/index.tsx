@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { HeaderPageReportsUsers } from "./components/HeaderPageReportsUsers";
 import type { ReportUser } from "./types";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 
 const MOCK_REPORT_USERS: ReportUser[] = Array.from({ length: 45 }, (_, i) => ({
   id: `${i + 1}`,
@@ -25,10 +25,10 @@ const ReportsUsersFeature = () => {
   const filteredUsers = useMemo(() => {
     return MOCK_REPORT_USERS.filter((u) => {
       const searchStr = searchTerm.toLowerCase();
-      const matchesSearch = 
-        u.name.toLowerCase().includes(searchStr) || 
+      const matchesSearch =
+        u.name.toLowerCase().includes(searchStr) ||
         u.email.toLowerCase().includes(searchStr);
-      
+
       const roleMap: Record<string, string> = {
         lawyer: "محامي",
         manager: "مدير",
@@ -74,11 +74,10 @@ const ReportsUsersFeature = () => {
       header: "الحالة",
       accessor: (item) => (
         <span
-          className={`px-3 py-1 rounded-full text-xs font-regular ${
-            item.status === "active"
+          className={`px-3 py-1 rounded-full text-xs font-regular ${item.status === "active"
               ? "bg-success/20 text-success"
               : "bg-error/20 text-error"
-          }`}
+            }`}
         >
           {item.status === "active" ? "نشط" : "غير نشط"}
         </span>

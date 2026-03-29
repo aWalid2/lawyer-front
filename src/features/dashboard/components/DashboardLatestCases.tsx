@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DataTable } from "@/components/shared/components/DataTable"
-import type { Column } from "@/components/shared/components/DataTable"
+import { DataTable } from "@/shared/components/DataTable"
+import type { Column } from "@/shared/components/DataTable"
 import { NewCaseLink } from "@/features/cases-mangement/MainCases/componnents/HeaderPageCase/components/NewCaseLink"
-import { ViewIcon } from "@/components/shared/icons/View"
+import { ViewIcon } from "@/shared/icons/View"
 
 type CaseData = {
   id: number

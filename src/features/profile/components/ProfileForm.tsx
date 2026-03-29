@@ -1,6 +1,6 @@
 import { Formik, Form } from "formik";
-import { InputForm } from "@/components/shared/components/InputForm";
-import { SelectForm } from "@/components/shared/components/SelectForm";
+import { InputForm } from "@/shared/components/InputForm";
+import { SelectForm } from "@/shared/components/SelectForm";
 import { validationSchema } from "./ProfileValidation";
 
 interface ProfileFormProps {
@@ -120,7 +120,7 @@ const ProfileForm = ({ onSubmit, initialValues }: ProfileFormProps) => {
                                 type="submit"
                                 className="px-6 py-2 bg-[#CBA462] text-white rounded-lg hover:bg-[#E3C086] transition-colors h-[50px] w-[241px] "
                             >
-                               حفظ التعديلات
+                                حفظ التعديلات
                             </button>
                         </div>
                     </div>

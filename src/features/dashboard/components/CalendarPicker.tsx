@@ -1,4 +1,4 @@
-import PageLayout from "@/components/shared/components/PageLayout";
+import PageLayout from "@/shared/components/PageLayout";
 import { Calendar } from "@/components/ui/calendar";
 import { ar } from "date-fns/locale";
 import { format } from "date-fns";

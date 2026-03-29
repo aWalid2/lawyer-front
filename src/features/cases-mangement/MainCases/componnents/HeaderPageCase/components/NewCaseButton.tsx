@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { HeaderActionButton } from "../../../../../../components/shared/components/HeaderActionButton";
+import { HeaderActionButton } from "../../../../../../shared/components/HeaderActionButton";
 
 export const NewCaseButton: React.FC = () => {
   return (

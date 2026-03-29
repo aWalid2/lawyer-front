@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
-import { EditIcon } from "@/components/shared/icons/Edit";
+import { EditIcon } from "@/shared/icons/Edit";
 import { InputForm } from "./components/InputForm";
 import type { FirstDegreeFormValues } from "./components/typesCaseInfo";
 import { Button } from "@/components/ui/button";

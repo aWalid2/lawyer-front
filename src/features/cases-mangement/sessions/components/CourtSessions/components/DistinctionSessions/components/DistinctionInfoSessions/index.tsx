@@ -1,7 +1,7 @@
 import React from "react";
 import { DistinctionBox } from "./components/DistinctionBox";
 import type { DistinctionInfProps } from "./components/typesDistinction";
-import { DateIcon } from "@/components/shared/icons/Date";
+import { DateIcon } from "@/shared/icons/Date";
 
 export const DistinctionInfoSessions: React.FC<DistinctionInfProps> = ({
     distinctionData,

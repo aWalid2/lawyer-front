@@ -1,9 +1,9 @@
 
 import { AddOtherSessionDialog } from "./AddOtherSessionDialog";
-import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
-import { TrashIcon } from "@/components/shared/icons/Trash";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { TrashIcon } from "@/shared/icons/Trash";
 import type { OtherSession, OtherSessionFormValues } from "./typesOther";
-import { EditIcon } from "@/components/shared/icons/Edit";
+import { EditIcon } from "@/shared/icons/Edit";
 
 interface OtherActionsProps {
   item: OtherSession;

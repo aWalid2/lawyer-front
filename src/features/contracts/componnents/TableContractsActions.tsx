@@ -1,9 +1,9 @@
 import React from "react";
 import type { Contract } from "../types";
-import { EditIcon } from "@/components/shared/icons/Edit";
-import { TrashIcon } from "@/components/shared/icons/Trash";
+import { EditIcon } from "@/shared/icons/Edit";
+import { TrashIcon } from "@/shared/icons/Trash";
 import { ContractDialog } from "./ContractDialog";
-import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 
 interface TableContractsActionsProps {
   contract: Contract;

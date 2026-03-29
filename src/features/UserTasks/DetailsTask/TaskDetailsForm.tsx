@@ -1,4 +1,4 @@
-import { InputForm } from '@/components/shared/components/InputForm';
+import { InputForm } from '@/shared/components/InputForm';
 import { Formik, Form } from 'formik';
 
 interface TaskDetailsFormProps {

@@ -1,6 +1,6 @@
-import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
-import { TableDeleteButton } from "@/components/shared/components/TableDeleteButton";
-import { TableEditButton } from "@/components/shared/components/TableEditButton";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
+import { TableEditButton } from "@/shared/components/TableEditButton";
 import React from "react";
 import type { UserT } from "../types";
 import { UserFormDialog } from "./UserFormDialog";

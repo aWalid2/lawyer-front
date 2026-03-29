@@ -1,4 +1,4 @@
-import PageLayout from "@/components/shared/components/PageLayout";
+import PageLayout from "@/shared/components/PageLayout";
 import { UsersEmployee } from "@/features/users/users-employees";
 
 const UsersEmployees = () => {

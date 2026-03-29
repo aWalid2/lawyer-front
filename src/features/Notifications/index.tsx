@@ -1,8 +1,8 @@
 import { useEffect, useState, useMemo } from "react";
-import PageLayout from "@/components/shared/components/PageLayout";
+import PageLayout from "@/shared/components/PageLayout";
 import NotificationFilters from "./componnents/NotificationFilters";
 import NotificationsList from "./componnents/NotificationsList";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { Pagination } from "@/shared/components/Pagination";
 
 interface Notification {
     id: string;

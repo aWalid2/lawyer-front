@@ -1,8 +1,8 @@
 // pages/UserTasksDetails.tsx
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import PageLayout from "@/components/shared/components/PageLayout";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import PageLayout from "@/shared/components/PageLayout";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import HeaderSection from "@/features/UserTasks/DetailsTask/HeaderSection";
 import TaskDetailsForm from "@/features/UserTasks/DetailsTask/TaskDetailsForm";
 import CommentsSection from "@/features/UserTasks/DetailsTask/CommentsSection";

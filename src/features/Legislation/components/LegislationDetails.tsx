@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { HeaderTitle } from '@/components/shared/components/HeaderTitle';
+import { HeaderTitle } from '@/shared/components/HeaderTitle';
 import { FileText, Calendar, Building2, Scale, Gavel, BookOpen } from 'lucide-react';
-import PageLayout from '@/components/shared/components/PageLayout';
+import PageLayout from '@/shared/components/PageLayout';
 
 // واجهة بيانات التشريع/الحكم
 interface LegislationRelatedT {

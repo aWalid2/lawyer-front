@@ -2,13 +2,13 @@ import React from "react";
 import { Plus } from "lucide-react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { LayoutDialog } from "@/components/shared/components/LayoutDialog";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { HeaderActionButton } from "@/components/shared/components/HeaderActionButton";
-import { TableEditButton } from "@/components/shared/components/TableEditButton";
-import { TableDeleteButton } from "@/components/shared/components/TableDeleteButton";
-import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
-import { InputForm } from "@/components/shared/components/InputForm";
+import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
+import { TableEditButton } from "@/shared/components/TableEditButton";
+import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { InputForm } from "@/shared/components/InputForm";
 import type { CourtT, DistrictT } from "../types";
 
 interface DistrictFormDialogProps {

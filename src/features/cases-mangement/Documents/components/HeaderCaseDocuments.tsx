@@ -1,5 +1,5 @@
 import React from "react";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 
 
 interface HeaderCaseDocumentsProps {

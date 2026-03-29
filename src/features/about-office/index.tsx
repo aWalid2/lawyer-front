@@ -2,8 +2,8 @@ import { Formik, Form } from "formik";
 import { useState } from "react";
 import type { FormValues } from "./types";
 import { validationSchema } from "./ValidationSchema";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
-import PageLayout from "@/components/shared/components/PageLayout";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import PageLayout from "@/shared/components/PageLayout";
 
 // استيراد المكونات
 import OfficeInfo from "./components/OfficeInfo";
