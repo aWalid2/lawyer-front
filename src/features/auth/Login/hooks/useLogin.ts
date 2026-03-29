@@ -16,7 +16,7 @@ export const useLogin = () => {
     mutationFn: loginUser,
     onSuccess: (data: any) => {
       const token = data?.token;
-      if (!token) return console.error("Token not found");
+      if (!token) return toast.error("Token not found");
 
       Cookies.set("auth_token", token, {
         expires: 7,
@@ -24,13 +24,13 @@ export const useLogin = () => {
         sameSite: "strict",
       });
 
-      saveUser(token); 
+      saveUser(token);
 
       const { role }: any = jwtDecode(token);
-      navigate(role === "ADMIN" ? "/dashboard" : "/profile");
+      navigate(role === "admin" ? "/dashboard" : "/profile");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message || "حدث خطأ");
     },
   });
 };
