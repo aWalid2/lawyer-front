@@ -9,8 +9,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
-import { InputForm } from "@/components/shared/components/InputForm";
-import { TextAreaForm } from "@/components/shared/components/TextAreaForm";
+import { InputForm } from "@/shared/components/InputForm";
+import { TextAreaForm } from "@/shared/components/TextAreaForm";
 
 // تعريف الـ interface للـ props
 interface EditModelProps {
@@ -65,7 +65,7 @@ function EditModel({ initialValues, onClose, onSave, mode = "add" }: EditModelPr
             <XIcon size={23} className="text-gray-500" />
           </button>
         </DialogClose>
-        
+
         <DialogHeader className="mb-2 mt-15">
           <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
             {mode === "add" ? "إضافة بيانات مخفر" : "تعديل بيانات المخفر"}
@@ -77,7 +77,7 @@ function EditModel({ initialValues, onClose, onSave, mode = "add" }: EditModelPr
           validationSchema={validationSchema}
           onSubmit={handleSaveChanges}
         >
-          {({ values }) => (
+          {() => (
             <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
               <div className="grid grid-cols-1 gap-4">
                 <InputForm

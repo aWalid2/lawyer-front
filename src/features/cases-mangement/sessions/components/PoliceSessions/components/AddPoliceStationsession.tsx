@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 import deleteic from "@/public/images/delete.svg";
 import editefff from "@/public/images/edit.svg";
 import AddPoliceModel from "./AddPoliceModel";
@@ -123,14 +123,14 @@ const AddPoliceStationsession = () => {
                 onClick={() => handleEditSession(item)}
                 className="hover:scale-110 transition shrink-0 text-[#CBA462]"
             >
-                <img src={editefff} alt="تعديل"  />
+                <img src={editefff} alt="تعديل" />
             </button>
             <button
                 title="حذف"
                 onClick={() => handleDeleteSession(item.id)}
                 className="hover:scale-110 transition shrink-0 text-red-500"
             >
-                <img src={deleteic} alt="حذف"  />
+                <img src={deleteic} alt="حذف" />
             </button>
         </div>
     );

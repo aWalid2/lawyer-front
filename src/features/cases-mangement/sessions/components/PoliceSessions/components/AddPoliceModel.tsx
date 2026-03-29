@@ -9,8 +9,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
-import { InputForm } from "@/components/shared/components/InputForm";
-import { SelectForm } from "@/components/shared/components/SelectForm";
+import { InputForm } from "@/shared/components/InputForm";
+import { SelectForm } from "@/shared/components/SelectForm";
 
 // تعريف الـ interface للـ props
 interface AddPoliceModelProps {
@@ -74,7 +74,7 @@ function AddPoliceModel({ onClose, onSave, initialValues = defaultValues, mode =
             <XIcon size={23} className="text-gray-500" />
           </button>
         </DialogClose>
-        
+
         <DialogHeader className="mb-2 mt-15">
           <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
             {mode === "add" ? "إضافة جلسة مخفر" : "تعديل جلسة المخفر"}
@@ -86,7 +86,7 @@ function AddPoliceModel({ onClose, onSave, initialValues = defaultValues, mode =
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ values }) => (
+          {() => (
             <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
               <div className="grid grid-cols-1 ">
                 <InputForm

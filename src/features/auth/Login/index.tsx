@@ -2,7 +2,6 @@ import { InputForm } from '@/shared/components/InputForm';
 import { Form, Formik } from 'formik';
 import { useLogin } from './hooks/useLogin';
 import * as yup from "yup";
-import { Spinner } from '@/components/ui/spinner';
 
 const Login = () => {
   const validationSchema = yup.object({

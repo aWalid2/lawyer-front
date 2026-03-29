@@ -4,8 +4,7 @@ import type { FormValues } from "../typsePolice";
 import { validationSchema } from "../ValidationSchema";
 import Frame from "@/public/images/Frame.svg";
 import EditModel from "../components/EditModel";
-import { InputForm } from "@/components/shared/components/InputForm";
-
+import { InputForm } from "@/shared/components/InputForm";
 const FormPoliceSessions = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit">("add");
