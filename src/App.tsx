@@ -4,6 +4,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import Loading from "./components/shared/Loading";
 import ScrollToTop from "./components/shared/ScrollToTop";
 import { LegislationDetails } from "./features/Legislation/components/LegislationDetails.tsx";
+import { Toaster } from "sonner";
 
 // Modular Routes
 const CaseRoutes = lazy(() => import("./routes/CaseRoutes"));
@@ -39,6 +40,7 @@ const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
 function App() {
   return (
     <Suspense fallback={<Loading />}>
+      <Toaster />
 
       <ScrollToTop />
       <Routes>
