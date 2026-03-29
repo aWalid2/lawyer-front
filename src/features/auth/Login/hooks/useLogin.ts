@@ -6,8 +6,6 @@ import { useAuth } from "@/context/AuthContext";
 import { loginUser } from "../services/login";
 import { toast } from "sonner";
 
-
-
 export const useLogin = () => {
   const navigate = useNavigate();
   const { saveUser } = useAuth();
@@ -33,6 +31,5 @@ export const useLogin = () => {
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "حدث خطأ");
     },
-
   });
 };
