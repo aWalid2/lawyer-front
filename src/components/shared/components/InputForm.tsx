@@ -16,6 +16,7 @@ type InputFormProps = {
   type: string;
   dir?: string;
   readonly?: boolean;
+  labelColor?: string;
 };
 
 export const InputForm: React.FC<InputFormProps> = ({
@@ -25,7 +26,8 @@ export const InputForm: React.FC<InputFormProps> = ({
   label,
   type,
   dir,
-  readonly
+  readonly,
+  labelColor = "text-[#1A1A1A]"
 }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
@@ -33,7 +35,7 @@ export const InputForm: React.FC<InputFormProps> = ({
   if (type === "date") {
     return (
       <div className="flex flex-col w-full col-span-2">
-        <label className="block mb-4 text-sm font-normal text-[#1A1A1A]">
+        <label className={`block mb-4 text-sm font-normal ${labelColor}`}>
           {label}
         </label>
         <Popover>
@@ -82,7 +84,7 @@ export const InputForm: React.FC<InputFormProps> = ({
 
   return (
     <div className="flex flex-col w-full">
-      <label className="block mb-4 text-sm font-normal text-[#1A1A1A]">
+      <label className={`block mb-4 text-sm font-normal ${labelColor}`}>
         {label}
       </label>
       <Input

@@ -6,6 +6,7 @@ import ScrollToTop from "./components/shared/ScrollToTop";
 import { LegislationDetails } from "./features/Legislation/components/LegislationDetails.tsx";
 import { Toaster } from "sonner";
 import GlobalSearch from "./features/GlobalSearch/index.tsx";
+import AuthRoutes from "./routes/Auth.tsx";
 
 // Modular Routes
 const CaseRoutes = lazy(() => import("./routes/CaseRoutes"));
@@ -46,6 +47,7 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/auth/*" element={<AuthRoutes />} />
         <Route path="/dashboard" element={<DashboardLayout />}>
           {/* Header routes */}
           <Route path="notifications" element={<Notifications />} />
