@@ -11,50 +11,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Eye, EyeOff } from "lucide-react"; 
+import { Eye, EyeOff } from "lucide-react";
 import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { InputForm } from "@/components/shared/components/InputForm";
+import { FileUpload } from "@/components/shared/components/FileUpload";
+import { TextAreaForm } from "@/components/shared/components/TextAreaForm";
 
 // ثوابت الكلاسات
 const CLASSES = {
-  // كلاسات الحقول الأساسية
-  inputBase: "w-full border rounded-md p-2 bg-gray-50",
-  inputMedium: "h-10 md:h-[50px]",
-  inputLarge: "h-[50px]",
-
-  // كلاسات الحقول المدمجة
-  inputField: "w-full border rounded-md p-2 bg-gray-50 h-10 md:h-[50px]",
-  inputFieldLarge: "w-full border rounded-md p-2 bg-gray-50 h-[50px]",
-
-  // كلاسات الـ Select
-  selectTrigger: "w-full border rounded-md p-2 bg-gray-50 h-10 md:h-[50px] flex items-center justify-between ", selectContent: "bg-white z-50 ",
-
-  // كلاسات حاويات رفع الصور
-  uploadContainer: "border border-gray-300 border-dashed border-2 rounded-xl bg-gray-50 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-gray-100 transition",
-  uploadBox: "w-[150px] h-[125px]",
-  uploadBoxSmall: "w-24 md:w-[150px] h-24 md:h-[125px]",
-
-  // كلاسات نصوص رفع الصور
-  uploadText: "text-sm text-gray-400 flex flex-col gap-2",
-  uploadTextSmall: "text-xs md:text-sm text-gray-400 flex flex-col gap-1 md:gap-2 px-2",
-
-  // كلاسات الحقول مع أيقونة
+  selectTrigger: "w-full border rounded-md p-2 bg-[#FBFBFB] h-10 md:h-[50px] flex items-center justify-between ", selectContent: "bg-[#FBFBFB] z-50 ",
   fieldWithIcon: "w-full border rounded-md p-2 bg-gray-50 h-10 md:h-[50px] pr-10",
-
-  // كلاسات الحاويات
   formSection: "border border-gray-300 p-4 rounded-xl",
   flexRow: "flex flex-col md:flex-row gap-3",
   flexBetween: "flex justify-between items-center",
-
-  // كلاسات التباعد
   sectionPadding: "pt-3 md:pt-5",
   largeSectionPadding: "pt-8 md:pt-14",
   extraLargeSectionPadding: "pt-16",
-
-  // كلاسات النصوص
   labelText: "block mb-5 text-sm",
-  sectionTitle: "text-base md:text-lg",
-
-  // كلاسات الزر
   submitButton: "w-full flex items-center gap-2 px-6 py-3 text-white font-cairo rounded-[12px] transition-all whitespace-nowrap w-[137px] h-[50px] justify-center relative overflow-hidden",
 };
 
@@ -98,9 +71,9 @@ const FormDetails = () => {
       {({ values, setFieldValue }) => (
         <div className="p-6 shadow-gray-400 shadow-2xl">
           <div className="flex items-center gap-2 pb-8">
-           <HeaderTitle title="إضافة موكل جديد" />
+            <HeaderTitle title="إضافة موكل جديد" />
           </div>
-          
+
           <div className={CLASSES.formSection}>
             <Form>
               <div>
@@ -124,21 +97,19 @@ const FormDetails = () => {
 
                 <div className={CLASSES.flexRow}>
                   <div className="flex-1">
-                    <label className={CLASSES.labelText}>الاسم</label>
-                    <Field
+                    <InputForm
                       name="secondName"
-                      type="text"
-                      className={CLASSES.inputField}
+                      type="string"
                       placeholder="أحمد"
+                      label="اسم الموكل"
                     />
                   </div>
                   <div className="flex-1">
-                    <label className={CLASSES.labelText}>رقم الهاتف</label>
-                    <Field
+                    <InputForm
                       name="phone"
-                      type="text"
-                      className={CLASSES.inputField}
+                      type="string"
                       placeholder="5xxxxxxxxxxxx"
+                      label="رقم الهاتف"
                     />
                   </div>
                   <div className="w-full md:w-28">
@@ -163,29 +134,26 @@ const FormDetails = () => {
 
               <div className={`${CLASSES.flexRow} ${CLASSES.sectionPadding}`}>
                 <div className="flex-1">
-                  <label className={CLASSES.labelText}>الرقم المدني</label>
-                  <Field
+                  <InputForm
                     name="civilId"
-                    type="text"
-                    className={CLASSES.inputField}
+                    type="string"
                     placeholder="019389384"
+                    label="الرقم المدني"
                   />
                 </div>
                 <div className="flex-1">
-                  <label className={CLASSES.labelText}>الجنسية</label>
-                  <Field
+                  <InputForm
                     name="nationality"
-                    type="text"
-                    className={CLASSES.inputField}
+                    type="string"
+                    label="الجنسية"
                     placeholder="سعودي"
                   />
                 </div>
                 <div className="flex-1">
-                  <label className={CLASSES.labelText}>الدولة</label>
-                  <Field
+                  <InputForm
                     name="country"
-                    type="text"
-                    className={CLASSES.inputField}
+                    type="string"
+                    label="الدولة"
                     placeholder="المملكة العربية السعودية"
                   />
                 </div>
@@ -193,20 +161,18 @@ const FormDetails = () => {
 
               <div className={`${CLASSES.flexRow} ${CLASSES.sectionPadding}`}>
                 <div className="flex-1">
-                  <label className={CLASSES.labelText}>العنوان</label>
-                  <Field
+                  <InputForm
                     name="address"
-                    type="text"
-                    className={CLASSES.inputField}
+                    type="string"
+                    label="العنوان"
                     placeholder="عنوان1"
                   />
                 </div>
                 <div className="flex-1">
-                  <label className={CLASSES.labelText}>البريد الإلكتروني</label>
-                  <Field
+                  <InputForm
                     name="email"
                     type="email"
-                    className={CLASSES.inputField}
+                    label="البريد الإلكتروني"
                     placeholder="example@gmail.com"
                   />
                 </div>
@@ -225,50 +191,37 @@ const FormDetails = () => {
                   <div className={CLASSES.formSection}>
                     <h1 className="pb-7">بيانات العقد</h1>
                     <div className="pb-7">
-                      <label className={CLASSES.labelText}>تاريخ بداية العقد</label>
-                      <Field
+                      <InputForm
                         name="contractStartDate"
                         type="date"
-                        className={CLASSES.inputFieldLarge}
+                        label="تاريخ بداية العقد"
                       />
+
                     </div>
                     <div className="pb-7">
-                      <label className={CLASSES.labelText}>القيمة المتفق عليها</label>
-                      <Field
+                      <InputForm
                         name="contractValue"
-                        type="text"
-                        className={CLASSES.inputFieldLarge}
+                        type="string"
+                        label="القيمة المتفق عليها"
                         placeholder="50 ألف ريال سعودي"
                       />
                     </div>
                     <div className="pb-7">
-                      <label className={CLASSES.labelText}>مدة العقد</label>
-                      <Field
+                      <InputForm
                         name="contractDuration"
-                        type="text"
-                        className={CLASSES.inputFieldLarge}
+                        type="string"
+                        label="مدة العقد"
                         placeholder=" سنتين"
                       />
                     </div>
                     <h1 className="pb-7">صورة العقد</h1>
                     <div className="flex">
-                      <div className={`${CLASSES.uploadContainer} ${CLASSES.uploadBox}`}>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          id="contractImage"
-                          onChange={(e) => {
-                            if (e.target.files && e.target.files[0]) {
-                              setFieldValue("contractImage", e.target.files[0]);
-                            }
-                          }}
+                      <div className="h-[99px] w-[121px] mb-8">
+                        <FileUpload
+                          name="contractImage"
+                          label=""
+                          placeholder="انقر هنا لتحميل الصوره او سحبها وإفلاتها"
                         />
-                        <label htmlFor="contractImage" className="cursor-pointer w-full h-full flex flex-col items-center justify-center">
-                          <p className={CLASSES.uploadText}>
-                            {values.contractImage ? values.contractImage.name : "انقر هنا لتحميل الصوره او سحبها وإفلاتها"}
-                          </p>
-                        </label>
                       </div>
                     </div>
                   </div>
@@ -277,36 +230,21 @@ const FormDetails = () => {
 
               <div className={CLASSES.largeSectionPadding}>
                 <div className="flex flex-col gap-4 md:gap-7">
-                  <h1 className={CLASSES.sectionTitle}>صورة التوكيل</h1>
+                  <h1 >صورة التوكيل</h1>
                   <div className="flex">
-                    <div className={`${CLASSES.uploadContainer} ${CLASSES.uploadBoxSmall}`}>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        id="powerOfAttorneyImage"
-                        onChange={(e) => {
-                          if (e.target.files && e.target.files[0]) {
-                            setFieldValue("powerOfAttorneyImage", e.target.files[0]);
-                          }
-                        }}
+                    <div className="h-[99px] w-[121px]">
+                      <FileUpload
+                        name="powerOfAttorneyImage"
+                        label=""
+                        placeholder="انقر هنا لتحميل الصوره او سحبها وإفلاتها"
                       />
-                      <label htmlFor="powerOfAttorneyImage" className="cursor-pointer w-full h-full flex flex-col items-center justify-center">
-                        <p className={CLASSES.uploadTextSmall}>
-                          {values.powerOfAttorneyImage ? values.powerOfAttorneyImage.name : "انقر هنا لتحميل الصوره او سحبها وإفلاتها"}
-                        </p>
-                      </label>
                     </div>
                   </div>
 
-                  <div className="flex flex-col" dir="rtl">
-                    <h1 className={`${CLASSES.sectionTitle} pb-3 md:pb-5 text-right`}>
-                      ملاحظات
-                    </h1>
-                    <Field
+                  <div className="flex flex-col pt-8" >
+                    <TextAreaForm
                       name="notes"
-                      as="textarea"
-                      className="w-full border rounded-md p-2 text-sm bg-gray-50 h-20 md:h-[102px] resize-none text-right"
+                      label=" ملاحظات"
                     />
                   </div>
                 </div>
@@ -325,17 +263,11 @@ const FormDetails = () => {
                   <div className="flex flex-col gap-4 md:gap-7 border border-gray-300 rounded-2xl p-3 md:p-5">
                     <div className={`${CLASSES.flexRow} ${CLASSES.sectionPadding}`}>
                       <div className="flex-1 relative">
-                        <label className={CLASSES.labelText}>كلمة المرور</label>
                         <div className="relative">
-                          <Field
-                            name="password"
-                            type={showPassword ? "text" : "password"}
-                            className={CLASSES.fieldWithIcon}
-                            placeholder="*************"
-                          />
+                          <InputForm type={showPassword ? "text" : "password"} name="password" placeholder="*************"  label="كلمة المرور" />
                           <button
                             type="button"
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                            className="absolute left-3 top-[60px] -translate-y-1/2 text-gray-500 hover:text-gray-700"
                             onClick={() => setShowPassword(!showPassword)}
                           >
                             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -343,17 +275,10 @@ const FormDetails = () => {
                         </div>
                       </div>
                       <div className="flex-1 relative">
-                        <label className={CLASSES.labelText}>تأكيد كلمة المرور</label>
-                        <div className="relative">
-                          <Field
-                            name="confirmPassword"
-                            type={showConfirmPassword ? "text" : "password"}
-                            className={CLASSES.fieldWithIcon}
-                            placeholder="**************"
-                          />
+                          <InputForm type={showPassword ? "text" : "password"} name="confirmPassword" placeholder="*************"  label="تأكيد كلمة المرور" />
                           <button
                             type="button"
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                            className="absolute left-3 top-[60px] -translate-y-1/2 flex   text-gray-500 hover:text-gray-700"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                           >
                             {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -362,22 +287,20 @@ const FormDetails = () => {
                       </div>
                     </div>
                   </div>
-                </div>
               )}
+              <div className="w-full pt-8">
+                <button
+                  type="submit"
+                  className={CLASSES.submitButton}
+                  style={{
+                    background: "linear-gradient(135deg, #E3C086 0%, #CBA462 100%)",
+                  }}
+                >
+                  <span className="relative z-10">إضافة الموكل</span>
+                  <div className="absolute inset-0 opacity-0 hover:opacity-20 transition-opacity bg-black"></div>
+                </button>
+              </div>
             </Form>
-
-            <div className="w-full pt-8">
-              <button
-                type="submit"
-                className={CLASSES.submitButton}
-                style={{
-                  background: "linear-gradient(135deg, #E3C086 0%, #CBA462 100%)",
-                }}
-              >
-                <span className="relative z-10">إضافة الموكل</span>
-                <div className="absolute inset-0 opacity-0 hover:opacity-20 transition-opacity bg-black"></div>
-              </button>
-            </div>
           </div>
         </div>
       )}

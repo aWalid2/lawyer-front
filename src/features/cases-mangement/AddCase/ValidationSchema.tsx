@@ -7,7 +7,7 @@ export const validationSchema = Yup.object({
   clientName: Yup.string().required("اسم الموكل مطلوب"),
   caseType: Yup.string().required("وضع القضية مطلوب"),
   clientType: Yup.string().required("صفة الموكل مطلوبة"),
-  
+  caseStatusReceived: Yup.string(),
   // حقول المخفر والتحقيق
   policeStation: Yup.string(),
   numberInPoliceStation: Yup.string(),

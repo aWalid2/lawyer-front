@@ -125,7 +125,7 @@ export default function NavbarHeader() {
               <SettingsIcon className={ICON_CLASSES} />
             </Link>
             <Link
-              to={"legislation-rulings"}
+              to={"global-search"}
               className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
             >
               <SearchIcon className={ICON_CLASSES} />
