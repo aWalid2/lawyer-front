@@ -22,7 +22,7 @@ export const useLogin = () => {
         sameSite: "strict",
       });
 
-      saveUser(token); 
+      saveUser(token);
 
       const { role }: any = jwtDecode(token);
       navigate(role === "admin" ? "/dashboard" : "/profile");

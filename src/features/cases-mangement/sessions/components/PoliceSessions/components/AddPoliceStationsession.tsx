@@ -1,12 +1,20 @@
 import { useState } from "react";
-import edit from '@/public/images/edit.svg';
-import deleteIcon from '@/public/images/delete.svg';
+import { DataTable, type Column } from "@/components/shared/components/DataTable";
+import { Pagination } from "@/components/shared/components/Pagination";
+import deleteic from "@/public/images/delete.svg";
+import editefff from "@/public/images/edit.svg";
 import AddPoliceModel from "./AddPoliceModel";
-
 
 // واجهة بيانات الجلسات
 interface SessionData {
     id: number;
+    sessionDate: string;
+    sessionTime: string;
+    lawyer: string;
+    decision: string;
+}
+
+interface SessionFormValues {
     sessionDate: string;
     sessionTime: string;
     lawyer: string;
@@ -46,7 +54,14 @@ const AddPoliceStationsession = () => {
         },
     ]);
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
+    const totalPages = Math.ceil(sessionsData.length / itemsPerPage);
+    const currentData = (() => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return sessionsData.slice(startIndex, startIndex + itemsPerPage);
+    })();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingSession, setEditingSession] = useState<SessionData | null>(null);
@@ -66,17 +81,14 @@ const AddPoliceStationsession = () => {
         setEditingSession(null);
     };
 
-    const handleSaveSession = (values: any) => {
+    const handleSaveSession = (values: SessionFormValues) => {
         if (editingSession) {
             // تعديل جلسة موجودة
             const updatedSessions = sessionsData.map(session =>
                 session.id === editingSession.id
                     ? {
                         ...session,
-                        sessionDate: values.sessionDate,
-                        sessionTime: values.sessionTime,
-                        lawyer: values.lawyer,
-                        decision: values.decision
+                        ...values
                     }
                     : session
             );
@@ -86,10 +98,7 @@ const AddPoliceStationsession = () => {
             // إضافة جلسة جديدة
             const newSession = {
                 id: sessionsData.length > 0 ? Math.max(...sessionsData.map(s => s.id)) + 1 : 1,
-                sessionDate: values.sessionDate,
-                sessionTime: values.sessionTime,
-                lawyer: values.lawyer,
-                decision: values.decision,
+                ...values,
             };
             setSessionsData([...sessionsData, newSession]);
             console.log("تم إضافة الجلسة:", newSession);
@@ -106,84 +115,83 @@ const AddPoliceStationsession = () => {
         }
     };
 
+    // عمود الإجراءات
+    const ActionsColumn = ({ item }: { item: SessionData }) => (
+        <div className="flex items-center justify-center gap-2 md:gap-3 flex-nowrap">
+            <button
+                title="تعديل"
+                onClick={() => handleEditSession(item)}
+                className="hover:scale-110 transition shrink-0 text-[#CBA462]"
+            >
+                <img src={editefff} alt="تعديل"  />
+            </button>
+            <button
+                title="حذف"
+                onClick={() => handleDeleteSession(item.id)}
+                className="hover:scale-110 transition shrink-0 text-red-500"
+            >
+                <img src={deleteic} alt="حذف"  />
+            </button>
+        </div>
+    );
+
+    const columns: Column<SessionData>[] = [
+        {
+            header: "#",
+            accessor: (item) => {
+                const index = currentData.findIndex(s => s.id === item.id);
+                return (currentPage - 1) * itemsPerPage + index + 1;
+            },
+            headerClassName: "w-[60px]",
+        },
+        {
+            header: "تاريخ الجلسة",
+            accessor: "sessionDate",
+        },
+        {
+            header: "وقت الجلسة",
+            accessor: "sessionTime",
+        },
+        {
+            header: "المحامي المتابع",
+            accessor: "lawyer",
+            className: "font-medium text-gray-800",
+        },
+        {
+            header: "قرار الجلسة",
+            accessor: "decision",
+        },
+        {
+            header: "الإجراءات",
+            accessor: (item) => <ActionsColumn item={item} />,
+        },
+    ];
+
     return (
-        <div className="border border-gray-300 p-4 rounded-xl">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4">
-                <h1 className="text-xl font-cairo">جلسات المخفر</h1>
+        <div className="bg-white rounded-2xl p-4 md:p-6 border border-[#eeeeee]">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6">
+                <h1 className="text-[18px] font-semibold text-secondary font-cairo text-right w-full sm:w-auto">
+                    جلسات المخفر
+                </h1>
                 <button
                     type="button"
                     onClick={handleOpenModal}
-                    className="flex shrink-0 items-center justify-center gap-2 bg-[#CBA46226] rounded-md w-full sm:w-[180px] md:w-[200px] h-[50px] transition-colors duration-200 px-2 hover:bg-[#CBA46240]"
+                    className="flex items-center justify-center gap-2 bg-[#CBA46226] rounded-md h-12.5 w-full sm:w-auto px-6 transition-all duration-200 hover:bg-[#CBA46240] text-[#CBA462] font-semibold font-cairo"
                 >
-                    <span className="text-[14px] sm:text-[16px] font-medium whitespace-nowrap text-[#CBA462]">+ إضافة جلسة مخفر</span>
+                    + إضافة جلسة مخفر
                 </button>
             </div>
 
-            {/* الجدول */}
-            <div className="overflow-x-auto">
-                <table className="w-full border-collapse border-r border-[#E6E6E6]">
-                    <thead>
-                        <tr className="bg-[#FCFCFC] border-b-2 border-[#F1F1F4]">
-                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] border-l border-[#F1F1F4] w-[60px]">#</th>
-                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] border-l border-[#F1F1F4] w-[150px]">تاريخ الجلسة</th>
-                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] border-l border-[#F1F1F4] w-[120px]">وقت الجلسة</th>
-                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] border-l border-[#F1F1F4] w-[200px]">المحامي المتابع</th>
-                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] border-l border-[#F1F1F4] w-[150px]">قرار الجلسة</th>
-                            <th className="p-3 text-center text-sm font-semibold text-[#4B5675] w-[150px]">الإجراءات</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {sessionsData.map((session, index) => (
-                            <tr
-                                key={session.id}
-                                className="cursor-pointer transition-colors bg-white border-b border-gray-200 hover:bg-gray-50"
-                            >
-                                <td className="text-gray-600 border-l border-gray-200 text-center p-3 whitespace-nowrap">
-                                    {index + 1}
-                                </td>
-                                <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base text-gray-600 border-l border-gray-200 text-center whitespace-nowrap">
-                                    {session.sessionDate}
-                                </td>
-                                <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base text-gray-600 border-l border-gray-200 text-center whitespace-nowrap">
-                                    {session.sessionTime}
-                                </td>
-                                <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base font-medium text-gray-800 border-l border-gray-200 text-center whitespace-nowrap">
-                                    {session.lawyer}
-                                </td>
-                                <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base border-l border-gray-200 text-center whitespace-nowrap">
-                                    {session.decision}
-                                </td>
-                                <td className="p-1.5 sm:p-2 md:p-3 text-xs sm:text-sm md:text-base">
-                                    <div className="flex items-center justify-center gap-2 md:gap-3 flex-nowrap">
-                                        <button
-                                            title="تعديل"
-                                            onClick={() => handleEditSession(session)}
-                                            className="hover:scale-110 transition shrink-0"
-                                        >
-                                            <img src={edit} alt="edit" className="max-sm:w-5 max-sm:h-5 max-md:w-5 max-md:h-5" />
-                                        </button>
-                                        <button
-                                            title="حذف"
-                                            onClick={() => handleDeleteSession(session.id)}
-                                            className="hover:scale-110 transition shrink-0"
-                                        >
-                                            <img src={deleteIcon} alt="delete" className="max-sm:w-5 max-sm:h-5 max-md:w-5 max-md:h-5" />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className="overflow-hidden">
+                <DataTable data={currentData} columns={columns} rowIdField="id" />
+                {totalPages > 1 && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
+                )}
             </div>
-
-            {/* رسالة إذا كانت البيانات فارغة */}
-            {sessionsData.length === 0 && (
-                <div className="text-center py-12 text-gray-500">
-                    لا توجد جلسات لعرضها
-                </div>
-            )}
 
             {/* مودال إضافة/تعديل جلسة */}
             {isModalOpen && (
@@ -191,6 +199,7 @@ const AddPoliceStationsession = () => {
                     onClose={handleCloseModal}
                     onSave={handleSaveSession}
                     initialValues={editingSession || undefined}
+                    mode={editingSession ? "edit" : "add"}
                 />
             )}
         </div>

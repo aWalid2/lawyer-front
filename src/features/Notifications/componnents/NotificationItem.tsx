@@ -49,7 +49,7 @@ function NotificationItem({ notification, onMarkAsRead }: NotificationItemProps)
                     </span>
                 </div>
                 <p
-                    className={`text-gray-600 text-sm mt-1 ${
+                    className={`text-gray-600 text-sm mt-1 leading-7 ${
                         !isExpanded ? "line-clamp-1" : ""
                     }`}
                 >
