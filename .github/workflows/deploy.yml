@@ -6,28 +6,69 @@ on:
       - main
 
 jobs:
-  deploy:
+  precheck:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      #- name: Run tests
-       # run: |
-        #  npm install
-         # npm run build
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'   
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit   
+
+      - name: Build project (pre-check)
+        run: npm run build
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: precheck
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Wait for SSH (retry connection)
+        run: |
+          for i in {1..6}; do
+            echo "Checking SSH (attempt $i)..."
+            nc -z -w 5 ${{ secrets.VPS_HOST }} 22 && exit 0
+            echo "⏳ SSH not ready, waiting 10s..."
+            sleep 10
+          done
+
+          echo "SSH never became available"
+          exit 1
 
       - name: Deploy to VPS
-        if: success()
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
+          timeout: 60s
+          command_timeout: 15m
+          script_stop: true   
           script: |
+            set -e   
+
+            echo "Starting deploy..."
+
             cd /lawyer/lawyer-front
+
+            echo "Pulling latest code"
             git pull origin main
-            npm install
-            npm run build           
+
+            echo "Installing dependencies"
+            npm ci
+
+            echo "Building project"
+            npm run build
+
+            echo "Deploy finished"
