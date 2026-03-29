@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/AuthContext";
 import { loginUser } from "../services/login";
+import { toast } from "sonner";
 
 
 
@@ -23,13 +24,13 @@ export const useLogin = () => {
         sameSite: "strict",
       });
 
-      saveUser(token); // decode + store in context
+      saveUser(token); 
 
       const { role }: any = jwtDecode(token);
       navigate(role === "ADMIN" ? "/dashboard" : "/profile");
     },
     onError: (error: any) => {
-      console.log("Response data:", error.response?.data);
+      toast.error(error.response?.data?.message);
     },
   });
 };
