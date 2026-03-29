@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { HeaderPageReportsSessions } from "./components/HeaderPageReportsSessions";
 import type { ReportSession } from "./types";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 
 const MOCK_REPORT_SESSIONS: ReportSession[] = Array.from({ length: 45 }, (_, i) => ({
   id: `${i + 1}`,
@@ -29,11 +29,11 @@ const ReportsSessionsFeature = () => {
   const filteredSessions = useMemo(() => {
     return MOCK_REPORT_SESSIONS.filter((s) => {
       const searchStr = searchTerm.toLowerCase();
-      const matchesSearch = 
-        s.clientName.toLowerCase().includes(searchStr) || 
+      const matchesSearch =
+        s.clientName.toLowerCase().includes(searchStr) ||
         s.lawyerName.toLowerCase().includes(searchStr) ||
         s.caseAutoNumber.includes(searchStr);
-      
+
       const matchesType = filters.type === "all" || (filters.type === "court" && s.sessionType === "محكمة") || (filters.type === "niyaba" && s.sessionType === "نيابة");
       const matchesStatus = filters.status === "all" || s.status === filters.status;
 

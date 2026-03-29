@@ -6,9 +6,9 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { InputForm } from "@/components/shared/components/InputForm";
-import { SelectForm } from "@/components/shared/components/SelectForm";
-import { TextAreaForm } from "@/components/shared/components/TextAreaForm";
+import { InputForm } from "@/shared/components/InputForm";
+import { SelectForm } from "@/shared/components/SelectForm";
+import { TextAreaForm } from "@/shared/components/TextAreaForm";
 
 import { XIcon } from "lucide-react";
 import React from "react";

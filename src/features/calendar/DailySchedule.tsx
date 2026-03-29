@@ -1,4 +1,4 @@
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";

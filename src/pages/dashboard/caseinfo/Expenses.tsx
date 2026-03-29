@@ -1,6 +1,6 @@
 import React from "react";
-import PageLayout from "@/components/shared/components/PageLayout";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import PageLayout from "@/shared/components/PageLayout";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { FormExpenses } from "@/features/cases-mangement/Expenses/FormExpenses";
 
 const Expenses: React.FC = () => {

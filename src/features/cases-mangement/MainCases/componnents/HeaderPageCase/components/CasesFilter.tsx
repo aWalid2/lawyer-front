@@ -1,6 +1,6 @@
 import React from "react";
-import { CheveronDownIcon } from "@/components/shared/icons/CheveronDown";
-import { HeaderActionButton } from "../../../../../../components/shared/components/HeaderActionButton";
+import { CheveronDownIcon } from "@/shared/icons/CheveronDown";
+import { HeaderActionButton } from "../../../../../../shared/components/HeaderActionButton";
 
 interface CasesFilterProps {
   onFilterChange: (status: string) => void;

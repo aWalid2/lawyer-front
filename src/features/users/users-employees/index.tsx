@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { DataTable, type Column } from '@/components/shared/components/DataTable'
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from '@/shared/components/DataTable'
+import { Pagination } from "@/shared/components/Pagination";
 import { HeaderEmployees } from './employees/HeaderEmployees';
 import { EmployeesAction } from './employees/EmployeesAction';
 import { Editemployees } from './employees/EditEmployees';
@@ -64,7 +64,7 @@ export const UsersEmployee: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const itemsPerPage = 15;
-    
+
 
     // فلترة الموظفين بناءً على البحث
     const filteredEmployees = useMemo(() => {

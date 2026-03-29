@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { InputForm } from "@/components/shared/components/InputForm";
+import { InputForm } from "@/shared/components/InputForm";
 import type { Consultation } from "../../MainConsultations/types";
 import { CardLayout } from "./CardLayout";
 

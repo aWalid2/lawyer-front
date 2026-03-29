@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
+import { DataTable, type Column } from "@/shared/components/DataTable";
 import { EmployeesActions } from "./components/EmployeesActions";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { Pagination } from "@/shared/components/Pagination";
 import { HeaderEmployee } from "./components/HeaderEmployee";
 
 interface Employee {

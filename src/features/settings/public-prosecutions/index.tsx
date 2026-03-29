@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { ProsecutionsHeader } from "./components/ProsecutionsHeader";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 import { ProsecutionsAction } from "./components/ProsecutionsAction";
-import { usePagination } from "@/hooks/usePagination";
+import { usePagination } from "@/shared/hooks/usePagination";
 import type { PublicProsecutionT } from "./types";
-import PageLayout from "@/components/shared/components/PageLayout";
+import PageLayout from "@/shared/components/PageLayout";
 
 const initialProsecutions: PublicProsecutionT[] = [
   {

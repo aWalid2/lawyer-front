@@ -1,7 +1,7 @@
 import React from "react";
-import { EditIcon } from "@/components/shared/icons/Edit";
-import { TrashIcon } from "@/components/shared/icons/Trash";
-import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
+import { EditIcon } from "@/shared/icons/Edit";
+import { TrashIcon } from "@/shared/icons/Trash";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { ProcedureDialog } from "./ProcedureDialog";
 
 interface Procedure {

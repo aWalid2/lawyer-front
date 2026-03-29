@@ -1,11 +1,11 @@
 import React from "react";
 import type { Consultation } from "../types";
-import { EditIcon } from "@/components/shared/icons/Edit";
-import { TrashIcon } from "@/components/shared/icons/Trash";
+import { EditIcon } from "@/shared/icons/Edit";
+import { TrashIcon } from "@/shared/icons/Trash";
 
-import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { Link } from "react-router-dom";
-import { ViewIcon } from "@/components/shared/icons/View";
+import { ViewIcon } from "@/shared/icons/View";
 import { ConsultationsDialog } from "./ConsultationsDialog";
 
 interface TableConsultationsActionsProps {

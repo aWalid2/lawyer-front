@@ -1,7 +1,7 @@
 import React from "react";
 import { AppealBox } from "./components/AppealBox";
 import type { AppealInfProps } from "./components/typesAppeal";
-import { DateIcon } from "@/components/shared/icons/Date";
+import { DateIcon } from "@/shared/icons/Date";
 
 export const AppealInfoSessions: React.FC<AppealInfProps> = ({ appealData }) => {
     return (

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { CaseStatusesHeader } from "./components/CaseStatusesHeader";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 import { CaseStatusesAction } from "./components/CaseStatusesAction";
-import { usePagination } from "@/hooks/usePagination";
+import { usePagination } from "@/shared/hooks/usePagination";
 import type { CaseStatusT } from "./types";
-import PageLayout from "@/components/shared/components/PageLayout";
+import PageLayout from "@/shared/components/PageLayout";
 
 const initialStatuses: CaseStatusT[] = [
   {

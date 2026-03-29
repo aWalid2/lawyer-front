@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { usePagination } from "@/hooks/usePagination";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { usePagination } from "@/shared/hooks/usePagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 import { TableCasesActions } from "@/features/cases-mangement/MainCases/componnents/TableCasesActions";
 
 // تعريف نوع Case

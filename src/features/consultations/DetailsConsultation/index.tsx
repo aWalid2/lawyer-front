@@ -1,5 +1,5 @@
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
-import PageLayout from "@/components/shared/components/PageLayout";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import PageLayout from "@/shared/components/PageLayout";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import type { Consultation, ConsultationStatus } from "../MainConsultations/types";

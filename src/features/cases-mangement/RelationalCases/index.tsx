@@ -1,8 +1,8 @@
 import React from 'react'
 import { HeaderRelationalCases } from './components/HeaderRelationalCases'
-import { DataTable, type Column } from '@/components/shared/components/DataTable'
+import { DataTable, type Column } from '@/shared/components/DataTable'
 import { RelationalCasesActions } from './components/RelationalCasesActions';
-import { Pagination } from '@/components/shared/components/Pagination';
+import { Pagination } from '@/shared/components/Pagination';
 import { useNavigate } from 'react-router-dom';
 
 

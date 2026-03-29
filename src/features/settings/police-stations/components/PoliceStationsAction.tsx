@@ -1,7 +1,7 @@
 import React from "react";
-import { TableEditButton } from "@/components/shared/components/TableEditButton";
-import { TableDeleteButton } from "@/components/shared/components/TableDeleteButton";
-import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
+import { TableEditButton } from "@/shared/components/TableEditButton";
+import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { PoliceStationFormDialog } from "./PoliceStationFormDialog";
 import type { PoliceStationT } from "../types";
 

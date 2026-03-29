@@ -1,7 +1,7 @@
 import React from "react";
-import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
-import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayout";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 
 interface HeaderEmployeesProps {
     onSearch: (value: string) => void;
@@ -16,10 +16,10 @@ export const HeaderEmployees: React.FC<HeaderEmployeesProps> = ({
 }) => {
     return (
         <HeaderPageLayout >
-        <HeaderTitle innerPage title="الموظفين" />
-       <div className="flex-1 order-2 lg:mr-25">
-         <HeaderSearch value={searchTerm} onChange={onSearch} className="lg:ms-0" />
-       </div>
+            <HeaderTitle innerPage title="الموظفين" />
+            <div className="flex-1 order-2 lg:mr-25">
+                <HeaderSearch value={searchTerm} onChange={onSearch} className="lg:ms-0" />
+            </div>
             <div className="flex items-center gap-3 order-3">
                 <button
                     onClick={onAddClick}

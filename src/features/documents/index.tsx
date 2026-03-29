@@ -1,9 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
 import { HeaderPageDocuments } from "./components/HeaderPageDocuments";
 import type { Document } from "./types";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
+import { DataTable, type Column } from "@/shared/components/DataTable";
 import { TableDocumentsActions } from "./components/TableDocumentsActions";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { Pagination } from "@/shared/components/Pagination";
 
 const MOCK_DOCUMENTS: Document[] = Array.from({ length: 45 }, (_, i) => ({
   id: `${i + 1}`,

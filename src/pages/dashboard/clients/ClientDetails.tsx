@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { ClientCases } from "@/features/clients/components/clientDetails/components/ClientCases";
 import { ClientInfo } from "@/features/clients/components/clientDetails/components/ClientInfo";
 import { HeaderUserDetails } from "@/features/clients/components/clientDetails/components/HeaderUserDetails";
-import PageLayout from "@/components/shared/components/PageLayout";
+import PageLayout from "@/shared/components/PageLayout";
 
 const ClientDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();

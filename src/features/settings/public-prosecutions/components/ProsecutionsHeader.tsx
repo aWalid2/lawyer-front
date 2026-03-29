@@ -1,9 +1,9 @@
 import React from "react";
 import { Plus } from "lucide-react";
-import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
-import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayout";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
-import { HeaderActionButton } from "@/components/shared/components/HeaderActionButton";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
 import { ProsecutionFormDialog } from "./ProsecutionFormDialog";
 
 interface ProsecutionsHeaderProps {

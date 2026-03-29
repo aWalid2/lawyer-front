@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { HeaderPageContracts } from "./componnents/HeaderPageContracts";
 import type { Contract } from "./types";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 import { TableContractsActions } from "./componnents/TableContractsActions";
 
 // بيانات تجريبية للعقود

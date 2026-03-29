@@ -1,9 +1,9 @@
 import React from 'react'
-import { ViewIcon } from '@/components/shared/icons/View';
-import { EditIcon } from '@/components/shared/icons/Edit';
+import { ViewIcon } from '@/shared/icons/View';
+import { EditIcon } from '@/shared/icons/Edit';
 import { RelationalCaseDialog } from './RelationalCaseDialog';
-import { ConfirmDeleteDialog } from '@/components/shared/components/ConfirmDeleteDialog';
-import { TrashIcon } from '@/components/shared/icons/Trash';
+import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
+import { TrashIcon } from '@/shared/icons/Trash';
 
 
 interface RelationalCasesProps {

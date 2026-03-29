@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { DataTable, type Column } from '@/components/shared/components/DataTable'
+import { DataTable, type Column } from '@/shared/components/DataTable'
 import { ExpertsActions } from './ExpertsActions';
 import AddExpertModal from './AddExpertModal'; // هنعمله بعد كده
 
@@ -20,66 +20,66 @@ interface ExpertRelatedT {
 }
 
 const experts: ExpertRelatedT[] = [
-    { 
-        id: "1", 
-        expertReportNumber: "EXP-2024-001", 
-        assignedAuthority: "محكمة استئناف القاهرة", 
-        assignmentDate: "2024-01-15", 
+    {
+        id: "1",
+        expertReportNumber: "EXP-2024-001",
+        assignedAuthority: "محكمة استئناف القاهرة",
+        assignmentDate: "2024-01-15",
         expertOfficeName: "مكتب الخبراء الهندسيين",
         subjectOfExpertise: "فحص هندسي",
         finalOpinion: "وجود عيوب إنشائية",
         reportSubmissionDate: "2024-02-10",
         status: "مُعتمد"
     },
-    { 
-        id: "2", 
-        expertReportNumber: "EXP-2024-002", 
-        assignedAuthority: "نيابة جنوب القاهرة", 
-        assignmentDate: "2024-02-01", 
+    {
+        id: "2",
+        expertReportNumber: "EXP-2024-002",
+        assignedAuthority: "نيابة جنوب القاهرة",
+        assignmentDate: "2024-02-01",
         expertOfficeName: "مكتب الخبراء الطبيين",
         subjectOfExpertise: "فحص طبي",
         finalOpinion: "نسبة عجز 25%",
         reportSubmissionDate: "2024-02-20",
         status: "قيد المراجعة"
     },
-    { 
-        id: "3", 
-        expertReportNumber: "EXP-2024-003", 
-        assignedAuthority: "محكمة الأسرة", 
-        assignmentDate: "2024-02-10", 
+    {
+        id: "3",
+        expertReportNumber: "EXP-2024-003",
+        assignedAuthority: "محكمة الأسرة",
+        assignmentDate: "2024-02-10",
         expertOfficeName: "مكتب الخبراء الماليين",
         subjectOfExpertise: "تقدير تعويض",
         finalOpinion: "تعويض 500,000 جنيه",
         reportSubmissionDate: "2024-03-05",
         status: "مُعترض عليه"
     },
-    { 
-        id: "4", 
-        expertReportNumber: "EXP-2024-004", 
-        assignedAuthority: "هيئة التحكيم", 
-        assignmentDate: "2024-02-15", 
+    {
+        id: "4",
+        expertReportNumber: "EXP-2024-004",
+        assignedAuthority: "هيئة التحكيم",
+        assignmentDate: "2024-02-15",
         expertOfficeName: "مكتب الخبراء القانونيين",
         subjectOfExpertise: "فحص توقيع",
         finalOpinion: "التوقيع سليم",
         reportSubmissionDate: "2024-03-01",
         status: "مُعتمد"
     },
-    { 
-        id: "5", 
-        expertReportNumber: "EXP-2024-005", 
-        assignedAuthority: "محكمة القضاء الإداري", 
-        assignmentDate: "2024-02-20", 
+    {
+        id: "5",
+        expertReportNumber: "EXP-2024-005",
+        assignedAuthority: "محكمة القضاء الإداري",
+        assignmentDate: "2024-02-20",
         expertOfficeName: "مكتب الخبراء الهندسيين",
         subjectOfExpertise: "تقدير تعويض",
         finalOpinion: "تعويض 750,000 جنيه",
         reportSubmissionDate: "2024-03-10",
         status: "قيد المراجعة"
     },
-    { 
-        id: "6", 
-        expertReportNumber: "EXP-2024-006", 
-        assignedAuthority: "نيابة شمال القاهرة", 
-        assignmentDate: "2024-02-25", 
+    {
+        id: "6",
+        expertReportNumber: "EXP-2024-006",
+        assignedAuthority: "نيابة شمال القاهرة",
+        assignmentDate: "2024-02-25",
         expertOfficeName: "مكتب الخبراء الجنائيين",
         subjectOfExpertise: "فحص مستندات",
         finalOpinion: "المستندات سليمة",
@@ -91,8 +91,8 @@ const experts: ExpertRelatedT[] = [
 const StatusCell: React.FC<{ status: string }> = ({ status }) => {
     const getStatusStyle = (status: string): string => {
         const statusValue = status.trim();
-        
-        switch(statusValue) {
+
+        switch (statusValue) {
             case "مُعتمد":
                 return "bg-[#11B32433] text-[#0B6E1F]";
             case "مُعترض عليه":
@@ -109,7 +109,7 @@ const StatusCell: React.FC<{ status: string }> = ({ status }) => {
             {status}
         </span>
     );
-};  
+};
 
 export const TableExpert: React.FC<ExpertsTableProps> = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);

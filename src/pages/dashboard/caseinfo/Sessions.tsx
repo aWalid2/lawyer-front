@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import PageLayout from "@/components/shared/components/PageLayout";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import PageLayout from "@/shared/components/PageLayout";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PoliceSessions from "@/features/cases-mangement/sessions/components/PoliceSessions";
 import CourtSessions from "@/features/cases-mangement/sessions/components/CourtSessions";

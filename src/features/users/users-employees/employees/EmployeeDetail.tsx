@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link} from 'react-router-dom';
-import { HeaderTitle } from '@/components/shared/components/HeaderTitle';
-import PageLayout from '@/components/shared/components/PageLayout';
+import { useParams, Link } from 'react-router-dom';
+import { HeaderTitle } from '@/shared/components/HeaderTitle';
+import PageLayout from '@/shared/components/PageLayout';
 // تعريف نوع الموظف
 interface Employee {
     id: string;
@@ -15,56 +15,56 @@ interface Employee {
 
 // بيانات تجريبية للموظفين
 const employeesData: Employee[] = [
-    { 
-        id: "1", 
-        employeeName: "أحمد محمد علي", 
-        phoneNumber: "0501234567", 
-        email: "ahmed@company.com", 
+    {
+        id: "1",
+        employeeName: "أحمد محمد علي",
+        phoneNumber: "0501234567",
+        email: "ahmed@company.com",
         jobTitle: "محامي أول",
         countryCode: "+966",
         notes: "خبرة 10 سنوات في القضايا التجارية"
     },
-    { 
-        id: "2", 
-        employeeName: "فاطمة عبدالله", 
-        phoneNumber: "0559876543", 
-        email: "fatima@company.com", 
+    {
+        id: "2",
+        employeeName: "فاطمة عبدالله",
+        phoneNumber: "0559876543",
+        email: "fatima@company.com",
         jobTitle: "محامي استشاري",
         countryCode: "+966",
         notes: "متخصصة في قضايا الأحوال الشخصية"
     },
-    { 
-        id: "3", 
-        employeeName: "محمد إبراهيم", 
-        phoneNumber: "0561122334", 
-        email: "mohamed@company.com", 
+    {
+        id: "3",
+        employeeName: "محمد إبراهيم",
+        phoneNumber: "0561122334",
+        email: "mohamed@company.com",
         jobTitle: "مدير القسم القانوني",
         countryCode: "+966",
         notes: "خبرة 15 سنة في الإدارة القانونية"
     },
-    { 
-        id: "4", 
-        employeeName: "سارة خالد", 
-        phoneNumber: "0544455667", 
-        email: "sara@company.com", 
+    {
+        id: "4",
+        employeeName: "سارة خالد",
+        phoneNumber: "0544455667",
+        email: "sara@company.com",
         jobTitle: "باحث قانوني",
         countryCode: "+966",
         notes: "ماجستير في القانون الدولي"
     },
-    { 
-        id: "5", 
-        employeeName: "عمر حسن", 
-        phoneNumber: "0587788990", 
-        email: "omar@company.com", 
+    {
+        id: "5",
+        employeeName: "عمر حسن",
+        phoneNumber: "0587788990",
+        email: "omar@company.com",
         jobTitle: "مساعد قانوني",
         countryCode: "+966",
         notes: "حديث التخرج"
     },
-    { 
-        id: "6", 
-        employeeName: "نورة سعد", 
-        phoneNumber: "0593344556", 
-        email: "noura@company.com", 
+    {
+        id: "6",
+        employeeName: "نورة سعد",
+        phoneNumber: "0593344556",
+        email: "noura@company.com",
         jobTitle: "مدير الموارد البشرية",
         countryCode: "+966",
         notes: "خبرة في إدارة الموارد البشرية"
@@ -109,7 +109,7 @@ const EmployeeDetail: React.FC = () => {
     return (
         <PageLayout>
             {/* شريط العنوان والعودة */}
-        <HeaderTitle title="تفاصيل الموظف" />
+            <HeaderTitle title="تفاصيل الموظف" />
 
             {/* بطاقة تفاصيل الموظف */}
             <div className="bg-white  overflow-hidden mt-10">
@@ -131,7 +131,7 @@ const EmployeeDetail: React.FC = () => {
                             <h3 className="text-lg font-semibold text-[#153A4D] border-b border-gray-100 pb-2">
                                 معلومات الاتصال
                             </h3>
-                            
+
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <span className="text-gray-500 min-w-[100px]">رقم الهاتف:</span>
@@ -139,7 +139,7 @@ const EmployeeDetail: React.FC = () => {
                                         <span className="text-gray-900 font-medium">{employee.countryCode} {employee.phoneNumber}</span>
                                     </div>
                                 </div>
-                                
+
                                 <div className="flex items-center gap-3">
                                     <span className="text-gray-500 min-w-[100px]">البريد الإلكتروني:</span>
                                     <span className="text-gray-900 font-medium" dir="ltr">{employee.email}</span>
@@ -153,7 +153,7 @@ const EmployeeDetail: React.FC = () => {
                                 <h3 className="text-lg font-semibold text-[#153A4D] border-b border-gray-100 pb-2">
                                     ملاحظات
                                 </h3>
-                                
+
                                 <div className="space-y-3">
                                     <div className="flex items-start gap-3">
                                         <span className="text-gray-500 min-w-[100px]">ملاحظات:</span>

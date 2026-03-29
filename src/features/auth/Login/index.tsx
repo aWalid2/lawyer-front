@@ -1,4 +1,4 @@
-import { InputForm } from '@/components/shared/components/InputForm';
+import { InputForm } from '@/shared/components/InputForm';
 import { Form, Formik } from 'formik';
 import { useLogin } from './hooks/useLogin';
 
@@ -7,7 +7,7 @@ const Login = () => {
     email: "",
     password: "",
   };
-  const { mutate: login, isPending } = useLogin();
+  const { mutate: login } = useLogin();
   return (
     <div className="flex justify-center items-center h-screen bg-secondary bg-[url('/images/backgroundAuth.png')] bg-cover bg-center">
 

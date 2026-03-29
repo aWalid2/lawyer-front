@@ -1,7 +1,7 @@
 import React from "react";
-import PageLayout from "@/components/shared/components/PageLayout";
+import PageLayout from "@/shared/components/PageLayout";
 import { CaseDetailsInfo } from "./components/CaseDetailsInfo";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { FormCaseDialog } from "./components/FormCaseDialog";
 
 const CaseInfo: React.FC = () => {

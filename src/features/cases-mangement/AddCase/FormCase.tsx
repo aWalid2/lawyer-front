@@ -15,7 +15,7 @@ import { UnderTheRift } from "./Undertheift";
 import { PublicProsecution } from "./PublicProsecution";
 import { InProsecution } from "./InProsecution";
 import { initialValues } from "./initialValues";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 
 // ثوابت الكلاسات (بدون تغيير)
 const CLASSES = {
@@ -63,7 +63,7 @@ const FormCase = () => {
   ];
 
 
- 
+
 
   return (
     <Formik<FormValues>
@@ -105,13 +105,13 @@ const FormCase = () => {
               </div>
 
               {/* الحقول التي تظهر فقط عند اختيار "تحت الرفع" */}
-              {caseType === "pending" && (<UnderTheRift /> )}
+              {caseType === "pending" && (<UnderTheRift />)}
 
               {/* الحقول التي تظهر عند اختيار "الادعاء العام" أو "في النيابة" */}
-              {(caseType === "inProgress") && ( <PublicProsecution />)}
+              {(caseType === "inProgress") && (<PublicProsecution />)}
 
               {/* باقي الحقل (الخصم، الأتعاب، زر الإرسال) - تظهر في جميع الحالات */}
-              {(caseType === "review") && ( <InProsecution/> )}
+              {(caseType === "review") && (<InProsecution />)}
               {/* Switch الخصم */}
               <div
                 className={`${CLASSES.flexBetween} ${CLASSES.extraLargeSectionPadding}`}

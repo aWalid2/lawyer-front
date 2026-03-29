@@ -1,4 +1,4 @@
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import { useState } from "react";
 
 import type { FormValues } from "../types";
@@ -12,10 +12,10 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Eye, EyeOff } from "lucide-react";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
-import { InputForm } from "@/components/shared/components/InputForm";
-import { FileUpload } from "@/components/shared/components/FileUpload";
-import { TextAreaForm } from "@/components/shared/components/TextAreaForm";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { InputForm } from "@/shared/components/InputForm";
+import { FileUpload } from "@/shared/components/FileUpload";
+import { TextAreaForm } from "@/shared/components/TextAreaForm";
 
 // ثوابت الكلاسات
 const CLASSES = {
@@ -264,7 +264,7 @@ const FormDetails = () => {
                     <div className={`${CLASSES.flexRow} ${CLASSES.sectionPadding}`}>
                       <div className="flex-1 relative">
                         <div className="relative">
-                          <InputForm type={showPassword ? "text" : "password"} name="password" placeholder="*************"  label="كلمة المرور" />
+                          <InputForm type={showPassword ? "text" : "password"} name="password" placeholder="*************" label="كلمة المرور" />
                           <button
                             type="button"
                             className="absolute left-3 top-[60px] -translate-y-1/2 text-gray-500 hover:text-gray-700"
@@ -275,18 +275,18 @@ const FormDetails = () => {
                         </div>
                       </div>
                       <div className="flex-1 relative">
-                          <InputForm type={showPassword ? "text" : "password"} name="confirmPassword" placeholder="*************"  label="تأكيد كلمة المرور" />
-                          <button
-                            type="button"
-                            className="absolute left-3 top-[60px] -translate-y-1/2 flex   text-gray-500 hover:text-gray-700"
-                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                          >
-                            {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                          </button>
-                        </div>
+                        <InputForm type={showPassword ? "text" : "password"} name="confirmPassword" placeholder="*************" label="تأكيد كلمة المرور" />
+                        <button
+                          type="button"
+                          className="absolute left-3 top-[60px] -translate-y-1/2 flex   text-gray-500 hover:text-gray-700"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                          {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
                       </div>
                     </div>
                   </div>
+                </div>
               )}
               <div className="w-full pt-8">
                 <button

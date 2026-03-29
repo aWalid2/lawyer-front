@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { SettingsLawIcon } from "@/components/shared/icons/SettingsLaw";
-import { ArrowLeftIcon } from "@/components/shared/icons/ArrowLeft";
+import { SettingsLawIcon } from "@/shared/icons/SettingsLaw";
+import { ArrowLeftIcon } from "@/shared/icons/ArrowLeft";
 
 interface SettingsCardProps {
   title: string;

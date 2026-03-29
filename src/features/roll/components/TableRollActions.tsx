@@ -1,9 +1,9 @@
 import React from "react";
 import type { RollSession } from "../types";
 import { RollSessionDialog } from "./RollSessionDialog";
-import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
-import { TableEditButton } from "@/components/shared/components/TableEditButton";
-import { TableDeleteButton } from "@/components/shared/components/TableDeleteButton";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { TableEditButton } from "@/shared/components/TableEditButton";
+import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
 
 interface TableRollActionsProps {
   session: RollSession;

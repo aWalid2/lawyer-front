@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { DataTable, type Column } from '@/components/shared/components/DataTable'
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from '@/shared/components/DataTable'
+import { Pagination } from "@/shared/components/Pagination";
 import { HeaderLawyers } from './lawyers/HeaderLawyers';
 import { LawyersAction } from './lawyers/LawyersAction';
 import { Editlawyers } from './lawyers/Editlawyers';
@@ -15,47 +15,47 @@ interface LawyerRelatedT {
 
 // بيانات تجريبية للمحامين
 const lawyers: LawyerRelatedT[] = [
-    { 
-        id: "1", 
-        lawyerName: "أحمد محمد علي", 
-        phoneNumber: "0501234567", 
-        email: "ahmed@example.com", 
-        specialization: "قضايا مدنية" 
+    {
+        id: "1",
+        lawyerName: "أحمد محمد علي",
+        phoneNumber: "0501234567",
+        email: "ahmed@example.com",
+        specialization: "قضايا مدنية"
     },
-    { 
-        id: "2", 
-        lawyerName: "فاطمة عبدالله", 
-        phoneNumber: "0559876543", 
-        email: "fatima@example.com", 
-        specialization: "قضايا تجارية" 
+    {
+        id: "2",
+        lawyerName: "فاطمة عبدالله",
+        phoneNumber: "0559876543",
+        email: "fatima@example.com",
+        specialization: "قضايا تجارية"
     },
-    { 
-        id: "3", 
-        lawyerName: "محمد إبراهيم", 
-        phoneNumber: "0561122334", 
-        email: "mohamed@example.com", 
-        specialization: "قضايا عمالية" 
+    {
+        id: "3",
+        lawyerName: "محمد إبراهيم",
+        phoneNumber: "0561122334",
+        email: "mohamed@example.com",
+        specialization: "قضايا عمالية"
     },
-    { 
-        id: "4", 
-        lawyerName: "سارة خالد", 
-        phoneNumber: "0544455667", 
-        email: "sara@example.com", 
-        specialization: "قضايا أحوال شخصية" 
+    {
+        id: "4",
+        lawyerName: "سارة خالد",
+        phoneNumber: "0544455667",
+        email: "sara@example.com",
+        specialization: "قضايا أحوال شخصية"
     },
-    { 
-        id: "5", 
-        lawyerName: "عمر حسن", 
-        phoneNumber: "0587788990", 
-        email: "omar@example.com", 
-        specialization: "قضايا جنائية" 
+    {
+        id: "5",
+        lawyerName: "عمر حسن",
+        phoneNumber: "0587788990",
+        email: "omar@example.com",
+        specialization: "قضايا جنائية"
     },
-    { 
-        id: "6", 
-        lawyerName: "نورة سعد", 
-        phoneNumber: "0593344556", 
-        email: "noura@example.com", 
-        specialization: "استشارات قانونية" 
+    {
+        id: "6",
+        lawyerName: "نورة سعد",
+        phoneNumber: "0593344556",
+        email: "noura@example.com",
+        specialization: "استشارات قانونية"
     },
 ];
 
@@ -146,8 +146,8 @@ export const UsersLawyer: React.FC = () => {
         {
             header: "الإجراءات",
             accessor: (item: LawyerRelatedT) => (
-                <LawyersAction 
-                    caseItem={item} 
+                <LawyersAction
+                    caseItem={item}
                     onLawyerUpdated={() => {
                         // تحديث البيانات بعد التعديل
                         console.log("تم تحديث المحامي");
@@ -167,12 +167,12 @@ export const UsersLawyer: React.FC = () => {
                 onAddClick={() => setIsAddModalOpen(true)}
             />
 
-                <DataTable
-                    data={currentLawyers}
-                    columns={columns}
-                    rowIdField="id"
-                />
-            
+            <DataTable
+                data={currentLawyers}
+                columns={columns}
+                rowIdField="id"
+            />
+
 
             {filteredLawyers.length > 0 ? (
                 totalPages > 1 && (

@@ -1,5 +1,5 @@
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
-import PageLayout from "@/components/shared/components/PageLayout";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import PageLayout from "@/shared/components/PageLayout";
 import ProfileForm from "./components/ProfileForm";
 import ProfileImage from "./components/ProfileImage";
 
@@ -35,7 +35,7 @@ const ProfileUser = () => {
                     <div className="order-1 md:order-2">
                         <ProfileImage onImageChange={handleImageChange} />
                     </div>
-                    
+
                     {/* الفورم يظهر ثانياً في الموبايل */}
                     <div className="order-2 md:order-1 flex-1">
                         <ProfileForm

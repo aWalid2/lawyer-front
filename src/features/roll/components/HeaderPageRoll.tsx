@@ -1,11 +1,11 @@
 import React from "react";
 import { Plus } from "lucide-react";
-import { HeaderActionButton } from "@/components/shared/components/HeaderActionButton";
-import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
-import { HeaderFilter } from "@/components/shared/components/HeaderFilter";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
-import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayout";
-import { HeaderDatePicker } from "@/components/shared/components/HeaderDatePicker";
+import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderFilter } from "@/shared/components/HeaderFilter";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
 import { RollSessionDialog } from "./RollSessionDialog";
 
 interface HeaderPageRollProps {

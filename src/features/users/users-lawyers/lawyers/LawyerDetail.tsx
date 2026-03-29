@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link} from 'react-router-dom';
-import { HeaderTitle } from '@/components/shared/components/HeaderTitle';
-import PageLayout from '@/components/shared/components/PageLayout';
+import { useParams, Link } from 'react-router-dom';
+import { HeaderTitle } from '@/shared/components/HeaderTitle';
+import PageLayout from '@/shared/components/PageLayout';
 
 // تعريف نوع المحامي
 interface Lawyer {
@@ -20,11 +20,11 @@ interface Lawyer {
 
 // بيانات تجريبية للمحامين
 const lawyersData: Lawyer[] = [
-    { 
-        id: "1", 
-        lawyerName: "أحمد محمد علي", 
-        phoneNumber: "0501234567", 
-        email: "ahmed@lawfirm.com", 
+    {
+        id: "1",
+        lawyerName: "أحمد محمد علي",
+        phoneNumber: "0501234567",
+        email: "ahmed@lawfirm.com",
         specialization: "قضايا مدنية",
         nationalId: "1234567890",
         countryCode: "+966",
@@ -33,11 +33,11 @@ const lawyersData: Lawyer[] = [
         address: "الرياض - حي النزهة",
         notes: "خبرة 10 سنوات في القضايا التجارية والمدنية"
     },
-    { 
-        id: "2", 
-        lawyerName: "فاطمة عبدالله", 
-        phoneNumber: "0559876543", 
-        email: "fatima@lawfirm.com", 
+    {
+        id: "2",
+        lawyerName: "فاطمة عبدالله",
+        phoneNumber: "0559876543",
+        email: "fatima@lawfirm.com",
         specialization: "قضايا تجارية",
         nationalId: "0987654321",
         countryCode: "+966",
@@ -46,11 +46,11 @@ const lawyersData: Lawyer[] = [
         address: "جدة - حي الشاطئ",
         notes: "متخصصة في قضايا الشركات والتجارة الدولية"
     },
-    { 
-        id: "3", 
-        lawyerName: "محمد إبراهيم", 
-        phoneNumber: "0561122334", 
-        email: "mohamed@lawfirm.com", 
+    {
+        id: "3",
+        lawyerName: "محمد إبراهيم",
+        phoneNumber: "0561122334",
+        email: "mohamed@lawfirm.com",
         specialization: "قضايا عمالية",
         nationalId: "1122334455",
         countryCode: "+966",
@@ -59,11 +59,11 @@ const lawyersData: Lawyer[] = [
         address: "الدمام - حي الزهور",
         notes: "خبرة 15 سنة في قضايا العمل والعمال"
     },
-    { 
-        id: "4", 
-        lawyerName: "سارة خالد", 
-        phoneNumber: "0544455667", 
-        email: "sara@lawfirm.com", 
+    {
+        id: "4",
+        lawyerName: "سارة خالد",
+        phoneNumber: "0544455667",
+        email: "sara@lawfirm.com",
         specialization: "قضايا أحوال شخصية",
         nationalId: "5566778899",
         countryCode: "+966",
@@ -72,11 +72,11 @@ const lawyersData: Lawyer[] = [
         address: "الرياض - حي الصحافة",
         notes: "متخصصة في قضايا الأحوال الشخصية والأسرة"
     },
-    { 
-        id: "5", 
-        lawyerName: "عمر حسن", 
-        phoneNumber: "0587788990", 
-        email: "omar@lawfirm.com", 
+    {
+        id: "5",
+        lawyerName: "عمر حسن",
+        phoneNumber: "0587788990",
+        email: "omar@lawfirm.com",
         specialization: "قضايا جنائية",
         nationalId: "9988776655",
         countryCode: "+966",
@@ -85,11 +85,11 @@ const lawyersData: Lawyer[] = [
         address: "مكة المكرمة - حي العزيزية",
         notes: "خبرة في القضايا الجنائية والمرافعات"
     },
-    { 
-        id: "6", 
-        lawyerName: "نورة سعد", 
-        phoneNumber: "0593344556", 
-        email: "noura@lawfirm.com", 
+    {
+        id: "6",
+        lawyerName: "نورة سعد",
+        phoneNumber: "0593344556",
+        email: "noura@lawfirm.com",
         specialization: "استشارات قانونية",
         nationalId: "4455667788",
         countryCode: "+966",
@@ -160,7 +160,7 @@ const LawyerDetail: React.FC = () => {
                             <h3 className="text-lg font-semibold text-[#153A4D] border-b border-gray-100 pb-2">
                                 معلومات الاتصال
                             </h3>
-                            
+
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <span className="text-gray-500 min-w-[100px]">رقم الهاتف:</span>
@@ -168,7 +168,7 @@ const LawyerDetail: React.FC = () => {
                                         <span className="text-gray-900 font-medium">{lawyer.countryCode} {lawyer.phoneNumber}</span>
                                     </div>
                                 </div>
-                                
+
                                 <div className="flex items-center gap-3">
                                     <span className="text-gray-500 min-w-[100px]">البريد الإلكتروني:</span>
                                     <span className="text-gray-900 font-medium" dir="ltr">{lawyer.email}</span>
@@ -181,7 +181,7 @@ const LawyerDetail: React.FC = () => {
                             <h3 className="text-lg font-semibold text-[#153A4D] border-b border-gray-100 pb-2">
                                 المعلومات الشخصية
                             </h3>
-                            
+
                             <div className="space-y-3">
                                 {lawyer.nationalId && (
                                     <div className="flex items-center gap-3">
@@ -189,7 +189,7 @@ const LawyerDetail: React.FC = () => {
                                         <span className="text-gray-900 font-medium">{lawyer.nationalId}</span>
                                     </div>
                                 )}
-                                
+
                                 {lawyer.nationality && (
                                     <div className="flex items-center gap-3">
                                         <span className="text-gray-500 min-w-[100px]">الجنسية:</span>
@@ -205,7 +205,7 @@ const LawyerDetail: React.FC = () => {
                                 <h3 className="text-lg font-semibold text-[#153A4D] border-b border-gray-100 pb-2">
                                     العنوان
                                 </h3>
-                                
+
                                 <div className="space-y-3">
                                     {lawyer.country && (
                                         <div className="flex items-center gap-3">
@@ -213,7 +213,7 @@ const LawyerDetail: React.FC = () => {
                                             <span className="text-gray-900 font-medium">{lawyer.country}</span>
                                         </div>
                                     )}
-                                    
+
                                     {lawyer.address && (
                                         <div className="flex items-start gap-3">
                                             <span className="text-gray-500 min-w-[100px]">العنوان:</span>
@@ -230,7 +230,7 @@ const LawyerDetail: React.FC = () => {
                                 <h3 className="text-lg font-semibold text-[#153A4D] border-b border-gray-100 pb-2">
                                     ملاحظات
                                 </h3>
-                                
+
                                 <div className="space-y-3">
                                     <div className="flex items-start gap-3">
                                         <span className="text-gray-500 min-w-[100px]">ملاحظات:</span>

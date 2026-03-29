@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Case, CasesTableProps } from "./casesTypes";
 import { EmptyState } from "./EmptyState";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { Pagination } from "@/shared/components/Pagination";
 import { TableCasesHeader } from "./TableCasesHeader";
 import { TableCasesRow } from "./TableCasesRow";
 

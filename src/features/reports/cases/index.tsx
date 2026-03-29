@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { HeaderPageReportsCases } from "./components/HeaderPageReportsCases";
 import type { ReportCase } from "./types";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 
 const MOCK_REPORT_CASES: ReportCase[] = Array.from({ length: 39 }, (_, i) => ({
   id: `${i + 1}`,
@@ -25,8 +25,8 @@ const ReportsCasesFeature = () => {
   const filteredCases = useMemo(() => {
     return MOCK_REPORT_CASES.filter((c) => {
       const searchStr = searchTerm.toLowerCase();
-      const matchesSearch = 
-        c.clientName.toLowerCase().includes(searchStr) || 
+      const matchesSearch =
+        c.clientName.toLowerCase().includes(searchStr) ||
         c.caseNumber.includes(searchStr);
       const matchesFilter = filter === "all" || c.status === filter;
 

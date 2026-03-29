@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import { DataTable, type Column } from '@/components/shared/components/DataTable'
+import { DataTable, type Column } from '@/shared/components/DataTable'
 import { LegislationActions } from './components/LegislationActions';
 import AddLegislationModal from './components/AddLegislationModal';
 import { HeaderLegislations } from './components/HeaderLegislations'; // استيراد الهيدر الجديد
-import { Pagination } from '@/components/shared/components/Pagination';
+import { Pagination } from '@/shared/components/Pagination';
 
 interface LegislationTableProps {
 
@@ -23,9 +23,9 @@ interface LegislationRelatedT {
 }
 
 const legislations: LegislationRelatedT[] = [
-    { 
-        id: "1", 
-        legislationNumber: "قانون 1 لسنة 2024", 
+    {
+        id: "1",
+        legislationNumber: "قانون 1 لسنة 2024",
         legislationType: "قانون",
         legislationTitle: "قانون الإجراءات الجنائية الجديد",
         issuingBody: "مجلس النواب",
@@ -35,9 +35,9 @@ const legislations: LegislationRelatedT[] = [
         status: "ساري",
         summary: "قانون ينظم إجراءات التقاضي في المواد الجنائية"
     },
-    { 
-        id: "2", 
-        legislationNumber: "حكم 245 لسنة 2023", 
+    {
+        id: "2",
+        legislationNumber: "حكم 245 لسنة 2023",
         legislationType: "حكم محكمة",
         legislationTitle: "حكم في الطعن رقم 245 لسنة 2023",
         issuingBody: "محكمة النقض",
@@ -46,9 +46,9 @@ const legislations: LegislationRelatedT[] = [
         status: "ساري",
         summary: "مبدأ قضائي حول التعويض في حوادث السيارات"
     },
-    { 
-        id: "3", 
-        legislationNumber: "لائحة 5 لسنة 2024", 
+    {
+        id: "3",
+        legislationNumber: "لائحة 5 لسنة 2024",
         legislationType: "لائحة",
         legislationTitle: "اللائحة التنفيذية لقانون الاستثمار",
         issuingBody: "مجلس الوزراء",
@@ -57,9 +57,9 @@ const legislations: LegislationRelatedT[] = [
         status: "ساري",
         summary: "لائحة تنظم إجراءات الاستثمار في المناطق الحرة"
     },
-    { 
-        id: "4", 
-        legislationNumber: "قرار 78 لسنة 2023", 
+    {
+        id: "4",
+        legislationNumber: "قرار 78 لسنة 2023",
         legislationType: "قرار وزاري",
         legislationTitle: "قرار وزير العدل بشأن الرسوم القضائية",
         issuingBody: "وزارة العدل",
@@ -68,9 +68,9 @@ const legislations: LegislationRelatedT[] = [
         status: "ساري",
         summary: "تعديل الرسوم القضائية في المحاكم الابتدائية"
     },
-    { 
-        id: "5", 
-        legislationNumber: "حكم 312 لسنة 2022", 
+    {
+        id: "5",
+        legislationNumber: "حكم 312 لسنة 2022",
         legislationType: "حكم محكمة",
         legislationTitle: "حكم في الدعوى 312 لسنة 2022",
         issuingBody: "محكمة استئناف القاهرة",
@@ -80,9 +80,9 @@ const legislations: LegislationRelatedT[] = [
         status: "مبدأ قضائي",
         summary: "مبدأ حول مسئولية المهندس في العقود الهندسية"
     },
-    { 
-        id: "6", 
-        legislationNumber: "قانون 15 لسنة 2023", 
+    {
+        id: "6",
+        legislationNumber: "قانون 15 لسنة 2023",
         legislationType: "قانون",
         legislationTitle: "قانون حماية المستهلك المعدل",
         issuingBody: "مجلس النواب",
@@ -91,9 +91,9 @@ const legislations: LegislationRelatedT[] = [
         status: "ساري",
         summary: "تعديلات على قانون حماية المستهلك"
     },
-    { 
-        id: "7", 
-        legislationNumber: "لائحة 2 لسنة 2024", 
+    {
+        id: "7",
+        legislationNumber: "لائحة 2 لسنة 2024",
         legislationType: "لائحة",
         legislationTitle: "لائحة الموارد البشرية",
         issuingBody: "الجهاز المركزي للتنظيم والإدارة",
@@ -107,7 +107,7 @@ const legislations: LegislationRelatedT[] = [
 // مكون عرض النوع مع لون مناسب
 const TypeCell: React.FC<{ type: string }> = ({ type }) => {
     const getTypeStyle = (type: string): string => {
-        switch(type) {
+        switch (type) {
             case "قانون":
                 return "bg-[#153A4D1A] text-[#153A4D]";
             case "لائحة":
@@ -131,7 +131,7 @@ const TypeCell: React.FC<{ type: string }> = ({ type }) => {
 // مكون عرض الحالة مع لون مناسب
 const StatusCell: React.FC<{ status: string }> = ({ status }) => {
     const getStatusStyle = (status: string): string => {
-        switch(status) {
+        switch (status) {
             case "ساري":
                 return "bg-[#11B32433] text-[#0B6E1F]";
             case "ملغي":
@@ -150,7 +150,7 @@ const StatusCell: React.FC<{ status: string }> = ({ status }) => {
             {status}
         </span>
     );
-};  
+};
 
 export const LegislationTable: React.FC<LegislationTableProps> = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -159,7 +159,7 @@ export const LegislationTable: React.FC<LegislationTableProps> = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
-    
+
     // فلترة التشريعات بناءً على البحث
     const filteredLegislations = useMemo(() => {
         if (!searchTerm) return legislationsData;
@@ -331,7 +331,7 @@ export const LegislationTable: React.FC<LegislationTableProps> = () => {
                         columns={columns}
                         rowIdField="id"
                     />
-                    
+
                     {/* Pagination */}
                     {totalPages > 1 && (
                         <div className="flex justify-center mt-4">

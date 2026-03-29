@@ -8,8 +8,8 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
-import { InputForm } from "@/components/shared/components/InputForm";
-import { TextAreaForm } from "@/components/shared/components/TextAreaForm";
+import { InputForm } from "@/shared/components/InputForm";
+import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import type { Document } from "./types";
 
 import * as Yup from "yup";

@@ -1,5 +1,5 @@
 import React from "react";
-import PageLayout from "@/components/shared/components/PageLayout";
+import PageLayout from "@/shared/components/PageLayout";
 import { Procedures } from "@/features/cases-mangement/Procedures";
 
 const ProceduresPage: React.FC = () => {

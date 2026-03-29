@@ -1,14 +1,14 @@
-import PageLayout from "@/components/shared/components/PageLayout";
+import PageLayout from "@/shared/components/PageLayout";
 import { UsersLawyer } from "@/features/users/users-lawyers";
 
 const UsersLawyers = () => {
   return (
     <PageLayout>
-      <UsersLawyer/>
+      <UsersLawyer />
     </PageLayout>
 
   )
-  
+
 };
 
 export default UsersLawyers;

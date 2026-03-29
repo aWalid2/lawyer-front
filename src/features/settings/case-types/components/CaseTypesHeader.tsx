@@ -1,7 +1,7 @@
 import React from "react";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
-import { HeaderActionButton } from "@/components/shared/components/HeaderActionButton";
-import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { Plus } from "lucide-react";
 import { CaseTypeFormDialog } from "./CaseTypeFormDialog";
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { DataTable, type Column } from '@/components/shared/components/DataTable'
+import { DataTable, type Column } from '@/shared/components/DataTable'
 import { UsersTaskActions } from './components/UsersTaskActions';
 import { HeaderTasksUser } from './components/HeaderTasksUser';
-import { Pagination } from "@/components/shared/components/Pagination";
+import { Pagination } from "@/shared/components/Pagination";
 
 interface UsersTaskTypes {
     // يمكن إضافة خصائص هنا إذا لزم الأمر

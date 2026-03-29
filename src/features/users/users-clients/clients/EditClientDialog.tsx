@@ -9,9 +9,9 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
-import { InputForm } from "@/components/shared/components/InputForm";
-import { FileUpload } from "@/components/shared/components/FileUpload";
-import { SelectForm } from "@/components/shared/components/SelectForm";
+import { InputForm } from "@/shared/components/InputForm";
+import { FileUpload } from "@/shared/components/FileUpload";
+import { SelectForm } from "@/shared/components/SelectForm";
 import type { Client } from "./types";
 
 import * as Yup from "yup";
@@ -116,42 +116,42 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                 />
                             </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                        <InputForm
-                                            name="civilId"
-                                            label="الرقم المدني"
-                                            type="text"
-                                            placeholder="أدخل الرقم المدني"
-                                        />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <InputForm
+                                    name="civilId"
+                                    label="الرقم المدني"
+                                    type="text"
+                                    placeholder="أدخل الرقم المدني"
+                                />
 
-                                        <div className="grid grid-cols-12 gap-2 ">
-                                            <div className="col-span-8">
-                                                <InputForm
-                                                    name="phoneNumber"
-                                                    label="رقم الهاتف"
-                                                    type="tel"
-                                                    placeholder="أدخل رقم الهاتف"
-                                                />
-                                            </div>
-                                            <div className="col-span-4">
-                                                <SelectForm
-                                                    name="countryCode"
-                                                    label="كود الدولة"
-                                                    options={[
-                                                        { value: "+966", label: "🇸🇦 +966" },
-                                                        { value: "+971", label: "🇦🇪 +971" },
-                                                        { value: "+974", label: "🇶🇦 +974" },
-                                                        { value: "+965", label: "🇰🇼 +965" },
-                                                        { value: "+973", label: "🇧🇭 +973" },
-                                                        { value: "+968", label: "🇴🇲 +968" },
-                                                        { value: "+20", label: "🇪🇬 +20" },
-                                                        { value: "+962", label: "🇯🇴 +962" },
-                                                        { value: "+961", label: "🇱🇧 +961" },
-                                                    ]}
-                                                />
-                                            </div>
-                                        </div>
+                                <div className="grid grid-cols-12 gap-2 ">
+                                    <div className="col-span-8">
+                                        <InputForm
+                                            name="phoneNumber"
+                                            label="رقم الهاتف"
+                                            type="tel"
+                                            placeholder="أدخل رقم الهاتف"
+                                        />
                                     </div>
+                                    <div className="col-span-4">
+                                        <SelectForm
+                                            name="countryCode"
+                                            label="كود الدولة"
+                                            options={[
+                                                { value: "+966", label: "🇸🇦 +966" },
+                                                { value: "+971", label: "🇦🇪 +971" },
+                                                { value: "+974", label: "🇶🇦 +974" },
+                                                { value: "+965", label: "🇰🇼 +965" },
+                                                { value: "+973", label: "🇧🇭 +973" },
+                                                { value: "+968", label: "🇴🇲 +968" },
+                                                { value: "+20", label: "🇪🇬 +20" },
+                                                { value: "+962", label: "🇯🇴 +962" },
+                                                { value: "+961", label: "🇱🇧 +961" },
+                                            ]}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
 
                             {/* الصف الثالث: البريد الإلكتروني والجنسية */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -188,7 +188,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                             </div>
 
                             {/* رفع الملفات */}
-                            <div  className="w-[121px] h-[99px] mb-16">
+                            <div className="w-[121px] h-[99px] mb-16">
                                 <FileUpload
                                     name="uploadFiles"
                                     label="صورة التوكيل"

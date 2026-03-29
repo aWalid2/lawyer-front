@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { HeaderPageConsultations } from "./components/HeaderPageConsultations";
 import type { Consultation, ConsultationStatus } from "./types";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 import { TableConsultationsActions } from "./components/TableConsultationsActions";
 
 const MOCK_CONSULTATIONS: Consultation[] = Array.from({ length: 45 }, (_, i) => ({

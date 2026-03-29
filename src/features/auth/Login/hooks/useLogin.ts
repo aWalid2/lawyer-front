@@ -15,10 +15,10 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (data: any) => {
-      const token = data?.token;
-      if (!token) return console.error("Token not found");
+      const token = data?.access_token;
+      if (!token) return toast.error("Token not found");
 
-      Cookies.set("auth_token", token, {
+      Cookies.set("access_token", token, {
         expires: 7,
         secure: true,
         sameSite: "strict",
@@ -27,10 +27,12 @@ export const useLogin = () => {
       saveUser(token); 
 
       const { role }: any = jwtDecode(token);
-      navigate(role === "ADMIN" ? "/dashboard" : "/profile");
+      navigate(role === "admin" ? "/dashboard" : "/profile");
+      toast.success(data.message);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message || "حدث خطأ");
     },
+
   });
 };

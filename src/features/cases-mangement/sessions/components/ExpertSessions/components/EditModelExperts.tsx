@@ -8,8 +8,8 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
-import { InputForm } from "@/components/shared/components/InputForm";
-import { TextAreaForm } from "@/components/shared/components/TextAreaForm";
+import { InputForm } from "@/shared/components/InputForm";
+import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import type { ExpertDocument } from "../typs";
 
 import * as Yup from "yup";
@@ -21,11 +21,11 @@ interface EditModelExpertsProps {
     onSave: (values: any) => void;
 }
 
-export const EditModelExperts: React.FC<EditModelExpertsProps> = ({ 
-    document, 
-    open, 
+export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
+    document,
+    open,
     onOpenChange,
-    onSave 
+    onSave
 }) => {
     const initialValues = {
         expertReportNumber: document.expertReportNumber || "",

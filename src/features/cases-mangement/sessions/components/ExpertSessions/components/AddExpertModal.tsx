@@ -8,8 +8,8 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
-import { InputForm } from "@/components/shared/components/InputForm";
-import { SelectForm } from "@/components/shared/components/SelectForm"; // استيراد SelectForm
+import { InputForm } from "@/shared/components/InputForm";
+import { SelectForm } from "@/shared/components/SelectForm"; // استيراد SelectForm
 import * as Yup from "yup";
 
 interface AddExpertModalProps {

@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { HeaderPageReportsExpenses } from "./components/HeaderPageReportsExpenses";
 import type { ReportExpense } from "./types";
-import { DataTable, type Column } from "@/components/shared/components/DataTable";
-import { Pagination } from "@/components/shared/components/Pagination";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Pagination } from "@/shared/components/Pagination";
 
 const MOCK_REPORT_EXPENSES: ReportExpense[] = Array.from({ length: 45 }, (_, i) => ({
   id: `${i + 1}`,
@@ -28,17 +28,17 @@ const ReportsExpensesFeature = () => {
   const filteredExpenses = useMemo(() => {
     return MOCK_REPORT_EXPENSES.filter((x) => {
       const searchStr = searchTerm.toLowerCase();
-      const matchesSearch = 
-        x.invoiceNumber.includes(searchStr) || 
+      const matchesSearch =
+        x.invoiceNumber.includes(searchStr) ||
         x.category.toLowerCase().includes(searchStr) ||
         x.description.toLowerCase().includes(searchStr);
-      
+
       const matchesStatus = filters.status === "all" || x.status === filters.status;
 
       let matchesDate = true;
       if (filters.date) {
         const expenseDate = new Date(x.date.split("/").reverse().join("-"));
-        matchesDate = 
+        matchesDate =
           expenseDate.getDate() === filters.date.getDate() &&
           expenseDate.getMonth() === filters.date.getMonth() &&
           expenseDate.getFullYear() === filters.date.getFullYear();

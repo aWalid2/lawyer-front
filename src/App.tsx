@@ -1,14 +1,13 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import DashboardLayout from "./layouts/DashboardLayout";
-import Loading from "./components/shared/Loading";
-import ScrollToTop from "./components/shared/ScrollToTop";
+import Loading from "./shared/Loading.tsx";
+import ScrollToTop from "./shared/ScrollToTop.tsx";
 import { LegislationDetails } from "./features/Legislation/components/LegislationDetails.tsx";
 import { Toaster } from "sonner";
-import GlobalSearch from "./features/GlobalSearch/index.tsx";
-import AuthRoutes from "./routes/Auth.tsx";
 
 // Modular Routes
+const AuthRoutes = lazy(() => import("./routes/Auth.tsx"));
 const CaseRoutes = lazy(() => import("./routes/CaseRoutes"));
 const SettingRoutes = lazy(() => import("./routes/SettingRoutes"));
 const ReportRoutes = lazy(() => import("./routes/ReportRoutes"));
@@ -38,11 +37,12 @@ const Consultations = lazy(() => import("./pages/dashboard/Consultations"));
 const ConsultationDetails = lazy(() => import("./pages/dashboard/ConsultationDetails"));
 const Contracts = lazy(() => import("./pages/dashboard/Contracts"));
 const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
+const GlobalSearch = lazy(() => import("./features/GlobalSearch"));
 
 function App() {
   return (
     <Suspense fallback={<Loading />}>
-      <Toaster />
+      <Toaster position="top-right" richColors />
 
       <ScrollToTop />
       <Routes>

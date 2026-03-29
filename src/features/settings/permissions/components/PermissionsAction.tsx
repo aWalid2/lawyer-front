@@ -1,7 +1,7 @@
 import React from "react";
-import { TableEditButton } from "@/components/shared/components/TableEditButton";
-import { TableDeleteButton } from "@/components/shared/components/TableDeleteButton";
-import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
+import { TableEditButton } from "@/shared/components/TableEditButton";
+import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 
 import type { RoleT } from "../types";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ export const PermissionsAction: React.FC<PermissionsActionProps> = ({
         title="حذف الدور"
         description={`هل أنت متأكد من حذف الدور "${role.name}"؟ لا يمكن التراجع عن هذا الإجراء.`}
         onConfirm={() => onDelete(role.id)}
-        trigger={<TableDeleteButton onClick={() => {}} />}
+        trigger={<TableDeleteButton onClick={() => { }} />}
       />
     </div>
   );

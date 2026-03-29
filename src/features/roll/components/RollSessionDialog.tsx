@@ -6,7 +6,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { InputForm } from "@/components/shared/components/InputForm";
+import { InputForm } from "@/shared/components/InputForm";
 import { XIcon } from "lucide-react";
 import React from "react";
 import { Formik, Form } from "formik";
@@ -81,11 +81,11 @@ export const RollSessionDialog: React.FC<RollSessionDialogProps> = ({
                   type="text"
                 />
                 <div className="md:col-span-2">
-                    <InputForm
+                  <InputForm
                     name="decision"
                     label="القرار"
                     type="text"
-                    />
+                  />
                 </div>
               </div>
               <DialogClose asChild>

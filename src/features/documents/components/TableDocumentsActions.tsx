@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import type { Document } from "../types";
-import { ViewIcon } from "@/components/shared/icons/View";
-import { EditIcon } from "@/components/shared/icons/Edit";
-import { TrashIcon } from "@/components/shared/icons/Trash";
+import { ViewIcon } from "@/shared/icons/View";
+import { EditIcon } from "@/shared/icons/Edit";
+import { TrashIcon } from "@/shared/icons/Trash";
 
 import { EditDocumentDialog } from "./EditDocumentDialog";
-import { ConfirmDeleteDialog } from "@/components/shared/components/ConfirmDeleteDialog";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 
 export const TableDocumentsActions: React.FC<{
   document: Document;
@@ -26,7 +26,7 @@ export const TableDocumentsActions: React.FC<{
       <EditDocumentDialog
         document={document}
         trigger={
-            <button
+          <button
             onClick={(e) => {
               e.stopPropagation();
               onEdit?.(document);
@@ -44,20 +44,20 @@ export const TableDocumentsActions: React.FC<{
         title="حذف المستند"
         description={`هل أنت متأكد من حذف المستند ${document.type === 'cases' ? document.caseTitle : document.clientName}؟`}
         onConfirm={() => {
-            if (onDelete) {
-                onDelete(document);
-            }
+          if (onDelete) {
+            onDelete(document);
+          }
         }}
         trigger={
-            <button
-                onClick={(e) => {
-                e.stopPropagation();
-                }}
-                title="حذف"
-                className="h-9 w-9 flex items-center justify-center rounded-[12px] bg-[#C60000]/8"
-            >
-                <TrashIcon className="size-[16px] text-[#C60000]" />
-            </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            title="حذف"
+            className="h-9 w-9 flex items-center justify-center rounded-[12px] bg-[#C60000]/8"
+          >
+            <TrashIcon className="size-[16px] text-[#C60000]" />
+          </button>
         }
       />
 

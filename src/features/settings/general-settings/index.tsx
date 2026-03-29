@@ -1,8 +1,8 @@
-import { FileUpload } from "@/components/shared/components/FileUpload";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
-import PageLayout from "@/components/shared/components/PageLayout";
-import { SelectForm } from "@/components/shared/components/SelectForm";
-import { SwitchForm } from "@/components/shared/components/SwitchForm";
+import { FileUpload } from "@/shared/components/FileUpload";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import PageLayout from "@/shared/components/PageLayout";
+import { SelectForm } from "@/shared/components/SelectForm";
+import { SwitchForm } from "@/shared/components/SwitchForm";
 import { Button } from "@/components/ui/button";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";

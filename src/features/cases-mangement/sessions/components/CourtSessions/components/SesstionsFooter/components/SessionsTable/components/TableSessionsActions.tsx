@@ -1,6 +1,6 @@
 import React from "react";
-import { EditIcon } from "@/components/shared/icons/Edit";
-import { TrashIcon } from "@/components/shared/icons/Trash";
+import { EditIcon } from "@/shared/icons/Edit";
+import { TrashIcon } from "@/shared/icons/Trash";
 import { SessionDialog } from "../../SessionDialog";
 
 interface Session {

@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import type { Case } from "./casesTypes";
-import { SearchIcon } from "@/components/shared/icons/Search";
-import { ViewIcon } from "@/components/shared/icons/View";
-import { EditIcon } from "@/components/shared/icons/Edit";
+import { SearchIcon } from "@/shared/icons/Search";
+import { ViewIcon } from "@/shared/icons/View";
+import { EditIcon } from "@/shared/icons/Edit";
 import { EditCaseDialog } from "./EditCaseDialog";
 
 export const TableCasesActions: React.FC<{

@@ -1,6 +1,6 @@
-import { SettingsLawIcon } from "@/components/shared/icons/SettingsLaw"
-import { TextIcon } from "@/components/shared/icons/Text"
-import { WalletIcon } from "@/components/shared/icons/Wallet"
+import { SettingsLawIcon } from "@/shared/icons/SettingsLaw"
+import { TextIcon } from "@/shared/icons/Text"
+import { WalletIcon } from "@/shared/icons/Wallet"
 import { Card, CardContent } from "@/components/ui/card"
 
 const metricsData = [

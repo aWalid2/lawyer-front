@@ -1,7 +1,7 @@
 import React from "react";
-import { HeaderPageLayout } from "@/components/shared/components/HeaderPageLayout";
-import { HeaderTitle } from "@/components/shared/components/HeaderTitle";
-import { HeaderSearch } from "@/components/shared/components/HeaderSearch";
+import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
 
 interface HeaderLawyersProps {
     onSearch: (value: string) => void;
