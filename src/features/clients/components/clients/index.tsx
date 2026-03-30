@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { DataTable, type Column } from '@/shared/components/DataTable'
 import { Pagination } from "@/shared/components/Pagination";
-import { HeaderClient } from './clients/components/HederClient';
-import { UserClientsAction } from './clients/components/UserClientsAction';
-import { useFetchClients } from './clients/api/hooks/useGetClients';
+import { HeaderClient } from './components/HederClient';
+import { UserClientsAction } from './components/UserClientsAction';
+import { useFetchClients } from './api/hooks/useGetClients';
 import { useIndexedData } from '@/shared/utils/useIndexedData';
 import { EmptyTable } from '@/shared/components/EmptyTable';
 import LoadingPage from '@/shared/components/LoadingPage';
 import { Error } from '@/shared/components/Error';
-import type { ClientRelatedT } from './clients/types/clientT';
+import type { ClientRelatedT } from './types/clientT';
 import { usePagination } from '@/shared/hooks/usePagination';
 
 
