@@ -1,53 +1,29 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { DataTable, type Column } from '@/shared/components/DataTable'
 import { Pagination } from "@/shared/components/Pagination";
 import { HeaderClient } from './clients/components/HederClient';
 import { UserClientsAction } from './clients/components/UserClientsAction';
-import { useFetchClients } from './clients/hooks/useGetClients';
+import { useFetchClients } from './clients/api/hooks/useGetClients';
+import { useIndexedData } from '@/shared/utils/useIndexedData';
+import { EmptyTable } from '@/shared/components/EmptyTable';
+import LoadingPage from '@/shared/components/LoadingPage';
+import { Error } from '@/shared/components/Error';
+import type { ClientRelatedT } from './clients/types/clientT';
+import { usePagination } from '@/shared/hooks/usePagination';
 
 
-interface UsersClientsTypes {
-
-}
-
-interface ClientRelatedT {
-    id: string;
-    user_id: string;
-    client_name: string;
-    case_count: number;
-    phone_number: string;
-    rowNumber: number;
-    created_at: string;
-    updated_at: string;
-
-}
-
-
-export const ClientsFeature: React.FC<UsersClientsTypes> = () => {
-    const { data: clientsData } = useFetchClients();
+export const ClientsFeature: React.FC = () => {
+    const { data: clientsData, isPending, isError } = useFetchClients();
+    const indexedData = useIndexedData(clientsData);
     const [searchTerm, setSearchTerm] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 15;
-
-    console.log(clientsData);
-
-    const totalPages = Math.ceil(clientsData?.length / itemsPerPage);
-
-    useEffect(() => {
-        if (totalPages > 0 && currentPage > totalPages) {
-            setCurrentPage(totalPages);
-        } else if (totalPages === 0) {
-            setCurrentPage(1);
-        }
-    }, [totalPages, currentPage]);
+    const {
+        currentPage,
+        setCurrentPage,
+        totalPages,
+    } = usePagination<ClientRelatedT>(indexedData || [], 15);
 
 
-    const indexedData = useMemo(() => {
-        return (clientsData ?? []).map((item: any, index: number) => ({
-            ...item,
-            rowNumber: index + 1,
-        }));
-    }, [clientsData]);
+
 
     const columns: Column<ClientRelatedT>[] = [
 
@@ -99,6 +75,8 @@ export const ClientsFeature: React.FC<UsersClientsTypes> = () => {
         },
     ];
 
+    if (isPending) return <LoadingPage />
+    if (isError) return <Error message="حدث خطأ في تحميل البيانات" />
     return (
         <div className="space-y-6">
             <HeaderClient
@@ -124,9 +102,7 @@ export const ClientsFeature: React.FC<UsersClientsTypes> = () => {
                     </div>
                 )
             ) : (
-                <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-                    <p className="text-gray-500 text-lg">لا يوجد عملاء مطابقين لمعايير البحث</p>
-                </div>
+                <EmptyTable message="لا يوجد عملاء مطابقين لمعايير البحث" />
             )}
 
         </div>

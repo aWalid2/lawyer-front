@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Case, CasesTableProps } from "./casesTypes";
+import type { Case, CasesTableProps } from "../types/casesTypes";
 import { EmptyState } from "./EmptyState";
 import { Pagination } from "@/shared/components/Pagination";
 import { TableCasesHeader } from "./TableCasesHeader";
@@ -22,9 +22,9 @@ export const CasesTable: React.FC<CasesTableProps> = ({
     return cases.filter((caseItem) => {
       const searchStr = searchTerm.toLowerCase();
       return (
-        caseItem.caseNumber?.toLowerCase().includes(searchStr) ||
-        caseItem.subject?.toLowerCase().includes(searchStr) ||
-        caseItem.clientName?.toLowerCase().includes(searchStr)
+        caseItem.case_number?.toLowerCase().includes(searchStr) ||
+        caseItem.case_type?.toLowerCase().includes(searchStr) ||
+        caseItem.detective_name?.toLowerCase().includes(searchStr)
       );
     });
   }, [cases, searchTerm]);
@@ -60,35 +60,33 @@ export const CasesTable: React.FC<CasesTableProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="">
-        <table className="w-full border-collapse">
-          <TableCasesHeader />
-          <tbody>
-            {currentCases.map((caseItem, index) => (
-              <TableCasesRow
-                key={caseItem.id}
-                caseItem={caseItem}
-                index={(currentPage - 1) * itemsPerPage + index + 1}
-                isSelected={selectedId === caseItem.id}
-                onRowClick={handleRowClick}
-                onEdit={(item) => onEdit?.(item)}
-                onDelete={(item) => onDelete?.(item)}
-              />
-            ))}
-          </tbody>
-        </table>
-        {totalPages > 1 && (
+      <table className="w-full border-collapse">
+        <TableCasesHeader />
+        <tbody>
+          {currentCases.map((caseItem, index) => (
+            <TableCasesRow
+              key={caseItem.id}
+              caseItem={caseItem}
+              index={(currentPage - 1) * itemsPerPage + index + 1}
+              isSelected={selectedId === caseItem.id}
+              onRowClick={handleRowClick}
+              onEdit={(item) => onEdit?.(item)}
+              onDelete={(item) => onDelete?.(item)}
+            />
+          ))}
+        </tbody>
+      </table>
+      {totalPages > 1 && (
 
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={onPageChange}
-            totalItems={filteredCases.length}
-            itemsPerPage={itemsPerPage}
-          />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+          totalItems={filteredCases.length}
+          itemsPerPage={itemsPerPage}
+        />
 
-        )}
-      </div>
+      )}
     </div>
   );
 };

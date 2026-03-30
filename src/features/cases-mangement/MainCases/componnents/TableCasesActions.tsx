@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import type { Case } from "./casesTypes";
+import type { Case } from "../types/casesTypes";
 import { SearchIcon } from "@/shared/icons/Search";
 import { ViewIcon } from "@/shared/icons/View";
 import { EditIcon } from "@/shared/icons/Edit";

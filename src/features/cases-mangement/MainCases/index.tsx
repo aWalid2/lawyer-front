@@ -1,58 +1,49 @@
-import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { usePagination } from "@/shared/hooks/usePagination";
 import { HeaderPageCase } from "./componnents/HeaderPageCase";
-import type { Case } from "./componnents/casesTypes";
+import type { Case } from "./types/casesTypes";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { TableCasesActions } from "./componnents/TableCasesActions";
 import { Pagination } from "@/shared/components/Pagination";
-import { useGetCases } from "./hooks/useGetCases";
-import Loading from "@/shared/Loading";
+import { useGetCases } from "./api/hooks/useGetCases";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 
+const getStatusStyles = (status: string) => {
+  switch (status) {
+    case "active":
+      return "bg-[#5570F1]/20 text-[#5570F1]";
+    case "تحت الرفع":
+      return "bg-[#937F12]/20 text-[#937F12]";
+    default:
+      return "bg-gray-100 text-gray-600";
+  }
+};
 
 
 const MainCases = () => {
-  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const { data: cases, isLoading, isPending } = useGetCases();
-  console.log(cases);
+  const { data: cases, isPending, isError } = useGetCases();
+  const indexedData = useIndexedData(cases);
+  const {
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination<Case>(indexedData || [], 15);
+
 
   const handleEdit = (caseItem: Case) => {
     console.log("Edit case:", caseItem);
   };
 
-  const handleCaseClick = (caseItem: Case) => {
-    navigate(`/dashboard/case-management/${caseItem.id}`);
-  };
 
-
-
-  const {
-    currentData,
-    currentPage,
-    setCurrentPage,
-    totalPages,
-  } = usePagination<Case>(cases?.data || [], 15);
-
-  const getStatusStyles = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-[#5570F1]/20 text-[#5570F1]";
-      case "تحت الرفع":
-        return "bg-[#937F12]/20 text-[#937F12]";
-      default:
-        return "bg-gray-100 text-gray-600";
-    }
-  };
 
   const columns: Column<Case>[] = [
     {
       header: "#",
-      accessor: (item) =>
-        (currentPage - 1) * 15 +
-        currentData.findIndex((c) => c.id === item.id) +
-        1,
+      accessor: (item: Case) => item.rowNumber,
       headerClassName: "w-16",
     },
     {
@@ -98,7 +89,8 @@ const MainCases = () => {
   ];
 
 
-  // if (isLoading || isPending) return <Loading />
+  if (isPending) return <LoadingPage />
+  if (isError) return <EmptyTable message="حدث خطأ في تحميل البيانات" />
   return (
     <div className="w-full pt-6 space-y-6">
       <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
@@ -108,13 +100,13 @@ const MainCases = () => {
           onFilterChange={(value) => console.log(value)}
         />
 
-
-        <DataTable
-          data={cases}
-          columns={columns}
-          rowIdField="id"
-          onRowClick={handleCaseClick}
-        />
+        {indexedData?.length === 0 ? <EmptyTable message="لا توجد بيانات حالية لادارة القضايا" /> : (
+          <DataTable
+            data={indexedData}
+            columns={columns}
+            rowIdField="id"
+          />
+        )}
         {totalPages > 1 && (
           <Pagination
             currentPage={currentPage}

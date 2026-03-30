@@ -1,14 +1,16 @@
 export interface Case {
   id: string;
-  caseNumber: string;
-  autoNumber: string;
-  clientName: string;
-  subject: string;
-  status: 'متداولة' | 'تحت الرفع' | string;
+  rowNumber: number;
+  case_number_at_prosecution: string;
+  case_number: string;
+  detective_name: string;
+  case_type: string;
+  case_situation: string;
   court?: string;
   judge?: string;
   registrationDate?: string;
 }
+
 
 export interface CasesTableProps {
   cases: Case[];

@@ -12,15 +12,15 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { SelectForm } from "@/shared/components/SelectForm";
-import type { Client } from "./types";
+import type { Client } from "../types/clientT";
 
 import * as Yup from "yup";
 
 interface EditClientDialogProps {
     client: Client;
-    trigger?: React.ReactNode; // جعل trigger اختيارياً
-    open?: boolean; // إضافة open
-    onOpenChange?: (open: boolean) => void; // إضافة onOpenChange
+    trigger?: React.ReactNode;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
     onClientUpdated?: () => void;
 }
 
@@ -72,7 +72,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                 {trigger}
             </DialogTrigger>
             <DialogContent
-                className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none"
+                className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-main rounded-main border-none"
                 dir="rtl"
                 showCloseButton={false}
             >

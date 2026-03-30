@@ -10,7 +10,7 @@ import { InputForm } from "@/shared/components/InputForm";
 import { XIcon } from "lucide-react";
 import React from "react";
 import { Formik, Form } from "formik";
-import type { Case } from "./casesTypes";
+import type { Case } from "../types/casesTypes";
 
 interface EditCaseDialogProps {
   caseItem: Case;
