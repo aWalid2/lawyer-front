@@ -6,6 +6,8 @@ import ScrollToTop from "./shared/ScrollToTop.tsx";
 import { LegislationDetails } from "./features/Legislation/components/LegislationDetails.tsx";
 import { Toaster } from "sonner";
 
+import PrivateRoute from "./pages/PrivateRoute.tsx";
+
 // Modular Routes
 const AuthRoutes = lazy(() => import("./routes/Auth.tsx"));
 const CaseRoutes = lazy(() => import("./routes/CaseRoutes"));
@@ -46,53 +48,61 @@ function App() {
 
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/" element={<Navigate to="/auth/login" replace />} />
+
         <Route path="/auth/*" element={<AuthRoutes />} />
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          {/* Header routes */}
-          <Route path="notifications" element={<Notifications />} />
-          <Route path="chat-bot" element={<ChatBot />} />
-          <Route path="messages" element={<Messages />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="global-search" element={<GlobalSearch />} />
-          {/* Dashboard Home */}
-          <Route index element={<DashboardHome />} />
 
-          {/* Main Routes */}
-          <Route path="clients" element={<Clients />} />
-          <Route path="clients/add-client" element={<AddClient />} />
-          <Route path="clients/:id" element={<ClientDetails />} />
+        <Route
+          element={
+            <PrivateRoute />
+          }
+        >
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            {/* Header routes */}
+            <Route path="notifications" element={<Notifications />} />
+            <Route path="chat-bot" element={<ChatBot />} />
+            <Route path="messages" element={<Messages />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="global-search" element={<GlobalSearch />} />
+            {/* Dashboard Home */}
+            <Route index element={<DashboardHome />} />
 
-          <Route path="case-management/*" element={<CaseRoutes />} />
+            {/* Main Routes */}
+            <Route path="clients" element={<Clients />} />
+            <Route path="clients/add-client" element={<AddClient />} />
+            <Route path="clients/:id" element={<ClientDetails />} />
 
-          <Route path="legislation-rulings" element={<Legislation />} />
-          <Route path="/dashboard/legislations/:id" element={<LegislationDetails />} />
-          <Route path="calendar" element={<Calendar />} />
-          <Route path="daily-schedule" element={<DailySchedule />} />
-          <Route path="roll" element={<Roll />} />
-          <Route path="documents" element={<Documents />} />
-          <Route path="documents/:id" element={<DocumentDetails />} />
-          <Route path="user-tasks" element={<UserTasks />} />
-          <Route path="user-tasks/:id" element={<UserTasksDetails />} />
-          <Route path="consultations" element={<Consultations />} />
-          <Route path="consultations/:id" element={<ConsultationDetails />} />
-          <Route path="contracts" element={<Contracts />} />
-          <Route path="client-details/:id" element={<ClientDetails />} />
-          <Route path="about-office" element={<AboutOffice />} />
+            <Route path="case-management/*" element={<CaseRoutes />} />
 
-          <Route path="settings/*" element={<SettingRoutes />} />
+            <Route path="legislation-rulings" element={<Legislation />} />
+            <Route path="/dashboard/legislations/:id" element={<LegislationDetails />} />
+            <Route path="calendar" element={<Calendar />} />
+            <Route path="daily-schedule" element={<DailySchedule />} />
+            <Route path="roll" element={<Roll />} />
+            <Route path="documents" element={<Documents />} />
+            <Route path="documents/:id" element={<DocumentDetails />} />
+            <Route path="user-tasks" element={<UserTasks />} />
+            <Route path="user-tasks/:id" element={<UserTasksDetails />} />
+            <Route path="consultations" element={<Consultations />} />
+            <Route path="consultations/:id" element={<ConsultationDetails />} />
+            <Route path="contracts" element={<Contracts />} />
+            <Route path="client-details/:id" element={<ClientDetails />} />
+            <Route path="about-office" element={<AboutOffice />} />
 
-          {/* Reports Routes */}
-          <Route path="reports/*" element={<ReportRoutes />} />
+            <Route path="settings/*" element={<SettingRoutes />} />
 
-          {/* Users Routes */}
-          <Route path="users/*" element={<UserRoutes />} />
+            {/* Reports Routes */}
+            <Route path="reports/*" element={<ReportRoutes />} />
 
-          {/* Finance Routes */}
-          <Route path="finance/*" element={<FinanceRoutes />} />
+            {/* Users Routes */}
+            <Route path="users/*" element={<UserRoutes />} />
+
+            {/* Finance Routes */}
+            <Route path="finance/*" element={<FinanceRoutes />} />
+          </Route>
         </Route>
       </Routes>
-    </Suspense>
+    </Suspense >
   );
 }
 

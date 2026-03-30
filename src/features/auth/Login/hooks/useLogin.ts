@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/shared/context/AuthContext";
 import { loginUser } from "../services/login";
 import { toast } from "sonner";
 
@@ -25,8 +25,8 @@ export const useLogin = () => {
       saveUser(token);
 
       const { role }: any = jwtDecode(token);
-      navigate(role === "admin" ? "/dashboard" : "/profile");
-      toast.success(data.message);
+      navigate(role === "admin" ? "/dashboard" : "/dashboard");
+      toast.success(`مرحبا  لقد تم تسجيل الدخول بنجاح`);
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "حدث خطأ");
