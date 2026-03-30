@@ -52,7 +52,7 @@ export const DataTable = <T,>({
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data.map((item) => (
+                    {data?.map((item) => (
                         <TableRow
                             key={String(item[rowIdField])}
                             className={`cursor-pointer border-b border-[#F1F1F4] transition-colors last:border-b-0 ${selectedId === item[rowIdField] ? "bg-blue-50" : "hover:bg-gray-50 bg-white"

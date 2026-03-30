@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 export const useFetchClients = () => {
   const query = useQuery({
-    queryKey: ["clients"],
+    queryKey: ["client-profile"],
     queryFn: fetchClients,
     staleTime: 1000 * 60 * 2,
     retry: 2,
