@@ -41,7 +41,7 @@ export const ClientsFeature: React.FC = () => {
         },
         {
             header: "اسم الموكل",
-            accessor: "client_name",
+            accessor: (item: ClientRelatedT) => item.client_name,
             headerClassName: "w-50",
             className: "w-50 font-medium",
         },
@@ -93,18 +93,16 @@ export const ClientsFeature: React.FC = () => {
 
             {clientsData?.length > 0 ? (
                 totalPages > 1 && (
-                    <div className="flex justify-center mt-4">
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            onPageChange={setCurrentPage}
-                        />
-                    </div>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
                 )
             ) : (
                 <EmptyTable message="لا يوجد عملاء مطابقين لمعايير البحث" />
             )}
 
-        </div>
+        </div >
     );
 };

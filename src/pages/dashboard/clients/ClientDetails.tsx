@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useParams } from "react-router-dom";
-import { ClientCases } from "@/features/clients/components/clientDetails/components/ClientCases";
-import { ClientInfo } from "@/features/clients/components/clientDetails/components/ClientInfo";
-import { HeaderUserDetails } from "@/features/clients/components/clientDetails/components/HeaderUserDetails";
+import { ClientCases } from "@/features/clients/clientDetails/components/ClientCases";
+import { ClientInfo } from "@/features/clients/clientDetails/components/ClientInfo";
+import { HeaderUserDetails } from "@/features/clients/clientDetails/components/HeaderUserDetails";
 import PageLayout from "@/shared/components/PageLayout";
 
 const ClientDetails: React.FC = () => {

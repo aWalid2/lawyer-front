@@ -13,12 +13,12 @@ export const useFetchClients = () => {
 
   });
 
-
   useEffect(() => {
     if (query.error) {
       toast.error(query.error.message || "Failed to fetch clients");
     }
   }, [query.error]);
+  
 
   return query;
 };
