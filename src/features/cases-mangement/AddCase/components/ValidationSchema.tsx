@@ -1,14 +1,12 @@
 import * as Yup from "yup";
 
 export const validationSchema = Yup.object({
-  // حقول القضية الأساسية
   caseStatus: Yup.string(),
   caseTitle: Yup.string().required("عنوان القضية مطلوب"),
   clientName: Yup.string().required("اسم الموكل مطلوب"),
   caseType: Yup.string().required("وضع القضية مطلوب"),
   clientType: Yup.string().required("صفة الموكل مطلوبة"),
   caseStatusReceived: Yup.string(),
-  // حقول المخفر والتحقيق
   policeStation: Yup.string(),
   numberInPoliceStation: Yup.string(),
   dateInPoliceStation: Yup.date().nullable(),
@@ -18,7 +16,6 @@ export const validationSchema = Yup.object({
   dateInOffice: Yup.date().nullable(),
   caseReceiptDate: Yup.date().nullable(),
   
-  // بيانات الخصم (اختياري)
   firstName: Yup.string(),
   secondName: Yup.string(),
   legalStatus: Yup.string(),
@@ -34,13 +31,11 @@ export const validationSchema = Yup.object({
     .min(14, "الرقم القومي يجب أن يكون 14 رقم")
     .max(14, "الرقم القومي يجب أن يكون 14 رقم"),
   
-  // بيانات إضافية (اختيارية)
   nationality: Yup.string(),
   country: Yup.string(),
   address: Yup.string(),
   email: Yup.string().email("البريد الإلكتروني غير صحيح"),
   
-  // الأتعاب (حسب نوع الرسوم)
   fixedFees: Yup.number()
     .positive("يجب أن يكون رقماً موجباً")
     .when('feeType', {
@@ -58,16 +53,11 @@ export const validationSchema = Yup.object({
       otherwise: (schema) => schema.notRequired(),
     }),
   
-  // حقول العقد
   contractStartDate: Yup.date().nullable(),
   contractValue: Yup.string(),
   contractDuration: Yup.string(),
   contractImage: Yup.mixed().nullable(),
-  
-  // حقول التوكيل
   powerOfAttorneyImage: Yup.mixed().nullable(),
-  
-  // ملاحظات
   notes: Yup.string(),
   
 });

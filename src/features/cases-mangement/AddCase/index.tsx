@@ -3,21 +3,15 @@ import { useState } from "react";
 import x from "@/public/images/x.svg";
 import type { FormValues } from "./types/typseCase";
 import { validationSchema } from "./components/ValidationSchema";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { UnderTheRift } from "./components/Undertheift";
 import { PublicProsecution } from "./components/PublicProsecution";
 import { InProsecution } from "./components/InProsecution";
 import { initialValues } from "./hooks/initialValues";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { SelectForm } from "@/shared/components/SelectForm";
+import { InputForm } from "@/shared/components/InputForm";
 
-// ثوابت الكلاسات (بدون تغيير)
 const CLASSES = {
   inputBase: "w-full border rounded-md p-2 bg-[#FBFBFB]",
   inputMedium: "h-10 md:h-[50px]",
@@ -55,15 +49,11 @@ const FormCase = () => {
   const [feeType, setFeeType] = useState<string>("");
   const [caseType, setCaseType] = useState<string>("");
 
-  // مصفوفة الخيارات
   const feeOptions = [
     { value: "fixed", label: "أتعاب ثابتة" },
     { value: "profit", label: "نسبة من الأرباح" },
     { value: "contract", label: "تابعة للعقد" },
   ];
-
-
-
 
   return (
     <Formik<FormValues>
@@ -74,34 +64,26 @@ const FormCase = () => {
       }}
     >
       {({ values, setFieldValue }) => (
-        <div >
+        <div className="w-full pt-6">
           <HeaderTitle title="إضافة قضية جديدة" />
           <div className={CLASSES.formSection}>
             <Form>
 
               <div className="mb-4">
-                <label className={CLASSES.labelText}>
-                  وضع القضية عند الاستلام
-                </label>
-                <Select
-                  value={values.caseStatusReceived}
-                  onValueChange={(value) => {
+                <SelectForm
+                  label="وضع القضية عند الاستلام"
+                  name="caseStatusReceived"
+                  options={[
+                    { value: "pending", label: "تحت الرفع" },
+                    { value: "inProgress", label: "الادعاء العام" },
+                    { value: "review", label: "في النيابة" },
+                  ]}
+                  placeholder="اختر وضع القضية"
+                  onChange={(value) => {
                     setFieldValue("caseStatusReceived", value);
                     setCaseType(value);
                   }}
-                  dir="rtl"
-                >
-                  <SelectTrigger className={CLASSES.selectTrigger}>
-                    <SelectValue placeholder="اختر وضع القضية" />
-                  </SelectTrigger>
-                  <SelectContent
-                    className={`${CLASSES.selectContent} lg:w-[907px] sm:w-[400px] md:w-[500px] w-full`}
-                  >
-                    <SelectItem value="pending">تحت الرفع</SelectItem>
-                    <SelectItem value="inProgress"> الادعاء العام</SelectItem>
-                    <SelectItem value="review"> في النيابة</SelectItem>
-                  </SelectContent>
-                </Select>
+                />
               </div>
 
               {caseType === "pending" && (<UnderTheRift />)}
@@ -131,65 +113,42 @@ const FormCase = () => {
                     </div>
                     <div className={CLASSES.flexRow + " mb-4"}>
                       <div className="flex-1">
-                        <label className={CLASSES.labelText}>الاسم</label>
-                        <Field
-                          name="secondName"
-                          type="text"
-                          className={CLASSES.inputField}
-                          placeholder="أحمد"
-                        />
+                        <InputForm label="الاسم" name="secondName" type="text" placeholder="أحمد" />
                       </div>
                       <div className="flex-1">
-                        <label className={CLASSES.labelText}>
-                          الصفة القانونية
-                        </label>
-                        <Field
-                          name="legalStatus"
-                          type="text"
-                          className={CLASSES.inputField}
-                          placeholder="صفة1"
-                        />
+                        <InputForm label="الصفة القانونية" name="legalStatus" type="text" placeholder="صفة1" />
                       </div>
                     </div>
                     <div className={CLASSES.flexRow}>
                       <div className="flex-1">
-                        <label className={CLASSES.labelText}>
-                          الرقم القومي{" "}
-                        </label>
-                        <Field
-                          name="civilId"
-                          type="text"
-                          className={CLASSES.inputField}
-                          placeholder="5xxxxxxxxxxxx"
-                        />
+                        <InputForm label="الرقم القومي" name="civilId" type="text" placeholder="5xxxxxxxxxxxx" />
                       </div>
                       <div className="flex-1">
-                        <label className={CLASSES.labelText}>رقم الهاتف</label>
-                        <Field
-                          name="phone"
-                          type="text"
-                          className={CLASSES.inputField}
-                          placeholder="5xxxxxxxxxxxx"
-                        />
+                        <InputForm label="رقم الهاتف" name="phone" type="text" placeholder="5xxxxxxxxxxxx" />
+                      </div>
+                    </div>
+                    <div className={CLASSES.flexRow}>
+                      <div className="flex-1">
+                        <InputForm label="الرقم القومي" name="civilId" type="text" placeholder="5xxxxxxxxxxxx" />
+                      </div>
+                      <div className="flex-1">
+                        <InputForm label="رقم الهاتف" name="phone" type="text" placeholder="5xxxxxxxxxxxx" />
                       </div>
                       <div className="w-full md:w-28">
-                        <label className={CLASSES.labelText}>الكود</label>
-                        <Select
-                          value={values.countryCode}
-                          onValueChange={(value) =>
-                            setFieldValue("countryCode", value)
-                          }
-                        >
-                          <SelectTrigger className={CLASSES.selectTrigger}>
-                            <SelectValue placeholder="الكود" />
-                          </SelectTrigger>
-                          <SelectContent className={CLASSES.selectContent}>
-                            <SelectItem value="+20">🇪🇬 +20</SelectItem>
-                            <SelectItem value="+966">🇸🇦 +966</SelectItem>
-                            <SelectItem value="+971">🇦🇪 +971</SelectItem>
-                            <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <SelectForm
+                          label="الكود"
+                          name="countryCode"
+                          options={[
+                            { value: "+20", label: "🇪🇬 +20" },
+                            { value: "+966", label: "🇸🇦 +966" },
+                            { value: "+971", label: "🇦🇪 +971" },
+                            { value: "+1", label: "🇺🇸 +1" },
+                          ]}
+                          placeholder="الكود"
+                          onChange={(value) => {
+                            setFieldValue("countryCode", value);
+                          }}
+                        />
                       </div>
                     </div>
                   </div>
