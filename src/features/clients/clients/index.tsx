@@ -23,10 +23,7 @@ export const ClientsFeature: React.FC = () => {
     } = usePagination<ClientRelatedT>(indexedData || [], 15);
 
 
-
-
     const columns: Column<ClientRelatedT>[] = [
-
         {
             header: "#",
             accessor: (item: ClientRelatedT) => item.rowNumber,
