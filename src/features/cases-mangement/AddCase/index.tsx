@@ -1,8 +1,8 @@
 import { Formik, Form, Field } from "formik";
 import { useState } from "react";
 import x from "@/public/images/x.svg";
-import type { FormValues } from "./typseCase";
-import { validationSchema } from "./ValidationSchema";
+import type { FormValues } from "./types/typseCase";
+import { validationSchema } from "./components/ValidationSchema";
 import {
   Select,
   SelectContent,
@@ -11,10 +11,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { UnderTheRift } from "./Undertheift";
-import { PublicProsecution } from "./PublicProsecution";
-import { InProsecution } from "./InProsecution";
-import { initialValues } from "./initialValues";
+import { UnderTheRift } from "./components/Undertheift";
+import { PublicProsecution } from "./components/PublicProsecution";
+import { InProsecution } from "./components/InProsecution";
+import { initialValues } from "./hooks/initialValues";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 
 // ثوابت الكلاسات (بدون تغيير)
@@ -78,7 +78,7 @@ const FormCase = () => {
           <HeaderTitle title="إضافة قضية جديدة" />
           <div className={CLASSES.formSection}>
             <Form>
-              {/* وضع القضية */}
+
               <div className="mb-4">
                 <label className={CLASSES.labelText}>
                   وضع القضية عند الاستلام
@@ -104,15 +104,11 @@ const FormCase = () => {
                 </Select>
               </div>
 
-              {/* الحقول التي تظهر فقط عند اختيار "تحت الرفع" */}
               {caseType === "pending" && (<UnderTheRift />)}
 
-              {/* الحقول التي تظهر عند اختيار "الادعاء العام" أو "في النيابة" */}
               {(caseType === "inProgress") && (<PublicProsecution />)}
 
-              {/* باقي الحقل (الخصم، الأتعاب، زر الإرسال) - تظهر في جميع الحالات */}
               {(caseType === "review") && (<InProsecution />)}
-              {/* Switch الخصم */}
               <div
                 className={`${CLASSES.flexBetween} ${CLASSES.extraLargeSectionPadding}`}
               >
@@ -123,7 +119,6 @@ const FormCase = () => {
                 />
               </div>
 
-              {/* بيانات الخصم - تظهر فقط إذا Discount = true */}
               {Discount && (
                 <div className="pt-6">
                   <div className={CLASSES.formSection}>
@@ -237,7 +232,6 @@ const FormCase = () => {
                 </div>
               </div>
 
-              {/* أتعاب ثابتة - يظهر input رقمي */}
               {feeType === "fixed" && (
                 <div className="pt-7 px-3 ">
                   <label className={CLASSES.labelText}> الأتعاب </label>
@@ -250,7 +244,6 @@ const FormCase = () => {
                 </div>
               )}
 
-              {/* نسبة من الأرباح - يظهر input مع علامة % */}
               {feeType === "profit" && (
                 <div className="pt-7 px-3">
                   <label className={CLASSES.labelText}>النسبة</label>
@@ -269,10 +262,8 @@ const FormCase = () => {
                 </div>
               )}
 
-              {/* تابعة للعقد - لا يظهر شيء */}
               {feeType === "contract" && null}
 
-              {/* زر الإرسال - داخل Form لكي يعمل */}
               <div className="w-full pt-8">
                 <button
                   type="submit"
