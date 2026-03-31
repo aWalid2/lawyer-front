@@ -1,100 +1,79 @@
-import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { usePagination } from "@/shared/hooks/usePagination";
 import { HeaderPageCase } from "./componnents/HeaderPageCase";
-import type { Case } from "./componnents/casesTypes";
+import type { Case } from "./types/casesTypes";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { TableCasesActions } from "./componnents/TableCasesActions";
 import { Pagination } from "@/shared/components/Pagination";
+import { useGetCases } from "./api/hooks/useGetCases";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
-const MOCK_CASES: Case[] = Array.from({ length: 19 }, (_, i) => ({
-  id: `${i + 1}`,
-  caseNumber: `#634${(i % 5) + 1}`,
-  autoNumber: "255",
-  clientName: "خالد محمد",
-  subject: "سرقة",
-  status: i % 2 === 0 ? "متداولة" : "تحت الرفع",
-}));
+
+const getStatusStyles = (status: string) => {
+  switch (status) {
+    case "active":
+      return "bg-[#5570F1]/20 text-[#5570F1]";
+    case "تحت الرفع":
+      return "bg-[#937F12]/20 text-[#937F12]";
+    default:
+      return "bg-gray-100 text-gray-600";
+  }
+};
+
 
 const MainCases = () => {
-  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const { data: cases, isPending, isError } = useGetCases();
+  const indexedData = useIndexedData(cases);
+  const {
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination<Case>(indexedData || [], 15);
+
 
   const handleEdit = (caseItem: Case) => {
     console.log("Edit case:", caseItem);
   };
 
-  const handleCaseClick = (caseItem: Case) => {
-    navigate(`/dashboard/case-management/${caseItem.id}`);
-  };
 
-  const filteredCases = useMemo(() => {
-    return MOCK_CASES.filter((caseItem) => {
-      const searchStr = searchTerm.toLowerCase();
-      const matchesSearch =
-        caseItem.clientName.toLowerCase().includes(searchStr) ||
-        caseItem.caseNumber.toLowerCase().includes(searchStr) ||
-        caseItem.subject.toLowerCase().includes(searchStr);
-
-      const matchesStatus =
-        statusFilter === "all" || caseItem.status === statusFilter;
-
-      return matchesSearch && matchesStatus;
-    });
-  }, [searchTerm, statusFilter]);
-
-  const {
-    currentData,
-    currentPage,
-    setCurrentPage,
-    totalPages,
-  } = usePagination<Case>(filteredCases, 15);
-
-  const getStatusStyles = (status: string) => {
-    switch (status) {
-      case "متداولة":
-        return "bg-[#5570F1]/20 text-[#5570F1]";
-      case "تحت الرفع":
-        return "bg-[#937F12]/20 text-[#937F12]";
-      default:
-        return "bg-gray-100 text-gray-600";
-    }
-  };
 
   const columns: Column<Case>[] = [
     {
       header: "#",
-      accessor: (item) => filteredCases.findIndex((c) => c.id === item.id) + 1,
+      accessor: (item: Case) => item.rowNumber,
       headerClassName: "w-16",
     },
     {
       header: "كود القضية",
-      accessor: "caseNumber",
+      accessor: (item) => item.case_number_at_prosecution
+      ,
       className: "font-medium text-black",
     },
     {
       header: "الرقم الآلي للقضية",
-      accessor: "autoNumber",
+      accessor: (item) => item.case_number,
     },
     {
       header: "اسم الموكل",
-      accessor: "clientName",
+      accessor: (item) => item.detective_name,
       className: "font-medium text-black",
     },
     {
       header: "عنوان القضية",
-      accessor: "subject",
+      accessor: (item) => item.case_type,
     },
     {
       header: "الحالة",
       accessor: (item) => (
         <span
           className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(
-            item.status
+            item.case_situation
           )}`}
         >
-          {item.status}
+          {item.case_situation}
         </span>
       ),
     },
@@ -109,22 +88,25 @@ const MainCases = () => {
     },
   ];
 
+
+  if (isPending) return <LoadingPage />
+  if (isError) return <EmptyTable message="حدث خطأ في تحميل البيانات" />
   return (
     <div className="w-full pt-6 space-y-6">
       <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
         <HeaderPageCase
           searchTerm={searchTerm}
           onSearch={setSearchTerm}
-          onFilterChange={setStatusFilter}
+          onFilterChange={(value) => console.log(value)}
         />
 
-
-        <DataTable
-          data={currentData}
-          columns={columns}
-          rowIdField="id"
-          onRowClick={handleCaseClick}
-        />
+        {indexedData?.length === 0 ? <EmptyTable message="لا توجد بيانات حالية لادارة القضايا" /> : (
+          <DataTable
+            data={indexedData}
+            columns={columns}
+            rowIdField="id"
+          />
+        )}
         {totalPages > 1 && (
           <Pagination
             currentPage={currentPage}

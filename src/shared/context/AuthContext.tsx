@@ -27,7 +27,7 @@ interface AuthContextValue {
 }
 
 
-const TOKEN_KEY = "auth_token";
+const TOKEN_KEY = "access_token";
 
 function decodeToken(token: string): AuthUser | null {
   try {
@@ -49,6 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const token = Cookies.get(TOKEN_KEY);
     return token ? decodeToken(token) : null;
   });
+
 
   useEffect(() => {
     const token = Cookies.get(TOKEN_KEY);

@@ -1,5 +1,5 @@
 import React from "react";
-import type { Case } from "./casesTypes";
+import type { Case } from "../types/casesTypes";
 import { TableCasesActions } from "./TableCasesActions";
 
 export const TableCasesRow: React.FC<{

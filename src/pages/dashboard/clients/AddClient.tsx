@@ -1,4 +1,4 @@
-import FormDetails from "../../../features/clients/components/addclient/form/FormDetails";
+import FormDetails from "../../../features/clients/addclient/form/FormDetails";
 
 function AddClient() {
   return (

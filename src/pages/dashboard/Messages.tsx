@@ -1,6 +1,7 @@
+import ChatFeature from "@/features/chat";
 
 const Messages = () => {
-  return <div>Messages</div>;
+  return <ChatFeature />;
 };
 
 export default Messages;
