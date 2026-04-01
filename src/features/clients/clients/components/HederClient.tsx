@@ -14,7 +14,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({
 }) => {
   return (
     <HeaderPageLayout >
-      {/* العنوان على اليمين */}
+
       <HeaderTitle innerPage title=" الموكلين " />
 
 

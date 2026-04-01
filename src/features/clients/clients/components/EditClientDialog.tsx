@@ -33,7 +33,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
     const initialValues: any = {
         ...client,
         clientType: client?.client_type || "individual",
-        clientName: `${client?.first_name || ""} ${client?.last_name || ""}`.trim(),
+        first_name: client?.first_name,
         nationalId: client?.ssn || "",
         phoneNumber: client?.phone || "",
         countryCode: "+966",
@@ -41,18 +41,18 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
         nationality: client?.nationality || "",
         country: client?.country || "",
         address: client?.address || "",
-        uploadFiles: null,
+        uploadFiles: client?.uploadFiles || null,
         notes: client?.notes || "",
     };
 
 
     const validationSchema = Yup.object().shape({
         clientType: Yup.string().required("نوع الموكل مطلوب"),
-        clientName: Yup.string(),
-        nationalId: Yup.string().nullable(),
-        phoneNumber: Yup.string(),
+        first_name: Yup.string(),
+        ssn: Yup.string().matches(/^[0-9]+$/, "الرقم المدني يجب أن يكون أرقام").length(10, "الرقم المدني يجب أن يكون 10 أرقام"),
+        phoneNumber: Yup.string().matches(/^[0-9]+$/, "رقم الهاتف يجب أن يكون أرقام").length(9, "رقم الهاتف يجب أن يكون 9 أرقام"),
         countryCode: Yup.string(),
-        email: Yup.string().email("البريد الإلكتروني غير صالح").nullable(),
+        email: Yup.string().email("البريد الإلكتروني غير صالح"),
         nationality: Yup.string().nullable(),
         country: Yup.string().nullable(),
         address: Yup.string().nullable(),
