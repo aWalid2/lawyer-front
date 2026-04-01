@@ -12,37 +12,36 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { SelectForm } from "@/shared/components/SelectForm";
-import type { Client } from "../types/clientT";
+import { useUpdateClient } from "../api/hooks/useUpdateClient";
+import type { ClientRelatedT } from "../types/clientT";
 
 import * as Yup from "yup";
 
 interface EditClientDialogProps {
-    client: Client;
-    trigger?: React.ReactNode;
-    open?: boolean;
-    onOpenChange?: (open: boolean) => void;
-    onClientUpdated?: () => void;
+    client: ClientRelatedT;
+    trigger: React.ReactNode;
+    onSave?: (client: any) => void;
 }
 
 export const EditClientDialog: React.FC<EditClientDialogProps> = ({
     client,
     trigger,
-    open,
-    onOpenChange,
-    onClientUpdated
+    onSave,
 }) => {
+    const { mutateAsync: update, isPending } = useUpdateClient();
+
     const initialValues = {
-        clientType: client.clientType || "individual",
-        clientName: client.clientName || "",
-        nationalId: client.nationalId || "",
-        phoneNumber: client.phoneNumber || "",
-        countryCode: client.countryCode || "+966",
-        email: client.email || "",
-        nationality: client.nationality || "",
-        country: client.country || "",
-        address: client.address || "",
+        clientType: "individual",
+        clientName: `${client?.user?.first_name || ""} ${client?.user?.last_name || ""}`.trim(),
+        nationalId: client?.user?.national_id || "",
+        phoneNumber: client?.user?.phone || "",
+        countryCode: "+966",
+        email: client?.user?.email || "",
+        nationality: client?.user?.nationality || "",
+        country: client?.user?.country || "",
+        address: client?.user?.address || "",
         uploadFiles: null,
-        notes: client.notes || "",
+        notes: client?.user?.notes || "",
     };
 
     const validationSchema = Yup.object().shape({
@@ -59,25 +58,27 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
         notes: Yup.string().nullable(),
     });
 
-    const handleSubmit = (values: typeof initialValues) => {
-        console.log("Updating client:", values);
-        if (onClientUpdated) {
-            onClientUpdated();
-        }
+    const handleSubmit = async (values: typeof initialValues) => {
+        await update({ id: client.id, data: values });
+        onSave?.(values);
     };
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog>
             <DialogTrigger asChild>
                 {trigger}
             </DialogTrigger>
             <DialogContent
-                className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-main rounded-main border-none"
+                className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-main rounded-main border-none"
                 dir="rtl"
                 showCloseButton={false}
+                onClick={(e) => e.stopPropagation()}
             >
                 <DialogClose asChild>
-                    <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all">
+                    <button
+                        onClick={(e) => e.stopPropagation()}
+                        className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all outline-none"
+                    >
                         <XIcon size={23} className="text-gray-500" />
                     </button>
                 </DialogClose>
@@ -96,7 +97,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                 >
                     {() => (
                         <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
-                            {/* الصف الأول: نوع الموكل والاسم */}
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <SelectForm
                                     name="clientType"
@@ -118,7 +119,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <InputForm
-                                    name="civilId"
+                                    name="nationalId"
                                     label="الرقم المدني"
                                     type="text"
                                     placeholder="أدخل الرقم المدني"
@@ -153,7 +154,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                 </div>
                             </div>
 
-                            {/* الصف الثالث: البريد الإلكتروني والجنسية */}
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="email"
@@ -170,7 +171,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                 />
                             </div>
 
-                            {/* الصف الرابع: الدولة والعنوان */}
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="country"
@@ -187,7 +188,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                 />
                             </div>
 
-                            {/* رفع الملفات */}
+
                             <div className="w-[121px] h-[99px] mb-16">
                                 <FileUpload
                                     name="uploadFiles"
@@ -195,12 +196,15 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                 />
                             </div>
 
-                            <button
-                                type="submit"
-                                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
-                            >
-                                حفظ التغييرات
-                            </button>
+                            <DialogClose asChild>
+                                <button
+                                    type="submit"
+                                    disabled={isPending}
+                                    className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity font-cairo disabled:opacity-50"
+                                >
+                                    {isPending ? "جاري الحفظ..." : "حفظ التغييرات"}
+                                </button>
+                            </DialogClose>
                         </Form>
                     )}
                 </Formik>

@@ -22,7 +22,7 @@ export const ClientsFeature: React.FC = () => {
         totalPages,
     } = usePagination<ClientRelatedT>(indexedData || [], 15);
 
-
+    console.log(clientsData)
     const columns: Column<ClientRelatedT>[] = [
         {
             header: "#",
@@ -38,7 +38,7 @@ export const ClientsFeature: React.FC = () => {
         },
         {
             header: "اسم الموكل",
-            accessor: (item: ClientRelatedT) => item.client_name,
+            accessor: (item: ClientRelatedT) => item.user?.first_name + " " + item.user?.last_name,
             headerClassName: "w-50",
             className: "w-50 font-medium",
         },
@@ -56,7 +56,7 @@ export const ClientsFeature: React.FC = () => {
             header: "رقم الهاتف",
             accessor: (item: ClientRelatedT) => (
                 <div className="flex items-center justify-center " dir="ltr">
-                    <span className="text-left">{item.phone_number}</span>
+                    <span className="text-left">{item.user.phone}</span>
                 </div>
             ),
             headerClassName: "w-40",
@@ -84,6 +84,7 @@ export const ClientsFeature: React.FC = () => {
             <DataTable
                 data={indexedData}
                 columns={columns}
+                rowKey="user_id"
                 rowIdField="id"
             />
 
