@@ -118,6 +118,7 @@ const DocumentsFeature = () => {
         />
 
         <DataTable
+          rowKey={'id'}
           columns={columns}
           data={paginatedDocuments}
           rowIdField="id"

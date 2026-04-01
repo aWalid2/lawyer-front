@@ -71,11 +71,7 @@ export const Employees: React.FC = () => {
         <>
             <HeaderEmployee title="الموظفين" buttonText="تعيين موظف" />
             <div className="mt-4 bg-white">
-                <DataTable
-                    data={currentData}
-                    columns={columns}
-                    rowIdField="id"
-                />
+                <DataTable rowKey={'id'} data={currentData} columns={columns} rowIdField="id" />
                 {totalPages > 1 && (
                     <Pagination
                         currentPage={currentPage}

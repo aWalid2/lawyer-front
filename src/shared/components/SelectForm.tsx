@@ -21,6 +21,7 @@ type SelectFormProps = {
     placeholder?: string;
     disabled?: boolean;
     className?: string;
+    onChange?: (value: string) => void;
 };
 
 export const SelectForm: React.FC<SelectFormProps> = ({
@@ -30,6 +31,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
     placeholder,
     disabled,
     className,
+    onChange,
 }) => {
     const [field, meta] = useField(name);
     const { setFieldValue } = useFormikContext();
@@ -41,7 +43,10 @@ export const SelectForm: React.FC<SelectFormProps> = ({
             </label>
             <Select
                 disabled={disabled}
-                onValueChange={(value) => setFieldValue(name, value)}
+                onValueChange={(value) => {
+                    setFieldValue(name, value);
+                    onChange?.(value);
+                }}
                 value={field.value}
             >
                 <SelectTrigger

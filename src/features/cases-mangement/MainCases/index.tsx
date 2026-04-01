@@ -34,11 +34,6 @@ const MainCases = () => {
   } = usePagination<Case>(indexedData || [], 15);
 
 
-  const handleEdit = (caseItem: Case) => {
-    console.log("Edit case:", caseItem);
-  };
-
-
 
   const columns: Column<Case>[] = [
     {
@@ -82,7 +77,6 @@ const MainCases = () => {
       accessor: (item) => (
         <TableCasesActions
           caseItem={item}
-          onEdit={(c) => handleEdit(c)}
         />
       ),
     },
@@ -102,6 +96,7 @@ const MainCases = () => {
 
         {indexedData?.length === 0 ? <EmptyTable message="لا توجد بيانات حالية لادارة القضايا" /> : (
           <DataTable
+            rowKey="id"
             data={indexedData}
             columns={columns}
             rowIdField="id"

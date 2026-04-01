@@ -22,7 +22,8 @@ interface DataTableProps<T> {
     columns: Column<T>[];
     onRowClick?: (item: T) => void;
     selectedId?: string | number;
-    rowIdField: keyof T;
+    rowKey?: keyof T | ((item: T) => string | number);
+    rowIdField?: keyof T;
 }
 
 export const DataTable = <T,>({
@@ -30,6 +31,7 @@ export const DataTable = <T,>({
     columns,
     onRowClick,
     selectedId,
+    rowKey,
     rowIdField,
 }: DataTableProps<T>) => {
     return (
@@ -52,25 +54,31 @@ export const DataTable = <T,>({
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data?.map((item) => (
-                        <TableRow
-                            key={String(item[rowIdField])}
-                            className={`cursor-pointer border-b border-[#F1F1F4] transition-colors last:border-b-0 ${selectedId === item[rowIdField] ? "bg-blue-50" : "hover:bg-gray-50 bg-white"
-                                }`}
-                            onClick={() => onRowClick?.(item)}
-                        >
-                            {columns.map((column, colIndex) => (
-                                <TableCell
-                                    key={colIndex}
-                                    className={`p-3 h-[60px] text-center text-sm text-gray-600 border-r border-[#F1F1F4] ${column.className || ""}`}
-                                >
-                                    {typeof column.accessor === "function"
-                                        ? column.accessor(item)
-                                        : (item[column.accessor] as React.ReactNode)}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    ))}
+                    {data?.map((item, index) => {
+                        const key = typeof rowKey === "function" ? rowKey(item) : String(item[rowKey as keyof T] ?? index);
+                        const selectionField = rowIdField || (typeof rowKey !== "function" ? rowKey : undefined);
+                        const isSelected = selectionField ? selectedId === item[selectionField] : false;
+
+                        return (
+                            <TableRow
+                                key={key}
+                                className={`cursor-pointer border-b border-[#F1F1F4] transition-colors last:border-b-0 ${isSelected ? "bg-blue-50" : "hover:bg-gray-50 bg-white"
+                                    }`}
+                                onClick={() => onRowClick?.(item)}
+                            >
+                                {columns.map((column, colIndex) => (
+                                    <TableCell
+                                        key={colIndex}
+                                        className={`p-3 h-[60px] text-center text-sm text-gray-600 border-r border-[#F1F1F4] ${column.className || ""}`}
+                                    >
+                                        {typeof column.accessor === "function"
+                                            ? column.accessor(item)
+                                            : (item[column.accessor] as React.ReactNode)}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        );
+                    })}
                 </TableBody>
             </Table>
         </div>

@@ -78,7 +78,7 @@ export function Chat({
 
     const latestMessages = [...messagesRef.current]
     const lastAssistantMessage = latestMessages.findLast(
-      (m) => m.role === "assistant"
+      (m: any) => m.role === "assistant"
     )
 
     if (!lastAssistantMessage) return
@@ -88,7 +88,7 @@ export function Chat({
 
     if (lastAssistantMessage.toolInvocations) {
       const updatedToolInvocations = lastAssistantMessage.toolInvocations.map(
-        (toolInvocation) => {
+        (toolInvocation: any) => {
           if (toolInvocation.state === "call") {
             needsUpdate = true
             return {
@@ -305,7 +305,7 @@ interface ChatFormProps {
 }
 
 export const ChatForm = forwardRef<HTMLFormElement, ChatFormProps>(
-  ({ children, handleSubmit, isPending, className }, ref) => {
+  ({ children, handleSubmit, className }, ref) => {
     const [files, setFiles] = useState<File[] | null>(null)
 
     const onSubmit = (event: React.FormEvent) => {

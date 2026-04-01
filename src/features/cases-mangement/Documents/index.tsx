@@ -62,7 +62,7 @@ export const CaseDocuments: React.FC = () => {
     <>
       <HeaderCaseDocuments title="المستندات" buttonText="إضافة مستند" />
 
-      <DataTable data={currentData} columns={columns} rowIdField="id" />
+      <DataTable rowKey={'id'} data={currentData} columns={columns} rowIdField="id" />
       {totalPages > 1 && (
         <div className="p-4 border-t">
           <Pagination
