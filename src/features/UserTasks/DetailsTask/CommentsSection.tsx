@@ -1,4 +1,3 @@
-// components/tasks/CommentsSection.tsx
 interface Comment {
     date: string;
     text: string;

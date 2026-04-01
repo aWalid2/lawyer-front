@@ -12,6 +12,7 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
+import { useTaskUser } from "./api/hooks/useAddTask";
 
 interface AddTaskModalProps {
   onClose: () => void;
@@ -20,31 +21,35 @@ interface AddTaskModalProps {
 }
 
 interface TaskFormValues {
-  taskTitle: string;
-  assignee: string;
-  taskType: string;
-  deliveryDate: string;
+  task_title: string;
+  assigned_to: number;
+  task_type: string;
+  delivery_date: string;
+  status: string;
   notes: string;
 }
 
 const validationSchema = Yup.object({
-  taskTitle: Yup.string().required("عنوان المهمة مطلوب"),
-  assignee: Yup.string().required("المكلف مطلوب"),
-  taskType: Yup.string().required("نوع المهمة مطلوب"),
-  deliveryDate: Yup.string().required("تاريخ التسليم مطلوب"),
+  task_title: Yup.string().required("عنوان المهمة مطلوب"),
+  assigned_to: Yup.number().required("المكلف مطلوب"),
+  task_type: Yup.string().required("نوع المهمة مطلوب"),
+  delivery_date: Yup.string().required("تاريخ التسليم مطلوب"),
   notes: Yup.string(),
+  status: Yup.string().required("حالة المهمة مطلوبة"),
 });
 
 const defaultValues: TaskFormValues = {
-  taskTitle: "",
-  assignee: "",
-  taskType: "",
-  deliveryDate: "",
+  task_title: "",
+  assigned_to: 0,
+  task_type: "",
+  delivery_date: "",
   notes: "",
+  status: "",
 };
 
 function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTaskModalProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const { mutate: addTask, isPending } = useTaskUser(); // استخدام الـ hook
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -53,11 +58,20 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
 
   const handleSubmit = (values: TaskFormValues) => {
     console.log("تم حفظ المهمة:", values);
-    if (onSave) {
-      onSave(values);
-    }
-    setIsModalOpen(false);
-    onClose();
+    
+    // استخدام mutation لإضافة المهمة
+    addTask(values, {
+      onSuccess: () => {
+        if (onSave) {
+          onSave(values);
+        }
+        setIsModalOpen(false);
+        onClose();
+      },
+      onError: (error) => {
+        console.error("خطأ في إضافة المهمة:", error);
+      }
+    });
   };
 
   if (!isModalOpen) return null;
@@ -88,24 +102,24 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
         >
           {() => (
             <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
-              <div className="grid grid-cols-1  gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <InputForm
-                  name="taskTitle"
+                  name="task_title"
                   label="عنوان المهمة"
                   type="text"
                   placeholder="أدخل عنوان المهمة"
                 />
                 <InputForm
-                  name="assignee"
+                  name="assigned_to"
                   label="المكلف"
-                  type="text"
+                  type="number"
                   placeholder="أدخل اسم المكلف"
                 />
               </div>
 
-              <div className="grid grid-cols-1 ">
+              <div className="grid grid-cols-1">
                 <SelectForm
-                  name="taskType"
+                  name="task_type"
                   label="نوع المهمة"
                   options={[
                     { value: "قضية 1", label: "قضية 1" },
@@ -116,7 +130,7 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
                   ]}
                 />
                 <InputForm
-                  name="deliveryDate"
+                  name="delivery_date"
                   label="تاريخ التسليم"
                   type="date"
                 />
@@ -128,11 +142,28 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
                 placeholder="أدخل ملاحظات إضافية"
               />
 
+              <SelectForm
+                name="status"
+                label="حالة المهمة"
+                options={[
+                  { value: " in_progress", label: "قيد التنفيذ" },
+                  { value: "pending", label: "قيد الانتظار" },
+                  { value: "done", label: "مُنجزة" },
+                  { value: "late", label: "متأخرة" },
+                ]}
+              />
+
               <button
                 type="submit"
-                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
+                disabled={isPending}
+                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {initialValues === defaultValues ? "إضافة مهمة" : "حفظ التعديلات"}
+                {isPending 
+                  ? "جاري الإضافة..." 
+                  : initialValues === defaultValues 
+                    ? "إضافة مهمة" 
+                    : "حفظ التعديلات"
+                }
               </button>
             </Form>
           )}
