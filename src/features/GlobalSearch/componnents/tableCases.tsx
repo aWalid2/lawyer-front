@@ -3,24 +3,16 @@ import { usePagination } from "@/shared/hooks/usePagination";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
 import { TableCasesActions } from "@/features/cases-mangement/MainCases/componnents/TableCasesActions";
-
-// تعريف نوع Case
-interface Case {
-  id: string;
-  caseNumber: string;
-  autoNumber: string;
-  clientName: string;
-  subject: string;
-  status: string;
-}
+import type { Case } from "@/features/cases-mangement/MainCases/types/casesTypes";
 
 const MOCK_CASES: Case[] = Array.from({ length: 19 }, (_, i) => ({
   id: `${i + 1}`,
-  caseNumber: `#634${(i % 5) + 1}`,
-  autoNumber: "255",
-  clientName: "خالد محمد",
-  subject: "سرقة",
-  status: i % 2 === 0 ? "متداولة" : "تحت الرفع",
+  rowNumber: i + 1,
+  case_number: `#634${(i % 5) + 1}`,
+  case_number_at_prosecution: `P-${i + 1}`,
+  detective_name: "محقق افتراضي",
+  case_type: "سرقة",
+  case_situation: i % 2 === 0 ? "متداولة" : "تحت الرفع",
 }));
 
 const TableCases = () => {
@@ -41,8 +33,8 @@ const TableCases = () => {
     totalPages,
   } = usePagination<Case>(MOCK_CASES, 15);
 
-  const getStatusStyles = (status: string) => {
-    switch (status) {
+  const getStatusStyles = (situation: string) => {
+    switch (situation) {
       case "متداولة":
         return "bg-[#5570F1]/20 text-[#5570F1]";
       case "تحت الرفع":
@@ -60,31 +52,31 @@ const TableCases = () => {
     },
     {
       header: "كود القضية",
-      accessor: "caseNumber",
+      accessor: "case_number",
       className: "font-medium text-black",
     },
     {
-      header: "الرقم الآلي للقضية",
-      accessor: "autoNumber",
+      header: "رقم القضية بالنيابة",
+      accessor: "case_number_at_prosecution",
     },
     {
-      header: "اسم الموكل",
-      accessor: "clientName",
+      header: "اسم المحقق",
+      accessor: "detective_name",
       className: "font-medium text-black",
     },
     {
-      header: "عنوان القضية",
-      accessor: "subject",
+      header: "نوع القضية",
+      accessor: "case_type",
     },
     {
       header: "الحالة",
       accessor: (item) => (
         <span
           className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(
-            item.status
+            item.case_situation
           )}`}
         >
-          {item.status}
+          {item.case_situation}
         </span>
       ),
     },
@@ -106,7 +98,7 @@ const TableCases = () => {
         <DataTable
           data={currentData}
           columns={columns}
-          rowIdField="id"
+          rowKey={'id'}
           onRowClick={handleCaseClick}
         />
         {totalPages > 1 && (

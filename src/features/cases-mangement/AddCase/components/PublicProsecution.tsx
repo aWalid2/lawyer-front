@@ -7,7 +7,7 @@ import { TextAreaForm } from "@/shared/components/TextAreaForm";
 
 
 export function PublicProsecution() {
-  const { setFieldValue } = useFormikContext<FormValues>();
+  const { } = useFormikContext<FormValues>();
 
   return (
     <>

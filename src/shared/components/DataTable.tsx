@@ -22,7 +22,7 @@ interface DataTableProps<T> {
     columns: Column<T>[];
     onRowClick?: (item: T) => void;
     selectedId?: string | number;
-    rowKey: keyof T | ((item: T) => string | number);
+    rowKey?: keyof T | ((item: T) => string | number);
     rowIdField?: keyof T;
 }
 
@@ -55,7 +55,7 @@ export const DataTable = <T,>({
                 </TableHeader>
                 <TableBody>
                     {data?.map((item, index) => {
-                        const key = typeof rowKey === "function" ? rowKey(item) : String(item[rowKey] ?? index);
+                        const key = typeof rowKey === "function" ? rowKey(item) : String(item[rowKey as keyof T] ?? index);
                         const selectionField = rowIdField || (typeof rowKey !== "function" ? rowKey : undefined);
                         const isSelected = selectionField ? selectedId === item[selectionField] : false;
 

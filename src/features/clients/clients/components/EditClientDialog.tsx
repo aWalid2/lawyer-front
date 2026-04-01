@@ -49,7 +49,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
     const validationSchema = Yup.object().shape({
         clientType: Yup.string().required("نوع الموكل مطلوب"),
         first_name: Yup.string(),
-        ssn: Yup.string().matches(/^[0-9]+$/, "الرقم المدني يجب أن يكون أرقام").length(10, "الرقم المدني يجب أن يكون 10 أرقام"),
+        ssn: Yup.string().matches(/^[0-9]+$/, "الرقم المدني يجب أن يكون أرقام").length(12, "الرقم المدني يجب أن يكون 10 أرقام"),
         phoneNumber: Yup.string().matches(/^[0-9]+$/, "رقم الهاتف يجب أن يكون أرقام").length(9, "رقم الهاتف يجب أن يكون 9 أرقام"),
         countryCode: Yup.string(),
         email: Yup.string().email("البريد الإلكتروني غير صالح"),

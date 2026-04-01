@@ -21,6 +21,8 @@ export const TableCasesRow: React.FC<{
     }
   };
 
+
+
   return (
     <tr
       className={`cursor-pointer border-b border-[#F1F1F4] transition-colors hover:bg-gray-50 ${isSelected ? "bg-blue-50" : "bg-white"
@@ -31,24 +33,24 @@ export const TableCasesRow: React.FC<{
         {index}
       </td>
       <td className="p-4 text-center text-sm font-medium text-black border-x border-[#F1F1F4] whitespace-nowrap">
-        {caseItem.caseNumber}
+        {caseItem.case_number}
       </td>
       <td className="p-4 text-center text-sm text-gray-600 border-x border-[#F1F1F4] whitespace-nowrap">
-        {caseItem.autoNumber}
+        {caseItem.case_number_at_prosecution}
       </td>
       <td className="p-4 text-center text-sm font-medium text-black border-x border-[#F1F1F4] whitespace-nowrap">
-        {caseItem.clientName}
+        {caseItem.detective_name}
       </td>
       <td className="p-4 text-center text-sm text-gray-600 border-x border-[#F1F1F4] whitespace-nowrap">
-        {caseItem.subject}
+        {caseItem.case_type}
       </td>
       <td className="p-4 text-center border-x border-[#F1F1F4]">
         <span
-          className={`px-3 py-1 rounded-[12px] text-xs font-medium whitespace-nowrap ${getStatusStyles(
-            caseItem.status,
+          className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(
+            caseItem.case_situation,
           )}`}
         >
-          {caseItem.status}
+          {caseItem.case_situation}
         </span>
       </td>
       <td className="p-4 text-center border-x border-[#F1F1F4]">
