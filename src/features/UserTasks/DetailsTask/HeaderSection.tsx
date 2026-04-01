@@ -1,4 +1,3 @@
-// components/tasks/HeaderSection.tsx
 interface HeaderSectionProps {
     title: string;
     status: string;
