@@ -11,6 +11,7 @@ import { XIcon } from "lucide-react";
 import React from "react";
 import { Formik, Form } from "formik";
 import type { Case } from "../types/casesTypes";
+import { useUpdateCase } from "../api/hooks/useUpdateCase";
 
 interface EditCaseDialogProps {
   caseItem: Case;
@@ -23,13 +24,14 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
   onSave,
   caseItem,
 }) => {
+  const { mutateAsync: updateCase } = useUpdateCase();
   const initialValues: Case = {
     ...caseItem,
-    caseNumber: caseItem.caseNumber || "",
-    autoNumber: caseItem.autoNumber || "",
-    clientName: caseItem.clientName || "",
-    subject: caseItem.subject || "",
-    status: caseItem.status || "",
+    case_number: caseItem.case_number || "",
+    case_number_at_prosecution: caseItem.case_number_at_prosecution || "",
+    detective_name: caseItem.detective_name || "",
+    case_type: caseItem.case_type || "",
+    case_situation: caseItem.case_situation || "",
     court: caseItem.court || "",
     judge: caseItem.judge || "",
     registrationDate: caseItem.registrationDate || "",
@@ -60,7 +62,8 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
 
         <Formik
           initialValues={initialValues}
-          onSubmit={(values) => {
+          onSubmit={async (values) => {
+            await updateCase({ id: caseItem.id, data: values });
             onSave(values);
           }}
         >
@@ -68,27 +71,27 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
             <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
                 <InputForm
-                  name="caseNumber"
+                  name="case_number_at_prosecution"
                   label="رقم القضية"
                   type="text"
                 />
                 <InputForm
-                  name="autoNumber"
+                  name="case_number"
                   label="الرقم الآلي"
                   type="text"
                 />
                 <InputForm
-                  name="clientName"
+                  name="detective_name"
                   label="اسم العميل"
                   type="text"
                 />
                 <InputForm
-                  name="subject"
+                  name="case_type"
                   label="الموضوع"
                   type="text"
                 />
                 <InputForm
-                  name="status"
+                  name="case_situation"
                   label="الحالة"
                   type="text"
                 />

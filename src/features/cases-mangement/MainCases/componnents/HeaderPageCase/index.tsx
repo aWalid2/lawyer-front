@@ -23,7 +23,7 @@ export const HeaderPageCase: React.FC<HeaderPageCaseProps> = ({
         <CasesFilter onFilterChange={onFilterChange} />
         <NewCaseLink />
       </div>
-    </HeaderPageLayout  >
+    </HeaderPageLayout >
 
   );
 };
