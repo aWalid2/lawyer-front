@@ -8,12 +8,12 @@ export const useUpdateCase = () => {
         mutationKey: ["cases"],
         mutationFn: updateCase,
         retry: 1,
-        onSuccess: () => {
+        onSuccess: (data: any) => {
             queryClient.invalidateQueries({ queryKey: ["cases"] });
-            toast.success("تم تحديث القضية بنجاح");
+            toast.success(data.message || "تم تحديث القضية بنجاح");
         },
         onError: (error: any) => {
-            toast.error(error.message);
+            toast.error(error.response?.data?.message || "حدث خطأ في تحديث القضية");
         }
     });
 

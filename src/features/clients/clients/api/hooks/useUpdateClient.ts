@@ -5,10 +5,12 @@ import { toast } from "sonner";
 export const useUpdateClient = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, data }: { id: string; data: any }) => updateClient(id, data),
-        onSuccess: () => {
+        mutationKey: ["clients"],
+        mutationFn: updateClient,
+        retry: 1,
+        onSuccess: (data: any) => {
             queryClient.invalidateQueries({ queryKey: ["client-profile"] });
-            toast.success("تم تحديث بيانات الموكل بنجاح");
+            toast.success(data.message || "تم تحديث بيانات الموكل بنجاح");
         },
         onError: (error: any) => {
             toast.error(error.response?.data?.message || "حدث خطأ في تحديث البيانات");

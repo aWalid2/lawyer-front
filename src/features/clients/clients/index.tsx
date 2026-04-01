@@ -65,7 +65,7 @@ export const ClientsFeature: React.FC = () => {
         {
             header: "الإجراءات",
             accessor: (item: ClientRelatedT) => (
-                <UserClientsAction caseItem={item} />
+                <UserClientsAction client={item} />
             ),
             headerClassName: "w-35 text-center",
             className: "w-35 text-center",

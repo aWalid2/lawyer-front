@@ -1,6 +1,6 @@
-import axios from "axios";
+import api from "@/lib/api";
 
-export const deleteClient = async (id: string) => {
-    const response = await axios.delete(`/client-profile/${id}`);
+export const deleteClient = async ({ id }: { id: string }) => {
+    const response = await api.delete(`/client-profile/${id}`);
     return response.data;
 };

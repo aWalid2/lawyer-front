@@ -13,12 +13,12 @@ import { InputForm } from "@/shared/components/InputForm";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { useUpdateClient } from "../api/hooks/useUpdateClient";
-import type { ClientRelatedT } from "../types/clientT";
+
 
 import * as Yup from "yup";
 
 interface EditClientDialogProps {
-    client: ClientRelatedT;
+    client: any
     trigger: React.ReactNode;
     onSave?: (client: any) => void;
 }
@@ -30,37 +30,40 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
 }) => {
     const { mutateAsync: update, isPending } = useUpdateClient();
 
-    const initialValues = {
-        clientType: "individual",
-        clientName: `${client?.user?.first_name || ""} ${client?.user?.last_name || ""}`.trim(),
-        nationalId: client?.user?.national_id || "",
-        phoneNumber: client?.user?.phone || "",
+    const initialValues: any = {
+        ...client,
+        clientType: client?.client_type || "individual",
+        clientName: `${client?.first_name || ""} ${client?.last_name || ""}`.trim(),
+        nationalId: client?.ssn || "",
+        phoneNumber: client?.phone || "",
         countryCode: "+966",
-        email: client?.user?.email || "",
-        nationality: client?.user?.nationality || "",
-        country: client?.user?.country || "",
-        address: client?.user?.address || "",
+        email: client?.email || "",
+        nationality: client?.nationality || "",
+        country: client?.country || "",
+        address: client?.address || "",
         uploadFiles: null,
-        notes: client?.user?.notes || "",
+        notes: client?.notes || "",
     };
+
 
     const validationSchema = Yup.object().shape({
         clientType: Yup.string().required("نوع الموكل مطلوب"),
-        clientName: Yup.string().required("اسم الموكل مطلوب"),
-        nationalId: Yup.string().required("الرقم المدني مطلوب"),
-        phoneNumber: Yup.string().required("رقم الهاتف مطلوب"),
-        countryCode: Yup.string().required("كود الدولة مطلوب"),
-        email: Yup.string().email("البريد الإلكتروني غير صالح"),
-        nationality: Yup.string(),
-        country: Yup.string(),
-        address: Yup.string(),
+        clientName: Yup.string(),
+        nationalId: Yup.string().nullable(),
+        phoneNumber: Yup.string(),
+        countryCode: Yup.string(),
+        email: Yup.string().email("البريد الإلكتروني غير صالح").nullable(),
+        nationality: Yup.string().nullable(),
+        country: Yup.string().nullable(),
+        address: Yup.string().nullable(),
         uploadFiles: Yup.mixed().nullable(),
         notes: Yup.string().nullable(),
     });
 
     const handleSubmit = async (values: typeof initialValues) => {
-        await update({ id: client.id, data: values });
+        await update({ id: client.user_id, data: values });
         onSave?.(values);
+
     };
 
     return (
@@ -100,7 +103,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <SelectForm
-                                    name="clientType"
+                                    name="client_type"
                                     label="نوع الموكل"
                                     options={[
                                         { value: "individual", label: "فرد" },
@@ -110,7 +113,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                 />
 
                                 <InputForm
-                                    name="clientName"
+                                    name="first_name"
                                     label="الاسم"
                                     type="text"
                                     placeholder="أدخل الاسم كاملاً"
@@ -119,7 +122,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <InputForm
-                                    name="nationalId"
+                                    name="ssn"
                                     label="الرقم المدني"
                                     type="text"
                                     placeholder="أدخل الرقم المدني"
@@ -128,7 +131,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                 <div className="grid grid-cols-12 gap-2 ">
                                     <div className="col-span-8">
                                         <InputForm
-                                            name="phoneNumber"
+                                            name="phone"
                                             label="رقم الهاتف"
                                             type="tel"
                                             placeholder="أدخل رقم الهاتف"
@@ -136,7 +139,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                     </div>
                                     <div className="col-span-4">
                                         <SelectForm
-                                            name="countryCode"
+                                            name="country_code"
                                             label="كود الدولة"
                                             options={[
                                                 { value: "+966", label: "🇸🇦 +966" },

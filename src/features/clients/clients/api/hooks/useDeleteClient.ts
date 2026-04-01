@@ -5,12 +5,15 @@ import { toast } from "sonner";
 export const useDeleteClient = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (id: string) => deleteClient(id),
+        mutationFn:  deleteClient,
+        
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["clients"] });
+            queryClient.invalidateQueries({ queryKey: ["client-profile"] });
+            toast.success("تم حذف الموكل بنجاح")
         },
         onError: (error: any) => {
-            toast.error(error.response.data.message || "حدث خطأ في حذف العميل")
+            toast.error(error.response.data.message || "حدث خطأ في حذف الموكل")
         }
+    
     });
 };

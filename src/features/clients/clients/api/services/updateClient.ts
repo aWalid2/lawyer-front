@@ -1,6 +1,6 @@
 import api from "@/lib/api";
 
-export const updateClient = async (id: string, clientData: any) => {
-    const response = await api.patch(`/client-profile/${id}`, clientData);
+export const updateClient = async ({ id, data }: { id: string; data: any }) => {
+    const response = await api.patch(`/users/client/${id}`, data);
     return response.data;
 };
