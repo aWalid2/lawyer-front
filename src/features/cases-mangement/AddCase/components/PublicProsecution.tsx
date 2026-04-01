@@ -17,12 +17,12 @@ export function PublicProsecution() {
 
         <SelectForm
           label="اسم الموكل"
-          name="clientName"
+          name="clientId"
           options={[
-            { label: "احمد", value: "Ahmed" },
-            { label: "محمد", value: "Mohammed" },
-            { label: "علي", value: "Ali" },
-            { label: "خالد", value: "Khalid" }
+            { label: "احمد", value: "1" },
+            { label: "محمد", value: "2" },
+            { label: "علي", value: "3" },
+            { label: "خالد", value: "4" }
           ]}
           placeholder="اختر الموكل"
         />

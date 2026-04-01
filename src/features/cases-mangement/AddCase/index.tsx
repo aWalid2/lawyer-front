@@ -1,9 +1,8 @@
-import { Formik, Form, Field } from "formik";
-import { useState } from "react";
+import { Formik, Form } from "formik";
+import { useState, useEffect } from "react";
 import x from "@/public/images/x.svg";
-import type { FormValues } from "./types/typseCase";
+import { type FormValues } from "./types/typseCase";
 import { validationSchema } from "./components/ValidationSchema";
-import { Switch } from "@/components/ui/switch";
 import { UnderTheRift } from "./components/Undertheift";
 import { PublicProsecution } from "./components/PublicProsecution";
 import { InProsecution } from "./components/InProsecution";
@@ -11,42 +10,18 @@ import { initialValues } from "./hooks/initialValues";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { InputForm } from "@/shared/components/InputForm";
+import { SwitchForm } from "@/shared/components/SwitchForm";
+import { cn } from "@/lib/utils";
+import { useAddCase } from "./api/hooks/useAddCase";
 
 const CLASSES = {
-  inputBase: "w-full border rounded-md p-2 bg-[#FBFBFB]",
-  inputMedium: "h-10 md:h-[50px]",
-  inputLarge: "h-[50px]",
-  inputField: "w-full border rounded-md p-2 bg-[#FBFBFB] h-10 md:h-[50px]",
-  inputFieldLarge: "w-full border rounded-md p-2 bg-[#FBFBFB] h-[50px]",
-  selectTrigger:
-    "w-full border rounded-md p-2 bg-[#FBFBFB] h-10 md:h-[50px] flex items-center justify-between",
-  selectContent: "bg-white z-50 w-full",
-  uploadContainer:
-    "border border-gray-300 border-dashed border-2 rounded-xl bg-[#FBFBFB] flex flex-col items-center justify-center text-center cursor-pointer hover:bg-gray-100 transition",
-  uploadBox: "w-[150px] h-[125px]",
-  uploadBoxSmall: "w-24 md:w-[150px] h-24 md:h-[125px]",
-  uploadText: "text-sm text-gray-400 flex flex-col gap-2",
-  uploadTextSmall:
-    "text-xs md:text-sm text-gray-400 flex flex-col gap-1 md:gap-2 px-2",
-  fieldWithIcon:
-    "w-full border rounded-md p-2 bg-[#FBFBFB] h-10 md:h-[50px] pr-10",
   formSection: "border border-gray-300 p-4 rounded-xl mt-6",
   flexRow: "flex flex-col md:flex-row gap-3",
-  flexBetween: "flex justify-between items-center",
-  sectionPadding: "pt-3 md:pt-5",
-  largeSectionPadding: "pt-8 md:pt-14",
-  extraLargeSectionPadding: "pt-16",
-  labelText: "block mb-5 text-sm",
-  sectionTitle: "text-base md:text-lg",
-  submitButton:
-    "w-full flex items-center gap-2 px-6 py-3 text-white font-cairo rounded-[12px] transition-all whitespace-nowrap w-[137px] h-[50px] justify-center relative overflow-hidden",
+  submitButton: "w-full flex items-center gap-2 px-6 py-3 text-white font-cairo rounded-[12px] transition-all whitespace-nowrap w-[137px] h-[50px] justify-center relative overflow-hidden",
 };
 
 const FormCase = () => {
-  const validationSchem = validationSchema;
-
-  const [Discount, setHasDiscount] = useState(false);
-  const [feeType, setFeeType] = useState<string>("");
+  const { mutateAsync: addCase } = useAddCase()
   const [caseType, setCaseType] = useState<string>("");
 
   const feeOptions = [
@@ -58,188 +33,155 @@ const FormCase = () => {
   return (
     <Formik<FormValues>
       initialValues={initialValues}
-      validationSchema={validationSchem}
+      validationSchema={validationSchema}
       onSubmit={(values) => {
-        console.log("Form Values:", values);
+        addCase(values);
       }}
     >
-      {({ values, setFieldValue }) => (
-        <div className="w-full pt-6">
-          <HeaderTitle title="إضافة قضية جديدة" />
-          <div className={CLASSES.formSection}>
-            <Form>
+      {({ values, setFieldValue, errors, submitCount }) => {
+        useEffect(() => {
+          if (submitCount > 0 && Object.keys(errors).length > 0) {
+            console.warn("Validation Errors:", errors);
+          }
+        }, [submitCount, errors]);
 
-              <div className="mb-4">
-                <SelectForm
-                  label="وضع القضية عند الاستلام"
-                  name="caseStatusReceived"
-                  options={[
-                    { value: "pending", label: "تحت الرفع" },
-                    { value: "inProgress", label: "الادعاء العام" },
-                    { value: "review", label: "في النيابة" },
-                  ]}
-                  placeholder="اختر وضع القضية"
-                  onChange={(value) => {
-                    setFieldValue("caseStatusReceived", value);
-                    setCaseType(value);
-                  }}
-                />
-              </div>
-
-              {caseType === "pending" && (<UnderTheRift />)}
-
-              {(caseType === "inProgress") && (<PublicProsecution />)}
-
-              {(caseType === "review") && (<InProsecution />)}
-              <div
-                className={`${CLASSES.flexBetween} ${CLASSES.extraLargeSectionPadding}`}
-              >
-                <h1 className="text-sm font-medium p-6">إضافة خصم </h1>
-                <Switch
-                  checked={Discount}
-                  onCheckedChange={setHasDiscount}
-                />
-              </div>
-
-              {Discount && (
-                <div className="pt-6">
-                  <div className={CLASSES.formSection}>
-                    <div className="flex items-center justify-between">
-                      <h1 className="pb-7">بيانات الخصم</h1>
-                      <button className="bg-[#C600001A] p-2 w-[85px] rounded-[20px] text-[#C60000] flex shrink-0 items-center justify-center gap-1">
-                        <img src={x} alt="إزالة" className="ml-1" />
-                        إزالة
-                      </button>
-                    </div>
-                    <div className={CLASSES.flexRow + " mb-4"}>
-                      <div className="flex-1">
-                        <InputForm label="الاسم" name="secondName" type="text" placeholder="أحمد" />
-                      </div>
-                      <div className="flex-1">
-                        <InputForm label="الصفة القانونية" name="legalStatus" type="text" placeholder="صفة1" />
-                      </div>
-                    </div>
-                    <div className={CLASSES.flexRow}>
-                      <div className="flex-1">
-                        <InputForm label="الرقم القومي" name="civilId" type="text" placeholder="5xxxxxxxxxxxx" />
-                      </div>
-                      <div className="flex-1">
-                        <InputForm label="رقم الهاتف" name="phone" type="text" placeholder="5xxxxxxxxxxxx" />
-                      </div>
-                    </div>
-                    <div className={CLASSES.flexRow}>
-                      <div className="flex-1">
-                        <InputForm label="الرقم القومي" name="civilId" type="text" placeholder="5xxxxxxxxxxxx" />
-                      </div>
-                      <div className="flex-1">
-                        <InputForm label="رقم الهاتف" name="phone" type="text" placeholder="5xxxxxxxxxxxx" />
-                      </div>
-                      <div className="w-full md:w-28">
-                        <SelectForm
-                          label="الكود"
-                          name="countryCode"
-                          options={[
-                            { value: "+20", label: "🇪🇬 +20" },
-                            { value: "+966", label: "🇸🇦 +966" },
-                            { value: "+971", label: "🇦🇪 +971" },
-                            { value: "+1", label: "🇺🇸 +1" },
-                          ]}
-                          placeholder="الكود"
-                          onChange={(value) => {
-                            setFieldValue("countryCode", value);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="pt-7">
-                <label className="px-5 max-sm:text-sm flex shrink-0">
-                  هل الاتعاب رقم أم نسبة من الأرباح أم تابعة للعقد ؟
-                </label>
-                <div className="flex justify-between pt-7 px-5 max-sm:text-sm shrink-0 max-sm:flex-col max-sm:gap-4">
-                  {feeOptions.map((option) => (
-                    <label
-                      key={option.value}
-                      className="flex items-center gap-2 cursor-pointer"
-                    >
-                      <input
-                        type="radio"
-                        name="feeType"
-                        value={option.value}
-                        checked={feeType === option.value}
-                        onChange={(e) => setFeeType(e.target.value)}
-                        className="hidden"
-                      />
-                      <div
-                        className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all max-sm:w-5 max-sm:h-5 shrink-0 ${feeType === option.value
-                          ? "border-[#DBDBDB]/32"
-                          : "border-[#DBDBDB]"
-                          }`}
-                      >
-                        {feeType === option.value && (
-                          <div className="w-5 h-5 rounded-full bg-primary max-sm:w-4 max-sm:h-4 shrink-0"></div>
-                        )}
-                      </div>
-                      <span className="max-sm:text-[12px] shrink-0">
-                        {option.label}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {feeType === "fixed" && (
-                <div className="pt-7 px-3 ">
-                  <label className={CLASSES.labelText}> الأتعاب </label>
-                  <Field
-                    name="fixedFees"
-                    type="number"
-                    className="w-full border rounded-md p-2 bg-[#FBFBFB] text-black h-10 md:h-[50px]"
-                    placeholder="أدخل القيمة"
+        return (
+          <div className="w-full pt-6">
+            <HeaderTitle title="إضافة قضية جديدة" />
+            <div className={CLASSES.formSection}>
+              <Form>
+                <div className="mb-4">
+                  <SelectForm
+                    label="وضع القضية عند الاستلام"
+                    name="caseStatusReceived"
+                    options={[
+                      { value: "pending", label: "تحت الرفع" },
+                      { value: "inProgress", label: "الادعاء العام" },
+                      { value: "review", label: "في النيابة" },
+                    ]}
+                    placeholder="اختر وضع القضية"
+                    onChange={(value) => {
+                      setFieldValue("caseStatusReceived", value);
+                      setCaseType(value);
+                    }}
                   />
                 </div>
-              )}
 
-              {feeType === "profit" && (
-                <div className="pt-7 px-3">
-                  <label className={CLASSES.labelText}>النسبة</label>
+                <div className="space-y-4">
+                  {caseType === "pending" && <UnderTheRift />}
+                  {caseType === "inProgress" && <PublicProsecution />}
+                  {caseType === "review" && <InProsecution />}
+                </div>
 
-                  <div className="flex items-center gap-2">
-                    <div className="relative flex-1">
-                      <Field
-                        name="profitPercentage"
-                        type="number"
-                        className={`${CLASSES.inputField} w-full`}
-                        placeholder="أدخل النسبة"
-                      />
+                <div className="mt-8 pt-8 border-t border-gray-100">
+                  <SwitchForm
+                    name="hasDiscount"
+                    label="إضافة خصم للدعوى"
+                  />
+
+                  {values.hasDiscount && (
+                    <div className="mt-4 p-6 border border-dashed border-gray-200 rounded-xl bg-[#FBFBFB] space-y-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-semibold text-[#CBA462]">بيانات الخصم</h4>
+                        <button
+                          type="button"
+                          onClick={() => setFieldValue("hasDiscount", false)}
+                          className="text-red-500 text-sm flex items-center gap-1 hover:underline"
+                        >
+                          <img src={x} alt="" className="w-3" />
+                          إزالة
+                        </button>
+                      </div>
+
+                      <div className={CLASSES.flexRow}>
+                        <div className="flex-1">
+                          <InputForm label="الاسم" name="secondName" type="text" placeholder="بدر" />
+                        </div>
+                        <div className="flex-1">
+                          <InputForm label="الصفة القانونية" name="legalStatus" type="text" placeholder="صفة1" />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
+                        <InputForm label="الرقم القومي" name="civilId" type="text" placeholder="5xxxxxxxxxxxx" />
+                        <div className="lg:col-span-2 flex gap-2 items-end">
+                          <div className="w-1/3">
+                            <SelectForm
+                              label="الكود"
+                              name="countryCode"
+                              options={[
+                                { value: "+20", label: "🇪🇬 +20" },
+                                { value: "+966", label: "🇸🇦 +966" },
+                                { value: "+971", label: "🇦🇪 +971" },
+                                { value: "+1", label: "🇺🇸 +1" },
+                              ]}
+                              placeholder="الكود"
+                            />
+                          </div>
+                          <div className="w-2/3">
+                            <InputForm label="رقم الهاتف" name="phone" type="text" placeholder="5xxxxxxxxxxxx" />
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-4xl text-black">%</span>
+                  )}
+                </div>
+
+                <div className="mt-10 space-y-6">
+                  <label className="text-sm font-medium text-gray-700">كيفية احتساب الأتعاب؟</label>
+                  <div className="flex flex-wrap gap-4 py-2">
+                    {feeOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setFieldValue("feeType", option.value)}
+                        className={cn(
+                          " min-w-[120px] flex items-center justify-center gap-3 p-4 transition-all duration-200"
+                        )}
+                      >
+                        <div className={cn(
+                          "w-5 h-5 rounded-full border-2 flex items-center justify-center",
+                          values.feeType === option.value ? "border-[#CBA462]" : "border-gray-300"
+                        )}>
+                          {values.feeType === option.value && <div className="w-2.5 h-2.5 rounded-full bg-[#CBA462]" />}
+                        </div>
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="mt-4">
+                    {values.feeType === "fixed" && (
+                      <InputForm label="قيمة الأتعاب الثابتة" name="fixedFees" type="number" placeholder="0.00" />
+                    )}
+                    {values.feeType === "profit" && (
+                      <div className="flex items-end gap-3 max-w-sm">
+                        <div className="flex-1">
+                          <InputForm label="نسبة الأرباح المستحقة" name="profitPercentage" type="number" placeholder="15" />
+                        </div>
+                        <div className="mb-2.5 text-2xl font-bold bg-gray-50 px-4 py-2 rounded-lg border border-gray-200 text-gray-400">
+                          %
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-              )}
-
-              {feeType === "contract" && null}
-
-              <div className="w-full pt-8">
-                <button
-                  type="submit"
-                  className={CLASSES.submitButton}
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #E3C086 0%, #CBA462 100%)",
-                  }}
-                >
-                  <span className="relative z-10">إضافة قضية</span>
-                  <div className="absolute inset-0 opacity-0 hover:opacity-20 transition-opacity bg-black"></div>
-                </button>
-              </div>
-            </Form>
+                <div className="w-full pt-10 flex justify-end">
+                  <button
+                    type="submit"
+                    className={CLASSES.submitButton}
+                    style={{
+                      background: "linear-gradient(135deg, #E3C086 0%, #CBA462 100%)",
+                    }}
+                  >
+                    إضافة قضية
+                  </button>
+                </div>
+              </Form>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      }}
     </Formik>
   );
 };
