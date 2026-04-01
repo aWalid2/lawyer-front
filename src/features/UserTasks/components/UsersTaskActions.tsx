@@ -30,10 +30,11 @@ export const UsersTaskActions: React.FC<UsersTaskActionsProps> = ({ caseItem, on
     };
 
     const editInitialValues = {
-        taskTitle: caseItem.TaskTitle || "",
-        assignee: caseItem.PersonInCharge || "",
-        taskType: caseItem.TaskType || "",
-        deliveryDate: caseItem.DeliveryDate || "",
+        task_title: caseItem.TaskTitle || "",
+        assigned_to: caseItem.PersonInCharge || 0,
+        task_type: caseItem.TaskType || "",
+        delivery_date: caseItem.DeliveryDate || "",
+        status: caseItem.status || "",
         notes: "",
     };
 

@@ -130,7 +130,7 @@ const FormDetails = () => {
       validateOnChange={true}
       validateOnBlur={true}
     >
-      {({ values, setFieldValue }) => (
+      {({ setFieldValue }) => (
         <PageLayout>
           <div className="flex items-center gap-2 pb-8">
             <HeaderTitle title="إضافة موكل جديد" />
