@@ -29,7 +29,7 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
     ...caseItem,
     case_number: caseItem.case_number || "",
     case_number_at_prosecution: caseItem.case_number_at_prosecution || "",
-    detective_name: caseItem.detective_name || "",
+    client_name: caseItem.client_name || "",
     case_type: caseItem.case_type || "",
     case_situation: caseItem.case_situation || "",
     court: caseItem.court || "",
@@ -81,7 +81,7 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
                   type="text"
                 />
                 <InputForm
-                  name="detective_name"
+                  name="client_name"
                   label="اسم العميل"
                   type="text"
                 />

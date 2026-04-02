@@ -8,6 +8,6 @@ export const useGetCases = () => {
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 10,
         retry: 1,
-        
+        select: (data) => data.data,
     });
 };

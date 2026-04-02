@@ -1,9 +1,10 @@
 export interface Case {
   id: string;
   rowNumber: number;
-  case_number_at_prosecution: string;
+  case_number_at_prosecution?: string;
+  case_sequence: string;
   case_number: string;
-  detective_name: string;
+  client_name: string;
   case_type: string;
   case_situation: string;
   court?: string;

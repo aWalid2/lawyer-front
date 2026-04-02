@@ -43,7 +43,7 @@ const MainCases = () => {
     },
     {
       header: "كود القضية",
-      accessor: (item) => item.case_number_at_prosecution
+      accessor: (item) => item.case_sequence
       ,
       className: "font-medium text-black",
     },
@@ -53,7 +53,7 @@ const MainCases = () => {
     },
     {
       header: "اسم الموكل",
-      accessor: (item) => item.detective_name,
+      accessor: (item) => item.client_name,
       className: "font-medium text-black",
     },
     {
