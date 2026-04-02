@@ -47,9 +47,9 @@ const FormDetails = () => {
     country: "",
     address: "",
     ssn: "",
+    phone: "",
     profile: {
       client_type: "individual",
-      phone: "",
       notes: "",
       contract: {
         start_date: "",
@@ -79,7 +79,7 @@ const FormDetails = () => {
       );
     }
     formData.append("profile[client_type]", values.profile.client_type);
-    formData.append("profile[phone]", values.profile.phone);
+    formData.append("phone", values.phone);
     formData.append("profile[notes]", values.profile.notes);
     if (hasContract) {
       if (values.profile.contract.start_date) {
@@ -162,7 +162,7 @@ const FormDetails = () => {
                   </div>
                   <div className="flex-1">
                     <InputForm
-                      name="profile.phone"
+                      name="phone"
                       type="string"
                       placeholder="5xxxxxxxxxxxx"
                       label="رقم الهاتف"
