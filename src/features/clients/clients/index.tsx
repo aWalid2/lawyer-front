@@ -38,7 +38,7 @@ export const ClientsFeature: React.FC = () => {
         },
         {
             header: "اسم الموكل",
-            accessor: (item: ClientRelatedT) => item.user?.first_name + " " + item.user?.last_name,
+            accessor: (item: ClientRelatedT) => item.user?.first_name,
             headerClassName: "w-50",
             className: "w-50 font-medium",
         },
@@ -85,7 +85,6 @@ export const ClientsFeature: React.FC = () => {
                 data={indexedData}
                 columns={columns}
                 rowKey="user_id"
-                rowIdField="id"
             />
 
 
