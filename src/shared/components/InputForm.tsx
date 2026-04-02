@@ -95,7 +95,7 @@ export const InputForm: React.FC<InputFormProps> = ({
         dir={dir}
         readOnly={readonly}
         className={cn(
-          "text-right",
+          "text-right h-[50px] bg-[#FBFBFB]",
           meta.touched && meta.error && "border-red-500"
         )}
       />
