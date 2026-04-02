@@ -86,7 +86,7 @@ export function PublicProsecution() {
 
         <InputForm label="تاريخ تسجيل القضية في الادعاء العام" name="registration_at_public_prosecution" type="date" />
         <InputForm label="تاريخ ورود القضية في المكتب" name="case_entry_date" type="date" />
-
+        <InputForm label="رقم القضية في الادعاء العام" name="case_number_at_prosecution" type="number" placeholder="رقم القضية في الادعاء العام" />
       </div>
 
       <TextAreaForm label="ملاحظات" name="notes" placeholder="أضف ملاحظات..." />

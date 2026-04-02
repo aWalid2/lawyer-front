@@ -1,11 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
-import { addPublicProsecutionOfficCase } from "../services/addPublicProsecutionOfficCase";
+import { addPublicProsecutionOfficeCase } from "../services/addPublicProsecutionOfficeCase";
 import { toast } from "sonner";
 import type { ProsecutionPayload } from "../../types/caseT";
+import { mapToApiPayload, type FormValues } from "../../utils/mapToApiPayload";
 
 export const useAddPublicProsecutionOfficeCase = () => {
     return useMutation({
-        mutationFn: (payload: ProsecutionPayload) => addPublicProsecutionOfficCase(payload),
+        mutationFn: (values: FormValues) => {
+            const payload = mapToApiPayload(values);
+            return addPublicProsecutionOfficeCase(payload as ProsecutionPayload);
+        },
         onSuccess: () => {
             toast.success("تم إضافة القضية بنجاح");
         },

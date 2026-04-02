@@ -19,10 +19,10 @@ export function InProsecution() {
           label="اسم الموكل"
           name="client_name"
           options={[
-            { label: "احمد", value: "1" },
-            { label: "محمد", value: "2" },
-            { label: "علي", value: "3" },
-            { label: "خالد", value: "4" },
+            { label: "احمد", value: "ahmed" },
+            { label: "محمد", value: "mohamed" },
+            { label: "علي", value: "ali" },
+            { label: "خالد", value: "khalid" },
           ]}
           placeholder="اختر الموكل"
         />
@@ -65,19 +65,19 @@ export function InProsecution() {
 
         <SelectForm
           label="النيابة"
-          name="prosecution"
+          name="case_police_station"
           options={[
             { label: "نيابة شرق الإسكندرية", value: "prosecution1" },
             { label: "نيابة غرب الإسكندرية", value: "prosecution2" },
             { label: "نيابة وسط الإسكندرية", value: "prosecution3" },
             { label: "نيابة المنتزه", value: "prosecution4" },
           ]}
-          onChange={(value) => setFieldValue("prosecution", value)}
+          onChange={(value) => setFieldValue("case_police_station", value)}
         />
 
 
 
-        <InputForm label="رقم القضية في النيابة" name="case_number_at_prosecution" type="text" placeholder="رقم القضية في النيابة" />
+        <InputForm label="رقم القضية في النيابة" name="case_number_at_police_station" type="number" placeholder="رقم القضية في النيابة" />
 
         <InputForm label="تاريخ تسجيل القضية في النيابة" name="registration_at_public_prosecution" type="date" />
 

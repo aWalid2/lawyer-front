@@ -44,6 +44,8 @@ const FormCase = () => {
           await addUnderAppealCase(values);
         } else if (values.case_situation === "PUBLIC_PROSECUTION") {
           await addPublicProsecutionCase(values);
+        } else if (values.case_situation === "AT_PROSECUTOR_OFFICE") {
+          await addPublicProsecutionOfficeCase(values);
         }
       }}
     >
