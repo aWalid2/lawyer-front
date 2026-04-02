@@ -1,7 +1,6 @@
 import { Formik, Form } from "formik";
 import { useState, useEffect } from "react";
 import x from "@/public/images/x.svg";
-import { type FormValues } from "./types/typseCase";
 import { validationSchema } from "./components/ValidationSchema";
 import { UnderTheRift } from "./components/Undertheift";
 import { PublicProsecution } from "./components/PublicProsecution";
@@ -12,7 +11,11 @@ import { SelectForm } from "@/shared/components/SelectForm";
 import { InputForm } from "@/shared/components/InputForm";
 import { SwitchForm } from "@/shared/components/SwitchForm";
 import { cn } from "@/lib/utils";
-import { useAddCase } from "./api/hooks/useAddCase";
+import { useAddUnderAppealCase } from "./api/hooks/useAddUnderAppealCase";
+import { useAddPublicProsecutionCase } from "./api/hooks/useAddPublicProsecutionCase";
+import { useAddPublicProsecutionOfficeCase } from "./api/hooks/useAddPublicProsecutionOfficeCase";
+
+
 
 const CLASSES = {
   formSection: "border border-gray-300 p-4 rounded-xl mt-6",
@@ -21,7 +24,9 @@ const CLASSES = {
 };
 
 const FormCase = () => {
-  const { mutateAsync: addCase } = useAddCase()
+  const { mutateAsync: addUnderAppealCase } = useAddUnderAppealCase()
+  const { mutateAsync: addPublicProsecutionCase } = useAddPublicProsecutionCase()
+  const { mutateAsync: addPublicProsecutionOfficeCase } = useAddPublicProsecutionOfficeCase()
   const [caseType, setCaseType] = useState<string>("");
 
   const feeOptions = [
@@ -31,11 +36,15 @@ const FormCase = () => {
   ];
 
   return (
-    <Formik<FormValues>
+    <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
-        addCase(values);
+      onSubmit={async (values) => {
+        if (values.case_situation === "UNDER_APPEAL") {
+          await addUnderAppealCase(values);
+        } else if (values.case_situation === "PUBLIC_PROSECUTION") {
+          await addPublicProsecutionCase(values);
+        }
       }}
     >
       {({ values, setFieldValue, errors, submitCount }) => {
@@ -53,11 +62,11 @@ const FormCase = () => {
                 <div className="mb-4">
                   <SelectForm
                     label="وضع القضية عند الاستلام"
-                    name="caseStatusReceived"
+                    name="case_situation"
                     options={[
-                      { value: "pending", label: "تحت الرفع" },
-                      { value: "inProgress", label: "الادعاء العام" },
-                      { value: "review", label: "في النيابة" },
+                      { value: "UNDER_APPEAL", label: "تحت الرفع" },
+                      { value: "PUBLIC_PROSECUTION", label: "الادعاء العام" },
+                      { value: "AT_PROSECUTOR_OFFICE", label: "في النيابة" },
                     ]}
                     placeholder="اختر وضع القضية"
                     onChange={(value) => {
@@ -68,24 +77,24 @@ const FormCase = () => {
                 </div>
 
                 <div className="space-y-4">
-                  {caseType === "pending" && <UnderTheRift />}
-                  {caseType === "inProgress" && <PublicProsecution />}
-                  {caseType === "review" && <InProsecution />}
+                  {caseType === "UNDER_APPEAL" && <UnderTheRift />}
+                  {caseType === "PUBLIC_PROSECUTION" && <PublicProsecution />}
+                  {caseType === "AT_PROSECUTOR_OFFICE" && <InProsecution />}
                 </div>
 
                 <div className="mt-8 pt-8 border-t border-gray-100">
                   <SwitchForm
-                    name="hasDiscount"
+                    name="has_discount"
                     label="إضافة خصم للدعوى"
                   />
 
-                  {values.hasDiscount && (
+                  {values.has_discount && (
                     <div className="mt-4 p-6 border border-dashed border-gray-200 rounded-xl bg-[#FBFBFB] space-y-4">
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-semibold text-[#CBA462]">بيانات الخصم</h4>
                         <button
                           type="button"
-                          onClick={() => setFieldValue("hasDiscount", false)}
+                          onClick={() => setFieldValue("has_discount", false)}
                           className="text-red-500 text-sm flex items-center gap-1 hover:underline"
                         >
                           <img src={x} alt="" className="w-3" />
@@ -95,20 +104,20 @@ const FormCase = () => {
 
                       <div className={CLASSES.flexRow}>
                         <div className="flex-1">
-                          <InputForm label="الاسم" name="secondName" type="text" placeholder="بدر" />
+                          <InputForm label="الاسم" name="name" type="text" placeholder="بدر" />
                         </div>
                         <div className="flex-1">
-                          <InputForm label="الصفة القانونية" name="legalStatus" type="text" placeholder="صفة1" />
+                          <InputForm label="الصفة القانونية" name="legal_status" type="text" placeholder="صفة1" />
                         </div>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
-                        <InputForm label="الرقم القومي" name="civilId" type="text" placeholder="5xxxxxxxxxxxx" />
+                        <InputForm label="الرقم القومي" name="ssn" type="text" placeholder="5xxxxxxxxxxxx" />
                         <div className="lg:col-span-2 flex gap-2 items-end">
                           <div className="w-1/3">
                             <SelectForm
                               label="الكود"
-                              name="countryCode"
+                              name="country_code"
                               options={[
                                 { value: "+20", label: "🇪🇬 +20" },
                                 { value: "+966", label: "🇸🇦 +966" },
@@ -141,9 +150,9 @@ const FormCase = () => {
                       >
                         <div className={cn(
                           "w-5 h-5 rounded-full border-2 flex items-center justify-center",
-                          values.feeType === option.value ? "border-[#CBA462]" : "border-gray-300"
+                          values.fee_type === option.value ? "border-[#CBA462]" : "border-gray-300"
                         )}>
-                          {values.feeType === option.value && <div className="w-2.5 h-2.5 rounded-full bg-[#CBA462]" />}
+                          {values.fee_type === option.value && <div className="w-2.5 h-2.5 rounded-full bg-[#CBA462]" />}
                         </div>
                         {option.label}
                       </button>
@@ -151,10 +160,10 @@ const FormCase = () => {
                   </div>
 
                   <div className="mt-4">
-                    {values.feeType === "fixed" && (
-                      <InputForm label="قيمة الأتعاب الثابتة" name="fixedFees" type="number" placeholder="0.00" />
+                    {values.fee_type === "fixed_profits" && (
+                      <InputForm label="قيمة الأتعاب الثابتة" name="fixed_amount" type="number" placeholder="0.00" />
                     )}
-                    {values.feeType === "profit" && (
+                    {values.fee_type === "percentage_of_profits" && (
                       <div className="flex items-end gap-3 max-w-sm">
                         <div className="flex-1">
                           <InputForm label="نسبة الأرباح المستحقة" name="profitPercentage" type="number" placeholder="15" />

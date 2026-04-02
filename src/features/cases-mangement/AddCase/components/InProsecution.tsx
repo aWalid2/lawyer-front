@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import type { FormValues } from "../types/typseCase";
+import type { FormValues } from "../utils/mapToApiPayload";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { InputForm } from "@/shared/components/InputForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
@@ -12,12 +12,12 @@ export function InProsecution() {
     <>
 
       <div className={" grid grid-cols-1 md:grid-cols-2 gap-4"}>
-        <InputForm label="عنوان القضية" name="caseTitle" type="text" placeholder="عنوان القضية" />
+        <InputForm label="عنوان القضية" name="case_title" type="text" placeholder="عنوان القضية" />
 
 
         <SelectForm
           label="اسم الموكل"
-          name="clientId"
+          name="client_name"
           options={[
             { label: "احمد", value: "1" },
             { label: "محمد", value: "2" },
@@ -30,7 +30,7 @@ export function InProsecution() {
 
         <SelectForm
           label="حالة القضية"
-          name="caseStatus"
+          name="case_title"
           options={[
             { label: "متداولة", value: "pending" },
             { label: "تحت التنفيذ", value: "inProgress" },
@@ -41,7 +41,7 @@ export function InProsecution() {
 
         <SelectForm
           label="صفة الموكل"
-          name="clientType"
+          name="client_type"
           options={[
             { label: "مدعي", value: "individual" },
             { label: "شركة", value: "company" },
@@ -52,7 +52,7 @@ export function InProsecution() {
 
         <SelectForm
           label="نوع القضية"
-          name="caseType"
+          name="case_type"
           options={[
             { label: "جنائي", value: "criminal" },
             { label: "مدني", value: "civil" },
@@ -77,17 +77,17 @@ export function InProsecution() {
 
 
 
-        <InputForm label="رقم القضية في النيابة" name="numberInProsecution" type="text" placeholder="رقم القضية في النيابة" />
+        <InputForm label="رقم القضية في النيابة" name="case_number_at_prosecution" type="text" placeholder="رقم القضية في النيابة" />
 
-        <InputForm label="تاريخ تسجيل القضية في النيابة" name="dateInProsecution" type="date" />
-
-
-        <InputForm label="اسم المحقق" name="investigatorName" type="text" placeholder="اسم المحقق" />
-        <InputForm label="جهة التحقيق" name="investigativeAuthority" type="text" placeholder="جهة التحقيق" />
+        <InputForm label="تاريخ تسجيل القضية في النيابة" name="registration_at_public_prosecution" type="date" />
 
 
-        <InputForm label="رقم القضية في المخفر" name="numberInPoliceStation" type="text" />
-        <InputForm label="تاريخ ورود القضية في المكتب" name="dateInOffice" type="date" />
+        <InputForm label="اسم المحقق" name="detective_name" type="text" placeholder="اسم المحقق" />
+        <InputForm label="جهة التحقيق" name="investigation_name" type="text" placeholder="جهة التحقيق" />
+
+
+        <InputForm label="رقم القضية في المخفر" name="case_number_at_prosecution" type="text" />
+        <InputForm label="تاريخ ورود القضية في المكتب" name="case_entry_date" type="date" />
       </div>
       <TextAreaForm label="ملاحظات" name="notes" />
     </>

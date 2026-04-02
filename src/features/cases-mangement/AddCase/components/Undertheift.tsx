@@ -7,17 +7,17 @@ export function UnderTheRift() {
   return (
     <>
       <div className={" grid grid-cols-1 md:grid-cols-2 gap-4"}>
-        <InputForm label="عنوان القضية" name="caseTitle" type="text" placeholder="عنوان القضية" />
+        <InputForm label="عنوان القضية" name="case_title" type="text" placeholder="عنوان القضية" />
 
 
         <SelectForm
           label="اسم الموكل"
-          name="clientId"
+          name="client_name"
           options={[
-            { label: "احمد", value: "1" },
-            { label: "محمد", value: "2" },
-            { label: "علي", value: "3" },
-            { label: "خالد", value: "4" }
+            { label: "احمد", value: "Ahmed" },
+            { label: "محمد", value: "Mohamed" },
+            { label: "علي", value: "Ali" },
+            { label: "خالد", value: "Khaled" }
           ]}
           placeholder="اختر الموكل"
         />
@@ -25,7 +25,7 @@ export function UnderTheRift() {
 
         <SelectForm
           label="حالة القضية"
-          name="caseStatus"
+          name="case_status"
           options={[
             { label: "متداولة", value: "pending" },
             { label: "تحت التنفيذ", value: "inProgress" },
@@ -36,7 +36,7 @@ export function UnderTheRift() {
 
         <SelectForm
           label="صفة الموكل"
-          name="clientType"
+          name="client_type"
           options={[
             { label: "مدعي", value: "individual" },
             { label: "شركة", value: "company" }
@@ -47,7 +47,7 @@ export function UnderTheRift() {
 
         <SelectForm
           label="نوع القضية"
-          name="caseType"
+          name="case_type"
           options={[
             { label: "جنائي", value: "criminal" },
             { label: "مدني", value: "civil" },
@@ -56,7 +56,7 @@ export function UnderTheRift() {
           placeholder="اختر نوع القضية"
         />
 
-        <InputForm label="تاريخ ورود القضية داخل المكتب" name="caseReceiptDate" type="date" />
+        <InputForm label="تاريخ ورود القضية داخل المكتب" name="case_receipt_date" type="date" />
       </div>
 
       <TextAreaForm label="ملاحظات" name="notes" placeholder="أضف ملاحظات..." />

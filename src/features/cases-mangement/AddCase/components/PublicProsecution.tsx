@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import type { FormValues } from "../types/typseCase";
+import type { FormValues } from "../utils/mapToApiPayload";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { InputForm } from "@/shared/components/InputForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
@@ -17,12 +17,12 @@ export function PublicProsecution() {
 
         <SelectForm
           label="اسم الموكل"
-          name="clientId"
+          name="client_name"
           options={[
-            { label: "احمد", value: "1" },
-            { label: "محمد", value: "2" },
-            { label: "علي", value: "3" },
-            { label: "خالد", value: "4" }
+            { label: "احمد", value: "ahmed" },
+            { label: "محمد", value: "mohamed" },
+            { label: "علي", value: "ali" },
+            { label: "خالد", value: "khalid" }
           ]}
           placeholder="اختر الموكل"
         />
@@ -32,7 +32,7 @@ export function PublicProsecution() {
 
         <SelectForm
           label="حالة القضية"
-          name="caseStatus"
+          name="case_title"
           options={[
             { label: "متداولة", value: "pending" },
             { label: "تحت التنفيذ", value: "inProgress" },
@@ -43,7 +43,7 @@ export function PublicProsecution() {
 
         <SelectForm
           label="صفة الموكل"
-          name="clientType"
+          name="client_type"
           options={[
             { label: "مدعي", value: "individual" },
             { label: "شركة", value: "company" }
@@ -53,7 +53,7 @@ export function PublicProsecution() {
 
         <SelectForm
           label="نوع القضية"
-          name="caseType"
+          name="case_type"
           options={[
             { label: "جنائي", value: "criminal" },
             { label: "مدني", value: "civil" },
@@ -64,7 +64,7 @@ export function PublicProsecution() {
 
         <SelectForm
           label="المخفر التابع له القضية"
-          name="policeStation"
+          name="case_police_station"
           options={[
             { label: "مخفر الأزاريطة", value: "police1" },
             { label: "مخفر سيدي جابر", value: "police2" },
@@ -75,17 +75,17 @@ export function PublicProsecution() {
         />
 
 
-        <InputForm label="رقم القضية في المخفر" name="numberInPoliceStation" type="text" placeholder="رقم القضية في المخفر" />
+        <InputForm label="رقم القضية في المخفر" name="case_number_at_police_station" type="number" placeholder="رقم القضية في المخفر" />
 
-        <InputForm label="تاريخ ورود القضية في المخفر" name="dateInPoliceStation" type="date" />
+        <InputForm label="تاريخ ورود القضية في المخفر" name="regestration_date_of_case_at_prosecution" type="date" />
 
-        <InputForm label="اسم المحقق" name="investigatorName" type="text" placeholder="اسم المحقق" />
+        <InputForm label="اسم المحقق" name="detective_name" type="text" placeholder="اسم المحقق" />
 
-        <InputForm label="جهة التحقيق" name="investigativeAuthority" type="text" placeholder="جهة التحقيق" />
+        <InputForm label="جهة التحقيق" name="investigation_name" type="text" placeholder="جهة التحقيق" />
 
 
-        <InputForm label="تاريخ تسجيل القضية في الادعاء العام" name="dateInProsecution" type="date" />
-        <InputForm label="تاريخ ورود القضية في المكتب" name="dateInOffice" type="date" />
+        <InputForm label="تاريخ تسجيل القضية في الادعاء العام" name="registration_at_public_prosecution" type="date" />
+        <InputForm label="تاريخ ورود القضية في المكتب" name="case_entry_date" type="date" />
 
       </div>
 

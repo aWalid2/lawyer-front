@@ -1,4 +1,4 @@
-import type { FormValues } from "../types/typseCase";
+import type { FormValues } from "../utils/mapToApiPayload";
 
 export const initialValues: FormValues = {
   clientId: "",

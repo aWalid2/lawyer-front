@@ -1,63 +1,61 @@
 import * as Yup from "yup";
 
 export const validationSchema = Yup.object({
-  caseStatus: Yup.string(),
-  caseTitle: Yup.string().required("عنوان القضية مطلوب"),
-  clientId: Yup.string().required("اسم الموكل مطلوب"),
-  caseType: Yup.string().required("وضع القضية مطلوب"),
-  clientType: Yup.string().required("صفة الموكل مطلوبة"),
-  caseStatusReceived: Yup.string(),
-  policeStation: Yup.string(),
-  numberInPoliceStation: Yup.string(),
-  dateInPoliceStation: Yup.date().nullable(),
-  investigatorName: Yup.string(),
-  investigativeAuthority: Yup.string(),
-  dateInProsecution: Yup.date().nullable(),
-  dateInOffice: Yup.date().nullable(),
-  caseReceiptDate: Yup.date().nullable(),
+  // case_status: Yup.string(),
+  // case_title: Yup.string().required("عنوان القضية مطلوب"),
+  // client_name: Yup.string().required("اسم الموكل مطلوب"),
+  // case_type: Yup.string().required("وضع القضية مطلوب"),
+  // client_type: Yup.string().required("صفة الموكل مطلوبة"),
+  // case_status_received: Yup.string(),
+  // police_station: Yup.string(),
+  // case_number_at_prosecution: Yup.string(),
+  // regestration_date_of_case_at_prosecution: Yup.date().nullable(),
+  // detective_name: Yup.string(),
+  // investigation_name: Yup.string(),
+  // registration_at_public_prosecution: Yup.date().nullable(),
+  // case_entry_date: Yup.date().nullable(),
+  // case_receipt_date: Yup.date().nullable(),
 
-  firstName: Yup.string(),
-  secondName: Yup.string(),
-  legalStatus: Yup.string(),
+  // name: Yup.string(),
+  // legal_status: Yup.string(),
 
-  countryCode: Yup.string().required("كود الدولة مطلوب"),
-  phone: Yup.string()
-    .matches(/^[0-9]+$/, "رقم الهاتف يجب أن يحتوي على أرقام فقط")
-    .min(9, "رقم الهاتف يجب أن يكون 9 أرقام على الأقل")
-    .max(14, "رقم الهاتف طويل جداً"),
+  // phone: Yup.string()
+  //   .matches(/^[0-9]+$/, "رقم الهاتف يجب أن يحتوي على أرقام فقط")
+  //   .min(9, "رقم الهاتف يجب أن يكون 9 أرقام على الأقل")
+  //   .max(14, "رقم الهاتف طويل جداً"),
 
-  civilId: Yup.string()
-    .matches(/^[0-9]+$/, "الرقم القومي يجب أن يحتوي على أرقام فقط")
-    .min(14, "الرقم القومي يجب أن يكون 14 رقم")
-    .max(14, "الرقم القومي يجب أن يكون 14 رقم"),
+  // ssn: Yup.string()
+  //   .matches(/^[0-9]+$/, "الرقم القومي يجب أن يحتوي على أرقام فقط")
+  //   .min(14, "الرقم القومي يجب أن يكون 14 رقم")
+  //   .max(14, "الرقم القومي يجب أن يكون 14 رقم"),
 
-  nationality: Yup.string(),
-  country: Yup.string(),
-  address: Yup.string(),
-  email: Yup.string().email("البريد الإلكتروني غير صحيح"),
+  // nationality: Yup.string(),
+  // country: Yup.string(),
+  // address: Yup.string(),
+  // email: Yup.string().email("البريد الإلكتروني غير صحيح"),
 
-  fixedFees: Yup.number()
-    .positive("يجب أن يكون رقماً موجباً")
-    .when('feeType', {
-      is: 'fixed',
-      then: (schema) => schema.required("الأتعاب الثابتة مطلوبة"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
+  // fixedFees: Yup.number()
+  //   .positive("يجب أن يكون رقماً موجباً")
+  //   .when('fee_type', {
+  //     is: 'fixed',
+  //     then: (schema) => schema.required("الأتعاب الثابتة مطلوبة"),
+  //     otherwise: (schema) => schema.notRequired(),
+  //   }),
 
-  profitPercentage: Yup.number()
-    .positive("يجب أن يكون رقماً موجباً")
-    .max(100, "النسبة يجب أن تكون أقل من أو تساوي 100")
-    .when('feeType', {
-      is: 'profit',
-      then: (schema) => schema.required("نسبة الأرباح مطلوبة"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
+  // profitPercentage: Yup.number()
+  //   .positive("يجب أن يكون رقماً موجباً")
+  //   .max(100, "النسبة يجب أن تكون أقل من أو تساوي 100")
+  //   .when('fee_type', {
+  //     is: 'profit',
+  //     then: (schema) => schema.required("نسبة الأرباح مطلوبة"),
+  //     otherwise: (schema) => schema.notRequired(),
+  //   }),
 
-  contractStartDate: Yup.date().nullable(),
-  contractValue: Yup.string(),
-  contractDuration: Yup.string(),
-  contractImage: Yup.mixed().nullable(),
-  powerOfAttorneyImage: Yup.mixed().nullable(),
-  notes: Yup.string(),
+  // contract_start_date: Yup.date().nullable(),
+  // contract_value: Yup.string(),
+  // contract_duration: Yup.string(),
+  // contract_image: Yup.mixed().nullable(),
+  // power_of_attorney_image: Yup.mixed().nullable(),
+  // notes: Yup.string(),
 
 });

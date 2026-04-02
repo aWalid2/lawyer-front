@@ -24,7 +24,7 @@ export const CasesTable: React.FC<CasesTableProps> = ({
       return (
         caseItem.case_number?.toLowerCase().includes(searchStr) ||
         caseItem.case_type?.toLowerCase().includes(searchStr) ||
-        caseItem.detective_name?.toLowerCase().includes(searchStr)
+        caseItem.client_name?.toLowerCase().includes(searchStr)
       );
     });
   }, [cases, searchTerm]);
