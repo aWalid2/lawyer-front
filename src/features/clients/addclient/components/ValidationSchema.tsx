@@ -1,37 +1,46 @@
 import * as Yup from "yup";
 
-// في ملف ValidationSchema.ts
-export const validationSchema = (shouldAddClient: boolean) => {
+export const validationSchema = (shouldAddClient: boolean, hasContract: boolean = false) => {
   const baseSchema = Yup.object().shape({
     first_name: Yup.string().required("اسم الموكل مطلوب"),
-    email: Yup.string()
-      .required("البريد الإلكتروني مطلوب")
-      .email("البريد الإلكتروني غير صالح"),
-    ssn: Yup.string()
-      .required("الرقم المدني مطلوب"),
+    email: Yup.string().required("البريد الإلكتروني مطلوب").email("البريد الإلكتروني غير صالح"),
+    ssn: Yup.string().required("الرقم المدني مطلوب"),
     nationality: Yup.string().required("الجنسية مطلوبة"),
     country: Yup.string().required("الدولة مطلوبة"),
-    address: Yup.string().required("العنوان مطلوب"),
-
+    authorization_photo: Yup.mixed()
+      .required("صورة التوكيل مطلوبة")
+      .test("fileExists", "صورة التوكيل مطلوبة", (value) => {
+        return value && value instanceof File;
+      }),
+      address: Yup.string().required("العنوان مطلوب"),
+    phone: Yup.string()
+      .required("رقم الهاتف مطلوب")
+      .matches(/^[0-9]+$/, "رقم الهاتف يجب أن يحتوي على أرقام فقط")
+      .min(8, "رقم الهاتف يجب أن يكون 8 أرقام على الأقل")
+      .max(15, "رقم الهاتف يجب أن لا يتجاوز 15 رقم"),
     profile: Yup.object().shape({
       client_type: Yup.string()
         .oneOf(["individual", "company", "lawyer"], "نوع الموكل غير صالح")
         .required("نوع الموكل مطلوب"),
-      phone: Yup.string()
-        .required("رقم الهاتف مطلوب")
-        .matches(/^[0-9]+$/, "رقم الهاتف يجب أن يحتوي على أرقام فقط")
-        .min(8, "رقم الهاتف يجب أن يكون 8 أرقام على الأقل")
-        .max(15, "رقم الهاتف يجب أن لا يتجاوز 15 رقم"),
       notes: Yup.string(),
       contract: Yup.object().shape({
-        start_date: Yup.string().nullable(),
-        contract_value: Yup.string().nullable(),
-        contract_duration: Yup.string().nullable(),
+        start_date: hasContract 
+          ? Yup.string().required("تاريخ بداية العقد مطلوب") 
+          : Yup.string().nullable(),
+        contract_value: hasContract 
+          ? Yup.string().required("القيمة المتفق عليها مطلوبة") 
+          : Yup.string().nullable(),
+        contract_duration: hasContract 
+          ? Yup.string().required("مدة العقد مطلوبة") 
+          : Yup.string().nullable(),
       }),
       account: Yup.object().shape({
         confirmation_password: Yup.string(),
       }),
     }),
+    contract_file: hasContract 
+      ? Yup.mixed().required("صورة العقد مطلوبة")
+      : Yup.mixed().notRequired(),
   });
 
   if (shouldAddClient) {
@@ -46,8 +55,7 @@ export const validationSchema = (shouldAddClient: boolean) => {
             .test(
               'passwords-match',
               'كلمة المرور غير متطابقة',
-              function(value) {
-                // الطريقة الصحيحة للوصول إلى password
+              function (value) {
                 const password = this.options.context?.password || this.parent?.parent?.parent?.password;
                 return value === password;
               }

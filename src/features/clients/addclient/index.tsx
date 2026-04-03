@@ -1,6 +1,5 @@
 import { Formik, Form } from "formik";
 import { useState } from "react";
-
 import type { FormValues } from "../addclient/types/addClientT";
 import { validationSchema } from "../addclient/components/ValidationSchema";
 import { Switch } from "@/components/ui/switch";
@@ -15,10 +14,9 @@ import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
 import { useAddClient } from "./api/hooks/useAddClient";
 
-// ثوابت الكلاسات
 const CLASSES = {
   fieldWithIcon:
-    "w-full border rounded-md p-2 bg-gray-50 h-10 md:h-[50px] pr-10",
+  "w-full border rounded-md p-2 bg-gray-50 h-10 md:h-[50px] pr-10",
   formSection: "border border-gray-300 p-4 rounded-xl",
   flexRow: "flex flex-col md:flex-row gap-3",
   flexBetween: "flex justify-between items-center",
@@ -62,7 +60,6 @@ const FormDetails = () => {
     },
   };
 
-  // ✅ دالة تحويل الـ FormValues لـ FormData
   const convertToFormData = (values: FormValues) => {
     const formData = new FormData();
     formData.append("first_name", values.first_name);
@@ -106,16 +103,7 @@ const FormDetails = () => {
   };
 
   const handleSubmit = (values: FormValues) => {
-    console.log("Form Values:", values);
-
     const formData = convertToFormData(values);
-
-    // ✅ أضف هذا الكود لمعرفة البيانات اللي رايحة
-    console.log("📤 Sending FormData:");
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
     mutate(formData);
   };
 
