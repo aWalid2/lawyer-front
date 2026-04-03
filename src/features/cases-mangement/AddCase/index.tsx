@@ -62,7 +62,7 @@ const FormCase = () => {
                     placeholder="اختر وضع القضية"
                     onChange={(value) => {
                       setFieldValue("caseStatusReceived", value);
-                      setCaseType(value);
+                      setCaseType(value as string);
                     }}
                   />
                 </div>
