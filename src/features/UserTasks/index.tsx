@@ -1,103 +1,122 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { DataTable, type Column } from '@/shared/components/DataTable'
 import { UsersTaskActions } from './components/UsersTaskActions';
 import { HeaderTasksUser } from './components/HeaderTasksUser';
 import { Pagination } from "@/shared/components/Pagination";
-
-interface UsersTaskTypes {
-    // يمكن إضافة خصائص هنا إذا لزم الأمر
-}
+import { usePagination } from '@/shared/hooks/usePagination';
+import { useFetchTasks } from './api/hooks/useGetTasks';
+import { useFetchClients } from '@/features/clients/clients/api/hooks/useGetClients'; // استورد الـ hook
 
 interface TaskRelatedT {
     id: string;
-    TaskTitle: string;
-    TaskType: string;
-    PersonInCharge: string;
+    task_title: string;
+    task_type: string;
+    assigned_to: number;
     status: string;
-    DeliveryDate: string;
+    delivery_date: string;
 }
 
-const tasks: TaskRelatedT[] = [
-    { id: "1", TaskTitle: "مراجعة عقد القضية رقم 254", TaskType: "نوع المهمة 1", PersonInCharge: "المسؤول 1", status: "متأخرة", DeliveryDate: "2024-06-01" },
-    { id: "2", TaskTitle: "مراجعة عقد القضية رقم 24", TaskType: "نوع المهمة 2", PersonInCharge: "المسؤول 2", status: "مُنجزة", DeliveryDate: "2024-06-02" },
-    { id: "3", TaskTitle: "مراجعة عقد القضية رقم 254", TaskType: "نوع المهمة 3", PersonInCharge: "المسؤول 3", status: "قيد التنفيذ ", DeliveryDate: "2024-06-03" },
-    { id: "4", TaskTitle: "مراجعة عقد القضية رقم 254", TaskType: "نوع المهمة 4", PersonInCharge: "المسؤول 4", status: "قيد التنفيذ", DeliveryDate: "2024-06-04" },
-    { id: "5", TaskTitle: "مراجعة عقد القضية رقم 254", TaskType: "نوع المهمة 5", PersonInCharge: "المسؤول 5", status: "متأخرة ", DeliveryDate: "2024-06-05" },
-    { id: "6", TaskTitle: "مراجعة عقد القضية رقم 254", TaskType: "نوع المهمة 6", PersonInCharge: "المسؤول 6", status: "قيد التنفيذ", DeliveryDate: "2024-06-06" },
-];
+// خريطة لتحويل الحالات من إنجليزي إلى عربي
+const statusMapping: Record<string, string> = {
+    "in_progress": "قيد التنفيذ",
+    "pending": "قيد الانتظار",
+    "done": "مُنجزة",
+    "late": "متأخرة"
+};
 
 const StatusCell: React.FC<{ status: string }> = ({ status }) => {
-    const getStatusStyle = (status: string): string => {
-        const statusValue = status.trim(); // لإزالة المسافات الزائدة
+    // تنظيف القيمة من المسافات
+    const cleanStatus = status.trim();
+    // تحويل القيمة الإنجليزية إلى العربية للعرض
+    const arabicStatus = statusMapping[cleanStatus] || cleanStatus;
 
-        switch (statusValue) {
-            case "مُنجزة":
+    const getStatusStyle = (statusValue: string): string => {
+        switch (statusValue.trim()) {
+            case "done":
                 return "bg-[#11B32433] text-[#0B6E1F]";
-            case "متأخرة":
+            case "late":
                 return "bg-[#C600001F] text-[#C60000]";
-            case "قيد التنفيذ":
+            case "in_progress":
                 return "bg-[#DBC33B29] text-[#9E7F0F]";
+            case "pending":
+                return "bg-[#FFA50029] text-[#FF8C00]";
             default:
                 return "bg-gray-100 text-gray-700";
         }
     };
 
     return (
-        <span className={`inline-block px-3 py-1.5 rounded-full text-sm font-medium ${getStatusStyle(status)}`}>
-            {status}
+        <span className={`inline-block px-3 py-1.5 rounded-full text-sm font-medium ${getStatusStyle(cleanStatus)}`}>
+            {arabicStatus}
         </span>
     );
 };
 
-export const UsersTask: React.FC<UsersTaskTypes> = () => {
+export const UsersTask: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
+    const { data: tasks, isPending, isError } = useFetchTasks();
+    const { data: clientsData, isPending: isClientsLoading } = useFetchClients(); // جلب بيانات العملاء
     const [statusFilter, setStatusFilter] = useState<string>("all");
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 15;
 
-    // استخدام useMemo لحساب المهام المصفاة بشكل فعال
+    // عمل Map للعملاء عشان نقدر نجيب الاسم بسرعة من الـ ID
+    const clientsMap = useMemo(() => {
+        if (!clientsData) return new Map();
+        return new Map(clientsData.map((client: any) => [client.user_id, client.user?.first_name || `موكل ${client.user_id}`]));
+    }, [clientsData]);
+
+    // دالة لجلب اسم الموكل من الـ ID
+    const getClientName = (userId: number): string => {
+        return clientsMap.get(userId) || `موكل ${userId}`;
+    };
+
+    // فلترة المهام حسب البحث والحالة
     const filteredTasks = useMemo(() => {
-        return tasks.filter(task => {
-            // فلترة حسب الحالة
-            if (statusFilter !== "all" && task.status.trim() !== statusFilter) {
+        if (!tasks || tasks.length === 0) return [];
+
+        return tasks.filter((task: TaskRelatedT) => {
+            // تنظيف القيمة من المسافات
+            const cleanStatus = task.status.trim();
+
+            // فلترة حسب الحالة (المقارنة بالقيم الإنجليزية)
+            if (statusFilter !== "all" && cleanStatus !== statusFilter) {
                 return false;
             }
 
-            // فلترة حسب البحث
+            // فلترة حسب البحث (يبحث في القيم المعروضة بالعربي)
             if (searchTerm) {
                 const searchLower = searchTerm.toLowerCase();
+                const clientName = getClientName(task.assigned_to).toLowerCase();
                 return (
-                    task.TaskTitle.toLowerCase().includes(searchLower) ||
-                    task.TaskType.toLowerCase().includes(searchLower) ||
-                    task.PersonInCharge.toLowerCase().includes(searchLower)
+                    task.task_title.toLowerCase().includes(searchLower) ||
+                    task.task_type.toLowerCase().includes(searchLower) ||
+                    task.assigned_to.toString().includes(searchLower) ||
+                    clientName.includes(searchLower) || // البحث في اسم الموكل
+                    statusMapping[cleanStatus].includes(searchLower)
                 );
             }
 
             return true;
         });
-    }, [searchTerm, statusFilter]);
+    }, [searchTerm, statusFilter, tasks, clientsMap]);
 
-    const totalPages = Math.ceil(filteredTasks.length / itemsPerPage);
-    useEffect(() => {
-        if (totalPages > 0 && currentPage > totalPages) {
-            setCurrentPage(totalPages);
-        } else if (totalPages === 0) {
-            setCurrentPage(1);
-        }
-    }, [totalPages, currentPage]);
+    const {
+        currentPage,
+        setCurrentPage,
+        totalPages,
+    } = usePagination<TaskRelatedT>(filteredTasks || [], 15);
 
-    // حساب المهام للصفحة الحالية
-    const currentTasks = useMemo(() => {
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        return filteredTasks.slice(startIndex, startIndex + itemsPerPage);
-    }, [filteredTasks, currentPage, itemsPerPage]);
+    // الحصول على بيانات الصفحة الحالية
+    const currentPageData = useMemo(() => {
+        const startIndex = (currentPage - 1) * 15;
+        const endIndex = startIndex + 15;
+        return filteredTasks.slice(startIndex, endIndex);
+    }, [filteredTasks, currentPage]);
 
     const columns: Column<TaskRelatedT>[] = [
         {
             header: "#",
             accessor: (item: TaskRelatedT) => {
-                // إيجاد الرقم التسلسلي في القائمة المصفاة
-                const indexInFiltered = filteredTasks.findIndex(t => t.id === item.id);
+                const indexInFiltered = filteredTasks.findIndex((t: TaskRelatedT) => t.id === item.id);
                 return indexInFiltered + 1;
             },
             headerClassName: "w-13",
@@ -105,19 +124,19 @@ export const UsersTask: React.FC<UsersTaskTypes> = () => {
         },
         {
             header: "عنوان المهمة",
-            accessor: "TaskTitle",
+            accessor: "task_title",
             headerClassName: "w-35",
             className: "w-35",
         },
         {
             header: "نوع المهمة",
-            accessor: "TaskType",
+            accessor: "task_type",
             headerClassName: "w-35",
             className: "w-35",
         },
         {
             header: "المُكلف",
-            accessor: "PersonInCharge",
+            accessor: (item: TaskRelatedT) => getClientName(item.assigned_to), // عرض الاسم بدل الرقم
             headerClassName: "w-35",
             className: "w-35",
         },
@@ -129,9 +148,16 @@ export const UsersTask: React.FC<UsersTaskTypes> = () => {
         },
         {
             header: "تاريخ التسليم",
-            accessor: "DeliveryDate",
-            headerClassName: "w-35",
-            className: "w-35",
+            accessor: (item: TaskRelatedT) => {
+                const date = new Date(item.delivery_date);
+                return date.toLocaleDateString('ar-SA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            },
+            headerClassName: "w-35 text-center",
+            className: "w-35 text-center font-medium",
         },
         {
             header: "إجراء",
@@ -143,6 +169,34 @@ export const UsersTask: React.FC<UsersTaskTypes> = () => {
         },
     ];
 
+    const filterOptions = useMemo(() => {
+        return [
+            { value: "all", label: "الكل" },
+            { value: "in_progress", label: "قيد التنفيذ" },
+            { value: "pending", label: "قيد الانتظار" },
+            { value: "done", label: "مُنجزة" },
+            { value: "late", label: "متأخرة" }
+        ];
+    }, []);
+
+    // حالة التحميل
+    if (isPending || isClientsLoading) {
+        return (
+            <div className="flex justify-center items-center py-8">
+                <div className="text-gray-500">جاري تحميل المهام...</div>
+            </div>
+        );
+    }
+
+    // حالة الخطأ
+    if (isError) {
+        return (
+            <div className="flex justify-center items-center py-8">
+                <div className="text-red-500">حدث خطأ في تحميل المهام</div>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-4">
             <HeaderTasksUser
@@ -150,10 +204,11 @@ export const UsersTask: React.FC<UsersTaskTypes> = () => {
                 onSearch={setSearchTerm}
                 onFilterChange={setStatusFilter}
                 statusFilter={statusFilter}
+                filterOptions={filterOptions}
             />
 
             <DataTable
-                data={currentTasks}
+                data={currentPageData}
                 columns={columns}
                 rowIdField="id"
             />

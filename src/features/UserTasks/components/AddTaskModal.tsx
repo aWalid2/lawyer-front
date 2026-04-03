@@ -1,5 +1,5 @@
 import { Formik, Form } from "formik";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import * as Yup from "yup";
 import {
   Dialog,
@@ -13,6 +13,7 @@ import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { useTaskUser } from "./api/hooks/useAddTask";
+import { useFetchClients } from "@/features/clients/clients/api/hooks/useGetClients";
 
 interface AddTaskModalProps {
   onClose: () => void;
@@ -31,7 +32,9 @@ interface TaskFormValues {
 
 const validationSchema = Yup.object({
   task_title: Yup.string().required("عنوان المهمة مطلوب"),
-  assigned_to: Yup.number().required("المكلف مطلوب"),
+  assigned_to: Yup.number()
+    .required("المكلف مطلوب")
+    .min(1, "يرجى اختيار المكلف"),
   task_type: Yup.string().required("نوع المهمة مطلوب"),
   delivery_date: Yup.string().required("تاريخ التسليم مطلوب"),
   notes: Yup.string(),
@@ -49,7 +52,8 @@ const defaultValues: TaskFormValues = {
 
 function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTaskModalProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const { mutate: addTask, isPending } = useTaskUser(); // استخدام الـ hook
+  const { mutate: addTask, isPending } = useTaskUser();
+  const { data: clientsData, isPending: isClientsLoading } = useFetchClients();
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -58,8 +62,7 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
 
   const handleSubmit = (values: TaskFormValues) => {
     console.log("تم حفظ المهمة:", values);
-    
-    // استخدام mutation لإضافة المهمة
+
     addTask(values, {
       onSuccess: () => {
         if (onSave) {
@@ -73,6 +76,16 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
       }
     });
   };
+
+  // تحويل بيانات العملاء إلى الصيغة المطلوبة للـ Select
+  const clientOptions = useMemo(() => {
+    if (!clientsData || clientsData.length === 0) return [];
+    
+    return clientsData.map((client: any) => ({
+      value: client.user_id,        // القيمة: ID الموكل (number)
+      label: client.user?.first_name || `موكل ${client.user_id}` // الاسم المعروض
+    }));
+  }, [clientsData]);
 
   if (!isModalOpen) return null;
 
@@ -109,11 +122,14 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
                   type="text"
                   placeholder="أدخل عنوان المهمة"
                 />
-                <InputForm
+                
+                {/* هنا الـ Select بدل InputForm */}
+                <SelectForm
                   name="assigned_to"
                   label="المكلف"
-                  type="number"
-                  placeholder="أدخل اسم المكلف"
+                  options={clientOptions}
+                  placeholder={isClientsLoading ? "جاري تحميل العملاء..." : "اختر المكلف"}
+                  disabled={isClientsLoading || clientOptions.length === 0}
                 />
               </div>
 
@@ -146,7 +162,7 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
                 name="status"
                 label="حالة المهمة"
                 options={[
-                  { value: " in_progress", label: "قيد التنفيذ" },
+                  { value: "in_progress", label: "قيد التنفيذ" },
                   { value: "pending", label: "قيد الانتظار" },
                   { value: "done", label: "مُنجزة" },
                   { value: "late", label: "متأخرة" },
@@ -158,10 +174,10 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
                 disabled={isPending}
                 className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isPending 
-                  ? "جاري الإضافة..." 
-                  : initialValues === defaultValues 
-                    ? "إضافة مهمة" 
+                {isPending
+                  ? "جاري الإضافة..."
+                  : initialValues === defaultValues
+                    ? "إضافة مهمة"
                     : "حفظ التعديلات"
                 }
               </button>

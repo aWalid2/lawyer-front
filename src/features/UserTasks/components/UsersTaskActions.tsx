@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import view from '../../../../public/images/view.svg';
-import edit from '../../../../public/images/edit.svg';
-import deleteIcon from '../../../../public/images/delete.svg';
+import view from '@/public/images/view.svg';
+import edit from '@/public/images/edit.svg';
+import deleteIcon from '@/public/images/delete.svg';
 import AddTaskModal from './AddTaskModal';
 import { Link } from 'react-router-dom';
 
