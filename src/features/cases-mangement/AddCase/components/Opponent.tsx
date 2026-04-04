@@ -11,7 +11,7 @@ export function OpponentForm() {
         <h4 className="font-semibold text-[#CBA462]">بيانات الخصم</h4>
         <button
           type="button"
-          onClick={() => setFieldValue("has_discount", false)}
+          onClick={() => setFieldValue("has_opponent", false)}
           className="text-red-500 text-sm flex items-center gap-1 hover:underline bg-red-500/10 px-2 py-1 rounded-md"
         >
           <span className="text-red-500 text-xl">x</span>

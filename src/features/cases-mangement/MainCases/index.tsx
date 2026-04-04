@@ -12,10 +12,13 @@ import { PaginationApi } from "@/shared/components/PaginationApi";
 
 const getStatusStyles = (status: string) => {
   switch (status) {
-    case "active":
-      return "bg-[#5570F1]/20 text-[#5570F1]";
+
     case "UNDER_APPEAL":
       return "bg-[#937F12]/20 text-[#937F12]";
+    case "PUBLIC_PROSECUTION":
+      return "bg-[#5570F1]/20 text-[#5570F1]";
+    case "AT_PROSECUTOR_OFFICE":
+      return "bg-[#5570F1]/20 text-[#5570F1]";
     default:
       return "bg-gray-100 text-gray-600";
   }

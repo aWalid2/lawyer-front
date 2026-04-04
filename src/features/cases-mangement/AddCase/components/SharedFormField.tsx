@@ -1,9 +1,15 @@
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
+import { useFetchClients } from "../api/hooks/useGetClients";
 
 
 
 export function SharedFormField() {
+  const { data: clients } = useFetchClients()
+  const options = clients?.map((client: any) => ({
+    label: client.name,
+    value: client.name
+  })) || []
 
 
   return (
@@ -14,12 +20,7 @@ export function SharedFormField() {
       <SelectForm
         label="اسم الموكل"
         name="client_name"
-        options={[
-          { label: "احمد", value: "Ahmed" },
-          { label: "محمد", value: "Mohamed" },
-          { label: "علي", value: "Ali" },
-          { label: "خالد", value: "Khaled" }
-        ]}
+        options={options}
         placeholder="اختر الموكل"
       />
 

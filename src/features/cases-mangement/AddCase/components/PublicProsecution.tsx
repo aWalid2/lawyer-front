@@ -31,7 +31,6 @@ export function PublicProsecution() {
 
       <InputForm label="تاريخ تسجيل القضية في الادعاء العام" name="regestration_date_of_case_at_prosecution" type="date" />
 
-      <InputForm label="تاريخ ورود القضية في المكتب" name="case_entry_date" type="date" />
 
 
     </>

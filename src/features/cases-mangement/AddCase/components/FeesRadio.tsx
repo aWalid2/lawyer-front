@@ -14,7 +14,7 @@ export function FeesRadio() {
                 dir="rtl"
                 value={values.case_fees_type}
                 onValueChange={(val) => setFieldValue("case_fees_type", val)}
-                className="w-full flex-row flex justify-between items-center"
+                className="w-full sm:flex-row flex-col flex sm:justify-between justify-start sm:items-center items-start"
             >
                 <div className="flex items-center gap-3">
                     <RadioGroupItem value="fixed_profits" id="r1" />
@@ -43,19 +43,21 @@ export function FeesRadio() {
                 )}
 
                 {values.case_fees_type === "percentage_of_profits" && (
-                    <div className="flex items-end gap-3 max-w-sm">
-                        <div className="flex-1">
+                    <div className="flex w-full  gap-3 ">
+                        <div className="w-full flex items-end gap-3">
                             <InputForm
                                 label="نسبة الأرباح المستحقة"
                                 name="percentage_of_profits"
                                 type="number"
                                 placeholder="15"
+
+
                             />
+                            <div className="text-4xl text-secondary mb-2">
+                                %
+                            </div>
                         </div>
 
-                        <div className="mb-2.5 text-2xl font-bold bg-gray-50 px-4 py-2 rounded-lg border border-gray-200 text-gray-400">
-                            %
-                        </div>
                     </div>
                 )}
             </div>

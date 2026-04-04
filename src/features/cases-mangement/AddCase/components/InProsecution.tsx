@@ -25,7 +25,7 @@ export function InProsecution() {
 
       <InputForm label="رقم القضية في النيابة" name="case_number_at_police_station" type="number" placeholder="رقم القضية في النيابة" />
 
-      <InputForm label="تاريخ تسجيل القضية في النيابة" name="case_arrival_date_at_police_station" type="date" />
+      <InputForm label="تاريخ تسجيل القضية في النيابة" name="regestration_date_of_case_at_prosecution" type="date" />
 
 
 
@@ -34,7 +34,6 @@ export function InProsecution() {
 
 
       <InputForm label="رقم القضية في المخفر" name="case_number_at_prosecution" type="text" />
-      <InputForm label="تاريخ ورود القضية في المكتب" name="case_entry_date" type="date" />
     </>
   );
 }

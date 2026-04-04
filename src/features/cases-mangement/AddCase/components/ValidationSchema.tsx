@@ -16,13 +16,14 @@ export const validationSchema = Yup.object({
 
   regestration_date_of_case_at_prosecution: Yup.date().when("case_situation", {
     is: "PUBLIC_PROSECUTION",
-    then: (schema) => schema.required("تاريخ تسجيل القضية في الادعاء العام مطلوب"),
-    otherwise: (schema) => schema.required("تاريخ تسجيل القضية في المخفر مطلوب"),
+    then: (schema) => schema.required("تاريخ تسجيل القضية "),
+
+    otherwise: (schema) => schema.notRequired(),
   }),
   case_arrival_date_at_police_station: Yup.date().when("case_situation", {
     is: "PUBLIC_PROSECUTION",
-    then: (schema) => schema.required("تاريخ ورود القضية في المخفر مطلوب"),
-    otherwise: (schema) => schema.required("تاريخ ورود القضية في النيابة مطلوب"),
+    then: (schema) => schema.required("تاريخ ورود القضية "),
+    otherwise: (schema) => schema.notRequired(),
   }),
 
 

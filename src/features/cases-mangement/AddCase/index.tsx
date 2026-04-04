@@ -1,4 +1,5 @@
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { SubmitButton } from "@/shared/components/SubmitButton";
 import { SwitchForm } from "@/shared/components/SwitchForm";
@@ -14,9 +15,9 @@ import { InProsecution } from "./components/InProsecution";
 import { OpponentForm } from "./components/Opponent";
 import { PublicProsecution } from "./components/PublicProsecution";
 import { SharedFormField } from "./components/SharedFormField";
-import { UnderReview } from "./components/UnderReview";
 import { validationSchema } from "./components/ValidationSchema";
 import { initialValues } from "./hooks/initialValues";
+
 
 
 
@@ -30,7 +31,6 @@ const FormCase = () => {
   const { mutateAsync: addUnderAppealCase, isPending: isPendingUnderAppealCase } = useAddUnderAppealCase()
   const { mutateAsync: addPublicProsecutionCase, isPending: isPendingPublicProsecutionCase } = useAddPublicProsecutionCase()
   const { mutateAsync: addPublicProsecutionOfficeCase, isPending: isPendingPublicProsecutionOfficeCase } = useAddPublicProsecutionOfficeCase()
-
 
   return (
     <Formik
@@ -81,10 +81,9 @@ const FormCase = () => {
 
                 <div className={" grid grid-cols-1 md:grid-cols-2 gap-4"}>
                   <SharedFormField />
-                  {values.case_situation === "UNDER_APPEAL" && <UnderReview />}
                   {values.case_situation === "PUBLIC_PROSECUTION" && <PublicProsecution />}
                   {values.case_situation === "AT_PROSECUTOR_OFFICE" && <InProsecution />}
-
+                  <InputForm label="تاريخ ورود القضية داخل المكتب" name="case_entry_date" type="date" />
                 </div>
 
 
@@ -102,14 +101,15 @@ const FormCase = () => {
 
 
                 <FeesForm />
-                <div className="w-full pt-10 flex justify-end">
-                  <SubmitButton
-                    isPending={isPendingUnderAppealCase || isPendingPublicProsecutionCase || isPendingPublicProsecutionOfficeCase}
-                    loadingText="جاري الإضافة..."
-                  >
-                    إضافة قضية
-                  </SubmitButton>
-                </div>
+
+                <SubmitButton
+                  isPending={isPendingUnderAppealCase || isPendingPublicProsecutionCase || isPendingPublicProsecutionOfficeCase}
+                  loadingText="جاري الإضافة..."
+                  className="mt-6"
+                >
+                  إضافة قضية
+                </SubmitButton>
+
               </Form>
             </div>
           </div>
