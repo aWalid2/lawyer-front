@@ -10,7 +10,8 @@ export const useUpdateLawyer = () => {
         retry: 1,
         onSuccess: (data: any) => {
             queryClient.invalidateQueries({ queryKey: ["lawyer-profile"] });
-            toast.success(data.message || "تم تحديث بيانات المحامي بنجاح");
+            // بدل ما تستخدم data.message، استخدم رسالة ثابتة
+            toast.success("تم تحديث بيانات المحامي بنجاح");
         },
         onError: (error: any) => {
             toast.error(error.response?.data?.message || "حدث خطأ في تحديث البيانات");

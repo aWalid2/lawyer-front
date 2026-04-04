@@ -17,7 +17,6 @@ export const updateLawyer = async ({ id, data }: { id: string; data: any }) => {
                 specialization: data.specialization,
             }
         }
-
     );
     return response.data;
 };

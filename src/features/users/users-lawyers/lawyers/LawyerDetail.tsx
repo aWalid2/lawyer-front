@@ -5,7 +5,6 @@ import PageLayout from '@/shared/components/PageLayout';
 import { useGetOneLawyer } from '../api/hooks/useGetLawyer';
 import { Error } from '@/shared/components/Error';
 
-
 const LawyerDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
 
@@ -30,12 +29,15 @@ const LawyerDetail: React.FC = () => {
             <HeaderTitle title="تفاصيل المحامي" />
             <div className="bg-white overflow-hidden mt-10">
                 <div className="p-8">
-
                     <div className="flex justify-between items-start border-b border-gray-100 pb-6">
                         <div>
-                            <h2 className="text-2xl font-bold text-[#153A4D]">{lawyer.first_name || 'غير محدد'}</h2>
+                            {/* ✅ استخدام user.first_name */}
+                            <h2 className="text-2xl font-bold text-[#153A4D]">
+                                {lawyer.user?.first_name || 'غير محدد'}
+                            </h2>
+                            {/* ✅ استخدام specialization مباشرة */}
                             <span className="inline-block mt-2 px-4 py-1.5 bg-[#E3C086] bg-opacity-20 text-[#CBA462] rounded-full text-sm font-medium">
-                                {lawyer.profile?.specialization || 'غير محدد'}
+                                {lawyer.specialization || 'غير محدد'}
                             </span>
                         </div>
                     </div>
@@ -50,13 +52,19 @@ const LawyerDetail: React.FC = () => {
                                 <div className="flex items-center gap-3">
                                     <span className="text-gray-500 min-w-[100px]">رقم الهاتف:</span>
                                     <div className="flex items-center" dir="ltr">
-                                        <span className="text-gray-900 font-medium">{lawyer.phone || 'غير محدد'}</span>
+                                        {/* ✅ استخدام user.phone */}
+                                        <span className="text-gray-900 font-medium">
+                                            {lawyer.user?.phone || 'غير محدد'}
+                                        </span>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center gap-3">
                                     <span className="text-gray-500 min-w-[100px]">البريد الإلكتروني:</span>
-                                    <span className="text-gray-900 font-medium" dir="ltr">{lawyer.email || 'غير محدد'}</span>
+                                    {/* ✅ استخدام user.email */}
+                                    <span className="text-gray-900 font-medium" dir="ltr">
+                                        {lawyer.user?.email || 'غير محدد'}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -67,69 +75,41 @@ const LawyerDetail: React.FC = () => {
                             </h3>
 
                             <div className="space-y-3">
-                                {lawyer.ssn && (
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-gray-500 min-w-[100px]">رقم الهوية:</span>
-                                        <span className="text-gray-900 font-medium">{lawyer.ssn}</span>
-                                    </div>
-                                )}
+                                {/* ✅ معلومات إضافية من الـ API الجديد */}
+                                <div className="flex items-center gap-3">
+                                    <span className="text-gray-500 min-w-[100px]">رقم الترخيص:</span>
+                                    <span className="text-gray-900 font-medium">
+                                        {lawyer.license_number || 'غير محدد'}
+                                    </span>
+                                </div>
 
-                                {lawyer.nationality && (
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-gray-500 min-w-[100px]">الجنسية:</span>
-                                        <span className="text-gray-900 font-medium">{lawyer.nationality}</span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                                <div className="flex items-center gap-3">
+                                    <span className="text-gray-500 min-w-[100px]">سنوات الخبرة:</span>
+                                    <span className="text-gray-900 font-medium">
+                                        {lawyer.experience_years || 'غير محدد'}
+                                    </span>
+                                </div>
 
-                        {(lawyer.country || lawyer.address) && (
-                            <div className="space-y-4 md:col-span-2">
-                                <h3 className="text-lg font-semibold text-[#153A4D] border-b border-gray-100 pb-2">
-                                    العنوان
-                                </h3>
-
-                                <div className="space-y-3">
-                                    {lawyer.country && (
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-gray-500 min-w-[100px]">الدولة:</span>
-                                            <span className="text-gray-900 font-medium">{lawyer.country}</span>
-                                        </div>
-                                    )}
-
-                                    {lawyer.address && (
-                                        <div className="flex items-start gap-3">
-                                            <span className="text-gray-500 min-w-[100px]">العنوان:</span>
-                                            <span className="text-gray-900 font-medium flex-1">{lawyer.address}</span>
-                                        </div>
-                                    )}
+                                <div className="flex items-center gap-3">
+                                    <span className="text-gray-500 min-w-[100px]">الحالة:</span>
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                        lawyer.is_verified 
+                                            ? 'bg-green-100 text-green-700' 
+                                            : 'bg-yellow-100 text-yellow-700'
+                                    }`}>
+                                        {lawyer.is_verified ? 'موثق' : 'قيد المراجعة'}
+                                    </span>
                                 </div>
                             </div>
-                        )}
-
-                    </div>
-
-                    <div className="mt-8 pt-6 border-t border-gray-100">
-                        <div className="space-y-3">
-                            <div className="flex items-center gap-6 text-sm text-gray-500">
-                                <span className="font-medium text-gray-700">آخر تحديث:</span>
-                                <span>{new Date(lawyer.updated_at).toLocaleDateString('ar-EG')}</span>
-                                <span>الساعة:</span>
-                                <span>{new Date(lawyer.updated_at).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}</span>
-                            </div>
-                            <div className="flex items-center gap-6 text-sm text-gray-500">
-                                <span className="font-medium text-gray-700">تاريخ الإنشاء:</span>
-                                <span>{new Date(lawyer.created_at).toLocaleDateString('ar-EG')}</span>
-                                <span>الساعة:</span>
-                                <span>{new Date(lawyer.created_at).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}</span>
-                            </div>
                         </div>
                     </div>
+
+                    {/* ملاحظة: حقول country, address, ssn, nationality, notes, created_at, updated_at غير موجودة في الـ API الجديد */}
+                    {/* إذا كنت بحاجة لهذه الحقول، أضفها إلى الـ API أو قم بإخفائها */}
                 </div>
             </div>
         </PageLayout>
     );
 };
 
-// التصدير الافتراضي
 export default LawyerDetail;

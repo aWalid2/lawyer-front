@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
-import type { Lawyer } from "./types";
 import * as Yup from "yup";
 import { useUpdateLawyer } from "../api/hooks/useLawyersUpdate";
 import { useAddLawyer } from "../api/hooks/useLawyers";
+import type { Lawyer } from "../lawyers/types";
 
 interface EditLawyersProps {
     lawyer?: Lawyer;
@@ -30,16 +30,16 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
     const isEditMode = !!lawyer;
 
     const initialValues = {
-        first_name: lawyer?.first_name || "",
-        phone: lawyer?.phone || "",
-        email: lawyer?.email || "",
-        specialization: lawyer?.profile?.specialization || "",
-        ssn: lawyer?.ssn || "",
+        first_name: lawyer?.user?.first_name || "",
+        phone: lawyer?.user?.phone || "",
+        email: lawyer?.user?.email || "",
+        specialization: lawyer?.specialization || "",
+        ssn: "",
         password: "",
-        nationality: lawyer?.nationality || "",
-        country: lawyer?.country || "",
-        address: lawyer?.address || "",
-        role: "lawyer", // ثابت
+        nationality: "",
+        country: "",
+        address: "",
+        role: "lawyer",
     };
 
     const validationSchema = Yup.object().shape({
@@ -56,54 +56,33 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
         address: Yup.string(),
     });
 
-    const { mutate: updateLawyer, isPending: isUpdating } = useUpdateLawyer();
-    const { mutate: addLawyer, isPending: isAdding } = useAddLawyer();
+    const { mutateAsync: updateLawyer, isPending: isUpdating } = useUpdateLawyer();
+    const { mutateAsync: addLawyer, isPending: isAdding } = useAddLawyer();
 
     const isLoading = isEditMode ? isUpdating : isAdding;
 
-    const handleSubmit = (values: typeof initialValues) => {
-        if (isEditMode && lawyer?.id) {
-            // تحديث محامي موجود
-            updateLawyer(
-                { 
-                    id: lawyer.id, 
-                    data: {
-                        first_name: values.first_name,
-                        email: values.email,
-                        phone: values.phone,
-                        nationality: values.nationality,
-                        password: values.password || undefined,
-                        country: values.country,
-                        address: values.address,
-                        ssn: values.ssn,
-                        specialization: values.specialization,
-                        role: values.role, // إضافة الرول
-                    }
-                },
-                {
-                    onSuccess: () => {
-                        if (onLawyerUpdated) {
-                            onLawyerUpdated();
-                        }
-                        if (onOpenChange) {
-                            onOpenChange(false);
-                        }
-                    },
+    const handleSubmit = async (values: typeof initialValues) => {
+        if (isEditMode && lawyer?.user_id) {
+            await updateLawyer({
+                id: lawyer.user_id.toString(),
+                data: {
+                    first_name: values.first_name,
+                    email: values.email,
+                    phone: values.phone,
+                    nationality: values.nationality,
+                    password: values.password || undefined,
+                    country: values.country,
+                    address: values.address,
+                    ssn: values.ssn,
+                    specialization: values.specialization,
+                    role: values.role,
                 }
-            );
-        } else {
-            // إضافة محامي جديد
-            addLawyer(values, {
-                onSuccess: () => {
-                    if (onLawyerUpdated) {
-                        onLawyerUpdated();
-                    }
-                    if (onOpenChange) {
-                        onOpenChange(false);
-                    }
-                },
             });
+        } else {
+            await addLawyer(values);
         }
+        onLawyerUpdated?.();
+        onOpenChange?.(false);
     };
 
     return (
@@ -133,7 +112,6 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
                 >
                     {() => (
                         <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
-                            {/* الصف الأول: الاسم والتخصص */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="first_name"
@@ -150,7 +128,6 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
                                 />
                             </div>
 
-                            {/* الصف الثاني: رقم الهاتف والبريد الإلكتروني */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="phone"
@@ -167,7 +144,6 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
                                 />
                             </div>
 
-                            {/* الصف الثالث: رقم الهوية والجنسية */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="ssn"
@@ -184,7 +160,6 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
                                 />
                             </div>
 
-                            {/* الصف الرابع: الدولة والعنوان */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="country"
@@ -201,9 +176,6 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
                                 />
                             </div>
 
-                           
-
-                            {/* حقل كلمة المرور - يظهر في وضع الإضافة فقط */}
                             {!isEditMode && (
                                 <div className="grid grid-cols-1 gap-4">
                                     <InputForm

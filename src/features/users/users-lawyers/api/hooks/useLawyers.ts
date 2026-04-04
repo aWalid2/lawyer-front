@@ -6,7 +6,7 @@ export const useAddLawyer = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: any) => addLawyers(data), // تعديل هنا
+    mutationFn: (data: any) => addLawyers(data),
     onSuccess: () => {
       toast.success("تم إضافة المحامي بنجاح");
       queryClient.invalidateQueries({ queryKey: ["lawyer-profile"]});
