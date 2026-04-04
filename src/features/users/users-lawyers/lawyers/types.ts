@@ -1,14 +1,16 @@
 // types.ts
 export interface Lawyer {
     id: string;
-    lawyerName?: string;
-    phoneNumber?: string;
+    role: string;
+    first_name?: string;
     email?: string;
-    specialization?: string;
-    nationalId?: string;
-    countryCode?: string;
+    phone?: string;
     nationality?: string;
+    password?: string;
     country?: string;
     address?: string;
-    notes?: string;
+    ssn?: string;
+    profile: {
+        specialization?: string;
+    }
 }

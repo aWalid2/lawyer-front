@@ -5,6 +5,8 @@ import deleteIcon from '@/public/images/delete.svg';
 import { Link } from 'react-router-dom';
 import type { Lawyer } from './types';
 import { Editlawyers } from './Editlawyers';
+import { useDeleteLawyer } from '../api/hooks/useDeletLawyers';
+import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
 
 interface LawyersActionProps {
     caseItem: Lawyer;
@@ -28,7 +30,8 @@ export const LawyersAction: React.FC<LawyersActionProps> = ({ caseItem, onLawyer
             onLawyerUpdated();
         }
     };
-
+        const { mutateAsync: deleteLawyer } = useDeleteLawyer();
+    
     return (
         <>
             <div className="flex items-center justify-center gap-2">
@@ -48,13 +51,23 @@ export const LawyersAction: React.FC<LawyersActionProps> = ({ caseItem, onLawyer
                     <img src={edit} alt="edit" />
                 </button>
 
-                <button
-                    type="button"
-                    title="حذف"
-                    className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-                >
-                    <img src={deleteIcon} alt="delete" />
-                </button>
+            <ConfirmDeleteDialog
+                title="حذف المحامي"
+                description={`هل أنت متأكد من حذف المحامي ${caseItem.first_name} ؟`}
+                onConfirm={() => {
+                    deleteLawyer({ id: caseItem.id });
+                }}
+                trigger={
+                    <button
+                        type="button"
+                        onClick={(e) => e.stopPropagation()}
+                        title="حذف"
+                        className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
+                    >
+                        <img src={deleteIcon} alt="delete" />
+                    </button>
+                }
+            />
             </div>
 
             {/* الموديل يظهر عند الضغط على زر التعديل */}
