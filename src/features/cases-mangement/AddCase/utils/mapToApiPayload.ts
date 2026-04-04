@@ -42,18 +42,22 @@ export interface FormValues {
   contract_image: File | null;
   power_of_attorney_image: File | null;
 
-  fixed_amount?: number;
-  percentage?: number;
 
   prosecution: string;
   case_number_at_prosecution: string;
   regestration_date_of_case_at_prosecution: string;
 
-  notes: string;
+  notes?: string;
 
   case_status_received: string;
 
-  fee_type: "percentage_of_profits" | "fixed_amount"| "contract_based";
+case_fees_type: "fixed_profits" | "percentage_of_profits" | "contract_based";
+
+fixed_profits?: number;
+percentage_of_profits?: number;
+contract_based?: number;
+
+
 
   has_discount: boolean;
 }
@@ -83,25 +87,22 @@ export const mapToApiPayload = (
     case_entry_date: values.case_entry_date,
   };
 
-  const case_fees = {
-    case_fees_type:
-      values.fee_type === "fixed_amount"
-        ? "fixed_amount"
-        : values.fee_type === "percentage_of_profits"
-        ? "percentage_of_profits"
-        : "contract_based",
+const case_fees = {
+  case_fees_type: values.case_fees_type,
+  notes: values.notes || "",
 
-    ...(values.fee_type === "fixed_amount" && {
-      fixed_amount: values.fixed_amount,
-    }),
+  ...(values.case_fees_type === "fixed_profits" && {
+    fixed_amount: Number(values.fixed_profits),
+  }),
 
-    ...(values.fee_type === "percentage_of_profits" && {
-      percentage: values.percentage,
-    }),
+  ...(values.case_fees_type === "percentage_of_profits" && {
+    percentage: Number(values.percentage_of_profits),
+  }),
 
-    notes: "",
-  };
-
+  ...(values.case_fees_type === "contract_based" && {
+    contract_based: Number(values.contract_based),
+  }),
+};
   // ================= UNDER APPEAL =================
   if (values.case_situation === "UNDER_APPEAL") {
     return {

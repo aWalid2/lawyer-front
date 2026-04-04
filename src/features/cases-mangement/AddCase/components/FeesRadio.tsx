@@ -10,14 +10,14 @@ export function FeesRadio() {
     return (
         <>
             <RadioGroup
-                name="fee_type"
+                name="case_fees_type"
                 dir="rtl"
-                value={values.fee_type}
-                onValueChange={(val) => setFieldValue("fee_type", val)}
-                className="w-full flex-row flex justify-between! items-center"
+                value={values.case_fees_type}
+                onValueChange={(val) => setFieldValue("case_fees_type", val)}
+                className="w-full flex-row flex justify-between items-center"
             >
                 <div className="flex items-center gap-3">
-                    <RadioGroupItem value="fixed_amount" id="r1" />
+                    <RadioGroupItem value="fixed_profits" id="r1" />
                     <Label htmlFor="r1">أتعاب ثابتة</Label>
                 </div>
 
@@ -33,16 +33,16 @@ export function FeesRadio() {
             </RadioGroup>
 
             <div className="mt-4">
-                {values.fee_type === "fixed_amount" && (
+                {values.case_fees_type === "fixed_profits" && (
                     <InputForm
                         label="قيمة الأتعاب الثابتة"
-                        name="fixed_amount"
+                        name="fixed_profits"
                         type="number"
                         placeholder="0.00"
                     />
                 )}
 
-                {values.fee_type === "percentage_of_profits" && (
+                {values.case_fees_type === "percentage_of_profits" && (
                     <div className="flex items-end gap-3 max-w-sm">
                         <div className="flex-1">
                             <InputForm

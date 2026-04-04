@@ -16,7 +16,11 @@ export const useAddUnderAppealCase = () => {
     },
 
     onError: (error: any) => {
-      toast.error(error?.message || "حدث خطأ");
+      const message =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        "حدث خطأ";
+      toast.error(message);
     },
   });
 };

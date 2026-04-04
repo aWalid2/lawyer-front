@@ -3,7 +3,7 @@ import { InputForm } from "@/shared/components/InputForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 
 
-export function UnderTheRift() {
+export function UnderReview() {
   return (
     <>
       <div className={" grid grid-cols-1 md:grid-cols-2 gap-4"}>
@@ -56,7 +56,7 @@ export function UnderTheRift() {
           placeholder="اختر نوع القضية"
         />
 
-        <InputForm label="تاريخ ورود القضية داخل المكتب" name="case_receipt_date" type="date" />
+        <InputForm label="تاريخ ورود القضية داخل المكتب" name="case_entry_date" type="date" />
       </div>
 
       <TextAreaForm label="ملاحظات" name="notes" placeholder="أضف ملاحظات..." />

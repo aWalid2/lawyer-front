@@ -14,10 +14,10 @@ export type BasePayload = {
 };
 
 export type CaseFees = {
-  case_fees_type: string;
+  case_fees_type: "fixed_amount" | "percentage" | "contract_based";
   fixed_amount?: number;
   percentage?: number;
-  notes: string;
+  contract_based?: number;
 };
 
 // ================= UNDER APPEAL =================

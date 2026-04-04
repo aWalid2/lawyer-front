@@ -41,9 +41,12 @@ export const initialValues: FormValues = {
   contract_image: null,
   power_of_attorney_image: null,
 
-  fee_type: "fixed_amount",
-  fixed_amount: undefined,
-  percentage: undefined,
+ case_fees_type: "fixed_profits",
+
+fixed_profits: undefined,
+percentage_of_profits: undefined,
+contract_based: undefined,
+
 
   prosecution: "",
   case_number_at_prosecution: "",

@@ -2,7 +2,7 @@ import { Formik, Form } from "formik";
 import { useState, useEffect } from "react";
 import x from "@/public/images/x.svg";
 import { validationSchema } from "./components/ValidationSchema";
-import { UnderTheRift } from "./components/Undertheift";
+import { UnderReview } from "./components/UnderReview";
 import { PublicProsecution } from "./components/PublicProsecution";
 import { InProsecution } from "./components/InProsecution";
 import { initialValues } from "./hooks/initialValues";
@@ -60,6 +60,7 @@ const FormCase = () => {
                   <SelectForm
                     label="وضع القضية عند الاستلام"
                     name="case_situation"
+
                     options={[
                       { value: "UNDER_APPEAL", label: "تحت الرفع" },
                       { value: "PUBLIC_PROSECUTION", label: "الادعاء العام" },
@@ -67,16 +68,16 @@ const FormCase = () => {
                     ]}
                     placeholder="اختر وضع القضية"
                     onChange={(value) => {
-                      setFieldValue("caseStatusReceived", value);
+                      setFieldValue("case_situation", value);
                       setCaseType(value);
                     }}
                   />
                 </div>
 
                 <div className="space-y-4">
-                  {caseType === "UNDER_APPEAL" && <UnderTheRift />}
-                  {caseType === "PUBLIC_PROSECUTION" && <PublicProsecution />}
-                  {caseType === "AT_PROSECUTOR_OFFICE" && <InProsecution />}
+                  {values.case_situation === "UNDER_APPEAL" && <UnderReview />}
+                  {values.case_situation === "PUBLIC_PROSECUTION" && <PublicProsecution />}
+                  {values.case_situation === "AT_PROSECUTOR_OFFICE" && <InProsecution />}
                 </div>
 
                 <div className="mt-8 pt-8 border-t border-gray-100">

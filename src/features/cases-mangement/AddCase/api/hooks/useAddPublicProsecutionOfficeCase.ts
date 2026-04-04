@@ -13,8 +13,12 @@ export const useAddPublicProsecutionOfficeCase = () => {
         onSuccess: () => {
             toast.success("تم إضافة القضية بنجاح");
         },
-        onError: (error) => {
-            toast.error(error.message);
+        onError: (error: any) => {
+            const message =
+                error?.response?.data?.message ||
+                error?.response?.data?.error ||
+                "حدث خطأ";
+            toast.error(message);
         },
     });
 };
