@@ -25,8 +25,8 @@ export function InProsecution() {
 
       <InputForm label="رقم القضية في النيابة" name="case_number_at_police_station" type="number" placeholder="رقم القضية في النيابة" />
 
-      <InputForm label="تاريخ تسجيل القضية في النيابة" name="regestration_date_of_case_at_prosecution" type="date" />
-      <InputForm label="تاريخ ورود القضية للنيابة" name="case_arrival_date_at_police_station" type="date" />
+      <InputForm label="تاريخ تسجيل القضية في النيابة" name="case_arrival_date_at_police_station" type="date" />
+
 
 
       <InputForm label="اسم المحقق" name="detective_name" type="text" placeholder="اسم المحقق" />

@@ -20,19 +20,20 @@ export function PublicProsecution() {
 
 
       <InputForm label="رقم القضية في المخفر" name="case_number_at_police_station" type="number" placeholder="رقم القضية في المخفر" />
-
       <InputForm label="تاريخ ورود القضية في المخفر" name="case_arrival_date_at_police_station" type="date" />
+
+
 
       <InputForm label="اسم المحقق" name="detective_name" type="text" placeholder="اسم المحقق" />
 
       <InputForm label="جهة التحقيق" name="investigation_name" type="text" placeholder="جهة التحقيق" />
 
 
-      <InputForm label="تاريخ تسجيل القضية في الادعاء العام" name="registration_at_public_prosecution" type="date" />
-      <InputForm label="تاريخ ورود القضية في الادعاء العام" name="case_arrival_date_at_prosecution" type="date" />
+      <InputForm label="تاريخ تسجيل القضية في الادعاء العام" name="regestration_date_of_case_at_prosecution" type="date" />
+
       <InputForm label="تاريخ ورود القضية في المكتب" name="case_entry_date" type="date" />
-      <InputForm label="رقم القضية في الادعاء العام" name="case_number_at_prosecution" type="number" placeholder="رقم القضية في الادعاء العام" />
-      case_arrival_date_at_police_station
+
+
     </>
   );
 }

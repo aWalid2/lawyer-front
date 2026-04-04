@@ -7,42 +7,24 @@ export const validationSchema = Yup.object({
   case_type: Yup.string().required("وضع القضية نوع"),
   client_type: Yup.string().required("صفة الموكل مطلوبة"),
   case_status: Yup.string().required("حالة القضية مطلوبة"),
-  case_entry_date: Yup.date().required("تاريخ استلام القضية مطلوب"),
+  case_entry_date: Yup.date().required("تاريخ ورود القضية في المكتب مطلوب"),
   case_police_station: Yup.string().when("case_situation", {
     is: "PUBLIC_PROSECUTION",
     then: (schema) => schema.required("المخفر مطلوب"),
     otherwise: (schema) => schema.notRequired(),
   }),
-  case_number_at_prosecution: Yup.string().when("case_situation", {
+
+  regestration_date_of_case_at_prosecution: Yup.date().when("case_situation", {
     is: "PUBLIC_PROSECUTION",
-    then: (schema) => schema.required("رقم القضية في الادعاء العام مطلوب"),
-    otherwise: (schema) => schema.notRequired(),
+    then: (schema) => schema.required("تاريخ تسجيل القضية في الادعاء العام مطلوب"),
+    otherwise: (schema) => schema.required("تاريخ تسجيل القضية في المخفر مطلوب"),
   }),
-  regestration_date_of_case_at_prosecution: Yup.date()
-
-    .nullable()
-    .when("case_situation", (value: any, schema: any) => {
-      if (value === "PUBLIC_PROSECUTION") {
-        return schema.required("تاريخ تسجيل القضية في الادعاء العام مطلوب");
-      }
-
-      if (value === "AT_PROSECUTOR_OFFICE") {
-        return schema.required("تاريخ تسجيل القضية في النيابة مطلوب");
-      }
-
-      return schema.notRequired();
-    }),
   case_arrival_date_at_police_station: Yup.date().when("case_situation", {
     is: "PUBLIC_PROSECUTION",
     then: (schema) => schema.required("تاريخ ورود القضية في المخفر مطلوب"),
-    otherwise: (schema) => schema.notRequired(),
+    otherwise: (schema) => schema.required("تاريخ ورود القضية في النيابة مطلوب"),
   }),
 
-  case_arrival_date_at_prosecution: Yup.date().when("case_situation", {
-    is: "PUBLIC_PROSECUTION",
-    then: (schema) => schema.required("تاريخ ورود القضية في الادعاء العام مطلوب"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
 
   name: Yup.string().when("has_opponent", {
     is: true,
