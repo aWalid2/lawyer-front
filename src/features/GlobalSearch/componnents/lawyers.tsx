@@ -1,101 +1,44 @@
-import React, { useState, useMemo } from 'react'
 import { DataTable, type Column } from '@/shared/components/DataTable'
 import { Pagination } from "@/shared/components/Pagination";
+import { usePagination } from '@/shared/hooks/usePagination';
+import { useFetchLawyers } from '@/features/users/users-lawyers/api/hooks/useLawyersGet';
 import { LawyersAction } from '@/features/users/users-lawyers/lawyers/LawyersAction';
-import { Editlawyers } from '@/features/users/users-lawyers/lawyers/Editlawyers';
+import type { Lawyer } from '@/features/users/users-lawyers/lawyers/types';
 
-
-interface LawyerRelatedT {
-    id: string;
-    lawyerName: string;
-    phoneNumber: string;
-    email: string;
-    specialization: string;
-}
-
-// بيانات تجريبية للمحامين
-const lawyers: LawyerRelatedT[] = [
-    {
-        id: "1",
-        lawyerName: "أحمد محمد علي",
-        phoneNumber: "0501234567",
-        email: "ahmed@example.com",
-        specialization: "قضايا مدنية"
-    },
-    {
-        id: "2",
-        lawyerName: "فاطمة عبدالله",
-        phoneNumber: "0559876543",
-        email: "fatima@example.com",
-        specialization: "قضايا تجارية"
-    },
-    {
-        id: "3",
-        lawyerName: "محمد إبراهيم",
-        phoneNumber: "0561122334",
-        email: "mohamed@example.com",
-        specialization: "قضايا عمالية"
-    },
-    {
-        id: "4",
-        lawyerName: "سارة خالد",
-        phoneNumber: "0544455667",
-        email: "sara@example.com",
-        specialization: "قضايا أحوال شخصية"
-    },
-    {
-        id: "5",
-        lawyerName: "عمر حسن",
-        phoneNumber: "0587788990",
-        email: "omar@example.com",
-        specialization: "قضايا جنائية"
-    },
-    {
-        id: "6",
-        lawyerName: "نورة سعد",
-        phoneNumber: "0593344556",
-        email: "noura@example.com",
-        specialization: "استشارات قانونية"
-    },
-];
 
 export const TableLawyers: React.FC = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const itemsPerPage = 15;
-
-    const totalPages = Math.ceil(lawyers.length / itemsPerPage);
-
-    // حساب المحامين للصفحة الحالية
-    const currentLawyers = useMemo(() => {
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        return lawyers.slice(startIndex, startIndex + itemsPerPage);
-    }, [currentPage, itemsPerPage]);
-
-    // دالة مساعدة لحساب الرقم التسلسلي
-    const getSerialNumber = (item: LawyerRelatedT): number => {
-        const indexInLawyers = lawyers.findIndex(c => c.id === item.id);
-        return indexInLawyers + 1;
+    const { data: lawyers, isPending, isError } = useFetchLawyers();
+    
+    const {
+        currentPage,
+        setCurrentPage,
+        totalPages,
+        currentData,
+    } = usePagination<Lawyer>(lawyers || [], 15);
+    
+    const getSerialNumber = (item: Lawyer) => {
+        const index = lawyers?.findIndex((lawyer: Lawyer) => lawyer.id === item.id);
+        return index !== undefined && index >= 0 ? index + 1 : "-";
     };
-
-    const columns: Column<LawyerRelatedT>[] = [
+    
+    const columns: Column<Lawyer>[] = [
         {
             header: "#",
-            accessor: (item: LawyerRelatedT) => getSerialNumber(item),
+            accessor: (item: Lawyer) => getSerialNumber(item),
             headerClassName: "w-13",
             className: "w-13 text-center font-medium",
         },
         {
             header: "اسم المحامي",
-            accessor: "lawyerName",
+            accessor: (item: Lawyer) => item.first_name,
             headerClassName: "w-50",
             className: "w-50 font-medium",
         },
         {
             header: "رقم الهاتف",
-            accessor: (item: LawyerRelatedT) => (
+            accessor: (item: Lawyer) => (
                 <div className="flex items-center justify-center" dir="ltr">
-                    <span className="text-left">{item.phoneNumber}</span>
+                    <span className="text-left">{item.phone}</span>
                 </div>
             ),
             headerClassName: "w-40",
@@ -103,7 +46,7 @@ export const TableLawyers: React.FC = () => {
         },
         {
             header: "البريد الإلكتروني",
-            accessor: (item: LawyerRelatedT) => (
+            accessor: (item: Lawyer) => (
                 <div className="flex items-center justify-center" dir="ltr">
                     <span className="text-left text-sm text-gray-600">{item.email}</span>
                 </div>
@@ -113,9 +56,9 @@ export const TableLawyers: React.FC = () => {
         },
         {
             header: "التخصص",
-            accessor: (item: LawyerRelatedT) => (
+            accessor: (item: Lawyer) => (
                 <span className="flex items-center justify-center" dir="ltr">
-                    {item.specialization}
+                    {item.profile?.specialization || "-"}
                 </span>
             ),
             headerClassName: "w-45",
@@ -123,11 +66,11 @@ export const TableLawyers: React.FC = () => {
         },
         {
             header: "الإجراءات",
-            accessor: (item: LawyerRelatedT) => (
+            accessor: (item: Lawyer) => (
                 <LawyersAction
                     caseItem={item}
                     onLawyerUpdated={() => {
-                        console.log("تم تحديث المحامي");
+                        window.location.reload();
                     }}
                 />
             ),
@@ -135,36 +78,40 @@ export const TableLawyers: React.FC = () => {
             className: "w-35 text-center",
         },
     ];
-
-    return (
-        <div className="space-y-6">
-            <div className="border rounded-main border-gray-200 p-4">
-                <h1 className="text-xl font-semibold mb-8 mt-4 ">قائمة المحامين</h1>
-                <DataTable
-                    data={currentLawyers}
-                    columns={columns}
-                    rowIdField="id"
-                />
-
-                {lawyers.length > 0 && totalPages > 1 && (
-                    <div className="flex justify-center mt-4">
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            onPageChange={setCurrentPage}
-                        />
-                    </div>
-                )}
-
-                {/* موديل إضافة محامي جديد */}
-                <Editlawyers
-                    open={isAddModalOpen}
-                    onOpenChange={setIsAddModalOpen}
-                    onLawyerUpdated={() => {
-                        console.log("تم إضافة محامي جديد");
-                    }}
-                />
+    
+    if (isPending) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
             </div>
-        </div>
+        );
+    }
+    
+    if (isError) {
+        return (
+            <div className="text-center py-12 bg-white rounded-lg border border-red-200">
+                <p className="text-red-500 text-lg">حدث خطأ في تحميل البيانات</p>
+            </div>
+        );
+    }
+    
+    return (
+    <div className="w-full pt-6 space-y-6">
+      <div className="border rounded-main border-gray-200 p-4">
+        <h1 className="text-xl font-semibold mb-8 mt-4 ">قائمة المحامين</h1>
+        <DataTable
+          data={currentData}
+          columns={columns}
+          rowKey={'id'}
+        />
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        )}
+      </div>
+    </div>
     );
 };
