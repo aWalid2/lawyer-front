@@ -3,8 +3,10 @@ import { addPublicProsecutionOfficeCase } from "../services/addPublicProsecution
 import { toast } from "sonner";
 import type { ProsecutionPayload } from "../../types/caseT";
 import { mapToApiPayload, type FormValues } from "../../utils/mapToApiPayload";
+import { useNavigate } from "react-router-dom";
 
 export const useAddPublicProsecutionOfficeCase = () => {
+    const navigate = useNavigate();
     return useMutation({
         mutationFn: (values: FormValues) => {
             const payload = mapToApiPayload(values);
@@ -12,6 +14,7 @@ export const useAddPublicProsecutionOfficeCase = () => {
         },
         onSuccess: () => {
             toast.success("تم إضافة القضية بنجاح");
+             navigate("/dashboard/case-management");
         },
         onError: (error: any) => {
             const message =
