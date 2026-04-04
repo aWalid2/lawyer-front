@@ -10,10 +10,10 @@ import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { InputForm } from "@/shared/components/InputForm";
 import { SwitchForm } from "@/shared/components/SwitchForm";
-import { cn } from "@/lib/utils";
 import { useAddUnderAppealCase } from "./api/hooks/useAddUnderAppealCase";
 import { useAddPublicProsecutionCase } from "./api/hooks/useAddPublicProsecutionCase";
 import { useAddPublicProsecutionOfficeCase } from "./api/hooks/useAddPublicProsecutionOfficeCase";
+import { FeesRadio } from "./components/FeesRadio";
 
 
 
@@ -29,11 +29,6 @@ const FormCase = () => {
   const { mutateAsync: addPublicProsecutionOfficeCase } = useAddPublicProsecutionOfficeCase()
   const [caseType, setCaseType] = useState<string>("");
 
-  const feeOptions = [
-    { value: "fixed", label: "أتعاب ثابتة" },
-    { value: "profit", label: "نسبة من الأرباح" },
-    { value: "contract", label: "تابعة للعقد" },
-  ];
 
   return (
     <Formik
@@ -139,43 +134,8 @@ const FormCase = () => {
                 </div>
 
                 <div className="mt-10 space-y-6">
-                  <label className="text-sm font-medium text-gray-700">كيفية احتساب الأتعاب؟</label>
-                  <div className="flex flex-wrap gap-4 py-2">
-                    {feeOptions.map((option) => (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => setFieldValue("feeType", option.value)}
-                        className={cn(
-                          " min-w-[120px] flex items-center justify-center gap-3 p-4 transition-all duration-200"
-                        )}
-                      >
-                        <div className={cn(
-                          "w-5 h-5 rounded-full border-2 flex items-center justify-center",
-                          values.fee_type === option.value ? "border-[#CBA462]" : "border-gray-300"
-                        )}>
-                          {values.fee_type === option.value && <div className="w-2.5 h-2.5 rounded-full bg-[#CBA462]" />}
-                        </div>
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="mt-4">
-                    {values.fee_type === "fixed_profits" && (
-                      <InputForm label="قيمة الأتعاب الثابتة" name="fixed_amount" type="number" placeholder="0.00" />
-                    )}
-                    {values.fee_type === "percentage_of_profits" && (
-                      <div className="flex items-end gap-3 max-w-sm">
-                        <div className="flex-1">
-                          <InputForm label="نسبة الأرباح المستحقة" name="profitPercentage" type="number" placeholder="15" />
-                        </div>
-                        <div className="mb-2.5 text-2xl font-bold bg-gray-50 px-4 py-2 rounded-lg border border-gray-200 text-gray-400">
-                          %
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <div className="text-sm font-medium text-gray-700 mb-5">هل الاتعاب رقم أم نسبة من الأرباح أم تابعة للعقد ؟</div>
+                  <FeesRadio />
                 </div>
                 <div className="w-full pt-10 flex justify-end">
                   <button

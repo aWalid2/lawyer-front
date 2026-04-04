@@ -53,7 +53,7 @@ export interface FormValues {
 
   case_status_received: string;
 
-  fee_type: "percentage_of_profits" | "fixed_profits"| "contract_based";
+  fee_type: "percentage_of_profits" | "fixed_amount"| "contract_based";
 
   has_discount: boolean;
 }
@@ -85,13 +85,13 @@ export const mapToApiPayload = (
 
   const case_fees = {
     case_fees_type:
-      values.fee_type === "fixed_profits"
-        ? "fixed_profits"
+      values.fee_type === "fixed_amount"
+        ? "fixed_amount"
         : values.fee_type === "percentage_of_profits"
         ? "percentage_of_profits"
         : "contract_based",
 
-    ...(values.fee_type === "fixed_profits" && {
+    ...(values.fee_type === "fixed_amount" && {
       fixed_amount: values.fixed_amount,
     }),
 
