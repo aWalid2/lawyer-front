@@ -53,5 +53,5 @@ contract_based: undefined,
   regestration_date_of_case_at_prosecution: "",
 
   notes: "",
-  has_discount: false,
+  has_opponent: false,
 };

@@ -1,8 +1,7 @@
+import { InputForm } from "@/shared/components/InputForm";
+import { SelectForm } from "@/shared/components/SelectForm";
 import { useFormikContext } from "formik";
 import type { FormValues } from "../utils/mapToApiPayload";
-import { SelectForm } from "@/shared/components/SelectForm";
-import { InputForm } from "@/shared/components/InputForm";
-import { TextAreaForm } from "@/shared/components/TextAreaForm";
 
 
 export function InProsecution() {
@@ -10,59 +9,6 @@ export function InProsecution() {
 
   return (
     <>
-
-      <div className={" grid grid-cols-1 md:grid-cols-2 gap-4"}>
-        <InputForm label="عنوان القضية" name="case_title" type="text" placeholder="عنوان القضية" />
-
-
-        <SelectForm
-          label="اسم الموكل"
-          name="client_name"
-          options={[
-            { label: "احمد", value: "ahmed" },
-            { label: "محمد", value: "mohamed" },
-            { label: "علي", value: "ali" },
-            { label: "خالد", value: "khalid" },
-          ]}
-          placeholder="اختر الموكل"
-        />
-
-
-        <SelectForm
-          label="حالة القضية"
-          name="case_title"
-          options={[
-            { label: "متداولة", value: "pending" },
-            { label: "تحت التنفيذ", value: "inProgress" },
-            { label: "تحت النظر", value: "review" },
-          ]}
-          placeholder="اختر حالة القضية"
-        />
-
-        <SelectForm
-          label="صفة الموكل"
-          name="client_type"
-          options={[
-            { label: "مدعي", value: "individual" },
-            { label: "شركة", value: "company" },
-          ]}
-          placeholder="اختر صفة الموكل"
-        />
-
-
-        <SelectForm
-          label="نوع القضية"
-          name="case_type"
-          options={[
-            { label: "جنائي", value: "criminal" },
-            { label: "مدني", value: "civil" },
-            { label: "تجاري", value: "commercial" },
-          ]}
-          placeholder="اختر نوع القضية"
-        />
-
-
-
         <SelectForm
           label="النيابة"
           name="case_police_station"
@@ -88,8 +34,6 @@ export function InProsecution() {
 
         <InputForm label="رقم القضية في المخفر" name="case_number_at_prosecution" type="text" />
         <InputForm label="تاريخ ورود القضية في المكتب" name="case_entry_date" type="date" />
-      </div>
-      <TextAreaForm label="ملاحظات" name="notes" />
     </>
   );
 }

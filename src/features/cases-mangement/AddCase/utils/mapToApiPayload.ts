@@ -59,7 +59,7 @@ contract_based?: number;
 
 
 
-  has_discount: boolean;
+  has_opponent: boolean;
 }
 
 export type CaseSituation =
