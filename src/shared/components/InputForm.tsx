@@ -17,6 +17,7 @@ type InputFormProps = {
   dir?: string;
   readonly?: boolean;
   labelColor?: string;
+  className?: string;
 };
 
 export const InputForm: React.FC<InputFormProps> = ({
@@ -27,14 +28,15 @@ export const InputForm: React.FC<InputFormProps> = ({
   type,
   dir,
   readonly,
-  labelColor = "text-[#1A1A1A]"
+  labelColor = "text-[#1A1A1A]",
+  className
 }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
 
   if (type === "date") {
     return (
-      <div className="flex flex-col w-full ">
+      <div className={cn("flex flex-col w-full ", className)}>
         <label className={`block mb-4 text-sm font-normal ${labelColor}`}>
           {label}
         </label>

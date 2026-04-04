@@ -1,55 +1,111 @@
 import * as Yup from "yup";
 
 export const validationSchema = Yup.object({
-  case_status: Yup.string(),
+  case_status_received: Yup.string(),
   case_title: Yup.string().required("عنوان القضية مطلوب"),
   client_name: Yup.string().required("اسم الموكل مطلوب"),
-  case_type: Yup.string().required("وضع القضية مطلوب"),
+  case_type: Yup.string().required("وضع القضية نوع"),
   client_type: Yup.string().required("صفة الموكل مطلوبة"),
-  case_status_received: Yup.string(),
-  police_station: Yup.string(),
-  case_number_at_prosecution: Yup.string(),
-  regestration_date_of_case_at_prosecution: Yup.date().nullable(),
-  detective_name: Yup.string(),
-  investigation_name: Yup.string(),
-  registration_at_public_prosecution: Yup.date().nullable(),
-  case_entry_date: Yup.date().nullable(),
-  case_receipt_date: Yup.date().nullable(),
+  case_status: Yup.string().required("حالة القضية مطلوبة"),
+  case_entry_date: Yup.date().required("تاريخ استلام القضية مطلوب"),
+  case_police_station: Yup.string().when("case_situation", {
+    is: "PUBLIC_PROSECUTION",
+    then: (schema) => schema.required("المخفر مطلوب"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  case_number_at_prosecution: Yup.string().when("case_situation", {
+    is: "PUBLIC_PROSECUTION",
+    then: (schema) => schema.required("رقم القضية في الادعاء العام مطلوب"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  regestration_date_of_case_at_prosecution: Yup.date()
 
-  name: Yup.string(),
-  legal_status: Yup.string(),
+    .nullable()
+    .when("case_situation", (value: any, schema: any) => {
+      if (value === "PUBLIC_PROSECUTION") {
+        return schema.required("تاريخ تسجيل القضية في الادعاء العام مطلوب");
+      }
 
-  phone: Yup.string()
+      if (value === "AT_PROSECUTOR_OFFICE") {
+        return schema.required("تاريخ تسجيل القضية في النيابة مطلوب");
+      }
+
+      return schema.notRequired();
+    }),
+  case_arrival_date_at_police_station: Yup.date().when("case_situation", {
+    is: "PUBLIC_PROSECUTION",
+    then: (schema) => schema.required("تاريخ ورود القضية في المخفر مطلوب"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+
+  case_arrival_date_at_prosecution: Yup.date().when("case_situation", {
+    is: "PUBLIC_PROSECUTION",
+    then: (schema) => schema.required("تاريخ ورود القضية في الادعاء العام مطلوب"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+
+  name: Yup.string().when("has_opponent", {
+    is: true,
+    then: (schema) => schema.required("اسم الخصم مطلوب"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  legal_status: Yup.string().when("has_opponent", {
+    is: true,
+    then: (schema) => schema.required("صفة الخصم مطلوبة"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+
+  phone: Yup.string().when("has_opponent", {
+    is: true,
+    then: (schema) => schema.required("رقم الهاتف مطلوب"),
+    otherwise: (schema) => schema.notRequired(),
+  })
     .matches(/^[0-9]+$/, "رقم الهاتف يجب أن يحتوي على أرقام فقط")
     .min(9, "رقم الهاتف يجب أن يكون 9 أرقام على الأقل")
     .max(14, "رقم الهاتف طويل جداً"),
 
-  ssn: Yup.string()
+  ssn: Yup.string().when("has_opponent", {
+    is: true,
+    then: (schema) => schema.required("الرقم القومي مطلوب"),
+    otherwise: (schema) => schema.notRequired(),
+  })
     .matches(/^[0-9]+$/, "الرقم القومي يجب أن يحتوي على أرقام فقط")
     .min(14, "الرقم القومي يجب أن يكون 14 رقم")
     .max(14, "الرقم القومي يجب أن يكون 14 رقم"),
+
+
+  fixed_profits: Yup.number()
+    .nullable()
+    .when("case_fees_type", {
+      is: "fixed_profits",
+      then: (schema) =>
+        schema
+          .required("الأتعاب الثابتة مطلوبة")
+          .typeError("يجب إدخال رقم صحيح")
+          .min(1, "الأتعاب الثابتة لابد ان تكون اكبر من 0"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+
+  percentage_of_profits: Yup.number()
+    .nullable()
+    .when("case_fees_type", {
+      is: "percentage_of_profits",
+      then: (schema) =>
+        schema
+          .required("نسبة الأرباح مطلوبة")
+          .typeError("يجب إدخال رقم صحيح")
+          .min(0, "يجب أن يكون 0 أو أكبر")
+          .max(100, "النسبة يجب أن تكون أقل من أو تساوي 100"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+
+
+
 
   nationality: Yup.string(),
   country: Yup.string(),
   address: Yup.string(),
   email: Yup.string().email("البريد الإلكتروني غير صحيح"),
-
-  fixedFees: Yup.number()
-    .positive("يجب أن يكون رقماً موجباً")
-    .when('fee_type', {
-      is: 'fixed',
-      then: (schema) => schema.required("الأتعاب الثابتة مطلوبة"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-
-  profitPercentage: Yup.number()
-    .positive("يجب أن يكون رقماً موجباً")
-    .max(100, "النسبة يجب أن تكون أقل من أو تساوي 100")
-    .when('fee_type', {
-      is: 'profit',
-      then: (schema) => schema.required("نسبة الأرباح مطلوبة"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
 
   contract_start_date: Yup.date().nullable(),
   contract_value: Yup.string(),

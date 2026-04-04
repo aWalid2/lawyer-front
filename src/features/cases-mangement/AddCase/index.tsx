@@ -17,6 +17,7 @@ import { SharedFormField } from "./components/SharedFormField";
 import { UnderReview } from "./components/UnderReview";
 import { validationSchema } from "./components/ValidationSchema";
 import { initialValues } from "./hooks/initialValues";
+import { InputForm } from "@/shared/components/InputForm";
 
 
 
@@ -84,7 +85,9 @@ const FormCase = () => {
                   {values.case_situation === "UNDER_APPEAL" && <UnderReview />}
                   {values.case_situation === "PUBLIC_PROSECUTION" && <PublicProsecution />}
                   {values.case_situation === "AT_PROSECUTOR_OFFICE" && <InProsecution />}
+
                 </div>
+
 
                 <TextAreaForm label="ملاحظات" name="notes" placeholder="أضف ملاحظات..." className="mt-4" />
                 <div className="mt-8 pt-8 border-t border-gray-100">
@@ -97,6 +100,7 @@ const FormCase = () => {
                     <OpponentForm />
                   )}
                 </div>
+
 
                 <FeesForm />
                 <div className="w-full pt-10 flex justify-end">

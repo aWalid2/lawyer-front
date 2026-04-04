@@ -3,8 +3,8 @@ import type { FormValues } from "../utils/mapToApiPayload";
 export const initialValues: FormValues = {
   client_id: "",
   case_status_received: "",
-  case_status: "pending",
   case_situation: "UNDER_APPEAL",
+  case_status: "",
 
   case_title: "",
   client_name: "",
@@ -13,7 +13,7 @@ export const initialValues: FormValues = {
   case_police_station: "",
   case_number_at_police_station: "",
 
-  client_type: "individual",
+  client_type: "",
 
   name: "",
   legal_status: "",
@@ -33,6 +33,7 @@ export const initialValues: FormValues = {
 
   detective_name: "",
   investigation_name: "",
+  
 
   contract_start_date: "",
   contract_value: "",
