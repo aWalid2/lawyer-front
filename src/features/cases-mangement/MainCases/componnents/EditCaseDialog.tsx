@@ -12,11 +12,13 @@ import React from "react";
 import { Formik, Form } from "formik";
 import type { Case } from "../types/casesTypes";
 import { useUpdateCase } from "../api/hooks/useUpdateCase";
+import { SubmitButton } from "@/shared/components/SubmitButton";
 
 interface EditCaseDialogProps {
   caseItem: Case;
   onSave: (values: Case) => void;
   trigger: React.ReactNode;
+  isPending?: boolean;
 }
 
 export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
@@ -24,7 +26,8 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
   onSave,
   caseItem,
 }) => {
-  const { mutateAsync: updateCase } = useUpdateCase();
+  const [open, setOpen] = React.useState(false);
+  const { mutateAsync: updateCase, isPending } = useUpdateCase();
   const initialValues: Case = {
     ...caseItem,
     case_number: caseItem.case_number || "",
@@ -38,18 +41,18 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
-        className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none"
+        className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
         dir="rtl"
         showCloseButton={false}
         onClick={(e) => e.stopPropagation()}
       >
-        <DialogClose asChild>
+        <DialogClose asChild >
           <button
             onClick={(e) => e.stopPropagation()}
-            className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all"
+            className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all"
           >
             <XIcon size={23} className="text-gray-500 " />
           </button>
@@ -62,9 +65,16 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
 
         <Formik
           initialValues={initialValues}
-          onSubmit={async (values) => {
-            await updateCase({ id: caseItem.id, data: values });
-            onSave(values);
+          onSubmit={async (values, { setSubmitting }) => {
+            try {
+              await updateCase({ id: caseItem.id, data: values });
+              onSave(values);
+              setOpen(false);
+            } catch (error) {
+              console.error(error);
+            } finally {
+              setSubmitting(false);
+            }
           }}
         >
           {() => (
@@ -111,14 +121,13 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
                   type="text"
                 />
               </div>
-              <DialogClose asChild>
-                <button
-                  type="submit"
-                  className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity font-cairo"
-                >
-                  حفظ التغييرات
-                </button>
-              </DialogClose>
+              <SubmitButton
+                isPending={isPending}
+                loadingText="جاري التعديل..."
+                className="mt-6"
+              >
+                حفظ التغييرات
+              </SubmitButton>
             </Form>
           )}
         </Formik>

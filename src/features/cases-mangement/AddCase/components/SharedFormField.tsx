@@ -1,6 +1,6 @@
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
-import { useFetchClients } from "../api/hooks/useGetClients";
+import { useFetchClients } from "@/shared/api/hooks/useGetClients";
 
 
 
@@ -15,7 +15,6 @@ export function SharedFormField() {
   return (
     <>
       <InputForm label="عنوان القضية" name="case_title" type="text" placeholder="عنوان القضية" />
-
 
       <SelectForm
         label="اسم الموكل"

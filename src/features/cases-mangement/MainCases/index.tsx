@@ -82,8 +82,6 @@ const MainCases = () => {
   const totalPages = cases?.meta?.total_pages ?? 1;
 
 
-
-
   if (isPending) return <LoadingPage />
   if (isError) return <EmptyTable message="حدث خطأ في تحميل البيانات" />
   return (

@@ -1,6 +1,6 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { fetchClients } from "../services/getClients";
+import { fetchClients} from '../services/getClients';
 import { toast } from "sonner";
 import { useEffect } from "react";
 
