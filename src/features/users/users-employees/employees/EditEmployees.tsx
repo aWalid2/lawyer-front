@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import {
     Dialog,
@@ -7,12 +7,13 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { XIcon } from "lucide-react";
+import { Eye, EyeOff, XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import type { Employee } from "./types";
-
 import * as Yup from "yup";
+import { useAddEmployee } from "./api/hooks/useAddEmployee";
+import { useUpdateEmployee } from "./api/hooks/useUpdateEmployee";
 
 interface EditemployeesProps {
     employee?: Employee;
@@ -28,31 +29,71 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
     onEmployeeUpdated
 }) => {
     const isEditMode = !!employee;
+    const [showPassword, setShowPassword] = useState(false);
 
     const initialValues = {
-        employeeName: employee?.employeeName || "",
-        phoneNumber: employee?.phoneNumber || "",
-        email: employee?.email || "",
-        jobTitle: employee?.jobTitle || "",
-        countryCode: employee?.countryCode || "+966",
-        notes: employee?.notes || "",
+        first_name: employee?.user?.first_name || "",
+        phone: employee?.user?.phone?.replace(/^\+\d{1,3}/, "") || "",
+        countryCode: employee?.user?.phone?.match(/^\+\d{1,3}/)?.[0] || "+966",
+        email: employee?.user?.email || "",
+        password: "",
+        position: employee?.position || "",
+        notes: employee?.profile?.notes || ""
     };
 
     const validationSchema = Yup.object().shape({
-        employeeName: Yup.string().required("اسم الموظف مطلوب"),
-        phoneNumber: Yup.string().required("رقم الهاتف مطلوب"),
-        email: Yup.string().email("البريد الإلكتروني غير صالح").required("البريد الإلكتروني مطلوب"),
-        jobTitle: Yup.string().required("الوظيفة مطلوبة"),
+        first_name: Yup.string().required("اسم الموظف مطلوب"),
+        phone: Yup.string().required("رقم الهاتف مطلوب"),
         countryCode: Yup.string().required("كود الدولة مطلوب"),
+        email: Yup.string().email("البريد الإلكتروني غير صالح").required("البريد الإلكتروني مطلوب"),
+        password: !isEditMode
+            ? Yup.string().required("كلمة المرور مطلوبة").min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل")
+            : Yup.string().min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل"),
+        position: Yup.string().required("الوظيفة مطلوبة"),
+        notes: Yup.string(),
     });
 
+    const { mutate: addEmployee, isPending: isAdding } = useAddEmployee();
+    const { mutate: updateEmployee, isPending: isUpdating } = useUpdateEmployee();
+    const isLoading = isEditMode ? isUpdating : isAdding;
+
     const handleSubmit = (values: typeof initialValues) => {
-        console.log(isEditMode ? "تحديث الموظف:" : "إضافة موظف جديد:", values);
-        if (onEmployeeUpdated) {
-            onEmployeeUpdated();
+        const submitData: any = {
+            first_name: values.first_name,
+            phone: `${values.countryCode}_${values.phone}`,
+            email: values.email,
+            role: "employee",
+            position: values.position,
+            notes: values.notes
+
+        };
+
+        // لو في حالة الإضافة أو لو المستخدم أدخل كلمة مرور جديدة
+        if (!isEditMode) {
+            submitData.password = values.password;
+        } else if (values.password) {
+            submitData.password = values.password;
         }
-        if (onOpenChange) {
-            onOpenChange(false);
+
+        if (isEditMode && employee?.user_id) {
+            // تعديل موظف
+            updateEmployee({
+                id: employee.user_id.toString(),
+                data: submitData
+            }, {
+                onSuccess: () => {
+                    onEmployeeUpdated?.();
+                    onOpenChange?.(false);
+                }
+            });
+        } else {
+            // إضافة موظف جديد
+            addEmployee(submitData, {
+                onSuccess: () => {
+                    onEmployeeUpdated?.();
+                    onOpenChange?.(false);
+                }
+            });
         }
     };
 
@@ -83,30 +124,26 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
                 >
                     {() => (
                         <Form className="space-y-6 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
-                            {/* اسم الموظف */}
                             <InputForm
-                                name="employeeName"
+                                name="first_name"
                                 label="اسم الموظف"
                                 type="text"
                                 placeholder="أدخل اسم الموظف كاملاً"
                             />
 
-                            {/* رقم الهاتف مع الكود */}
                             <div className="grid grid-cols-12 gap-2">
-                                {/* رقم الهاتف */}
                                 <div className="col-span-8">
                                     <InputForm
-                                        name="phoneNumber"
+                                        name="phone"
                                         label="رقم الهاتف"
                                         type="tel"
                                         placeholder="أدخل رقم الهاتف"
                                     />
                                 </div>
-                                {/* كود الدولة */}
-                                <div className="col-span-4 flex items-end">
+                                <div className="col-span-4">
                                     <SelectForm
                                         name="countryCode"
-                                        label=""
+                                        label="كود الدولة"
                                         options={[
                                             { value: "+966", label: "🇸🇦 +966" },
                                             { value: "+971", label: "🇦🇪 +971" },
@@ -122,7 +159,6 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
                                 </div>
                             </div>
 
-                            {/* البريد الإلكتروني */}
                             <InputForm
                                 name="email"
                                 label="البريد الإلكتروني"
@@ -130,15 +166,13 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
                                 placeholder="example@domain.com"
                             />
 
-                            {/* الوظيفة */}
                             <InputForm
-                                name="jobTitle"
+                                name="position"
                                 label="الوظيفة"
                                 type="text"
                                 placeholder="أدخل المسمى الوظيفي"
                             />
 
-                            {/* الملاحظات */}
                             <InputForm
                                 name="notes"
                                 label="ملاحظات"
@@ -146,11 +180,35 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
                                 placeholder="أي ملاحظات إضافية..."
                             />
 
+                            <div className="relative">
+                                <InputForm
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    placeholder="********"
+                                    label={isEditMode ? "كلمة المرور (اتركها فارغة إذا لم ترغب في التغيير)" : "كلمة المرور"}
+                                />
+                                <button
+                                    type="button"
+                                    className="absolute left-3 top-[60px] -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
+
                             <button
                                 type="submit"
-                                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
+                                disabled={isLoading}
+                                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {isEditMode ? "حفظ التغييرات" : "إضافة موظف"}
+                                {isLoading ? (
+                                    <span className="flex items-center justify-center gap-2">
+                                        <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
+                                        {isEditMode ? "جاري الحفظ..." : "جاري الإضافة..."}
+                                    </span>
+                                ) : (
+                                    isEditMode ? "حفظ التغييرات" : "إضافة موظف"
+                                )}
                             </button>
                         </Form>
                     )}

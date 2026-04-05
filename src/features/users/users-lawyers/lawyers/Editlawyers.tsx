@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import {
     Dialog,
@@ -7,8 +7,9 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { XIcon } from "lucide-react";
+import { Eye, EyeOff, XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
+import { SelectForm } from "@/shared/components/SelectForm";
 import * as Yup from "yup";
 import { useUpdateLawyer } from "../api/hooks/useLawyersUpdate";
 import { useAddLawyer } from "../api/hooks/useLawyers";
@@ -28,13 +29,15 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
     onLawyerUpdated
 }) => {
     const isEditMode = !!lawyer;
+    const [showPassword, setShowPassword] = useState(false);
 
     const initialValues = {
         first_name: lawyer?.user?.first_name || "",
-        phone: lawyer?.user?.phone || "",
+        phone: lawyer?.user?.phone?.replace(/^\+?\d{1,3}/, "") || "",
+        countryCode: lawyer?.user?.phone?.match(/^\+\d{1,3}/)?.[0] || "+966",
         email: lawyer?.user?.email || "",
         specialization: lawyer?.specialization || "",
-        ssn: "",
+        license_number: lawyer?.license_number || "",
         password: "",
         nationality: "",
         country: "",
@@ -45,13 +48,13 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
     const validationSchema = Yup.object().shape({
         first_name: Yup.string().required("اسم المحامي مطلوب"),
         phone: Yup.string().required("رقم الهاتف مطلوب"),
+        countryCode: Yup.string().required("كود الدولة مطلوب"),
         email: Yup.string().email("البريد الإلكتروني غير صالح").required("البريد الإلكتروني مطلوب"),
         specialization: Yup.string().required("التخصص مطلوب"),
-        ssn: Yup.string(),
-        password: !isEditMode 
+        license_number: Yup.string(),
+        password: !isEditMode
             ? Yup.string().required("كلمة المرور مطلوبة").min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل")
-            : Yup.string(),
-        nationality: Yup.string(),
+            : Yup.string().min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل"), nationality: Yup.string(),
         country: Yup.string(),
         address: Yup.string(),
     });
@@ -62,24 +65,29 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
     const isLoading = isEditMode ? isUpdating : isAdding;
 
     const handleSubmit = async (values: typeof initialValues) => {
+        const fullPhone = `${values.countryCode}_${values.phone}`;
+
         if (isEditMode && lawyer?.user_id) {
             await updateLawyer({
                 id: lawyer.user_id.toString(),
                 data: {
                     first_name: values.first_name,
                     email: values.email,
-                    phone: values.phone,
+                    phone: fullPhone,
                     nationality: values.nationality,
                     password: values.password || undefined,
                     country: values.country,
                     address: values.address,
-                    ssn: values.ssn,
+                    license_number: values.license_number,
                     specialization: values.specialization,
                     role: values.role,
                 }
             });
         } else {
-            await addLawyer(values);
+            await addLawyer({
+                ...values,
+                phone: fullPhone,
+            });
         }
         onLawyerUpdated?.();
         onOpenChange?.(false);
@@ -129,12 +137,33 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <InputForm
-                                    name="phone"
-                                    label="رقم الهاتف"
-                                    type="tel"
-                                    placeholder="أدخل رقم الهاتف"
-                                />
+                                <div className="grid grid-cols-12 gap-2">
+                                    <div className="col-span-8">
+                                        <InputForm
+                                            name="phone"
+                                            label="رقم الهاتف"
+                                            type="tel"
+                                            placeholder="أدخل رقم الهاتف"
+                                        />
+                                    </div>
+                                    <div className="col-span-4">
+                                        <SelectForm
+                                            name="countryCode"
+                                            label="كود الدولة"
+                                            options={[
+                                                { value: "+966", label: "🇸🇦 +966" },
+                                                { value: "+971", label: "🇦🇪 +971" },
+                                                { value: "+974", label: "🇶🇦 +974" },
+                                                { value: "+965", label: "🇰🇼 +965" },
+                                                { value: "+973", label: "🇧🇭 +973" },
+                                                { value: "+968", label: "🇴🇲 +968" },
+                                                { value: "+20", label: "🇪🇬 +20" },
+                                                { value: "+962", label: "🇯🇴 +962" },
+                                                { value: "+961", label: "🇱🇧 +961" },
+                                            ]}
+                                        />
+                                    </div>
+                                </div>
 
                                 <InputForm
                                     name="email"
@@ -146,10 +175,10 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
-                                    name="ssn"
-                                    label="رقم الهوية"
+                                    name="license_number"
+                                    label="رقم الترخيص"
                                     type="text"
-                                    placeholder="أدخل رقم الهوية"
+                                    placeholder="أدخل رقم الترخيص"
                                 />
 
                                 <InputForm
@@ -176,15 +205,21 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
                                 />
                             </div>
 
-                                <div className="grid grid-cols-1 gap-4">
-                                    <InputForm
-                                        name="password"
-                                        label="كلمة المرور"
-                                        type="password"
-                                        placeholder="أدخل كلمة المرور"
-                                    />
-                                </div>
-                            
+                            <div className="relative">
+                                <InputForm
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    label="كلمة المرور"
+                                    placeholder="أدخل كلمة المرور"
+                                />
+                                <button
+                                    type="button"
+                                    className="absolute left-3 top-[60px] -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
 
                             <button
                                 type="submit"

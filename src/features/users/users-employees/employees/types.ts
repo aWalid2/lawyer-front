@@ -1,10 +1,16 @@
 // types.ts
 export interface Employee {
-    id: string;
-    employeeName?: string;
-    phoneNumber?: string;
-    email?: string;
-    jobTitle?: string;
-    countryCode?: string;
-    notes?: string;
+    user_id: number;
+    position: string;
+    role?: string;
+    password?: string;
+    profile?: {
+        position: string;
+        notes: string;
+    };
+    user: {
+        first_name: string;
+        email: string;
+        phone: string;
+    };
 }
