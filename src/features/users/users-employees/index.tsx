@@ -88,7 +88,7 @@ export const UsersEmployee: React.FC = () => {
                 />
             ),
             headerClassName: "w-35 text-center",
-            className: "w-35 text-center",
+            className: "w-34 text-center",
         },
     ];
     
