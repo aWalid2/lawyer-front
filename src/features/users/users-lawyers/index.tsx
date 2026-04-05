@@ -7,6 +7,8 @@ import { Editlawyers } from './lawyers/Editlawyers';
 import { usePagination } from '@/shared/hooks/usePagination';
 import { useFetchLawyers } from './api/hooks/useLawyersGet';
 import type { Lawyer } from './lawyers/types';
+import LoadingPage from '@/shared/components/LoadingPage';
+import { Error } from '@/shared/components/Error';
 
 export const UsersLawyer: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -90,21 +92,8 @@ export const UsersLawyer: React.FC = () => {
         },
     ];
     
-    if (isPending) {
-        return (
-            <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            </div>
-        );
-    }
-    
-    if (isError) {
-        return (
-            <div className="text-center py-12 bg-white rounded-lg border border-red-200">
-                <p className="text-red-500 text-lg">حدث خطأ في تحميل البيانات</p>
-            </div>
-        );
-    }
+     if (isPending) return <LoadingPage />
+    if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
     
     return (
         <div className="space-y-6">

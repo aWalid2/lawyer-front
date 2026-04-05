@@ -1,124 +1,57 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import { DataTable, type Column } from '@/shared/components/DataTable'
+import React, { useState } from 'react';
+import { DataTable, type Column } from '@/shared/components/DataTable';
 import { Pagination } from "@/shared/components/Pagination";
 import { HeaderEmployees } from './employees/HeaderEmployees';
 import { EmployeesAction } from './employees/EmployeesAction';
 import { Editemployees } from './employees/EditEmployees';
-
-interface EmployeeRelatedT {
-    id: string;
-    employeeName: string;
-    phoneNumber: string;
-    email: string;
-    jobTitle: string;
-}
-
-// بيانات تجريبية للموظفين
-const employees: EmployeeRelatedT[] = [
-    {
-        id: "1",
-        employeeName: "أحمد محمد علي",
-        phoneNumber: "0501234567",
-        email: "ahmed@company.com",
-        jobTitle: "محامي أول"
-    },
-    {
-        id: "2",
-        employeeName: "فاطمة عبدالله",
-        phoneNumber: "0559876543",
-        email: "fatima@company.com",
-        jobTitle: "محامي استشاري"
-    },
-    {
-        id: "3",
-        employeeName: "محمد إبراهيم",
-        phoneNumber: "0561122334",
-        email: "mohamed@company.com",
-        jobTitle: "مدير القسم القانوني"
-    },
-    {
-        id: "4",
-        employeeName: "سارة خالد",
-        phoneNumber: "0544455667",
-        email: "sara@company.com",
-        jobTitle: "باحث قانوني"
-    },
-    {
-        id: "5",
-        employeeName: "عمر حسن",
-        phoneNumber: "0587788990",
-        email: "omar@company.com",
-        jobTitle: "مساعد قانوني"
-    },
-    {
-        id: "6",
-        employeeName: "نورة سعد",
-        phoneNumber: "0593344556",
-        email: "noura@company.com",
-        jobTitle: "مدير الموارد البشرية"
-    },
-];
+import { usePagination } from '@/shared/hooks/usePagination';
+import { useFetchEmployees } from './employees/api/hooks/useGetAllEmployees';
+import type { Employee,  } from './employees/types';
+import LoadingPage from '@/shared/components/LoadingPage';
+import { Error } from '@/shared/components/Error';
 
 export const UsersEmployee: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const itemsPerPage = 15;
-
-
-    // فلترة الموظفين بناءً على البحث
-    const filteredEmployees = useMemo(() => {
-        if (!searchTerm) return employees;
-
-        return employees.filter(employee =>
-            employee.employeeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            employee.phoneNumber.includes(searchTerm) ||
-            employee.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            employee.jobTitle.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }, [searchTerm]);
-
-    const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
-
-    // إعادة تعيين الصفحة الحالية إذا كانت أكبر من إجمالي الصفحات
-    useEffect(() => {
-        if (totalPages > 0 && currentPage > totalPages) {
-            setCurrentPage(totalPages);
-        } else if (totalPages === 0) {
-            setCurrentPage(1);
-        }
-    }, [totalPages, currentPage]);
-
-    // حساب الموظفين للصفحة الحالية
-    const currentEmployees = useMemo(() => {
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        return filteredEmployees.slice(startIndex, startIndex + itemsPerPage);
-    }, [filteredEmployees, currentPage, itemsPerPage]);
-
-    // دالة مساعدة لحساب الرقم التسلسلي
-    const getSerialNumber = (item: EmployeeRelatedT): number => {
-        const indexInFiltered = filteredEmployees.findIndex(c => c.id === item.id);
-        return indexInFiltered + 1;
+    
+    const { data: employees, isPending, isError, refetch } = useFetchEmployees();
+    
+    const filteredEmployees = employees?.filter((employee: Employee) => 
+        employee.user.first_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        employee.user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        employee.position?.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
+    
+    const getSerialNumber = (item: Employee) => {
+        const index = filteredEmployees.findIndex((employee: Employee) => employee.user_id === item.user_id);
+        return index >= 0 ? index + 1 : "-";
     };
-
-    const columns: Column<EmployeeRelatedT>[] = [
+    
+    const {
+        currentPage,
+        setCurrentPage,
+        totalPages,
+        currentData,
+    } = usePagination<Employee>(filteredEmployees, 15);
+    
+    const columns: Column<Employee>[] = [
         {
             header: "#",
-            accessor: (item: EmployeeRelatedT) => getSerialNumber(item),
+            accessor: (item: Employee) => getSerialNumber(item),
             headerClassName: "w-13",
             className: "w-13 text-center font-medium",
         },
         {
             header: "اسم الموظف",
-            accessor: "employeeName",
+            accessor: (item: Employee) => item.user.first_name,
             headerClassName: "w-50",
             className: "w-50 font-medium",
         },
         {
             header: "رقم الهاتف",
-            accessor: (item: EmployeeRelatedT) => (
+            accessor: (item: Employee) => (
                 <div className="flex items-center justify-center" dir="ltr">
-                    <span className="text-left">{item.phoneNumber}</span>
+                    <span className="text-left">{item.user.phone}</span>
                 </div>
             ),
             headerClassName: "w-40",
@@ -126,9 +59,9 @@ export const UsersEmployee: React.FC = () => {
         },
         {
             header: "البريد الإلكتروني",
-            accessor: (item: EmployeeRelatedT) => (
+            accessor: (item: Employee) => (
                 <div className="flex items-center justify-center" dir="ltr">
-                    <span className="text-left text-sm text-gray-600">{item.email}</span>
+                    <span className="text-left text-sm text-gray-600">{item.user.email}</span>
                 </div>
             ),
             headerClassName: "w-50",
@@ -136,9 +69,9 @@ export const UsersEmployee: React.FC = () => {
         },
         {
             header: "الوظيفة",
-            accessor: (item: EmployeeRelatedT) => (
+            accessor: (item: Employee) => (
                 <span className="flex items-center justify-center" dir="ltr">
-                    {item.jobTitle}
+                    {item.position || "-"}
                 </span>
             ),
             headerClassName: "w-45",
@@ -146,12 +79,11 @@ export const UsersEmployee: React.FC = () => {
         },
         {
             header: "الإجراءات",
-            accessor: (item: EmployeeRelatedT) => (
+            accessor: (item: Employee) => (
                 <EmployeesAction
                     caseItem={item}
                     onEmployeeUpdated={() => {
-                        // تحديث البيانات بعد التعديل
-                        console.log("تم تحديث الموظف");
+                        refetch();
                     }}
                 />
             ),
@@ -159,7 +91,10 @@ export const UsersEmployee: React.FC = () => {
             className: "w-35 text-center",
         },
     ];
-
+    
+    if (isPending) return <LoadingPage />
+    if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
+    
     return (
         <div className="space-y-6">
             <HeaderEmployees
@@ -167,37 +102,32 @@ export const UsersEmployee: React.FC = () => {
                 onSearch={setSearchTerm}
                 onAddClick={() => setIsAddModalOpen(true)}
             />
-
+            
             <DataTable
-                data={currentEmployees}
+                data={currentData}
                 columns={columns}
-                rowIdField="id"
+                rowIdField="user_id"
             />
-
-
+            
             {filteredEmployees.length > 0 ? (
                 totalPages > 1 && (
-                    <div className="flex justify-center mt-4">
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            onPageChange={setCurrentPage}
-                        />
-                    </div>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
                 )
             ) : (
                 <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
                     <p className="text-gray-500 text-lg">لا يوجد موظفين مطابقين لمعايير البحث</p>
                 </div>
             )}
-
-            {/* موديل إضافة موظف جديد */}
+            
             <Editemployees
                 open={isAddModalOpen}
                 onOpenChange={setIsAddModalOpen}
                 onEmployeeUpdated={() => {
-                    console.log("تم إضافة موظف جديد");
-                    // هنا يمكن إضافة منطق تحديث الجدول
+                    refetch();
                 }}
             />
         </div>
