@@ -12,7 +12,6 @@ export const addLawyers = async (data: any) => {
       country: data.country,
       address: data.address,
       ssn: data.ssn,
-      notes: data.notes,
       role: "lawyer",
       profile: {
         specialization: data.specialization,

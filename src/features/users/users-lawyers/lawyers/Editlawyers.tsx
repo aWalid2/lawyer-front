@@ -176,7 +176,6 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
                                 />
                             </div>
 
-                            {!isEditMode && (
                                 <div className="grid grid-cols-1 gap-4">
                                     <InputForm
                                         name="password"
@@ -185,7 +184,7 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
                                         placeholder="أدخل كلمة المرور"
                                     />
                                 </div>
-                            )}
+                            
 
                             <button
                                 type="submit"
