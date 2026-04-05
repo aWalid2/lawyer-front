@@ -65,7 +65,9 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
     const isLoading = isEditMode ? isUpdating : isAdding;
 
     const handleSubmit = async (values: typeof initialValues) => {
-        const fullPhone = `${values.countryCode}_${values.phone}`;
+        let cleanPhone = values.phone.replace(/\s/g, '').replace(/-/g, '');
+        cleanPhone = cleanPhone.replace(/^\+\d{1,3}/, '');
+        const fullPhone = `${values.countryCode}${cleanPhone}`;
 
         if (isEditMode && lawyer?.user_id) {
             await updateLawyer({

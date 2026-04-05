@@ -58,9 +58,11 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
     const isLoading = isEditMode ? isUpdating : isAdding;
 
     const handleSubmit = (values: typeof initialValues) => {
+        let cleanPhone = values.phone.replace(/\s/g, '').replace(/-/g, '');
+        cleanPhone = cleanPhone.replace(/^\+\d{1,3}/, '');
         const submitData: any = {
             first_name: values.first_name,
-            phone: `${values.countryCode}_${values.phone}`,
+            phone: `${values.countryCode}${cleanPhone}`,
             email: values.email,
             role: "employee",
             position: values.position,
@@ -185,7 +187,7 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
                                     type={showPassword ? "text" : "password"}
                                     name="password"
                                     placeholder="********"
-                                    label={isEditMode ? "كلمة المرور (اتركها فارغة إذا لم ترغب في التغيير)" : "كلمة المرور"}
+                                    label={isEditMode ? "كلمة المرور " : "كلمة المرور"}
                                 />
                                 <button
                                     type="button"
