@@ -15,8 +15,9 @@ import { useUpdateCase } from "../api/hooks/useUpdateCase";
 import { SubmitButton } from "@/shared/components/SubmitButton";
 import { useFetchClients } from "@/shared/api/hooks/useGetClients";
 import { SelectForm } from "@/shared/components/SelectForm";
-import type { ClientType } from "@/shared/api/types/client";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
+import { useGetCaseType } from "../api/hooks/useGetCaseType";
+import { useGetCaseStatus } from "../api/hooks/useGetCaseStatus";
 
 interface EditCaseDialogProps {
   caseItem: Case;
@@ -33,20 +34,34 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
   const [open, setOpen] = React.useState(false);
   const { mutateAsync: updateCase, isPending } = useUpdateCase();
   const { data: clients } = useFetchClients()
+  const { data: caseType } = useGetCaseType()
+  const { data: caseStatus } = useGetCaseStatus()
   const initialValues: Case = {
     ...caseItem,
     case_number: caseItem.case_number || "",
     case_number_at_prosecution: caseItem.case_number_at_prosecution || "",
-    client_name: caseItem.client_name || "",
-    case_type: caseItem.case_type || "",
-    case_status: caseItem.case_status || 1,
+    client_id: String(caseItem.client?.id) || "",
+    client_type: caseItem.client_type || "",
     created_at: caseItem.created_at || "",
     case_entry_date: caseItem.case_entry_date || "",
+    case_status_id: caseItem.case_status_id ? String(caseItem.case_status_id) : "",
+    case_type_id: caseItem.case_type?.id ? String(caseItem.case_type.id) : "",
+    case_situation: caseItem.case_situation || "",
   };
+
+  console.log(caseItem)
 
   const options = clients?.map((client: any) => ({
     label: client.name,
     value: String(client.user_id)
+  })) || []
+  const caseTypeOptions = caseType?.map((caseType: any) => ({
+    label: caseType.name,
+    value: String(caseType.id)
+  })) || []
+  const caseStatusOptions = caseStatus?.map((caseStatus: any) => ({
+    label: caseStatus.name,
+    value: String(caseStatus.id)
   })) || []
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -75,7 +90,13 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
           initialValues={initialValues}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-              await updateCase({ id: caseItem.id, data: values });
+              const payload = {
+                ...values,
+                client_id: values.client_id ? Number(values.client_id) : undefined,
+                case_type_id: values.case_type_id ? Number(values.case_type_id) : undefined,
+                case_status_id: values.case_status_id ? Number(values.case_status_id) : undefined,
+              };
+              await updateCase({ id: caseItem.id, data: payload as any });
               onSave(values);
               setOpen(false);
             } catch (error) {
@@ -99,12 +120,12 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
                   type="text"
                 />
                 <SelectForm
-                  name="client_name"
+                  name="client_id"
                   label="اسم العميل"
                   options={options}
                 />
 
-                <SelectForm name="client_status"
+                <SelectForm name="client_type"
                   label="صفة المدعي"
                   options={[
                     { value: "plaintiff", label: "مدعي" },
@@ -112,28 +133,20 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
                   ]}
                 />
 
-                <SelectForm name="case_type"
+                <SelectForm name="case_type_id"
                   label="نوع القضية"
-                  options={[
-                    { value: "theft", label: "سرقة " },
-                    { value: "murder", label: "قتل " },
-                    { value: "kidnapping", label: "خطف" },
-                  ]}
+                  options={caseTypeOptions}
                 />
-                <SelectForm name="case_status"
+                <SelectForm name="case_status_id"
                   label="الحالة"
-                  options={[
-                    { value: "under_consideration", label: "تحت النظر" },
-                    { value: "referred", label: "تم الإحالة" },
-                    { value: "judged", label: "تم الحكم" },
-                  ]}
+                  options={caseStatusOptions}
                 />
-                <SelectForm name="case_status_at_receipt"
+                <SelectForm name="case_situation"
                   label="وضع القضية عند الاستلام"
                   options={[
-                    { value: "under_consideration", label: "تحت النظر" },
-                    { value: "referred", label: "تم الإحالة" },
-                    { value: "judged", label: "تم الحكم" },
+                    { value: "AT_PROSECUTOR_OFFICE", label: "في النيابة" },
+                    { value: "PUBLIC_PROSECUTION", label: "الادعاء العام" },
+                    { value: "UNDER_APPEAL", label: "تحت الرفع " },
                   ]}
                 />
                 <SelectForm name="case_status_at_receipt"

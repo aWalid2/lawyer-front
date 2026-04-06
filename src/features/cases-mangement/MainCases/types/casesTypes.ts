@@ -5,7 +5,7 @@ export interface Case {
   case_sequence: string;
   case_number: string;
   client_name: string;
-  case_status: number;
+  case_status?: number;
   case_type_id?: string;
   case_status_id?: string;
   client_id?: string;
@@ -21,6 +21,9 @@ export interface Case {
     name: string;
     id: string;
   };
+  client_type?:string;
+  case_situation?:string;
+  
 
   registrationDate?: string;
   created_at?: string;
