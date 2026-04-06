@@ -36,15 +36,15 @@ export type ProsecutionPayload = BasePayload & {
     | "PUBLIC_PROSECUTION"
     | "AT_PROSECUTOR_OFFICE";
 
-  case_police_station: string;
-  case_number_at_police_station: number;
-  case_arrival_date_at_police_station: string;
+  case_police_station?: string;
+  case_number_at_police_station?: number;
+  case_arrival_date_at_police_station?: string;
 
-  case_number_at_prosecution: number;
-  regestration_date_of_case_at_prosecution: string;
+  case_number_at_prosecution?: number;
+  regestration_date_of_case_at_prosecution?: string;
 
-  detective_name: string;
-  investigation_name: string;
+  detective_name?: string;
+  investigation_name?: string;
 
   case_fees: CaseFees;
 

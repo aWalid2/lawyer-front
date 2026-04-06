@@ -110,25 +110,28 @@ const case_fees = {
   }
 
   // ================= PROSECUTION =================
+  
   return {
     ...base,
     case_situation: values.case_situation,
 
-    case_police_station: values.case_police_station,
-    case_number_at_police_station: Number(
-      values.case_number_at_police_station
-    ),
-    case_arrival_date_at_police_station:
-      values.case_arrival_date_at_police_station,
+    ...(values.case_police_station && { case_police_station: values.case_police_station }),
+    ...(values.case_number_at_police_station && {
+      case_number_at_police_station: Number(values.case_number_at_police_station)
+    }),
+    ...(values.case_arrival_date_at_police_station && {
+      case_arrival_date_at_police_station: values.case_arrival_date_at_police_station
+    }),
 
-    case_number_at_prosecution: Number(
-      values.case_number_at_prosecution
-    ),
-    regestration_date_of_case_at_prosecution:
-      values.regestration_date_of_case_at_prosecution,
+    ...(values.case_number_at_prosecution && {
+      case_number_at_prosecution: Number(values.case_number_at_prosecution)
+    }),
+    ...(values.regestration_date_of_case_at_prosecution && {
+      regestration_date_of_case_at_prosecution: values.regestration_date_of_case_at_prosecution
+    }),
 
-    detective_name: values.detective_name,
-    investigation_name: values.investigation_name,
+    ...(values.detective_name && { detective_name: values.detective_name }),
+    ...(values.investigation_name && { investigation_name: values.investigation_name }),
 
     case_fees,
 

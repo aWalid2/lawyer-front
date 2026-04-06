@@ -18,12 +18,6 @@ import { SharedFormField } from "./components/SharedFormField";
 import { validationSchema } from "./components/ValidationSchema";
 import { initialValues } from "./hooks/initialValues";
 
-
-
-
-
-
-
 const FormCase = () => {
   const { mutateAsync: addUnderAppealCase, isPending: isPendingUnderAppealCase } = useAddUnderAppealCase()
   const { mutateAsync: addPublicProsecutionCase, isPending: isPendingPublicProsecutionCase } = useAddPublicProsecutionCase()
@@ -79,10 +73,9 @@ const FormCase = () => {
                 <div className={" grid grid-cols-1 md:grid-cols-2 gap-4"}>
                   <SharedFormField />
                   {values.case_situation === "PUBLIC_PROSECUTION" && <PublicProsecution />}
-                  {values.case_situation === "AT_PROSECUTOR_OFFICE" && <InProsecution />}
+                  {values.case_situation === "AT_PROSECUTOR_OFFICE" && values.case_status_id && <InProsecution />}
                   <InputForm label="تاريخ ورود القضية داخل المكتب" name="case_entry_date" type="date" />
                 </div>
-
 
                 <TextAreaForm label="ملاحظات" name="notes" placeholder="أضف ملاحظات..." className="mt-4" />
                 <div className="mt-8 pt-8 border-t border-gray-100">
@@ -95,10 +88,7 @@ const FormCase = () => {
                     <OpponentForm />
                   )}
                 </div>
-
-
                 <FeesForm />
-
                 <SubmitButton
                   isPending={isPendingUnderAppealCase || isPendingPublicProsecutionCase || isPendingPublicProsecutionOfficeCase}
                   loadingText="جاري الإضافة..."
