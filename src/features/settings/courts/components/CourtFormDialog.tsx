@@ -3,7 +3,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { LayoutDialog } from "@/shared/components/LayoutDialog";
 import { InputForm } from "@/shared/components/InputForm";
-import type { CourtT } from "../types";
+import type { CourtT } from "../types/courtTypes";
 
 interface CourtFormDialogProps {
   court?: CourtT;

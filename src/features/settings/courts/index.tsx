@@ -1,91 +1,50 @@
-import React, { useState } from "react";
+import React from "react";
 import { CourtsHeader } from "./components/CourtsHeader";
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { Pagination } from "@/shared/components/Pagination";
 import { CourtsAction } from "./components/CourtsAction";
 import { DistrictsDialog } from "./components/DistrictsDialog";
 import { Button } from "@/components/ui/button";
-import type { CourtT, DistrictT } from "./types";
+import type { CourtT } from "./types/courtTypes";
 import PageLayout from "@/shared/components/PageLayout";
 import { usePagination } from "@/shared/hooks/usePagination";
+import { useGetCourts } from "./api/hooks/useGetCourts";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { Pagination } from "@/shared/components/Pagination";
+import { EmptyTable } from "@/shared/components/EmptyTable";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { Error } from "@/shared/components/Error";
 
-const mockDistricts: DistrictT[] = [
-  { id: "1", name: "محامي", status: "نشط" },
-  { id: "2", name: "سكرتير", status: "نشط" },
-];
-
-const initialCourts: CourtT[] = [
-  {
-    id: "1",
-    name: "محكمة جنوب الجيزة",
-    address: "شارع فؤاد- الاسكندرية",
-    caseCount: 4,
-    districts: [...mockDistricts],
-  },
-  {
-    id: "2",
-    name: "محكمة شمال الجيزة",
-    address: "الجيزة - الدقي",
-    caseCount: 2,
-    districts: [...mockDistricts],
-  },
-  // Add more mock data to test pagination if needed
-  ...Array.from({ length: 10 }).map((_, i) => ({
-    id: (i + 3).toString(),
-    name: `محكمة اختبار ${i + 3}`,
-    address: `عنوان اختبار ${i + 3}`,
-    caseCount: Math.floor(Math.random() * 10),
-    districts: [...mockDistricts],
-  })),
-];
 
 export const CourtsFeature: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
 
-  const [courts, setCourts] = useState<CourtT[]>(initialCourts);
 
-  const filteredCourts = courts.filter(
-    (c) =>
-      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.address.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const { data: courts, isPending, isError } = useGetCourts();
+  const indexedData = useIndexedData(courts);
 
   const {
-    currentData,
     currentPage,
     setCurrentPage,
     totalPages,
-  } = usePagination(filteredCourts, 15);
-
-  const handleDelete = (id: string) => {
-    setCourts(courts.filter((c) => c.id !== id));
-  };
-
-  const handleUpdate = (id: string, values: Partial<CourtT>) => {
-    setCourts(
-      courts.map((c) => (c.id === id ? { ...c, ...values } : c))
-    );
-  };
-
+  } = usePagination<CourtT>(indexedData || [], 15);
   const columns: Column<CourtT>[] = [
     {
       header: "#",
-      accessor: (court: CourtT) => filteredCourts.indexOf(court) + 1 + (currentPage - 1) * 15,
+      accessor: (court: CourtT) => court.rowNumber
     },
     {
       header: "اسم المحكمة",
-      accessor: "name" as keyof CourtT,
+      accessor: (court: CourtT) => court.name
     },
     {
       header: "العنوان",
-      accessor: "address" as keyof CourtT,
+      accessor: (court: CourtT) => court.address,
     },
     {
       header: "عدد القضايا",
       accessor: (court: CourtT) => (
         <div className="flex items-center justify-center gap-2">
           <span className="flex items-center justify-center size-8 bg-[#A6A6A6] text-white rounded-md text-xs font-bold leading-none">
-            {court.caseCount}
+            {court.cases_count ? court.cases_count : 0}
           </span>
           <DistrictsDialog
             court={court}
@@ -106,29 +65,33 @@ export const CourtsFeature: React.FC = () => {
       accessor: (court: CourtT) => (
         <CourtsAction
           court={court}
-          onUpdate={handleUpdate}
-          onDelete={handleDelete}
+
         />
       ),
     },
   ];
 
+
+  if (isPending) return <LoadingPage />
+  if (isError) return <Error message="حدث خطأ في تحميل البيانات" />
+
   return (
     <PageLayout>
       <CourtsHeader
-        searchTerm={searchTerm}
-        onSearch={setSearchTerm}
         onCourtAdded={() => console.log("Court added")}
       />
 
-      <DataTable data={currentData} columns={columns} rowIdField="id" />
-
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
+      <DataTable data={indexedData} columns={columns} rowIdField="id" />
+      {courts?.length > 0 ? (
+        totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        )
+      ) : (
+        <EmptyTable message="لا يوجد محاكم" />
       )}
     </PageLayout>
   );

@@ -9,10 +9,11 @@ import { TableEditButton } from "@/shared/components/TableEditButton";
 import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { InputForm } from "@/shared/components/InputForm";
-import type { CourtT, DistrictT } from "../types";
+import type { CourtT, court_sessions } from "../types/courtTypes";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 interface DistrictFormDialogProps {
-  district?: DistrictT;
+  district?: court_sessions;
   onSave: (values: { name: string }) => void;
   trigger: React.ReactNode;
 }
@@ -66,19 +67,19 @@ export const DistrictsDialog: React.FC<DistrictsDialogProps> = ({
   court,
   trigger,
 }) => {
-  const columns: Column<DistrictT>[] = [
+  const columns: Column<court_sessions>[] = [
     {
       header: "#",
-      accessor: (district: DistrictT) => court.districts.indexOf(district) + 1,
+      accessor: (district: court_sessions) => court.court_sessions.indexOf(district) + 1,
     },
     {
       header: "اسم الدائرة",
-      accessor: "name" as keyof DistrictT,
+      accessor: "name" as keyof court_sessions,
       className: "w-[500px]",
     },
     {
       header: "الحالة",
-      accessor: (district: DistrictT) => (
+      accessor: (district: court_sessions) => (
         <div className="flex items-center gap-2 justify-center">
           <DistrictFormDialog
             district={district}
@@ -118,8 +119,11 @@ export const DistrictsDialog: React.FC<DistrictsDialogProps> = ({
             }
           />
         </div>
-
-        <DataTable data={court.districts} columns={columns} rowIdField="id" />
+        {court.court_sessions?.length > 0 ? (
+          <DataTable data={court.court_sessions} columns={columns} rowIdField="id" />
+        ) : (
+          <EmptyTable message="لا يوجد دوائر" />
+        )}
       </div>
     </LayoutDialog>
   );

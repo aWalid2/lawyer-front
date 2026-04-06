@@ -7,8 +7,8 @@ import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
 import { CourtFormDialog } from "./CourtFormDialog";
 
 interface CourtsHeaderProps {
-  onSearch: (value: string) => void;
-  searchTerm: string;
+  onSearch?: (value: string) => void;
+  searchTerm?: string;
   onCourtAdded?: () => void;
 }
 
@@ -25,7 +25,6 @@ export const CourtsHeader: React.FC<CourtsHeaderProps> = ({
         value={searchTerm}
         onChange={onSearch}
         placeholder="بحث ..."
-
       />
 
       <CourtFormDialog
