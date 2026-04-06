@@ -65,7 +65,6 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
         country: Yup.string().nullable(),
         address: Yup.string().nullable(),
         uploadFiles: Yup.mixed().nullable(),
-        notes: Yup.string().nullable(),
     });
 
 
