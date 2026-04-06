@@ -6,13 +6,11 @@ import { useFetchClients } from "@/shared/api/hooks/useGetClients";
 
 export function SharedFormField() {
   const { data: clients } = useFetchClients()
-  console.log(clients)
   const options = clients?.map((client: any) => ({
     label: client.name,
     value: String(client.user_id)
   })) || []
 
-  console.log(options)
   return (
     <>
       <InputForm label="عنوان القضية" name="case_title" type="text" placeholder="عنوان القضية" />

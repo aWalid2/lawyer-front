@@ -10,13 +10,16 @@ export interface Case {
   case_status_id?: string;
   client_id?: string;
   client?: {
-    name: string;
+    first_name: string;
+    id: string;
   };
   case_type: {
     name: string;
+    id: string;
   };
   caseStatus?: {
     name: string;
+    id: string;
   };
 
   registrationDate?: string;

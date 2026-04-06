@@ -43,7 +43,7 @@ const MainCases = () => {
     },
     {
       header: "اسم الموكل",
-      accessor: (item: any) => item.client?.name,
+      accessor: (item: any) => item.client?.first_name,
       className: "font-medium text-black",
     },
     {

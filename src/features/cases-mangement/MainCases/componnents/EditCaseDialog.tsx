@@ -44,6 +44,10 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
     case_entry_date: caseItem.case_entry_date || "",
   };
 
+  const options = clients?.map((client: any) => ({
+    label: client.name,
+    value: String(client.user_id)
+  })) || []
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -97,10 +101,7 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
                 <SelectForm
                   name="client_name"
                   label="اسم العميل"
-                  options={clients?.map((client: ClientType) => ({
-                    value: client.name,
-                    label: client.name,
-                  }))}
+                  options={options}
                 />
 
                 <SelectForm name="client_status"
