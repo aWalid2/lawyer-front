@@ -65,16 +65,7 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ id: propId }) => {
         return statusMap[status] || status;
     };
 
-    const formatDate = (date: string): string => {
-        if (!date) return "";
-        const d = new Date(date);
-        if (isNaN(d.getTime())) return "";
-        return d.toLocaleDateString('ar-EG', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric'
-        });
-    };
+
 
     const cleanDate = (date: string): string => {
         if (!date) return "";

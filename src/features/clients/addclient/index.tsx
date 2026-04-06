@@ -117,7 +117,7 @@ const convertToFormData = (values: FormValues) => {
   return (
     <Formik<FormValues>
       initialValues={initialValues}
-      validationSchema={validationSchema(addClients, hasContract)}
+      validationSchema={validationSchema(hasContract)}
       onSubmit={handleSubmit}
       validateOnChange={true}
       validateOnBlur={true}

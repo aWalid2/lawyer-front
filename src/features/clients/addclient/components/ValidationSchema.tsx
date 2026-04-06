@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export const validationSchema = (shouldAddClient: boolean, hasContract: boolean = false) => {
+export const validationSchema = ( hasContract: boolean = false) => {
   const baseSchema = Yup.object().shape({
     first_name: Yup.string().required("اسم الموكل مطلوب"),
     email: Yup.string().required("البريد الإلكتروني مطلوب").email("البريد الإلكتروني غير صالح"),
