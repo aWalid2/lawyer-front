@@ -5,10 +5,10 @@ import type { CaseSituation } from "../utils/mapToApiPayload";
 export type BasePayload = {
   case_situation: CaseSituation;
   case_title: string;
-  case_status: number;
+  case_status_id: number;
   client_type: string;
-  client_name: string;
-  case_type: string;
+  client_id: number;
+  case_type_id: number;
   notes: string;
   case_entry_date: string;
 };

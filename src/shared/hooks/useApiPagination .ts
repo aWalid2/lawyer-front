@@ -17,7 +17,6 @@ interface UseApiPaginationProps {
 export function useApiPagination({ meta, initialPage = 1 }: UseApiPaginationProps) {
   const [page, setPage] = useState(initialPage);
 
-  // sync with API response
   useEffect(() => {
     if (meta?.page && meta.page !== page) {
       setPage(meta.page);

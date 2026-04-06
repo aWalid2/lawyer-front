@@ -3,15 +3,15 @@ import * as Yup from "yup";
 export const validationSchema = Yup.object({
   case_status_received: Yup.string(),
   case_title: Yup.string().required("عنوان القضية مطلوب"),
-  client_name: Yup.string().required("اسم الموكل مطلوب"),
-  case_type: Yup.string().required("وضع القضية نوع"),
+  client_id: Yup.string().required("اسم الموكل مطلوب"),
+  case_type_id: Yup.string().required("وضع القضية نوع"),
   client_type: Yup.string().required("صفة الموكل مطلوبة"),
-  case_status: Yup.string().required("حالة القضية مطلوبة"),
+  case_status_id: Yup.string().required("حالة القضية مطلوبة"),
   case_entry_date: Yup.date().required("تاريخ ورود القضية في المكتب مطلوب"),
   case_police_station: Yup.string().when("case_situation", {
     is: "PUBLIC_PROSECUTION",
-    then: (schema) => schema.required("المخفر مطلوب"),
-    otherwise: (schema) => schema.notRequired(),
+    then: (schema: any) => schema.required("المخفر مطلوب"),
+    otherwise: (schema: any) => schema.notRequired(),
   }),
 
   regestration_date_of_case_at_prosecution: Yup.date().when("case_situation", {

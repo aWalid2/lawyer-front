@@ -13,6 +13,10 @@ import { Formik, Form } from "formik";
 import type { Case } from "../types/casesTypes";
 import { useUpdateCase } from "../api/hooks/useUpdateCase";
 import { SubmitButton } from "@/shared/components/SubmitButton";
+import { useFetchClients } from "@/shared/api/hooks/useGetClients";
+import { SelectForm } from "@/shared/components/SelectForm";
+import type { ClientType } from "@/shared/api/types/client";
+import { TextAreaForm } from "@/shared/components/TextAreaForm";
 
 interface EditCaseDialogProps {
   caseItem: Case;
@@ -28,16 +32,16 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const { mutateAsync: updateCase, isPending } = useUpdateCase();
+  const { data: clients } = useFetchClients()
   const initialValues: Case = {
     ...caseItem,
     case_number: caseItem.case_number || "",
     case_number_at_prosecution: caseItem.case_number_at_prosecution || "",
     client_name: caseItem.client_name || "",
     case_type: caseItem.case_type || "",
-    case_situation: caseItem.case_situation || "",
-    court: caseItem.court || "",
-    judge: caseItem.judge || "",
-    registrationDate: caseItem.registrationDate || "",
+    case_status: caseItem.case_status || 1,
+    created_at: caseItem.created_at || "",
+    case_entry_date: caseItem.case_entry_date || "",
   };
 
   return (
@@ -81,7 +85,7 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
             <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
                 <InputForm
-                  name="case_number_at_prosecution"
+                  name="case_sequence"
                   label="رقم القضية"
                   type="text"
                 />
@@ -90,35 +94,72 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
                   label="الرقم الآلي"
                   type="text"
                 />
-                <InputForm
+                <SelectForm
                   name="client_name"
                   label="اسم العميل"
-                  type="text"
+                  options={clients?.map((client: ClientType) => ({
+                    value: client.name,
+                    label: client.name,
+                  }))}
                 />
-                <InputForm
-                  name="case_type"
-                  label="الموضوع"
-                  type="text"
+
+                <SelectForm name="client_status"
+                  label="صفة المدعي"
+                  options={[
+                    { value: "plaintiff", label: "مدعي" },
+                    { value: "defendant", label: "مدعى عليه" },
+                  ]}
                 />
-                <InputForm
-                  name="case_situation"
+
+                <SelectForm name="case_type"
+                  label="نوع القضية"
+                  options={[
+                    { value: "theft", label: "سرقة " },
+                    { value: "murder", label: "قتل " },
+                    { value: "kidnapping", label: "خطف" },
+                  ]}
+                />
+                <SelectForm name="case_status"
                   label="الحالة"
-                  type="text"
+                  options={[
+                    { value: "under_consideration", label: "تحت النظر" },
+                    { value: "referred", label: "تم الإحالة" },
+                    { value: "judged", label: "تم الحكم" },
+                  ]}
+                />
+                <SelectForm name="case_status_at_receipt"
+                  label="وضع القضية عند الاستلام"
+                  options={[
+                    { value: "under_consideration", label: "تحت النظر" },
+                    { value: "referred", label: "تم الإحالة" },
+                    { value: "judged", label: "تم الحكم" },
+                  ]}
+                />
+                <SelectForm name="case_status_at_receipt"
+                  label="درجة التقاضي"
+                  options={[
+                    { value: "1", label: "ابتدائي" },
+                    { value: "2", label: "استئناف" },
+                    { value: "3", label: "نقض" },
+                  ]}
+                />
+
+
+                <InputForm
+                  name="created_at"
+                  label="تاريخ انشاء القضية"
+                  type="date"
                 />
                 <InputForm
-                  name="court"
-                  label="المحكمة"
-                  type="text"
+                  name="case_entry_date"
+                  label="تاريخ ورود القضية"
+                  type="date"
                 />
-                <InputForm
-                  name="judge"
-                  label="القاضي"
-                  type="text"
-                />
-                <InputForm
-                  name="registrationDate"
-                  label="تاريخ التسجيل"
-                  type="text"
+                <TextAreaForm
+                  name="notes"
+                  label="ملاحظات"
+                  placeholder="أضف ملاحظات..."
+                  className="col-span-2"
                 />
               </div>
               <SubmitButton

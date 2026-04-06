@@ -16,6 +16,7 @@ import { useUpdateClient } from "../api/hooks/useUpdateClient";
 
 
 import * as Yup from "yup";
+import { SubmitButton } from "@/shared/components/SubmitButton";
 
 interface EditClientDialogProps {
     client: any
@@ -28,30 +29,37 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
     trigger,
     onSave,
 }) => {
-    const { mutateAsync: update, isPending } = useUpdateClient();
+    const [open, setOpen] = React.useState(false);
+    const { mutateAsync: updateClient, isPending } = useUpdateClient();
 
     const initialValues: any = {
         ...client,
-        clientType: client?.client_type || "individual",
-        first_name: client?.first_name,
-        nationalId: client?.ssn || "",
-        phoneNumber: client?.phone || "",
-        countryCode: "+966",
-        email: client?.email || "",
-        nationality: client?.nationality || "",
-        country: client?.country || "",
-        address: client?.address || "",
-        uploadFiles: client?.uploadFiles || null,
-        notes: client?.notes || "",
+        client_type: client?.client_type || "individual",
+        first_name: client?.user?.first_name || "",
+        last_name: client?.user?.last_name || "",
+        ssn: client?.user?.ssn || "",
+        phone: client?.user?.phone || "",
+        country_code: "+966",
+        email: client?.user?.email || "",
+        nationality: client?.user?.nationality || "",
+        country: client?.user?.country || "",
+        address: client?.user?.address || "",
+        uploadFiles: client?.user?.uploadFiles || null,
+        notes: client?.user?.notes || "",
     };
 
 
     const validationSchema = Yup.object().shape({
-        clientType: Yup.string().required("نوع الموكل مطلوب"),
+        client_type: Yup.string().required("نوع الموكل مطلوب"),
         first_name: Yup.string(),
-        ssn: Yup.string().matches(/^[0-9]+$/, "الرقم المدني يجب أن يكون أرقام").length(12, "الرقم المدني يجب أن يكون 10 أرقام"),
-        phoneNumber: Yup.string().matches(/^[0-9]+$/, "رقم الهاتف يجب أن يكون أرقام").length(9, "رقم الهاتف يجب أن يكون 9 أرقام"),
-        countryCode: Yup.string(),
+        last_name: Yup.string(),
+        ssn: Yup.string()
+            .matches(/^[0-9]+$/, "الرقم المدني يجب أن يكون أرقام")
+            .length(10, "الرقم المدني يجب أن يكون 10 أرقام"),
+        phone: Yup.string()
+            .matches(/^[0-9]+$/, "رقم الهاتف يجب أن يكون أرقام")
+            .length(9, "رقم الهاتف يجب أن يكون 9 أرقام"),
+        country_code: Yup.string(),
         email: Yup.string().email("البريد الإلكتروني غير صالح"),
         nationality: Yup.string().nullable(),
         country: Yup.string().nullable(),
@@ -60,14 +68,9 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
         notes: Yup.string().nullable(),
     });
 
-    const handleSubmit = async (values: typeof initialValues) => {
-        await update({ id: client.user_id, data: values });
-        onSave?.(values);
-
-    };
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 {trigger}
             </DialogTrigger>
@@ -80,7 +83,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                 <DialogClose asChild>
                     <button
                         onClick={(e) => e.stopPropagation()}
-                        className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all outline-none"
+                        className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all outline-none"
                     >
                         <XIcon size={23} className="text-gray-500" />
                     </button>
@@ -96,7 +99,17 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                     initialValues={initialValues}
                     validationSchema={validationSchema}
                     enableReinitialize
-                    onSubmit={handleSubmit}
+                    onSubmit={async (values, { setSubmitting }) => {
+                        try {
+                            await updateClient({ id: client.user_id, data: values });
+                            onSave?.(values);
+                            setOpen(false);
+                        } catch (error) {
+                            console.error(error);
+                        } finally {
+                            setSubmitting(false);
+                        }
+                    }}
                 >
                     {() => (
                         <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
@@ -198,16 +211,13 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                     label="صورة التوكيل"
                                 />
                             </div>
-
-                            <DialogClose asChild>
-                                <button
-                                    type="submit"
-                                    disabled={isPending}
-                                    className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity font-cairo disabled:opacity-50"
-                                >
-                                    {isPending ? "جاري الحفظ..." : "حفظ التغييرات"}
-                                </button>
-                            </DialogClose>
+                            <SubmitButton
+                                isPending={isPending}
+                                loadingText="جاري التعديل..."
+                                className="mt-6"
+                            >
+                                حفظ التغييرات
+                            </SubmitButton>
                         </Form>
                     )}
                 </Formik>

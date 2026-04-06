@@ -2,11 +2,11 @@ import type { CasePayload } from "../types/caseT";
 
 export interface FormValues {
   client_id?: string;
-  case_status: string;
+  case_status_id: string;
   case_situation: CaseSituation;
   case_title: string;
   client_name: string;
-  case_type: string;
+  case_type_id: string;
 
   case_police_station: string;
   case_number_at_police_station: string;
@@ -70,20 +70,14 @@ export type CaseSituation =
 export const mapToApiPayload = (
   values: FormValues
 ): CasePayload => {
-  const statusMap: Record<string, number> = {
-    pending: 1,
-    inProgress: 2,
-    review: 3,
-  };
-
   const base = {
     case_situation: values.case_situation,
     case_title: values.case_title,
-    case_status: statusMap[values.case_status_received] || 1,
+    case_status_id: Number(values.case_status_id),
     client_type: values.client_type,
-    client_name: values.client_name,
-    case_type: values.case_type,
-    notes: values.notes,
+    client_id: Number(values.client_id),
+    case_type_id: Number(values.case_type_id),
+    notes: values.notes || "",
     case_entry_date: values.case_entry_date,
   };
 

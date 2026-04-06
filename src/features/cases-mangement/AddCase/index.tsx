@@ -21,11 +21,7 @@ import { initialValues } from "./hooks/initialValues";
 
 
 
-const CLASSES = {
-  formSection: "border border-gray-300 p-4 rounded-xl mt-6",
-  flexRow: "flex flex-col md:flex-row gap-3",
-  submitButton: "w-full flex items-center gap-2 px-6 py-3 text-white font-cairo rounded-[12px] transition-all whitespace-nowrap w-[137px] h-[50px] justify-center relative overflow-hidden",
-};
+
 
 const FormCase = () => {
   const { mutateAsync: addUnderAppealCase, isPending: isPendingUnderAppealCase } = useAddUnderAppealCase()
@@ -60,7 +56,7 @@ const FormCase = () => {
         return (
           <div className="w-full pt-6">
             <HeaderTitle title="إضافة قضية جديدة" />
-            <div className={CLASSES.formSection}>
+            <div className="border border-gray-300 p-4 rounded-xl mt-6">
               <Form>
                 <div className="mb-4">
                   <SelectForm

@@ -1,5 +1,5 @@
 
-export interface Client {
+export interface ClientType {
     id: string;
     clientType?: "individual" | "company" | "government";
     clientName?: string;

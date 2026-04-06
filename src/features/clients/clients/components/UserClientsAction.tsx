@@ -12,20 +12,14 @@ import { useDeleteClient } from '../api/hooks/useDeleteClient';
 interface UserClientsActionProps {
 
     client: ClientRelatedT;
-    onTaskUpdated?: () => void;
     onClientUpdated?: (client: any) => void;
 }
 
-export const UserClientsAction: React.FC<UserClientsActionProps> = ({ client, onTaskUpdated, onClientUpdated }) => {
-    const handleClientUpdated = (values: any) => {
+export const UserClientsAction: React.FC<UserClientsActionProps> = ({ client, onClientUpdated }) => {
 
-        if (onTaskUpdated) onTaskUpdated();
-        if (onClientUpdated) onClientUpdated(values);
-    };
 
     const { mutateAsync: deleteClient } = useDeleteClient();
 
-    console.log(client);
     return (
         <div className="flex items-center justify-center gap-2" onClick={(e) => e.stopPropagation()}>
             <Link
@@ -39,7 +33,7 @@ export const UserClientsAction: React.FC<UserClientsActionProps> = ({ client, on
 
             <EditClientDialog
                 client={client}
-                onSave={handleClientUpdated}
+                onSave={(values) => onClientUpdated?.(values)}
                 trigger={
                     <button
                         type="button"

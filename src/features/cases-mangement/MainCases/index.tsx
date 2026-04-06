@@ -12,12 +12,11 @@ import { PaginationApi } from "@/shared/components/PaginationApi";
 
 const getStatusStyles = (status: string) => {
   switch (status) {
-
-    case "UNDER_APPEAL":
+    case "قيد التنفيذ":
       return "bg-[#937F12]/20 text-[#937F12]";
-    case "PUBLIC_PROSECUTION":
+    case "تم الإغلاق":
       return "bg-[#5570F1]/20 text-[#5570F1]";
-    case "AT_PROSECUTOR_OFFICE":
+    case "تم الإغلاق":
       return "bg-[#5570F1]/20 text-[#5570F1]";
     default:
       return "bg-gray-100 text-gray-600";
@@ -44,22 +43,20 @@ const MainCases = () => {
     },
     {
       header: "اسم الموكل",
-      accessor: (item) => item.client_name,
+      accessor: (item: any) => item.client?.name,
       className: "font-medium text-black",
     },
     {
       header: "عنوان القضية",
-      accessor: (item) => item.case_type === 'criminal' ? 'قضية جنائية' : item.case_type === 'civil' ? 'قضية مدنية' : item.case_type === 'commercial' ? 'قضية تجارية' : item.case_type === 'family' ? 'قضية أسرية' : item.case_type === 'administrative' ? 'قضية إدارية' : item.case_type === 'labor' ? 'قضية عمالية' : item.case_type === 'tax' ? 'قضية ضريبية' : item.case_type === 'real_estate' ? 'قضية عقارية' : item.case_type === 'intellectual_property' ? 'قضية ملكية فكرية' : item.case_type === 'international' ? 'قضية دولية' : item.case_type === 'other' ? 'قضية أخرى' : item.case_type,
+      accessor: (item: any) => item.case_type.name,
     },
     {
       header: "الحالة",
       accessor: (item) => (
         <span
-          className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(
-            item.case_situation
-          )}`}
+          className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(item?.caseStatus?.name || "")} `}
         >
-          {item.case_situation === "UNDER_APPEAL" ? "تحت الرفع" : item.case_situation === "PUBLIC_PROSECUTION" ? "الادعاء العام" : item.case_situation === "AT_PROSECUTOR_OFFICE" ? "في النيابة" : item.case_situation}
+          {item?.caseStatus?.name}
         </span>
       ),
     },
@@ -98,7 +95,6 @@ const MainCases = () => {
             rowKey="id"
             data={indexedData}
             columns={columns}
-            rowIdField="id"
           />
         )}
         {totalPages > 1 && (

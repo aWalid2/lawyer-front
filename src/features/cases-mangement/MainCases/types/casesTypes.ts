@@ -5,11 +5,24 @@ export interface Case {
   case_sequence: string;
   case_number: string;
   client_name: string;
-  case_type: string;
-  case_situation: string;
-  court?: string;
-  judge?: string;
+  case_status: number;
+  case_type_id?: string;
+  case_status_id?: string;
+  client_id?: string;
+  client?: {
+    name: string;
+  };
+  case_type: {
+    name: string;
+  };
+  caseStatus?: {
+    name: string;
+  };
+
   registrationDate?: string;
+  created_at?: string;
+  updated_at?: string;
+  case_entry_date?: string;
 }
 
 
