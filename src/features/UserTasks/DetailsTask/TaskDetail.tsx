@@ -7,6 +7,7 @@ import TaskDetailsForm from './TaskDetailsForm';
 import TimelineForm from './TimelineForm';
 import CommentsSection from './CommentsSection';
 import { useGetOneTask } from '../api/hooks/useGetOne';
+import { useFetchCases } from '../api/hooks/useGetCase';
 
 interface TaskDetailProps {
     id?: string;
@@ -16,6 +17,29 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ id: propId }) => {
     const taskId = propId;
     
     const { data, isPending, isError, error } = useGetOneTask(taskId || '');
+    const { data: cases } = useFetchCases();
+
+    // ✅ خريطة القضايا لتحويل الـ ID إلى اسم القضية
+    const casesMap = React.useMemo(() => {
+        if (!cases?.data) return new Map();
+        return new Map(cases.data.map((caseItem: any) => [
+            String(caseItem.id || caseItem.case_id),
+            caseItem.case_title
+        ]));
+    }, [cases]);
+
+    // ✅ دالة عرض نوع المهمة
+    const getTaskTypeDisplay = (taskType: string): string => {
+        if (!taskType) return "-";
+        
+        // لو كان رقم (ID) وموجود في الخريطة → يعرض اسم القضية
+        if (casesMap.has(String(taskType))) {
+            return casesMap.get(String(taskType));
+        }
+        
+        // لو مش رقم أو مش موجود → يعرض النص الأصلي
+        return taskType;
+    };
 
     if (isPending) {
         return <LoadingPage />;
@@ -44,7 +68,6 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ id: propId }) => {
     const formatDate = (date: string): string => {
         if (!date) return "";
         const d = new Date(date);
-        // ✅ تحقق من صحة التاريخ
         if (isNaN(d.getTime())) return "";
         return d.toLocaleDateString('ar-EG', {
             year: 'numeric',
@@ -53,24 +76,23 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ id: propId }) => {
         });
     };
 
-    // ✅ تنظيف التواريخ قبل إرسالها للـ InputForm
     const cleanDate = (date: string): string => {
         if (!date) return "";
         const d = new Date(date);
         if (isNaN(d.getTime())) return "";
-        return d.toISOString().split('T')[0]; // تحويل إلى YYYY-MM-DD
+        return d.toISOString().split('T')[0];
     };
 
     const taskDetails = {
-        TaskType: task.task_type || "",
+        TaskType: getTaskTypeDisplay(task.task_type),  // ✅ استخدام الدالة الجديدة
         PersonInCharge: task.assignee?.first_name || task.assigned_to?.toString() || "",
-        DeliveryDate: cleanDate(task.delivery_date),  // ✅ استخدم التاريخ المنظف
+        DeliveryDate: cleanDate(task.delivery_date),
         status: getStatusArabic(task.status)
     };
 
     const timeline = {
-        startDate: cleanDate(task.start_date),  // ✅ استخدم التاريخ المنظف
-        endDate: cleanDate(task.end_date)       // ✅ استخدم التاريخ المنظف
+        startDate: cleanDate(task.start_date),
+        endDate: cleanDate(task.end_date)
     };
 
     const commentsData = {
