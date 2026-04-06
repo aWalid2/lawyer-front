@@ -6,10 +6,11 @@ import { InputForm } from "@/shared/components/InputForm";
 import type { CourtT } from "../types/courtTypes";
 import { SubmitButton } from "@/shared/components/SubmitButton";
 import { useCreateCourt } from "../api/hooks/useCreateCourt";
+import { useUpdateCourt } from "../api/hooks/useUpdateCourt";
 
 interface CourtFormDialogProps {
   court?: CourtT;
-  onSave: (values: Partial<CourtT>) => void;
+  onSave: (values: { name: string, address: string }) => void;
   trigger: React.ReactNode;
 
 }
@@ -28,6 +29,7 @@ export const CourtFormDialog: React.FC<CourtFormDialogProps> = ({
     address: court?.address || "",
   };
   const { mutateAsync: createCourt, isPending } = useCreateCourt();
+  const { mutateAsync: updateCourt, isPending: isUpdating } = useUpdateCourt();
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -42,7 +44,11 @@ export const CourtFormDialog: React.FC<CourtFormDialogProps> = ({
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values) => {
-          await createCourt(values as { name: string, address: string })
+          if (court) {
+            await updateCourt({ id: Number(court.id), data: values })
+          } else {
+            await createCourt(values)
+          }
           setOpen(false)
         }}
         enableReinitialize
@@ -62,7 +68,7 @@ export const CourtFormDialog: React.FC<CourtFormDialogProps> = ({
               placeholder="شارع فؤاد"
             />
             <SubmitButton
-              isPending={isPending}
+              isPending={isPending || isUpdating}
             >
               {court ? "تعديل محكمة" : "إضافة محكمة"}
             </SubmitButton>

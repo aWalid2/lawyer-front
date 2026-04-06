@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { XIcon, Trash2Icon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Loading from "@/shared/Loading";
+import { Spinner } from "@/components/ui/spinner";
 
 interface ConfirmDeleteDialogProps {
     title?: string;
@@ -90,7 +90,7 @@ export const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
                         )}
                         disabled={isLoading}
                     >
-                        {isLoading ? <Loading /> : "تأكيد الحذف"}
+                        {isLoading ? <Spinner /> : "تأكيد الحذف"}
                     </Button>
                 </div>
             </DialogContent>
