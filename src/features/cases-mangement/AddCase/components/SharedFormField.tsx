@@ -1,14 +1,26 @@
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { useFetchClients } from "@/shared/api/hooks/useGetClients";
+import { useGetCaseStatus } from "../../MainCases/api/hooks/useGetCaseStatus";
+import { useGetCaseType } from "../../MainCases/api/hooks/useGetCaseType";
 
 
 
 export function SharedFormField() {
   const { data: clients } = useFetchClients()
+  const { data: caseStatus } = useGetCaseStatus()
+  const { data: caseType } = useGetCaseType()
   const options = clients?.map((client: any) => ({
     label: client.name,
     value: String(client.user_id)
+  })) || []
+  const caseStatusOptions = caseStatus?.map((caseStatus: any) => ({
+    label: caseStatus.name,
+    value: String(caseStatus.id)
+  })) || []
+  const caseTypeOptions = caseType?.map((caseType: any) => ({
+    label: caseType.name,
+    value: String(caseType.id)
   })) || []
 
   return (
@@ -26,11 +38,7 @@ export function SharedFormField() {
       <SelectForm
         label="حالة القضية"
         name="case_status_id"
-        options={[
-          { label: "تحت النظر", value: "1" },
-          { label: "تم الإحالة", value: "2" },
-          { label: "تم الحكم", value: "3" }
-        ]}
+        options={caseStatusOptions}
         placeholder="اختر حالة القضية"
       />
 
@@ -48,11 +56,7 @@ export function SharedFormField() {
       <SelectForm
         label="نوع القضية"
         name="case_type_id"
-        options={[
-          { label: "سرقة", value: "1" },
-          { label: "قتل", value: "2" },
-          { label: "خطف", value: "3" },
-        ]}
+        options={caseTypeOptions}
         placeholder="اختر نوع القضية"
       />
 
