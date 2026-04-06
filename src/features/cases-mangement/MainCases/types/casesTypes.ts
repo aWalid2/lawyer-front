@@ -13,7 +13,7 @@ export interface Case {
     first_name: string;
     id: string;
   };
-  case_type: {
+  case_type?: {
     name: string;
     id: string;
   };
@@ -23,7 +23,8 @@ export interface Case {
   };
   client_type?:string;
   case_situation?:string;
-  
+  detective_name?:string;
+ 
 
   registrationDate?: string;
   created_at?: string;

@@ -1,4 +1,4 @@
-import type { CasePayload } from "../types/caseT";
+import type { CaseFees, CasePayload } from "../types/caseT";
 
 export interface FormValues {
   client_id?: string;
@@ -81,21 +81,24 @@ export const mapToApiPayload = (
     case_entry_date: values.case_entry_date,
   };
 
-const case_fees = {
-  case_fees_type: values.case_fees_type,
+const case_fees: CaseFees = {
+  case_fees_type: values.case_fees_type, // ✅ DIRECT (no mapping)
   notes: values.notes || "",
 
-  ...(values.case_fees_type === "fixed_profits" && {
-    fixed_amount: Number(values.fixed_profits),
-  }),
+  ...(values.case_fees_type === "fixed_profits" &&
+    values.fixed_profits !== undefined && {
+      fixed_amount: Number(values.fixed_profits),
+    }),
 
-  ...(values.case_fees_type === "percentage_of_profits" && {
-    percentage: Number(values.percentage_of_profits),
-  }),
+  ...(values.case_fees_type === "percentage_of_profits" &&
+    values.percentage_of_profits !== undefined && {
+      percentage: Number(values.percentage_of_profits),
+    }),
 
-  ...(values.case_fees_type === "contract_based" && {
-    contract_based: Number(values.contract_based),
-  }),
+  ...(values.case_fees_type === "contract_based" &&
+    values.contract_based !== undefined && {
+      contract_based: Number(values.contract_based),
+    }),
 };
   // ================= UNDER APPEAL =================
   if (values.case_situation === "UNDER_APPEAL") {

@@ -42,12 +42,12 @@ export const TableCasesRow: React.FC<{
         {caseItem.detective_name}
       </td>
       <td className="p-4 text-center text-sm text-gray-600 border-x border-[#F1F1F4] whitespace-nowrap">
-        {caseItem.case_type}
+        {caseItem.case_type?.name}
       </td>
       <td className="p-4 text-center border-x border-[#F1F1F4]">
         <span
           className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(
-            caseItem.case_situation,
+            caseItem.case_situation || "",
           )}`}
         >
           {caseItem.case_situation}
