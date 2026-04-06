@@ -5,7 +5,7 @@ import { Pagination } from "@/shared/components/Pagination";
 import { TableCasesActions } from "@/features/cases-mangement/MainCases/componnents/TableCasesActions";
 import type { Case } from "@/features/cases-mangement/MainCases/types/casesTypes";
 
-const MOCK_CASES: Case[] = Array.from({ length: 19 }, (_, i) => ({
+const MOCK_CASES: any[] = Array.from({ length: 19 }, (_, i) => ({
   id: `${i + 1}`,
   rowNumber: i + 1,
   case_number: `#634${(i % 5) + 1}`,
@@ -73,7 +73,7 @@ const TableCases = () => {
       accessor: (item) => (
         <span
           className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(
-            item.case_situation
+            item.case_situation || ""
           )}`}
         >
           {item.case_situation}

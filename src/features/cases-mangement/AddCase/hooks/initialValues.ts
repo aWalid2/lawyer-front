@@ -1,41 +1,58 @@
-import type { FormValues } from "../types/typseCase";
+import type { FormValues } from "../utils/mapToApiPayload";
 
 export const initialValues: FormValues = {
-  clientId: "",
-  caseStatusReceived: "",
-  caseStatus: "pending",
-  caseTitle: "",
-  clientName: "",
-  caseType: "",
-  clientType: "individual",
-  policeStation: "",
-  numberInPoliceStation: "",
-  dateInPoliceStation: "",
-  investigatorName: "",
-  investigativeAuthority: "",
-  dateInOffice: "",
-  firstName: "",
-  secondName: "",
-  countryCode: "+20",
+  client_id: "1",
+  case_status_received: "",
+  case_situation: "UNDER_APPEAL",
+  case_status_id: "1",
+
+  case_title: "",
+  client_name: "",
+  case_type_id: "1",
+
+  case_police_station: "",
+  case_number_at_police_station: "",
+
+  client_type: "",
+
+  name: "",
+  legal_status: "",
+
+  country_code: "+20",
   phone: "",
-  civilId: "",
-  legalStatus: "",
+
+  civil_id: "",
   nationality: "",
   country: "",
   address: "",
   email: "",
+
+  case_arrival_date_at_police_station: "",
+  case_entry_date: "",
+  case_receipt_date: "",
+
+  detective_name: "",
+  investigation_name: "",
+  
+
+  contract_start_date: "",
+  contract_value: "",
+  contract_duration: "",
+
+  contract_image: null,
+  power_of_attorney_image: null,
+
+ case_fees_type: "fixed_profits",
+
+fixed_profits: undefined,
+percentage_of_profits: undefined,
+contract_based: undefined,
+
+
   prosecution: "",
-  numberInProsecution: "",
-  dateInProsecution: "",
-  caseReceiptDate: "",
-  contractStartDate: "",
-  contractValue: "",
-  contractDuration: "",
-  contractImage: null,
-  powerOfAttorneyImage: null,
-  fixedFees: 0,
-  profitPercentage: 0,
+  case_number_at_prosecution: "",
+  regestration_date_of_case_at_prosecution: "",
+
   notes: "",
-  feeType: "",
-  hasDiscount: false,
+  has_opponent: false,
 };

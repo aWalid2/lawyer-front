@@ -35,26 +35,4 @@ export interface ClientRelatedT {
 
 }
 
-// export interface UpdateClientPayload {
-//     first_name: string;
-//     last_name: string;
-//     phone: string;
-//     email: string | null;
-//     nationality: string | null;
-//     country: string | null;
-//     role_id: number;
-//     ssn: string | null;
-//     address: string | null;
-//     photo: string | null;
-//     fcm_token: string | null;
-//     created_at: string;
-//     updated_at: string;
-    
-//     clientName?: string;
-//     nationalId?: string;
-//     phoneNumber?: string;
-//     countryCode?: string;
-//     uploadFiles?: any;
-//     notes?: string;
-//     clientType?: string;
-// }
+

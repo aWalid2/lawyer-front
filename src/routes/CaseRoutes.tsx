@@ -1,3 +1,4 @@
+import NotFound from "@/shared/components/NotFound";
 import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 
@@ -30,6 +31,7 @@ const CaseRoutes = () => {
         <Route path="employees" element={<Employees />} />
         <Route path="employees/:employeeId" element={<EmployeeDetails />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };

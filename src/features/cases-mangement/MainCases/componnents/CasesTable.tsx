@@ -14,22 +14,13 @@ export const CasesTable: React.FC<CasesTableProps> = ({
   onDelete,
 }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const searchTerm = "";
+
 
   const itemsPerPage = 15;
 
-  const filteredCases = useMemo(() => {
-    return cases.filter((caseItem) => {
-      const searchStr = searchTerm.toLowerCase();
-      return (
-        caseItem.case_number?.toLowerCase().includes(searchStr) ||
-        caseItem.case_type?.toLowerCase().includes(searchStr) ||
-        caseItem.detective_name?.toLowerCase().includes(searchStr)
-      );
-    });
-  }, [cases, searchTerm]);
 
-  const totalPages = Math.ceil(filteredCases.length / itemsPerPage);
+
+  const totalPages = Math.ceil(itemsPerPage);
 
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
@@ -39,8 +30,8 @@ export const CasesTable: React.FC<CasesTableProps> = ({
 
   const currentCases = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredCases.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredCases, currentPage, itemsPerPage]);
+    return cases.slice(startIndex, startIndex + itemsPerPage);
+  }, [cases, currentPage, itemsPerPage]);
 
   const handleRowClick = (caseItem: Case) => {
     setSelectedId(caseItem.id);
@@ -82,7 +73,7 @@ export const CasesTable: React.FC<CasesTableProps> = ({
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={onPageChange}
-          totalItems={filteredCases.length}
+          totalItems={cases.length}
           itemsPerPage={itemsPerPage}
         />
 

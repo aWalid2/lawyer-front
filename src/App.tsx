@@ -7,8 +7,8 @@ import { LegislationDetails } from "./features/Legislation/components/Legislatio
 import { Toaster } from "sonner";
 
 import PrivateRoute from "./pages/PrivateRoute.tsx";
+import NotFound from "./shared/components/NotFound.tsx";
 
-// Modular Routes
 const AuthRoutes = lazy(() => import("./routes/Auth.tsx"));
 const CaseRoutes = lazy(() => import("./routes/CaseRoutes"));
 const SettingRoutes = lazy(() => import("./routes/SettingRoutes"));
@@ -58,6 +58,7 @@ function App() {
 
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route path="*" element={<NotFound />} />
             <Route path="notifications" element={<Notifications />} />
             <Route path="chat-bot" element={<ChatBot />} />
             <Route path="messages" element={<Messages />} />
@@ -74,7 +75,7 @@ function App() {
 
             <Route path="legislation-rulings" element={<Legislation />} />
             <Route
-              path="/dashboard/legislations/:id"
+              path="legislations/:id"
               element={<LegislationDetails />}
             />
             <Route path="calendar" element={<Calendar />} />
@@ -99,6 +100,7 @@ function App() {
             <Route path="finance/*" element={<FinanceRoutes />} />
           </Route>
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );

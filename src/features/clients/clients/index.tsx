@@ -65,7 +65,10 @@ export const ClientsFeature: React.FC = () => {
         {
             header: "الإجراءات",
             accessor: (item: ClientRelatedT) => (
-                <UserClientsAction client={item} />
+                <UserClientsAction client={item}
+                    onClientUpdated={(values) => {
+                        console.log(values);
+                    }} />
             ),
             headerClassName: "w-35 text-center",
             className: "w-35 text-center",

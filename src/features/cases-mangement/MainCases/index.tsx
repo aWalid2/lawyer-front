@@ -1,22 +1,23 @@
 import { useState } from "react";
-import { usePagination } from "@/shared/hooks/usePagination";
 import { HeaderPageCase } from "./componnents/HeaderPageCase";
 import type { Case } from "./types/casesTypes";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { TableCasesActions } from "./componnents/TableCasesActions";
-import { Pagination } from "@/shared/components/Pagination";
 import { useGetCases } from "./api/hooks/useGetCases";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { EmptyTable } from "@/shared/components/EmptyTable";
+import { PaginationApi } from "@/shared/components/PaginationApi";
 
 
 const getStatusStyles = (status: string) => {
   switch (status) {
-    case "active":
-      return "bg-[#5570F1]/20 text-[#5570F1]";
-    case "تحت الرفع":
+    case "قيد التنفيذ":
       return "bg-[#937F12]/20 text-[#937F12]";
+    case "تم الإغلاق":
+      return "bg-[#5570F1]/20 text-[#5570F1]";
+    case "تم الإغلاق":
+      return "bg-[#5570F1]/20 text-[#5570F1]";
     default:
       return "bg-gray-100 text-gray-600";
   }
@@ -24,17 +25,6 @@ const getStatusStyles = (status: string) => {
 
 
 const MainCases = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const { data: cases, isPending, isError } = useGetCases();
-  const indexedData = useIndexedData(cases);
-  const {
-    currentPage,
-    setCurrentPage,
-    totalPages,
-  } = usePagination<Case>(indexedData || [], 15);
-
-
-
   const columns: Column<Case>[] = [
     {
       header: "#",
@@ -43,7 +33,7 @@ const MainCases = () => {
     },
     {
       header: "كود القضية",
-      accessor: (item) => item.case_number_at_prosecution
+      accessor: (item) => item.case_sequence
       ,
       className: "font-medium text-black",
     },
@@ -53,22 +43,20 @@ const MainCases = () => {
     },
     {
       header: "اسم الموكل",
-      accessor: (item) => item.detective_name,
+      accessor: (item: any) => item.client?.first_name,
       className: "font-medium text-black",
     },
     {
       header: "عنوان القضية",
-      accessor: (item) => item.case_type,
+      accessor: (item: any) => item.case_type.name,
     },
     {
       header: "الحالة",
       accessor: (item) => (
         <span
-          className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(
-            item.case_situation
-          )}`}
+          className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(item?.caseStatus?.name || "")} `}
         >
-          {item.case_situation}
+          {item?.caseStatus?.name}
         </span>
       ),
     },
@@ -81,6 +69,14 @@ const MainCases = () => {
       ),
     },
   ];
+  const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
+  const limit = 15;
+
+  const { data: cases, isPending, isError } = useGetCases(page, limit);
+
+  const indexedData = useIndexedData(cases?.data || []);
+  const totalPages = cases?.meta?.total_pages ?? 1;
 
 
   if (isPending) return <LoadingPage />
@@ -99,14 +95,13 @@ const MainCases = () => {
             rowKey="id"
             data={indexedData}
             columns={columns}
-            rowIdField="id"
           />
         )}
         {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
+          <PaginationApi
+            currentPage={page}
             totalPages={totalPages}
-            onPageChange={setCurrentPage}
+            onPageChange={setPage}
           />
         )}
 

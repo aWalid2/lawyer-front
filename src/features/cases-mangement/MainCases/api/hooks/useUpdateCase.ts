@@ -15,6 +15,7 @@ export const useUpdateCase = () => {
         onError: (error: any) => {
             toast.error(error.response?.data?.message || "حدث خطأ في تحديث القضية");
         }
+
     });
 
 };

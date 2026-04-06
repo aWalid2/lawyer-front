@@ -1,4 +1,4 @@
-// types.ts
+
 export interface Client {
     id: string;
     clientType?: "individual" | "company" | "government";
@@ -11,5 +11,5 @@ export interface Client {
     country?: string;
     address?: string;
     notes?: string;
-    // يمكن إضافة حقول أخرى حسب الحاجة
+    name?: string;
 }
