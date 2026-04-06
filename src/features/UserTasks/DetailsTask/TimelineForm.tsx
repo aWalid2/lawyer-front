@@ -1,3 +1,4 @@
+// TimelineForm.tsx
 import { InputForm } from '@/shared/components/InputForm';
 import { Form, Formik } from 'formik';
 
@@ -27,8 +28,8 @@ export default function TimelineForm({ startDate, endDate }: TimelineFormProps) 
                 {() => (
                     <Form>
                         <div className={fieldClasses.grid}>
-                            <InputForm label='تاريخ بداية المهمة' type='date' name='StartDate' disabled />
-                            <InputForm label='تاريخ نهاية المهمة' type='date' name='EndDate' disabled />
+                            <InputForm label='تاريخ بداية المهمة' type='text' name='StartDate' readonly />
+                            <InputForm label='تاريخ نهاية المهمة' type='text' name='EndDate' readonly />
                         </div>
                     </Form>
                 )}

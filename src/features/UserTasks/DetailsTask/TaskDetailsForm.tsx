@@ -1,3 +1,4 @@
+// TaskDetailsForm.tsx
 import { InputForm } from '@/shared/components/InputForm';
 import { Formik, Form } from 'formik';
 
@@ -33,10 +34,10 @@ export default function TaskDetailsForm({ task }: TaskDetailsFormProps) {
                 {() => (
                     <Form>
                         <div className={fieldClasses.grid}>
-                            <InputForm label='نوع المهمة' type='text' name='TaskType' disabled />
-                            <InputForm label='المسؤول عن المهمة' type='text' name='PersonInCharge' disabled />
-                            <InputForm label='تاريخ التسليم' type='text' name='DeliveryDate' disabled />
-                            <InputForm label='حالة المهمة' type='text' name='status' disabled />
+                            <InputForm label='نوع المهمة' type='text' name='TaskType' readonly />
+                            <InputForm label='المسؤول عن المهمة' type='text' name='PersonInCharge' readonly />
+                            <InputForm label='تاريخ التسليم' type='text' name='DeliveryDate' readonly />
+                            <InputForm label='حالة المهمة' type='text' name='status' readonly />
                         </div>
                     </Form>
                 )}

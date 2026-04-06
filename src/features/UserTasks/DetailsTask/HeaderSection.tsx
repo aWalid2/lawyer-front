@@ -13,7 +13,7 @@ const getStatusStyle = (status: string): string => {
         case "قيد التنفيذ":
             return "bg-[#DBC33B1A] text-[#9E7F0F] border-[#DBC33B33]";
         default:
-            return "bg-gray-100 text-gray-700 border-gray-200";
+            return "bg-[#FFA50029] text-[#FF8C00] border-[#FFA50033]";
     }
 };
 
