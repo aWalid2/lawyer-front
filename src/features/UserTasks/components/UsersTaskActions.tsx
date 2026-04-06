@@ -4,6 +4,8 @@ import edit from '@/public/images/edit.svg';
 import deleteIcon from '@/public/images/delete.svg';
 import AddTaskModal from './AddTaskModal';
 import { Link } from 'react-router-dom';
+import { useDeleteTask } from '../api/hooks/useDelateTask';
+import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
 
 interface UsersTaskActionsProps {
     caseItem: any;
@@ -12,6 +14,7 @@ interface UsersTaskActionsProps {
 
 export const UsersTaskActions: React.FC<UsersTaskActionsProps> = ({ caseItem, onTaskUpdated }) => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const { mutateAsync: deleteTask } = useDeleteTask();
 
     const handleEditClick = () => {
         setIsEditModalOpen(true);
@@ -22,20 +25,48 @@ export const UsersTaskActions: React.FC<UsersTaskActionsProps> = ({ caseItem, on
     };
 
     const handleSaveTask = (values: any) => {
-        console.log("تم تعديل المهمة:", values);
+        console.log("تم حفظ المهمة:", values);
         if (onTaskUpdated) {
             onTaskUpdated();
         }
         handleCloseModal();
     };
+    
+    const handleDelete = async () => {
+        try {
+            await deleteTask({ id: caseItem.id.toString() });
+            if (onTaskUpdated) {
+                onTaskUpdated();
+            }
+        } catch (error) {
+            console.error('Error deleting task:', error);
+        }
+    };
+
+    const determineTaskRelation = (taskType: string): string => {
+        if (!taskType) return "case";
+        if (/^\d+$/.test(taskType)) {
+            return "case";
+        }
+        return "non_case";
+    };
+
+    const formatDateForInput = (dateString: string): string => {
+        if (!dateString) return "";
+        return dateString.split('T')[0];
+    };
 
     const editInitialValues = {
-        task_title: caseItem.TaskTitle || "",
-        assigned_to: caseItem.PersonInCharge || 0,
-        task_type: caseItem.TaskType || "",
-        delivery_date: caseItem.DeliveryDate || "",
+        task_title: caseItem.task_title || "",
+        assigned_to: caseItem.assigned_to || 0,
+        task_type: caseItem.task_type || "",
+        delivery_date: formatDateForInput(caseItem.delivery_date),
         status: caseItem.status || "",
-        notes: "",
+        notes: caseItem.notes || "",
+        details: caseItem.details || "",
+        start_date: formatDateForInput(caseItem.start_date),
+        end_date: formatDateForInput(caseItem.end_date),
+        task_relation: determineTaskRelation(caseItem.task_type),
     };
 
     return (
@@ -57,13 +88,21 @@ export const UsersTaskActions: React.FC<UsersTaskActionsProps> = ({ caseItem, on
                     <img src={edit} alt="edit" />
                 </button>
 
-                <button
-                    type="button"
-                    title="حذف"
-                    className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-                >
-                    <img src={deleteIcon} alt="delete" />
-                </button>
+                <ConfirmDeleteDialog
+                    title="حذف المهمة"
+                    description={`هل أنت متأكد من حذف المهمة (${caseItem.task_title})`}
+                    onConfirm={handleDelete}
+                    trigger={
+                        <button
+                            type="button"
+                            onClick={(e) => e.stopPropagation()}
+                            title="حذف"
+                            className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
+                        >
+                            <img src={deleteIcon} alt="delete" />
+                        </button>
+                    }
+                />
             </div>
 
             {isEditModalOpen && (
@@ -71,6 +110,7 @@ export const UsersTaskActions: React.FC<UsersTaskActionsProps> = ({ caseItem, on
                     onClose={handleCloseModal}
                     onSave={handleSaveTask}
                     initialValues={editInitialValues}
+                    taskId={caseItem.id.toString()}
                 />
             )}
         </>

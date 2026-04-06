@@ -35,73 +35,77 @@ const FormDetails = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [hasContract, setHasContract] = useState(false);
 
-  const initialValues: FormValues = {
-    first_name: "",
-    email: "",
-    password: "",
-    contract_file: {} as File,
-    authorization_photo: {} as File,
-    nationality: "",
-    country: "",
-    address: "",
-    ssn: "",
-    phone: "",
-    profile: {
-      client_type: "individual",
-      notes: "",
-      contract: {
-        start_date: "",
-        contract_value: "",
-        contract_duration: "",
-      },
-      account: {
-        confirmation_password: "",
-      },
+const initialValues: FormValues = {
+  first_name: "",
+  email: "",
+  password: "",
+  contract_file: "",        // ✅ string فاضي
+  authorization_photo: "",  // ✅ string فاضي
+  nationality: "",
+  country: "",
+  address: "",
+  ssn: "",
+  phone: "",
+  countryCode: "+966",
+  profile: {
+    client_type: "individual",
+    notes: "",
+    contract: {
+      start_date: "",
+      contract_value: "",
+      contract_duration: "",
     },
-  };
+    account: {
+      confirmation_password: "",
+    },
+  },
+};
 
-  const convertToFormData = (values: FormValues) => {
-    const formData = new FormData();
-    formData.append("first_name", values.first_name);
-    formData.append("email", values.email);
-    formData.append("nationality", values.nationality);
-    formData.append("address", values.address);
-    formData.append("ssn", values.ssn);
-    formData.append("country", values.country);
-    if (addClients) {
-      formData.append("password", values.password);
-      formData.append(
-        "profile[account][confirmation_password]",
-        values.profile.account.confirmation_password
-      );
+const convertToFormData = (values: FormValues) => {
+  const formData = new FormData();
+  formData.append("first_name", values.first_name);
+  formData.append("email", values.email);
+  formData.append("nationality", values.nationality);
+  formData.append("address", values.address);
+  formData.append("ssn", values.ssn);
+  formData.append("country", values.country);
+  
+  const cleanPhone = values.phone.replace(/\D/g, '');
+  formData.append("phone", `${values.countryCode}${cleanPhone}`);
+  
+  // ✅ الباسورد يتبعت بس لو المستخدم كتب حاجة
+  if (values.password && values.password.trim() !== "") {
+    formData.append("password", values.password);
+    if (values.profile.account.confirmation_password) {
+      formData.append("profile[account][confirmation_password]", values.profile.account.confirmation_password);
     }
-    formData.append("profile[client_type]", values.profile.client_type);
-    formData.append("phone", values.phone);
-    formData.append("profile[notes]", values.profile.notes);
-    if (hasContract) {
-      if (values.profile.contract.start_date) {
-        formData.append("profile[contract][start_date]", values.profile.contract.start_date);
-      }
-      if (values.profile.contract.contract_value) {
-        formData.append("profile[contract][contract_value]", values.profile.contract.contract_value);
-      }
-      if (values.profile.contract.contract_duration) {
-        formData.append("profile[contract][contract_duration]", values.profile.contract.contract_duration);
-      }
+  }
+  
+  formData.append("profile[client_type]", values.profile.client_type);
+  formData.append("profile[notes]", values.profile.notes);
+  
+  if (values.contract_file && values.contract_file !== "") {
+    formData.append("contract_file", values.contract_file);
+  }
+  
+  if (values.authorization_photo && values.authorization_photo !== "") {
+    formData.append("authorization_photo", values.authorization_photo);
+  }
+  
+  if (hasContract) {
+    if (values.profile.contract.start_date) {
+      formData.append("profile[contract][start_date]", values.profile.contract.start_date);
     }
-
-    // --- الملفات: التحقق من وجود الملف قبل إضافته ---
-    if (values.contract_file && values.contract_file instanceof File) {
-      formData.append("contract_file", values.contract_file);
+    if (values.profile.contract.contract_value) {
+      formData.append("profile[contract][contract_value]", values.profile.contract.contract_value);
     }
-
-    if (values.authorization_photo && values.authorization_photo instanceof File) {
-      formData.append("authorization_photo", values.authorization_photo);
+    if (values.profile.contract.contract_duration) {
+      formData.append("profile[contract][contract_duration]", values.profile.contract.contract_duration);
     }
+  }
 
-    return formData;
-  };
-
+  return formData;
+};
   const handleSubmit = (values: FormValues) => {
     const formData = convertToFormData(values);
     mutate(formData);
@@ -113,7 +117,7 @@ const FormDetails = () => {
   return (
     <Formik<FormValues>
       initialValues={initialValues}
-      validationSchema={validationSchema(addClients)}
+      validationSchema={validationSchema(addClients, hasContract)}
       onSubmit={handleSubmit}
       validateOnChange={true}
       validateOnBlur={true}
@@ -134,7 +138,7 @@ const FormDetails = () => {
                     options={[
                       { value: "individual", label: "أفراد" },
                       { value: "company", label: "شركة" },
-                      { value: "lawyer", label: "محامي" },
+                      { value: "government", label: "جهة حكومية" },
                     ]}
                   />
                 </div>
@@ -149,42 +153,33 @@ const FormDetails = () => {
                     />
                   </div>
                   <div className="flex-1">
-                    <InputForm
-                      name="phone"
-                      type="string"
-                      placeholder="5xxxxxxxxxxxx"
-                      label="رقم الهاتف"
-                    />
-                  </div>
-                  <div className="flex items-end">
-                    <SelectForm
-                      name="country_code"
-                      label=""
-                      placeholder=" كود الدولة"
-                      options={[
-                        { value: "966", label: "+966 (السعودية)" },
-                        { value: "971", label: "+971 (الإمارات)" },
-                        { value: "974", label: "+974 (قطر)" },
-                        { value: "965", label: "+965 (الكويت)" },
-                        { value: "968", label: "+968 (عُمان)" },
-                        { value: "973", label: "+973 (البحرين)" },
-                        { value: "962", label: "+962 (الأردن)" },
-                        { value: "961", label: "+961 (لبنان)" },
-                        { value: "963", label: "+963 (سوريا)" },
-                        { value: "970", label: "+970 (فلسطين)" },
-                        { value: "20", label: "+20 (مصر)" },
-                        { value: "212", label: "+212 (المغرب)" },
-                        { value: "213", label: "+213 (الجزائر)" },
-                        { value: "216", label: "+216 (تونس)" },
-                        { value: "218", label: "+218 (ليبيا)" },
-                        { value: "249", label: "+249 (السودان)" },
-                        { value: "967", label: "+967 (اليمن)" },
-                        { value: "964", label: "+964 (العراق)" },
-                        { value: "90", label: "+90 (تركيا)" },
-                        { value: "1", label: "+1 (الولايات المتحدة)" },
-                        { value: "44", label: "+44 (المملكة المتحدة)" },
-                      ]}
-                    />
+                    <div className="grid grid-cols-12 gap-2">
+                      <div className="col-span-8">
+                        <InputForm
+                          name="phone"
+                          label="رقم الهاتف"
+                          type="tel"
+                          placeholder="أدخل رقم الهاتف"
+                        />
+                      </div>
+                      <div className="col-span-4">
+                        <SelectForm
+                          name="countryCode"
+                          label="كود الدولة"
+                          options={[
+                            { value: "+966", label: "🇸🇦 +966" },
+                            { value: "+971", label: "🇦🇪 +971" },
+                            { value: "+974", label: "🇶🇦 +974" },
+                            { value: "+965", label: "🇰🇼 +965" },
+                            { value: "+973", label: "🇧🇭 +973" },
+                            { value: "+968", label: "🇴🇲 +968" },
+                            { value: "+20", label: "🇪🇬 +20" },
+                            { value: "+962", label: "🇯🇴 +962" },
+                            { value: "+961", label: "🇱🇧 +961" },
+                          ]}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -260,14 +255,14 @@ const FormDetails = () => {
                       <InputForm
                         name="profile.contract.start_date"
                         type="date"
-                        label="تاريخ بداية العقد (اختياري)"
+                        label="تاريخ بداية العقد"
                       />
                     </div>
                     <div className="pb-7">
                       <InputForm
                         name="profile.contract.contract_value"
                         type="string"
-                        label="القيمة المتفق عليها (اختياري)"
+                        label="القيمة المتفق عليها"
                         placeholder="50 ألف ريال سعودي"
                       />
                     </div>
@@ -275,8 +270,8 @@ const FormDetails = () => {
                       <InputForm
                         name="profile.contract.contract_duration"
                         type="string"
-                        label="مدة العقد (اختياري)"
-                        placeholder=" سنتين"
+                        label="مدة العقد"
+                        placeholder="سنتين"
                       />
                     </div>
                     <h1 className="pb-7">صورة العقد</h1>
@@ -285,7 +280,7 @@ const FormDetails = () => {
                         <FileUpload
                           name="contract_file"
                           label=""
-                          placeholder="انقر هنا لتحميل الصوره او سحبها وإفلاتها"
+                          placeholder="انقر هنا لتحميل الصورة او سحبها وإفلاتها"
                         />
                       </div>
                     </div>
@@ -301,13 +296,13 @@ const FormDetails = () => {
                       <FileUpload
                         name="authorization_photo"
                         label=""
-                        placeholder="انقر هنا لتحميل الصوره او سحبها وإفلاتها"
+                        placeholder="انقر هنا لتحميل الصورة او سحبها وإفلاتها"
                       />
                     </div>
                   </div>
 
                   <div className="flex flex-col pt-8">
-                    <TextAreaForm name="profile.notes" label=" ملاحظات" />
+                    <TextAreaForm name="profile.notes" label="ملاحظات" />
                   </div>
                 </div>
               </div>

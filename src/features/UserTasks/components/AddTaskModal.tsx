@@ -12,13 +12,16 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
-import { useTaskUser } from "./api/hooks/useAddTask";
-import { useFetchClients } from "@/features/clients/clients/api/hooks/useGetClients";
+import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
+import { useTaskUser } from "../api/hooks/useAddTask";
+import { useUpdateTask } from "../api/hooks/useUpdateTask";
+import { useFetchCases } from "../api/hooks/useGetCase";
 
 interface AddTaskModalProps {
   onClose: () => void;
   onSave?: (values: TaskFormValues) => void;
   initialValues?: TaskFormValues;
+  taskId?: string;
 }
 
 interface TaskFormValues {
@@ -28,6 +31,10 @@ interface TaskFormValues {
   delivery_date: string;
   status: string;
   notes: string;
+  details: string;
+  start_date: string;
+  end_date: string;
+  task_relation?: string;
 }
 
 const validationSchema = Yup.object({
@@ -35,10 +42,18 @@ const validationSchema = Yup.object({
   assigned_to: Yup.number()
     .required("المكلف مطلوب")
     .min(1, "يرجى اختيار المكلف"),
-  task_type: Yup.string().required("نوع المهمة مطلوب"),
+  task_type: Yup.string().when("task_relation", {
+    is: "case",
+    then: (schema) => schema.required("نوع المهمة مطلوب"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
   delivery_date: Yup.string().required("تاريخ التسليم مطلوب"),
   notes: Yup.string(),
+  details: Yup.string().required("تفاصيل المهمة مطلوبة"),
+  start_date: Yup.string().required("تاريخ بدء المهمة مطلوب"),
+  end_date: Yup.string().required("تاريخ انتهاء المهمة مطلوب"),
   status: Yup.string().required("حالة المهمة مطلوبة"),
+  task_relation: Yup.string().required("يرجى اختيار نوع المهمة"),
 });
 
 const defaultValues: TaskFormValues = {
@@ -48,12 +63,22 @@ const defaultValues: TaskFormValues = {
   delivery_date: "",
   notes: "",
   status: "",
+  details: "",
+  start_date: "",
+  end_date: "",
+  task_relation: "case",
 };
 
-function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTaskModalProps) {
+function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }: AddTaskModalProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const { mutate: addTask, isPending } = useTaskUser();
-  const { data: clientsData, isPending: isClientsLoading } = useFetchClients();
+  const isEditMode = !!taskId;
+  
+  const { mutate: addTask, isPending: isAdding } = useTaskUser();
+  const { mutate: updateTask, isPending: isUpdating } = useUpdateTask();  
+  const { data: lawyers, isPending: isClientsLoading } = useFetchLawyers();
+  const { data: cases, isPending: isCasesLoading } = useFetchCases();
+  
+  const isLoading = isEditMode ? isUpdating : isAdding;
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -61,31 +86,81 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
   };
 
   const handleSubmit = (values: TaskFormValues) => {
-    console.log("تم حفظ المهمة:", values);
-
-    addTask(values, {
-      onSuccess: () => {
-        if (onSave) {
-          onSave(values);
+    const submitValues = { ...values };
+    
+    // تحويل التواريخ إلى صيغة ISO
+    if (submitValues.delivery_date) {
+      submitValues.delivery_date = new Date(submitValues.delivery_date).toISOString();
+    }
+    if (submitValues.start_date) {
+      submitValues.start_date = new Date(submitValues.start_date).toISOString();
+    }
+    if (submitValues.end_date) {
+      submitValues.end_date = new Date(submitValues.end_date).toISOString();
+    }
+    
+    // تجهيز البيانات للإرسال
+    const apiValues: any = {
+      task_title: submitValues.task_title,
+      assigned_to: submitValues.assigned_to,
+      delivery_date: submitValues.delivery_date,
+      status: submitValues.status,
+      notes: submitValues.notes,
+      details: submitValues.details,
+      start_date: submitValues.start_date,
+      end_date: submitValues.end_date,
+    };
+    
+    // معالجة task_type حسب العلاقة
+    if (values.task_relation === "case") {
+      // تابعة لقضية - الـ task_type هو ID القضية
+      apiValues.task_type = submitValues.task_type;
+    } else {
+      // غير تابعة لقضية - الـ task_type هو النص المكتوب
+      apiValues.task_type = submitValues.task_type;
+    }
+    
+    console.log("Sending data:", apiValues);
+    
+    if (isEditMode && taskId) {
+      updateTask(
+        { id: taskId, data: apiValues },
+        {
+          onSuccess: () => {
+            if (onSave) onSave(submitValues);
+            setIsModalOpen(false);
+            onClose();
+          },
+          onError: (error) => console.error("خطأ في تعديل المهمة:", error)
         }
-        setIsModalOpen(false);
-        onClose();
-      },
-      onError: (error) => {
-        console.error("خطأ في إضافة المهمة:", error);
-      }
-    });
+      );
+    } else {
+      addTask(apiValues, {
+        onSuccess: () => {
+          if (onSave) onSave(submitValues);
+          setIsModalOpen(false);
+          onClose();
+        },
+        onError: (error) => console.error("خطأ في إضافة المهمة:", error)
+      });
+    }
   };
 
-  // تحويل بيانات العملاء إلى الصيغة المطلوبة للـ Select
-  const clientOptions = useMemo(() => {
-    if (!clientsData || clientsData.length === 0) return [];
-    
-    return clientsData.map((client: any) => ({
-      value: client.user_id,        // القيمة: ID الموكل (number)
-      label: client.user?.first_name || `موكل ${client.user_id}` // الاسم المعروض
+  const LawyerOptions = useMemo(() => {
+    if (!lawyers || lawyers.length === 0) return [];
+    return lawyers.map((lawyer: any) => ({
+      value: lawyer.user_id,        
+      label: lawyer.user?.first_name || `محامي ${lawyer.user_id}` 
     }));
-  }, [clientsData]);
+  }, [lawyers]);
+
+  const CaseOptions = useMemo(() => {
+    if (!cases?.data || cases.data.length === 0) return [];
+    return cases.data.map((caseItem: any) => ({
+      value: caseItem.case_title,
+      label: caseItem.case_title
+    }));
+  }, [cases]);
 
   if (!isModalOpen) return null;
 
@@ -104,7 +179,7 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
 
         <DialogHeader className="mb-2 mt-15">
           <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
-            {initialValues === defaultValues ? "إضافة مهمة جديدة" : "تعديل المهمة"}
+            {isEditMode ? "تعديل المهمة" : "إضافة مهمة جديدة"}
           </DialogTitle>
         </DialogHeader>
 
@@ -112,9 +187,22 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
+          enableReinitialize
         >
-          {() => (
+          {({ values }) => (
             <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
+              <div className="grid grid-cols-1 gap-4">
+                <SelectForm
+                  name="task_relation"
+                  label="نوع المهمة"
+                  options={[
+                    { value: "case", label: "المهمة تابعة للقضايا" },
+                    { value: "non_case", label: "المهمة غير تابعة للقضايا" },
+                  ]}
+                  placeholder="اختر نوع المهمة"
+                />
+              </div>
+
               <div className="grid grid-cols-1 gap-4">
                 <InputForm
                   name="task_title"
@@ -123,28 +211,33 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
                   placeholder="أدخل عنوان المهمة"
                 />
                 
-                {/* هنا الـ Select بدل InputForm */}
                 <SelectForm
                   name="assigned_to"
                   label="المكلف"
-                  options={clientOptions}
-                  placeholder={isClientsLoading ? "جاري تحميل العملاء..." : "اختر المكلف"}
-                  disabled={isClientsLoading || clientOptions.length === 0}
+                  options={LawyerOptions}
+                  placeholder={isClientsLoading ? "جاري تحميل المحامين..." : "اختر المكلف"}
+                  disabled={isClientsLoading || LawyerOptions.length === 0}
                 />
               </div>
 
-              <div className="grid grid-cols-1">
-                <SelectForm
-                  name="task_type"
-                  label="نوع المهمة"
-                  options={[
-                    { value: "قضية 1", label: "قضية 1" },
-                    { value: "قضية 2", label: "قضية 2" },
-                    { value: "قضية 3", label: "قضية 3" },
-                    { value: "قضية 4", label: "قضية 4" },
-                    { value: "قضية 5", label: "قضية 5" },
-                  ]}
-                />
+              <div className="grid grid-cols-1 gap-4">
+                {values.task_relation === "case" ? (
+                  <SelectForm
+                    name="task_type"
+                    label="القضية"
+                    options={CaseOptions}
+                    placeholder={isCasesLoading ? "جاري تحميل القضايا..." : "اختر القضية"}
+                    disabled={isCasesLoading || CaseOptions.length === 0}
+                  />
+                ) : (
+                  <InputForm
+                    name="task_type"
+                    label="نوع المهمة"
+                    type="text"
+                    placeholder="أدخل نوع المهمة"
+                  />
+                )}
+                
                 <InputForm
                   name="delivery_date"
                   label="تاريخ التسليم"
@@ -154,9 +247,27 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
 
               <TextAreaForm
                 name="notes"
-                label="ملاحظات (اختياري)"
+                label="ملاحظات"
                 placeholder="أدخل ملاحظات إضافية"
               />
+              <TextAreaForm
+                name="details"
+                label="تفاصيل المهمة"
+                placeholder="أدخل تفاصيل إضافية"
+              />
+              
+              <div className="grid grid-cols-1  gap-4">
+                <InputForm
+                  name="start_date"
+                  label="تاريخ بدء المهمة"
+                  type="date"
+                />
+                <InputForm
+                  name="end_date"
+                  label="تاريخ انتهاء المهمة"
+                  type="date"
+                />
+              </div>
 
               <SelectForm
                 name="status"
@@ -171,14 +282,14 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues }: AddTas
 
               <button
                 type="submit"
-                disabled={isPending}
+                disabled={isLoading}
                 className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isPending
-                  ? "جاري الإضافة..."
-                  : initialValues === defaultValues
-                    ? "إضافة مهمة"
-                    : "حفظ التعديلات"
+                {isLoading
+                  ? "جاري الحفظ..."
+                  : isEditMode
+                    ? "حفظ التغييرات"
+                    : "إضافة مهمة"
                 }
               </button>
             </Form>

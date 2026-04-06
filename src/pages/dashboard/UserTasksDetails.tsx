@@ -1,115 +1,19 @@
-// pages/UserTasksDetails.tsx
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import PageLayout from "@/shared/components/PageLayout";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import HeaderSection from "@/features/UserTasks/DetailsTask/HeaderSection";
-import TaskDetailsForm from "@/features/UserTasks/DetailsTask/TaskDetailsForm";
-import CommentsSection from "@/features/UserTasks/DetailsTask/CommentsSection";
-import TimelineForm from "@/features/UserTasks/DetailsTask/TimelineForm";
+// pages/dashboard/UserTasksDetails.tsx
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import PageLayout from '@/shared/components/PageLayout';
+import TaskDetail from '@/features/UserTasks/DetailsTask/TaskDetail';
 
-// نفس نوع البيانات الموجود عندك
-interface TaskRelatedT {
-    id: string;
-    TaskTitle: string;
-    TaskType: string;
-    PersonInCharge: string;
-    status: string;
-    DeliveryDate: string;
-}
-
-const tasks: TaskRelatedT[] = [
-    {
-        id: "1",
-        TaskTitle: "مراجعة عقد القضية رقم 254",
-        TaskType: "نوع المهمة 1",
-        PersonInCharge: "المسؤول 1",
-        status: "متأخرة",
-        DeliveryDate: "2024-06-01",
-    },
-    {
-        id: "2",
-        TaskTitle: "مراجعة عقد القضية رقم 24",
-        TaskType: "نوع المهمة 2",
-        PersonInCharge: "المسؤول 2",
-        status: "مُنجزة",
-        DeliveryDate: "2024-06-02",
-    },
-    {
-        id: "3",
-        TaskTitle: "مراجعة عقد القضية رقم 254",
-        TaskType: "نوع المهمة 3",
-        PersonInCharge: "المسؤول 3",
-        status: "قيد التنفيذ ",
-        DeliveryDate: "2024-06-03",
-    },
-    {
-        id: "4",
-        TaskTitle: "مراجعة عقد القضية رقم 254",
-        TaskType: "نوع المهمة 4",
-        PersonInCharge: "المسؤول 4",
-        status: "قيد التنفيذ",
-        DeliveryDate: "2024-06-04",
-    },
-    {
-        id: "5",
-        TaskTitle: "مراجعة عقد القضية رقم 254",
-        TaskType: "نوع المهمة 5",
-        PersonInCharge: "المسؤول 5",
-        status: "متأخرة ",
-        DeliveryDate: "2024-06-05",
-    },
-    {
-        id: "6",
-        TaskTitle: "مراجعة عقد القضية رقم 254",
-        TaskType: "نوع المهمة 6",
-        PersonInCharge: "المسؤول 6",
-        status: "قيد التنفيذ",
-        DeliveryDate: "2024-06-06",
-    },
-];
-
-export default function UserTasksDetails() {
+const UserTasksDetails: React.FC = () => {  
     const { id } = useParams<{ id: string }>();
-    const [task, setTask] = useState<TaskRelatedT | null>(null);
-
-    useEffect(() => {
-        if (id) {
-            const foundTask = tasks.find((t) => t.id === id) ?? null;
-            setTask(foundTask);
-        }
-    }, [id]);
-
-    const comments = [
-        { date: "22/01/2026", text: "تم الانتهاء من مراجعة البنود الأساسية." },
-        { date: "22/01/2026", text: "بانتظار توقيع العميل على النسخة النهائية." },
-    ];
-    const description = "و سأعرض مثال حي لهذا، من منا لم يتحمل جهد بدني شاق إلا من أجل الحصول على ميزة أو فائدة؟ ولكن من لديه الحق أن ينتقد شخص ما أراد أن يشعر بالسعادة التي لا تشوبها عواقب أليمة أو آخر أراد أن يتجنب الألم الذي ربما تنجم عنه بعض المتعة";
-
-    if (!task) {
-        return (
-            <PageLayout>
-                <HeaderTitle title="تفاصيل المهمة" />
-                <div className="flex justify-center items-center h-64">
-                    <p className="text-gray-500">جاري التحميل...</p>
-                </div>
-            </PageLayout>
-        );
-    }
-
+    
+    console.log("ID from URL in UserTasksDetails:", id);
+    
     return (
         <PageLayout>
-            <HeaderTitle title="تفاصيل المهمة" />
-
-            <HeaderSection title={task.TaskTitle} status={task.status} />
-            <TaskDetailsForm task={task} />
-
-            <TimelineForm startDate={task.DeliveryDate} endDate={task.DeliveryDate} />
-
-            <CommentsSection
-                description={description}
-                comments={comments}
-            />
+            <TaskDetail id={id} />
         </PageLayout>
     );
-}
+};
+
+export default UserTasksDetails;
