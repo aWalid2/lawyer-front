@@ -5,24 +5,25 @@ import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
 interface UserTaskFilter {
   onFilterChange: (status: string) => void;
   currentFilter?: string;
+  filterOptions?: Array<{ value: string; label: string }>; // أضف هذا السطر
 }
 
 export const UserTaskFilter: React.FC<UserTaskFilter> = ({
   onFilterChange,
-  currentFilter = "all"
+  currentFilter = "all",
+  filterOptions = [ // القيم الافتراضية (إنجليزي value, عربي label)
+    { value: "all", label: "جميع الحالات" },
+    { value: "done", label: "مُنجزة" },
+    { value: "late", label: "متأخرة" },
+    { value: "in_progress", label: "قيد التنفيذ" },
+    { value: "pending", label: "قيد الانتظار" },
+  ]
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const statusOptions = [
-    { value: "all", label: "جميع الحالات" },
-    { value: "مُنجزة", label: "مُنجزة" },
-    { value: "متأخرة", label: "متأخرة" },
-    { value: "قيد التنفيذ", label: "قيد التنفيذ" },
-  ];
-
   const getCurrentLabel = () => {
-    const option = statusOptions.find(opt => opt.value === currentFilter);
+    const option = filterOptions.find(opt => opt.value === currentFilter);
     return option ? option.label : "جميع الحالات";
   };
 
@@ -57,13 +58,13 @@ export const UserTaskFilter: React.FC<UserTaskFilter> = ({
       {/* القائمة المنسدلة */}
       {isOpen && (
         <div className="absolute top-full right-0 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-100 z-50 overflow-hidden">
-          {statusOptions.map((option) => (
+          {filterOptions.map((option, index) => (
             <button
               key={option.value}
               onClick={() => handleSelect(option.value)}
               className={`w-full text-right px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors duration-150
                 ${currentFilter === option.value ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700'}
-                ${option.value !== 'all' ? 'border-b border-gray-50' : ''}
+                ${index !== filterOptions.length - 1 ? 'border-b border-gray-50' : ''}
               `}
             >
               {option.label}

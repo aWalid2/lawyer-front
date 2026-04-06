@@ -8,9 +8,9 @@ export interface FormValues {
   country: string;
   address: string;
   ssn: string;
+  phone: string;
   profile: {
     client_type: "individual" | "company" | "lawyer";
-    phone: string;
     notes: string; 
     contract: {
       start_date: string;

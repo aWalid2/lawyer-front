@@ -10,6 +10,7 @@ interface HeaderTasksUser {
   onFilterChange: (status: string) => void;
   searchTerm: string;
   statusFilter: string;
+  filterOptions?: Array<{ value: string; label: string }>; // أضف هذا السطر
 }
 
 export const HeaderTasksUser: React.FC<HeaderTasksUser> = ({
@@ -17,11 +18,11 @@ export const HeaderTasksUser: React.FC<HeaderTasksUser> = ({
   onFilterChange,
   searchTerm,
   statusFilter,
+  filterOptions, 
 }) => {
   return (
     <HeaderPageLayout>
       <HeaderTitle innerPage title="مهام المستخدم" />
-
 
       <HeaderSearch value={searchTerm} onChange={onSearch} className="lg:ms-0" />
 
@@ -29,6 +30,7 @@ export const HeaderTasksUser: React.FC<HeaderTasksUser> = ({
         <UserTaskFilter
           onFilterChange={onFilterChange}
           currentFilter={statusFilter}
+          filterOptions={filterOptions} 
         />
         <AddTask />
       </div>

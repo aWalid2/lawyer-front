@@ -7,14 +7,11 @@ export const useAddClient = () => {
 
   return useMutation({
     mutationFn: (formData: FormData) => addClients(formData),
-    onSuccess: (data) => {
-      console.log("Success:", data);
+    onSuccess: () => {
       toast.success("تم إضافة الموكل بنجاح");
       queryClient.invalidateQueries({ queryKey: ["client-profile"] });
     },
     onError: (error: any) => {
-      console.error("Mutation Error:", error);
-      console.error("Error details:", error.response?.data);
       const errorMessage =
         error.response?.data?.message || "فشل في إضافة الموكل يرجى المحاولة لاحقاً";
       toast.error(errorMessage);

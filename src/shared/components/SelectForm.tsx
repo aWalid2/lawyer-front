@@ -1,3 +1,4 @@
+// SelectForm.tsx
 import React from "react";
 import { useField, useFormikContext } from "formik";
 import {
@@ -11,7 +12,7 @@ import { cn } from "@/lib/utils";
 
 type Option = {
     label: string;
-    value: string;
+    value: string | number; // تعديل: دعم string و number
 };
 
 type SelectFormProps = {
@@ -21,7 +22,7 @@ type SelectFormProps = {
     placeholder?: string;
     disabled?: boolean;
     className?: string;
-    onChange?: (value: string) => void;
+    onChange?: (value: string | number) => void;
 };
 
 export const SelectForm: React.FC<SelectFormProps> = ({
@@ -44,10 +45,14 @@ export const SelectForm: React.FC<SelectFormProps> = ({
             <Select
                 disabled={disabled}
                 onValueChange={(value) => {
-                    setFieldValue(name, value);
-                    onChange?.(value);
+                    // محاولة تحويل القيمة إلى رقم إذا كان الحقل الأصلي يتوقع رقم
+                    const finalValue = typeof field.value === 'number' 
+                        ? Number(value) 
+                        : value;
+                    setFieldValue(name, finalValue);
+                    onChange?.(finalValue);
                 }}
-                value={field.value}
+                value={String(field.value)} // تحويل القيمة إلى string للـ Select
             >
                 <SelectTrigger
                     className={cn(
@@ -59,7 +64,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                 </SelectTrigger>
                 <SelectContent className="w-(--radix-select-trigger-width)">
                     {options.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
+                        <SelectItem key={String(option.value)} value={String(option.value)}>
                             {option.label}
                         </SelectItem>
                     ))}

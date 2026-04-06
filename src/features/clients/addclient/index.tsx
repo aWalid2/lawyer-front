@@ -1,6 +1,5 @@
 import { Formik, Form } from "formik";
 import { useState } from "react";
-
 import type { FormValues } from "../addclient/types/addClientT";
 import { validationSchema } from "../addclient/components/ValidationSchema";
 import { Switch } from "@/components/ui/switch";
@@ -15,10 +14,9 @@ import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
 import { useAddClient } from "./api/hooks/useAddClient";
 
-// ثوابت الكلاسات
 const CLASSES = {
   fieldWithIcon:
-    "w-full border rounded-md p-2 bg-gray-50 h-10 md:h-[50px] pr-10",
+  "w-full border rounded-md p-2 bg-gray-50 h-10 md:h-[50px] pr-10",
   formSection: "border border-gray-300 p-4 rounded-xl",
   flexRow: "flex flex-col md:flex-row gap-3",
   flexBetween: "flex justify-between items-center",
@@ -47,9 +45,9 @@ const FormDetails = () => {
     country: "",
     address: "",
     ssn: "",
+    phone: "",
     profile: {
       client_type: "individual",
-      phone: "",
       notes: "",
       contract: {
         start_date: "",
@@ -62,7 +60,6 @@ const FormDetails = () => {
     },
   };
 
-  // ✅ دالة تحويل الـ FormValues لـ FormData
   const convertToFormData = (values: FormValues) => {
     const formData = new FormData();
     formData.append("first_name", values.first_name);
@@ -79,7 +76,7 @@ const FormDetails = () => {
       );
     }
     formData.append("profile[client_type]", values.profile.client_type);
-    formData.append("profile[phone]", values.profile.phone);
+    formData.append("phone", values.phone);
     formData.append("profile[notes]", values.profile.notes);
     if (hasContract) {
       if (values.profile.contract.start_date) {
@@ -106,16 +103,7 @@ const FormDetails = () => {
   };
 
   const handleSubmit = (values: FormValues) => {
-    console.log("Form Values:", values);
-
     const formData = convertToFormData(values);
-
-    // ✅ أضف هذا الكود لمعرفة البيانات اللي رايحة
-    console.log("📤 Sending FormData:");
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
     mutate(formData);
   };
 
@@ -162,7 +150,7 @@ const FormDetails = () => {
                   </div>
                   <div className="flex-1">
                     <InputForm
-                      name="profile.phone"
+                      name="phone"
                       type="string"
                       placeholder="5xxxxxxxxxxxx"
                       label="رقم الهاتف"
