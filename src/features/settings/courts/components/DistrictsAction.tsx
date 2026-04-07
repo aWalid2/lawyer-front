@@ -2,10 +2,10 @@ import React from "react";
 import { TableEditButton } from "@/shared/components/TableEditButton";
 import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
 import { DistrictFormDialog } from "./DistrictFormDialog";
-import type { court_sessions } from "../types/courtTypes";
+import type { court_circle } from "../types/courtTypes";
 
 interface DistrictsActionProps {
-  district: court_sessions;
+  district: court_circle;
   onUpdate: (id: number, values: { name: string }) => void;
   onDelete: (id: number) => void;
 }

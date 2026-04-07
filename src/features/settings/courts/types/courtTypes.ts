@@ -1,7 +1,7 @@
-export interface court_sessions {
+export interface court_circle {
   id: string;
   name: string;
-  status?: string;
+  rowNumber: number;
 }
 
 export interface CourtT {
@@ -9,6 +9,6 @@ export interface CourtT {
   name: string;
   address: string;
   cases_count?: number;
-  court_sessions: court_sessions[];
+  court_circles: court_circle[];
   rowNumber: number;
 }

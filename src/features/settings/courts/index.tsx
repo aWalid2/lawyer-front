@@ -1,31 +1,21 @@
-import React from "react";
-import { CourtsHeader } from "./components/CourtsHeader";
-import { DataTable, type Column } from "@/shared/components/DataTable";
-import { CourtsAction } from "./components/CourtsAction";
-import { DistrictsDialog } from "./components/DistrictsDialog";
 import { Button } from "@/components/ui/button";
-import type { CourtT } from "./types/courtTypes";
+import { DataTable, type Column } from "@/shared/components/DataTable";
 import PageLayout from "@/shared/components/PageLayout";
-import { usePagination } from "@/shared/hooks/usePagination";
-import { useGetCourts } from "./api/hooks/useGetCourts";
-import { useIndexedData } from "@/shared/utils/useIndexedData";
-import { Pagination } from "@/shared/components/Pagination";
-import { EmptyTable } from "@/shared/components/EmptyTable";
-import LoadingPage from "@/shared/components/LoadingPage";
+import React, { useState } from "react";
+import { CourtsAction } from "./components/CourtsAction";
+import { CourtsHeader } from "./components/CourtsHeader";
+import { DistrictsDialog } from "./components/DistrictsDialog";
+import type { CourtT } from "./types/courtTypes";
+
 import { Error } from "@/shared/components/Error";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { useGetCourts } from "./api/hooks/useGetCourts";
+import { EmptyTable } from "@/shared/components/EmptyTable";
+import { PaginationApi } from "@/shared/components/PaginationApi";
 
 
 export const CourtsFeature: React.FC = () => {
-
-
-  const { data: courts, isPending, isError } = useGetCourts();
-  const indexedData = useIndexedData(courts);
-
-  const {
-    currentPage,
-    setCurrentPage,
-    totalPages,
-  } = usePagination<CourtT>(indexedData || [], 15);
   const columns: Column<CourtT>[] = [
     {
       header: "#",
@@ -40,11 +30,11 @@ export const CourtsFeature: React.FC = () => {
       accessor: (court: CourtT) => court.address,
     },
     {
-      header: "عدد القضايا",
+      header: "عدد الدوائر",
       accessor: (court: CourtT) => (
         <div className="flex items-center justify-center gap-2">
           <span className="flex items-center justify-center size-8 bg-[#A6A6A6] text-white rounded-md text-xs font-bold leading-none">
-            {court.cases_count ? court.cases_count : 0}
+            {court.court_circles?.length ? court.court_circles.length : 0}
           </span>
           <DistrictsDialog
             court={court}
@@ -71,6 +61,12 @@ export const CourtsFeature: React.FC = () => {
     },
   ];
 
+  const [page, setPage] = useState(1);
+  const limit = 15;
+
+  const { data: courts, isPending, isError } = useGetCourts(page, limit);
+  const indexedData = useIndexedData(courts?.data || []);
+  const totalPages = courts?.meta?.total_pages ?? 1;
 
   if (isPending) return <LoadingPage />
   if (isError) return <Error message="حدث خطأ في تحميل البيانات" />
@@ -81,17 +77,17 @@ export const CourtsFeature: React.FC = () => {
         onCourtAdded={() => console.log("Court added")}
       />
 
-      <DataTable data={indexedData} columns={columns} rowIdField="id" />
-      {courts?.length > 0 ? (
-        totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        )
+      {indexedData?.length > 0 ? (
+        <DataTable data={indexedData} columns={columns} rowIdField="id" />
       ) : (
         <EmptyTable message="لا يوجد محاكم" />
+      )}
+      {indexedData?.length > 0 && totalPages > 1 && (
+        <PaginationApi
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       )}
     </PageLayout>
   );
