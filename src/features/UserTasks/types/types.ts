@@ -1,40 +1,49 @@
 export interface TaskRelatedT {
     id: string;
-    rowNumber?: number; 
+    rowNumber?: number;
     task_title: string;
     task_type: string;
-    assigned_to: number; 
+    assigned_to: number;
     status: string;
     delivery_date: string;
-    notes?: string; // اختياري
+    notes?: string;
     created_at?: string;
     updated_at?: string;
 }
 
-// استخدام const بدلاً من enum للحالات
-export const TaskStatus = {
-    IN_PROGRESS: "in_progress",
-    PENDING: "pending",
-    DONE: "done",
-    LATE: "late",
-} as const;
+export const statusMapping: Record<string, string> = {
+    "in_progress": "قيد التنفيذ",
+    "pending": "قيد الانتظار",
+    "done": "مُنجزة",
+    "late": "متأخرة"
+};
 
-export type TaskStatusType = typeof TaskStatus[keyof typeof TaskStatus];
+export const getStatusStyle = (statusValue: string): string => {
+    switch (statusValue.trim()) {
+        case "done":
+            return "bg-[#11B32433] text-[#0B6E1F]";
+        case "late":
+            return "bg-[#C600001F] text-[#C60000]";
+        case "in_progress":
+            return "bg-[#DBC33B29] text-[#9E7F0F]";
+        case "pending":
+            return "bg-[#FFA50029] text-[#FF8C00]";
+        default:
+            return "bg-gray-100 text-gray-700";
+    }
+};
 
-
-// واجهة لإضافة مهمة جديدة
 export interface AddTaskPayload {
     task_title: string;
     task_type: string;
-    assigned_to: number; 
+    assigned_to: number;
     status: string;
     delivery_date: string;
-    notes?: string; // اختياري
+    notes?: string;
     created_at?: string;
     updated_at?: string;
 }
 
-// واجهة لتعديل مهمة
 export interface UpdateTaskPayload extends AddTaskPayload {
     id: string;
 }
@@ -45,7 +54,6 @@ export interface TasksResponse {
     message?: string;
 }
 
-// واجهة لمهمة واحدة من API
 export interface TaskResponse {
     success: boolean;
     data: TaskRelatedT;

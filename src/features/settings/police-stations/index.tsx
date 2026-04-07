@@ -1,100 +1,99 @@
-import React, { useState } from "react";
-import { PoliceStationsHeader } from "./components/PoliceStationsHeader";
-import { DataTable, type Column } from "@/shared/components/DataTable";
-import { Pagination } from "@/shared/components/Pagination";
-import { PoliceStationsAction } from "./components/PoliceStationsAction";
-import PageLayout from "@/shared/components/PageLayout";
-import { usePagination } from "@/shared/hooks/usePagination";
-import type { PoliceStationT } from "./types";
+import React, { useState } from 'react'
+import { DataTable, type Column } from '@/shared/components/DataTable'
+import { PoliceStationsAction } from './components/PoliceStationsAction';
+import { PoliceStationsHeader } from './components/PoliceStationsHeader';
+import { useFetchPoliceStations } from './api/hooks/useGetStation';
+import { Error } from '@/shared/components/Error';
+import LoadingPage from '@/shared/components/LoadingPage';
+import { PaginationApi } from '@/shared/components/PaginationApi';
+import type { PoliceStationT } from './types/policeStationTypes';
+import PageLayout from '@/shared/components/PageLayout';
+import { useIndexedData } from '@/shared/utils/useIndexedData';
 
-const initialStations: PoliceStationT[] = [
-  {
-    id: "1",
-    name: "مخفر الجيزة",
-    address: "الجيزة - شارع الوفاء",
-  },
-  {
-    id: "2",
-    name: "مخفر الدقي",
-    address: "الجيزة - الدقي",
-  },
-  ...Array.from({ length: 10 }).map((_, i) => ({
-    id: (i + 3).toString(),
-    name: `مخفر اختبار ${i + 3}`,
-    address: `عنوان اختبار ${i + 3}`,
-  })),
-];
+interface PoliceStationWithRowNumber extends PoliceStationT {
+  rowNumber: number;
+}
 
 export const PoliceStationsFeature: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [stations, setStations] = useState<PoliceStationT[]>(initialStations);
+  const [page, setPage] = useState(1);
+  const limit = 15;
 
-  const filteredStations = stations.filter(
-    (p) =>
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.address.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const { data: stationsResponse, isPending, isError, refetch } = useFetchPoliceStations(page, limit, searchTerm);
 
-  const {
-    currentData,
-    currentPage,
-    setCurrentPage,
-    totalPages,
-  } = usePagination(filteredStations, 15);
+  const stations = stationsResponse?.data || [];
+  const totalPages = stationsResponse?.meta?.total_pages ?? 1;
 
-  const handleDelete = (id: string) => {
-    setStations(stations.filter((p) => p.id !== id));
-  };
+    const indexedData = useIndexedData(stations || []);
 
-  const handleUpdate = (id: string, values: Partial<PoliceStationT>) => {
-    setStations(
-      stations.map((p) => (p.id === id ? { ...p, ...values } : p))
-    );
-  };
+    
 
-  const columns: Column<PoliceStationT>[] = [
+  const columns: Column<PoliceStationWithRowNumber>[] = [
     {
       header: "#",
-      accessor: (p: PoliceStationT) =>
-        stations.indexOf(p) + 1 + (currentPage - 1) * 15,
+      accessor: (item) => item.rowNumber,
+      headerClassName: "w-13",
+      className: "w-13 text-center",
     },
     {
       header: "اسم المخفر",
-      accessor: "name" as keyof PoliceStationT,
+      accessor: "name",
+      headerClassName: "w-35",
+      className: "w-35",
     },
     {
       header: "العنوان",
-      accessor: "address" as keyof PoliceStationT,
+      accessor: "address",
+      headerClassName: "w-35",
+      className: "w-35",
     },
     {
-      header: "الحالة",
-      accessor: (station: PoliceStationT) => (
+      header: "الإجراءات",
+      accessor: (item) => (
         <PoliceStationsAction
-          station={station}
-          onUpdate={handleUpdate}
-          onDelete={handleDelete}
+          station={item}
+          onStationUpdated={() => {
+            refetch();
+          }}
         />
       ),
+      headerClassName: "w-35",
+      className: "w-35",
     },
   ];
 
+  if (isPending) return <LoadingPage />
+  if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
+
   return (
     <PageLayout>
-      <PoliceStationsHeader
-        searchTerm={searchTerm}
-        onSearch={setSearchTerm}
-        onStationAdded={() => console.log("Station added")}
-      />
-
-      <DataTable data={currentData} columns={columns} rowIdField="id" />
-
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
+        <PoliceStationsHeader
+          searchTerm={searchTerm}
+          onSearch={setSearchTerm}
+          onStationAdded={() => {
+            refetch();
+          }}
         />
-      )}
+
+        <DataTable
+          data={indexedData}
+          columns={columns}
+          rowIdField="id"
+        />
+
+        {totalPages > 1 && (
+          <PaginationApi
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        )}
+
+        {indexedData.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
+            لا توجد مراكز شرطة تطابق معايير البحث
+          </div>
+        )}
     </PageLayout>
   );
 };

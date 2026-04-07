@@ -1,92 +1,86 @@
-import React, { useState } from "react";
-import { CaseStatusesHeader } from "./components/CaseStatusesHeader";
-import { DataTable, type Column } from "@/shared/components/DataTable";
-import { Pagination } from "@/shared/components/Pagination";
-import { CaseStatusesAction } from "./components/CaseStatusesAction";
-import { usePagination } from "@/shared/hooks/usePagination";
-import type { CaseStatusT } from "./types";
-import PageLayout from "@/shared/components/PageLayout";
-
-const initialStatuses: CaseStatusT[] = [
-  {
-    id: "1",
-    name: "قيد الانتظار",
-    count: 0,
-  },
-  {
-    id: "2",
-    name: "منتهي",
-    count: 0,
-  },
-  ...Array.from({ length: 10 }).map((_, i) => ({
-    id: (i + 3).toString(),
-    name: `حالة اختبار ${i + 3}`,
-    count: 0,
-  })),
-];
+import React, { useState, useMemo } from 'react'
+import { DataTable, type Column } from '@/shared/components/DataTable'
+import { CaseStatusesAction } from './components/CaseStatusesAction';
+import { CaseStatusesHeader } from './components/CaseStatusesHeader';
+import { useFetchCaseStatuses } from './api/hooks/useGetCaseStatuses';
+import { Error } from '@/shared/components/Error';
+import LoadingPage from '@/shared/components/LoadingPage';
+import { PaginationApi } from '@/shared/components/PaginationApi';
+import { useIndexedData } from '@/shared/utils/useIndexedData';
+import type { CaseStatusT } from './types/caseStatuseTypes';
+import PageLayout from '@/shared/components/PageLayout';
 
 export const CaseStatusesFeature: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statuses, setStatuses] = useState<CaseStatusT[]>(initialStatuses);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [page, setPage] = useState(1);
+    const limit = 15;
 
-  const filteredStatuses = statuses.filter((p) =>
-    p.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    const { data: statusesResponse, isPending, isError, refetch } = useFetchCaseStatuses(page, limit, searchTerm);
+    
+    const statuses = statusesResponse?.data || [];
+    const totalPages = statusesResponse?.meta?.total_pages ?? 1;
+    const indexedData = useIndexedData(statuses || []);
 
-  const {
-    currentData,
-    currentPage,
-    setCurrentPage,
-    totalPages,
-  } = usePagination(filteredStatuses, 15);
+    const columns: Column<CaseStatusT>[] = [
+        {
+            header: "#",
+            accessor: (item: CaseStatusT) => item.rowNumber,
+            headerClassName: "w-13",
+            className: "w-13 text-center",
+        },
+        {
+            header: "اسم الحالة",
+            accessor: "name",
+            headerClassName: "w-35",
+            className: "w-35",
+        },
+        {
+            header: "الإجراءات",
+            accessor: (item: CaseStatusT) => (
+                <CaseStatusesAction 
+                    status={item} 
+                    onStatusUpdated={() => {
+                        refetch();
+                    }} 
+                />
+            ),
+            headerClassName: "w-35",
+            className: "w-35",
+        },
+    ];
 
-  const handleDelete = (id: string) => {
-    setStatuses(statuses.filter((p) => p.id !== id));
-  };
+    if (isPending) return <LoadingPage />
+    if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
 
-  const handleUpdate = (id: string, values: Partial<CaseStatusT>) => {
-    setStatuses(statuses.map((p) => (p.id === id ? { ...p, ...values } : p)));
-  };
+    return (
+        <PageLayout>
+            <CaseStatusesHeader
+                searchTerm={searchTerm}
+                onSearch={setSearchTerm}
+                onStatusAdded={() => {
+                    refetch();
+                }}
+            />
 
-  const columns: Column<CaseStatusT>[] = [
-    {
-      header: "#",
-      accessor: (p: CaseStatusT) =>
-        statuses.indexOf(p) + 1 + (currentPage - 1) * 15,
-    },
-    {
-      header: "اسم الحالة",
-      accessor: "name" as keyof CaseStatusT,
-    },
-    {
-      header: "الحالة",
-      accessor: (status: CaseStatusT) => (
-        <CaseStatusesAction
-          status={status}
-          onUpdate={handleUpdate}
-          onDelete={handleDelete}
-        />
-      ),
-    },
-  ];
+            <DataTable
+                data={indexedData}
+                columns={columns}
+                rowIdField="id"
+            />
 
-  return (
-    <PageLayout>
-      <CaseStatusesHeader
-        searchTerm={searchTerm}
-        onSearch={setSearchTerm}
-        onStatusAdded={() => console.log("Status added")}
-      />
+            {totalPages > 1 && (
+                <PaginationApi
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                />
+            )}
 
-      <DataTable data={currentData} columns={columns} rowIdField="id" />
-
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
-      )}
-    </PageLayout>
-  );
+            {indexedData.length === 0 && (
+                <div className="text-center py-8 text-gray-500">
+                    لا توجد حالات تطابق معايير البحث
+                </div>
+            )}
+        </PageLayout>
+    );
 };

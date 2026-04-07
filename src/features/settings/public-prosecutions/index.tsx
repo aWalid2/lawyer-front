@@ -1,102 +1,92 @@
-import React, { useState } from "react";
-import { ProsecutionsHeader } from "./components/ProsecutionsHeader";
-import { DataTable, type Column } from "@/shared/components/DataTable";
-import { Pagination } from "@/shared/components/Pagination";
-import { ProsecutionsAction } from "./components/ProsecutionsAction";
-import { usePagination } from "@/shared/hooks/usePagination";
-import type { PublicProsecutionT } from "./types";
-import PageLayout from "@/shared/components/PageLayout";
-
-const initialProsecutions: PublicProsecutionT[] = [
-  {
-    id: "1",
-    name: "نيابة جنوب الجيزة",
-    address: "الجيزة - شارع الوفاء",
-  },
-  {
-    id: "2",
-    name: "نيابة شمال الجيزة",
-    address: "الجيزة - المهندسين",
-  },
-  // Add more mock data if needed
-  ...Array.from({ length: 10 }).map((_, i) => ({
-    id: (i + 3).toString(),
-    name: `نيابة اختبار ${i + 3}`,
-    address: `عنوان اختبار ${i + 3}`,
-  })),
-];
+import React, { useState } from 'react'
+import { DataTable, type Column } from '@/shared/components/DataTable'
+import { ProsecutionsAction } from './components/ProsecutionsAction';
+import { ProsecutionsHeader } from './components/ProsecutionsHeader';
+import { useFetchProsecutions } from './api/hooks/useGetProsecutions';
+import { Error } from '@/shared/components/Error';
+import LoadingPage from '@/shared/components/LoadingPage';
+import { PaginationApi } from '@/shared/components/PaginationApi';
+import { useIndexedData } from '@/shared/utils/useIndexedData';
+import type { ProsecutionT } from './types/prosecutionsTypes';
+import PageLayout from '@/shared/components/PageLayout';
 
 export const PublicProsecutionsFeature: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
+    const [page, setPage] = useState(1);
+    const limit = 15;
 
-  const [prosecutions, setProsecutions] = useState<PublicProsecutionT[]>(initialProsecutions);
+    const { data: prosecutionsResponse, isPending, isError, refetch } = useFetchProsecutions(page, limit, searchTerm);
+    
+    const prosecutions = prosecutionsResponse?.data || [];
+    const totalPages = prosecutionsResponse?.meta?.total_pages ?? 1;
+    const indexedData = useIndexedData(prosecutions || []);
 
-  const filteredProsecutions = prosecutions.filter(
-    (p) =>
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.address.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    const columns: Column<ProsecutionT>[] = [
+        {
+            header: "#",
+            accessor: (item: ProsecutionT) => item.rowNumber,
+            headerClassName: "w-13",
+            className: "w-13 text-center",
+        },
+        {
+            header: "اسم النيابة",
+            accessor: "name",
+            headerClassName: "w-35",
+            className: "w-35",
+        },
+        {
+            header: "العنوان",
+            accessor: "address",
+            headerClassName: "w-35",
+            className: "w-35",
+        },
+        {
+            header: "الإجراءات",
+            accessor: (item: ProsecutionT) => (
+                <ProsecutionsAction 
+                    prosecution={item} 
+                    onProsecutionUpdated={() => {
+                        refetch();
+                    }} 
+                />
+            ),
+            headerClassName: "w-35",
+            className: "w-35",
+        },
+    ];
 
-  const {
-    currentData,
-    currentPage,
-    setCurrentPage,
-    totalPages,
-  } = usePagination(filteredProsecutions, 15);
+    if (isPending) return <LoadingPage />
+    if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
 
-  const handleDelete = (id: string) => {
-    setProsecutions(prosecutions.filter((p) => p.id !== id));
-  };
+    return (
+        <PageLayout>
+            <ProsecutionsHeader
+                searchTerm={searchTerm}
+                onSearch={setSearchTerm}
+                onProsecutionAdded={() => {
+                    refetch();
+                }}
+            />
 
-  const handleUpdate = (id: string, values: Partial<PublicProsecutionT>) => {
-    setProsecutions(
-      prosecutions.map((p) => (p.id === id ? { ...p, ...values } : p))
+            <DataTable
+                data={indexedData}
+                columns={columns}
+                rowIdField="id"
+            />
+
+            {totalPages > 1 && (
+                <PaginationApi
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                />
+            )}
+
+            {indexedData.length === 0 && (
+                <div className="text-center py-8 text-gray-500">
+                    لا توجد نيابات تطابق معايير البحث
+                </div>
+            )}
+        </PageLayout>
     );
-  };
-
-  const columns: Column<PublicProsecutionT>[] = [
-    {
-      header: "#",
-      accessor: (p: PublicProsecutionT) =>
-        prosecutions.indexOf(p) + 1 + (currentPage - 1) * 15,
-    },
-    {
-      header: "اسم النيابة",
-      accessor: "name" as keyof PublicProsecutionT,
-    },
-    {
-      header: "العنوان",
-      accessor: "address" as keyof PublicProsecutionT,
-    },
-    {
-      header: "الحالة",
-      accessor: (prosecution: PublicProsecutionT) => (
-        <ProsecutionsAction
-          prosecution={prosecution}
-          onUpdate={handleUpdate}
-          onDelete={handleDelete}
-        />
-      ),
-    },
-  ];
-
-  return (
-    <PageLayout>
-      <ProsecutionsHeader
-        searchTerm={searchTerm}
-        onSearch={setSearchTerm}
-        onProsecutionAdded={() => console.log("Prosecution added")}
-      />
-
-      <DataTable data={currentData} columns={columns} rowIdField="id" />
-
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
-      )}
-    </PageLayout>
-  );
 };
