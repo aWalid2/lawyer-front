@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { InputForm } from "@/shared/components/InputForm";
-import type { DistrictT } from "../types";
+import type { court_circle } from "../types/courtTypes";
 
 interface DistrictFormDialogProps {
-  district?: DistrictT;
+  district?: court_circle;
   onSave: (values: { name: string }) => void;
   trigger: React.ReactNode;
 }

@@ -59,7 +59,7 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
     label: caseType.name,
     value: String(caseType.id)
   })) || []
-  const caseStatusOptions = caseStatus?.map((caseStatus: any) => ({
+  const caseStatusOptions = caseStatus?.data?.map((caseStatus: any) => ({
     label: caseStatus.name,
     value: String(caseStatus.id)
   })) || []
