@@ -1,16 +1,14 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useEffect } from "react";
 import { fetchTasks } from "../service/getTasks";
 
-export const useFetchTasks = () => {
+export const useFetchTasks = (page: number, limit: number, status?: string, search?: string) => {
   const query = useQuery({
-    queryKey: ["tasks"],
-    queryFn: fetchTasks,
+    queryKey: ["tasks", page, limit, status, search],
+    queryFn: () => fetchTasks(page, limit, status, search),
     staleTime: 1000 * 60 * 2,
     retry: 2,
-
   });
 
   useEffect(() => {
@@ -19,6 +17,5 @@ export const useFetchTasks = () => {
     }
   }, [query.error]);
   
-
   return query;
 };

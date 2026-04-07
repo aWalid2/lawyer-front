@@ -1,46 +1,53 @@
-import React from "react";
-import { Plus } from "lucide-react";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
-import { CaseStatusFormDialog } from "./CaseStatusFormDialog";
+import React from 'react';
+import { Plus } from 'lucide-react';
+import { CaseStatusFormDialog } from './CaseStatusFormDialog';
+import { HeaderSearch } from '@/shared/components/HeaderSearch';
+import { HeaderTitle } from '@/shared/components/HeaderTitle';
 
 interface CaseStatusesHeaderProps {
-  onSearch: (value: string) => void;
-  searchTerm: string;
-  onStatusAdded?: () => void;
+    searchTerm: string;
+    onSearch: (value: string) => void;
+    onStatusAdded: () => void;
 }
 
 export const CaseStatusesHeader: React.FC<CaseStatusesHeaderProps> = ({
-  onSearch,
-  searchTerm,
-  onStatusAdded,
+    searchTerm,
+    onSearch,
+    onStatusAdded,
 }) => {
-  return (
-    <HeaderPageLayout>
-      <HeaderTitle innerPage title="حالات القضايا" />
+    const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
 
-      <HeaderSearch
-        value={searchTerm}
-        onChange={onSearch}
-        placeholder="بحث ..."
-      />
+    const handleSaveStatus = () => {
+        onStatusAdded();
+        setIsAddModalOpen(false);
+    };
 
-      <CaseStatusFormDialog
-        onSave={(values) => {
-          console.log("Saving status:", values);
-          onStatusAdded && onStatusAdded();
-        }}
-        trigger={
-          <HeaderActionButton
-            label="حالة جديدة"
-            icon={<Plus size={18} />}
-            variant="gradient"
-            className="rounded-main h-12.5 px-8"
-          />
-        }
-      />
-    </HeaderPageLayout>
-  );
+    return (
+        <div className="flex flex-col sm:flex-row justify-between  sm:items-center gap-4 mb-6">
+            <HeaderTitle title="حالات القضية" />
+            <HeaderSearch 
+                value={searchTerm} 
+                onChange={onSearch} 
+                className="lg:ms-0" 
+            />
+
+            <CaseStatusFormDialog
+                trigger={
+                    <button
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="flex items-center justify-center gap-1 px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 text-white text-xs md:text-base font-cairo rounded-lg md:rounded-[12px] transition-all whitespace-nowrap h-9 sm:h-10 md:h-[50px] relative overflow-hidden flex-shrink-0 order-3 w-full sm:w-auto"
+                        style={{
+                            background: "linear-gradient(135deg, #E3C086 0%, #CBA462 100%)",
+                        }}
+                    >
+                        <Plus className="h-4 w-4" />
+                        <span>إضافة حالة جديدة</span>
+                    </button>
+                }
+                open={isAddModalOpen}
+                onOpenChange={setIsAddModalOpen}
+                onSave={handleSaveStatus}
+            />
+        </div>
+    );
 };
