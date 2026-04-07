@@ -6,9 +6,10 @@ export const useCreateCircle = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ["circles"],
-        mutationFn: (data: { name: string; court_id: number }) => createCircle(data),
+        mutationFn: ({ name, court_id }: { court_id: number, name: string }) => createCircle(court_id, { name }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["circles"] });
+            queryClient.invalidateQueries({ queryKey: ["courts"] });
             toast.success("تم إضافة الدائرة بنجاح");
         },
         onError: () => {

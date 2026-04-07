@@ -34,7 +34,7 @@ export const CourtsFeature: React.FC = () => {
       accessor: (court: CourtT) => (
         <div className="flex items-center justify-center gap-2">
           <span className="flex items-center justify-center size-8 bg-[#A6A6A6] text-white rounded-md text-xs font-bold leading-none">
-            {court.court_circles?.length ? court.court_circles.length : 0}
+            {court.circles_count}
           </span>
           <DistrictsDialog
             court={court}

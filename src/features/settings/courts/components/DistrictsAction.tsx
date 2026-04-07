@@ -15,11 +15,15 @@ export const DistrictsAction: React.FC<DistrictsActionProps> = ({
   onUpdate,
   onDelete,
 }) => {
+  console.log(district)
   return (
     <div className="flex items-center gap-2 justify-center">
       <DistrictFormDialog
         district={district}
-        onSave={(values) => onUpdate(Number(district.id), values)}
+        onSave={(values) => {
+
+          onUpdate(Number(district.id), values)
+        }}
         trigger={<TableEditButton />}
       />
       <TableDeleteButton onClick={() => onDelete(Number(district.id))} />

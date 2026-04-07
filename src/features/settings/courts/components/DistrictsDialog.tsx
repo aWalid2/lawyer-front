@@ -26,6 +26,7 @@ interface DistrictFormDialogProps {
   onSave: (values: { name: string }) => void;
   trigger: React.ReactNode;
   isPending?: boolean;
+
 }
 
 const DistrictFormDialog: React.FC<DistrictFormDialogProps> = ({
@@ -34,8 +35,11 @@ const DistrictFormDialog: React.FC<DistrictFormDialogProps> = ({
   trigger,
   isPending,
 }) => {
+  const [open, setOpen] = useState(false);
   return (
     <LayoutDialog
+
+      open={open} onOpenChange={setOpen}
       title={district ? "تعديل دائرة" : "أضافة دائرة جديدة"}
       trigger={trigger}
       className="sm:max-w-[500px]"
@@ -45,7 +49,10 @@ const DistrictFormDialog: React.FC<DistrictFormDialogProps> = ({
         validationSchema={Yup.object().shape({
           name: Yup.string().required("اسم الدائرة مطلوب"),
         })}
-        onSubmit={(values) => onSave(values)}
+        onSubmit={(values) => {
+          onSave(values)
+          setOpen(false)
+        }}
         enableReinitialize
       >
         {() => (
@@ -80,20 +87,21 @@ export const DistrictsDialog: React.FC<DistrictsDialogProps> = ({
   court,
   trigger,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const limit = 15;
 
+
+  // Only fetch when the dialog is actually open
   const { data: districts, isPending, isError } = useGetCircles(
     Number(court.id),
-    page,
-    limit
+    isOpen
   );
-
+  console.log(districts)
   const { mutate: createCircle, isPending: isCreating } = useCreateCircle();
   const { mutate: updateCircle, isPending: isUpdating } = useUpdateCircle();
   const { mutate: deleteCircle, isPending: isDeleting } = useDeleteCircle();
 
-  const indexedData = useIndexedData(districts?.data || []);
+  const indexedData = useIndexedData(districts || []);
   const totalPages = districts?.meta?.total_pages ?? 1;
 
   const columns: Column<court_circle>[] = [
@@ -133,6 +141,8 @@ export const DistrictsDialog: React.FC<DistrictsDialogProps> = ({
     <LayoutDialog
       title={`دوائر ${court.name}`}
       trigger={trigger}
+      open={isOpen}
+      onOpenChange={setIsOpen}
       className="sm:max-w-[950px]"
     >
       <div className="flex flex-col gap-6">

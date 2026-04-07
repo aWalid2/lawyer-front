@@ -9,6 +9,7 @@ export interface CourtT {
   name: string;
   address: string;
   cases_count?: number;
+  circles_count?: number;
   court_circles: court_circle[];
   rowNumber: number;
 }
