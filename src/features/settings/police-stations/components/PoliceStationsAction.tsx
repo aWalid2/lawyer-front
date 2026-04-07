@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import view from '@/public/images/view.svg';
 import edit from '@/public/images/edit.svg';
 import deleteIcon from '@/public/images/delete.svg';
-import { Link } from 'react-router-dom';
 import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
 import { PoliceStationFormDialog } from './PoliceStationFormDialog';
 import { useDeletePoliceStation } from '../api/hooks/useDeletePoliceStation';
