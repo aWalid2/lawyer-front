@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { DataTable, type Column } from '@/shared/components/DataTable'
 import { CaseStatusesAction } from './components/CaseStatusesAction';
 import { CaseStatusesHeader } from './components/CaseStatusesHeader';
