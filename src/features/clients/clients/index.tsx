@@ -22,7 +22,6 @@ export const ClientsFeature: React.FC = () => {
         totalPages,
     } = usePagination<ClientRelatedT>(indexedData || [], 15);
 
-    console.log(clientsData)
     const columns: Column<ClientRelatedT>[] = [
         {
             header: "#",

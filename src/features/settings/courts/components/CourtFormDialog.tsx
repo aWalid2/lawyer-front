@@ -3,12 +3,16 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { LayoutDialog } from "@/shared/components/LayoutDialog";
 import { InputForm } from "@/shared/components/InputForm";
-import type { CourtT } from "../types";
+import type { CourtT } from "../types/courtTypes";
+import { SubmitButton } from "@/shared/components/SubmitButton";
+import { useCreateCourt } from "../api/hooks/useCreateCourt";
+import { useUpdateCourt } from "../api/hooks/useUpdateCourt";
 
 interface CourtFormDialogProps {
   court?: CourtT;
-  onSave: (values: Partial<CourtT>) => void;
+  onSave: (values: { name: string, address: string }) => void;
   trigger: React.ReactNode;
+
 }
 
 const validationSchema = Yup.object().shape({
@@ -18,24 +22,35 @@ const validationSchema = Yup.object().shape({
 
 export const CourtFormDialog: React.FC<CourtFormDialogProps> = ({
   court,
-  onSave,
   trigger,
 }) => {
   const initialValues = {
     name: court?.name || "",
     address: court?.address || "",
   };
+  const { mutateAsync: createCourt, isPending } = useCreateCourt();
+  const { mutateAsync: updateCourt, isPending: isUpdating } = useUpdateCourt();
+  const [open, setOpen] = React.useState(false);
 
   return (
     <LayoutDialog
       title={court ? "تعديل محكمة" : "اضافة محكمة جديدة"}
       trigger={trigger}
       className="sm:max-w-[715px]"
+      onOpenChange={setOpen}
+      open={open}
     >
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => onSave(values)}
+        onSubmit={async (values) => {
+          if (court) {
+            await updateCourt({ id: Number(court.id), data: values })
+          } else {
+            await createCourt(values)
+          }
+          setOpen(false)
+        }}
         enableReinitialize
       >
         {() => (
@@ -52,12 +67,11 @@ export const CourtFormDialog: React.FC<CourtFormDialogProps> = ({
               type="text"
               placeholder="شارع فؤاد"
             />
-            <button
-              type="submit"
-              className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity h-12.5"
+            <SubmitButton
+              isPending={isPending || isUpdating}
             >
               {court ? "تعديل محكمة" : "إضافة محكمة"}
-            </button>
+            </SubmitButton>
           </Form>
         )}
       </Formik>

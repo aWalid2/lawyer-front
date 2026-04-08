@@ -14,11 +14,11 @@ export function SharedFormField() {
     label: client.name,
     value: String(client.user_id)
   })) || []
-  const caseStatusOptions = caseStatus?.map((caseStatus: any) => ({
+  const caseStatusOptions = caseStatus?.data?.map((caseStatus: any) => ({
     label: caseStatus.name,
     value: String(caseStatus.id)
   })) || []
-  const caseTypeOptions = caseType?.map((caseType: any) => ({
+  const caseTypeOptions = caseType?.data?.map((caseType: any) => ({
     label: caseType.name,
     value: String(caseType.id)
   })) || []
