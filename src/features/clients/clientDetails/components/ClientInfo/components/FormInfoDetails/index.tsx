@@ -1,167 +1,96 @@
-import { Form, Formik } from "formik";
 
-import type {
-  FormDetailsProps,
-  FormValues,
-} from "./components/typesClientsInfo";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { InputForm } from "./components/InputForm";
 import ImageFormDetails from "./components/ImageFormDetails";
-import { validationSchema } from "./components/ValidationSchema";
-import { ButtonSubmit } from "./components/ButtonSubmit";
+import { InputBox } from "./components/InputBox";
+import { useGetClient } from "@/features/clients/clientDetails/api/hooks/useGetClient";
+import { useParams } from "react-router-dom";
 
-const FormDetails: React.FC<FormDetailsProps> = ({ isEditing, clientData }) => {
-  const validationSchem = validationSchema;
-
-  const initialValues: FormValues = clientData || {
-    clientCode: "",
-    clientName: "",
-    phone: "",
-    countryCode: "+20",
-    civilId: "",
-    nationality: "",
-    country: "",
-    address: "",
-    email: "",
-    registrationDate: "",
-    image: "",
-  };
+const ClientDetailsInfo: React.FC = () => {
+  const { id } = useParams();
+  const { data: client } = useGetClient(id!);
+  console.log(client);
 
   return (
-    <Formik<FormValues>
-      initialValues={initialValues}
-      validationSchema={validationSchem}
-      onSubmit={(values) => {
-        console.log("Form submitted:", values);
-      }}
-      enableReinitialize={true}
-    >
-      <div className="border border-[#E8E8E8] p-4 rounded-xl  ">
-        <Form>
-          <div className="mb-4 ">
-            <InputForm
-              name="clientCode"
-              placeholder="#123456789"
-              disabled={true}
-              label="كود الموكل"
-              type="text"
-            />
-          </div>
-          <div className="flex gap-3 items-end">
-            <div className="flex-1">
-              <InputForm
-                name="clientName"
-                placeholder="أحمد"
-                disabled={!isEditing}
-                label="اسم الموكل"
-                type="text"
-              />
-            </div>
-            <div className="flex-1">
-              <InputForm
-                dir="ltr"
-                name="phone"
-                placeholder="5xxxxxxxxxxxx"
-                disabled={!isEditing}
-                label="رقم الهاتف"
-                type="text"
-              />
-            </div>
-            <div className="w-28">
-              <Select
-                dir="rtl"
-                disabled={!isEditing}
-                defaultValue={initialValues.countryCode}
-                onValueChange={(value) => {
-                  console.log(value);
-                }}
-              >
-                <SelectTrigger className="w-full border border-[#DBDBDB]/32 rounded-md p-2 bg-[#FBFBFB] h-[50px] text-[#828282]  text-base placeholder:text-[#B5B5B5] ">
-                  <SelectValue placeholder="الكود" />
-                </SelectTrigger>
 
-                <SelectContent>
-                  <SelectItem value="+20">🇪🇬 +20</SelectItem>
-                  <SelectItem value="+966">🇸🇦 +966</SelectItem>
-                  <SelectItem value="+971">🇦🇪 +971</SelectItem>
-                  <SelectItem value="+1">🇺🇸 +1</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div className="flex gap-3 pt-5">
-            <div className="flex-1">
-              <InputForm
-                name="civilId"
-                placeholder="019389384"
-                disabled={!isEditing}
-                label="الرقم المدني"
-                type="text"
-              />
-            </div>
-            <div className="flex-1">
-              <InputForm
-                name="nationality"
-                placeholder="سعودي"
-                disabled={!isEditing}
-                label="الجنسية"
-                type="text"
-              />
-            </div>
-          </div>
-          <div className="flex gap-3 pt-5">
-            <div className="flex-1">
-              <InputForm
-                name="country"
-                placeholder="المملكة العربية السعودية"
-                disabled={!isEditing}
-                label="الدولة"
-                type="text"
-              />
-            </div>
+    <div className="border border-[#E8E8E8] p-4 rounded-xl  ">
 
-            <div className="flex-1">
-              <InputForm
-                name="address"
-                placeholder="عنوان1"
-                disabled={!isEditing}
-                label="العنوان"
-                type="text"
-              />
-            </div>
-          </div>
-          <div className="flex gap-3 pt-5">
-            <div className="flex-1">
-              <InputForm
-                name="email"
-                placeholder="example@gmail.com"
-                disabled={!isEditing}
-                label="البريد الإلكتروني"
-                type="text"
-              />
-            </div>
-
-            <div className="flex-1">
-              <InputForm
-                name="registrationDate"
-                disabled={!isEditing}
-                label="تاريخ التسجيل"
-                type="date"
-              />
-            </div>
-          </div>
-          <ImageFormDetails isEditing={isEditing} />
-          {isEditing && <ButtonSubmit />}
-        </Form>
+      <div className="mb-4 ">
+        <InputBox
+          label="كود الموكل"
+          text={client?.user_id}
+        />
       </div>
-    </Formik>
+      <div className="flex gap-3 items-end">
+        <div className="flex-1">
+          <InputBox
+            label="اسم الموكل"
+            text={client?.name}
+          />
+        </div>
+        <div className="flex-1">
+          <InputBox
+
+            label="رقم الهاتف"
+            text={client?.phone}
+          />
+        </div>
+        <div className="w-28">
+
+          <InputBox
+            label="الدولة"
+            text={client?.country}
+          />
+        </div>
+      </div>
+      <div className="flex gap-3 pt-5">
+        <div className="flex-1">
+          <InputBox
+            label="الرقم المدني"
+            text={client?.national_id}
+          />
+        </div>
+        <div className="flex-1">
+          <InputBox
+            label="الجنسية"
+            text={client?.nationality}
+          />
+        </div>
+      </div>
+      <div className="flex gap-3 pt-5">
+        <div className="flex-1">
+          <InputBox
+            label="الدولة"
+            text={client?.country}
+          />
+        </div>
+
+        <div className="flex-1">
+          <InputBox
+            label="العنوان"
+            text={client?.address}
+          />
+        </div>
+      </div>
+      <div className="flex gap-3 pt-5">
+        <div className="flex-1">
+          <InputBox
+            label="البريد الإلكتروني"
+            text={client?.email}
+          />
+        </div>
+
+        <div className="flex-1">
+          <InputBox
+            label="تاريخ التسجيل"
+            text={client?.created_at}
+          />
+        </div>
+      </div>
+      {/* <ImageFormDetails /> */}
+
+
+    </div>
+
   );
 };
 
-export default FormDetails;
+export default ClientDetailsInfo;

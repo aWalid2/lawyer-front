@@ -45,7 +45,7 @@ export const ClientDetails = () => {
                 </TabsList>
 
                 <TabsContent value="info" className="mt-0">
-                    <ClientInfo isEditing={isEditing} />
+                    <ClientInfo />
                 </TabsContent>
 
                 <TabsContent value="cases" className="mt-0">
