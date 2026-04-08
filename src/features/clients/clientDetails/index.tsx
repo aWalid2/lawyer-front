@@ -1,5 +1,5 @@
-import React from 'react'
-import { HeaderUserDetails } from './components/HeaderUserDetails'
+
+import { HeaderUserDetails } from './HeaderUserDetails'
 import { Tabs } from '@/components/ui/tabs'
 import { TabsList } from '@/components/ui/tabs'
 import { TabsTrigger } from '@/components/ui/tabs'
@@ -9,13 +9,22 @@ import { ClientCases } from './components/ClientCases'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGetClientCases } from './api/hooks/useGetClientCases'
+import LoadingPage from '@/shared/components/LoadingPage'
+import { Error } from '@/shared/components/Error'
 
 export const ClientDetails = () => {
     const [activeTab, setActiveTab] = useState("cases");
     const [isEditing, setIsEditing] = useState(false);
     const { id } = useParams<{ id: string }>();
-    const { data: clientCases } = useGetClientCases({ id: id! });
-    console.log(clientCases);
+    const { data: clientCases, isPending: isClientCasesPending, isError: isClientCasesError } = useGetClientCases({ id: id! });
+
+
+    if (isClientCasesPending) {
+        return <LoadingPage />
+    }
+    if (isClientCasesError) {
+        return <Error />
+    }
 
     return (
         <>      <HeaderUserDetails

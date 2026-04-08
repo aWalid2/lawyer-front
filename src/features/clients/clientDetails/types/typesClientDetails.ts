@@ -1,12 +1,13 @@
 
 export interface ClientCase {
   id: number;
-  code: string;
-  autoNumber: string;
-  subject: string;
-  status: string;
-  role: string;
-  date: string;
+  rowNumber?: number;
+  case_sequence: string;
+  case_number: string;
+  case_status_id: string;
+  case_title: string;
+  client_type: string;
+  created_at: string;
 }
 
 
@@ -21,35 +22,8 @@ export interface ClientsTableProps {
   onDelete?: (id: number) => void;
 }
 
-export interface ClientsStatsProps {
-  clients: ClientCase[];
-}
-
-export interface ClientsSearchProps {
-  onSearch: (term: string) => void;
-  onAddNew?: () => void;
-}
-
-export interface PerformanceFilterProps {
-  onFilterChange: (min: number, max: number) => void;
-  selectedRange?: { min: number; max: number };
-}
-
-export interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-  totalItems: number;
-  itemsPerPage: number;
-}
 
 
-export interface TableRowProps {
-  client: ClientCase;
-  index: number;
-  isSelected: boolean;
-  onRowClick: (client: ClientCase) => void;
-  onEdit?: (client: ClientCase) => void;
-  onDelete?: (id: number) => void;
-  onViewDetails?: (client: ClientCase) => void;
-}
+
+
+

@@ -26,8 +26,8 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
           <button
             onClick={() => setIsEditing?.(!isEditing)}
             className={`${isEditing
-                ? "bg-primary text-white"
-                : "bg-[#F1F1F3] text-[#3D3C48]"
+              ? "bg-primary text-white"
+              : "bg-[#F1F1F3] text-[#3D3C48]"
               } hover:opacity-90 p-3 rounded-[8px] shadow-sm transition-all h-12.5 w-12.5 flex items-center justify-center`}
           >
             {isEditing ? <X size={20} /> : <EditIcon />}

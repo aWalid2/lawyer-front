@@ -9,9 +9,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus, XIcon } from "lucide-react";
-import { InputForm } from "./ClientInfo/components/FormInfoDetails/components/InputForm";
-import ImageFormDetails from "./ClientInfo/components/FormInfoDetails/components/ImageFormDetails";
-import { ButtonSubmit } from "./ClientInfo/components/FormInfoDetails/components/ButtonSubmit";
+import { InputForm } from "./components/ClientInfo/components/FormInfoDetails/components/InputForm";
+import ImageFormDetails from "./components/ClientInfo/components/FormInfoDetails/components/ImageFormDetails";
+import { ButtonSubmit } from "./components/ClientInfo/components/FormInfoDetails/components/ButtonSubmit";
 
 interface AddContractFormValues {
   startDate: string;
