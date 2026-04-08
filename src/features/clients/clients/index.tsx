@@ -16,6 +16,7 @@ export const ClientsFeature: React.FC = () => {
     const { data: clientsData, isPending, isError } = useFetchClients();
     const indexedData = useIndexedData(clientsData);
     const [searchTerm, setSearchTerm] = useState("");
+    console.log(clientsData);
     const {
         currentPage,
         setCurrentPage,

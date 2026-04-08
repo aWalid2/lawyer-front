@@ -23,7 +23,7 @@ export const UserClientsAction: React.FC<UserClientsActionProps> = ({ client, on
     return (
         <div className="flex items-center justify-center gap-2" onClick={(e) => e.stopPropagation()}>
             <Link
-                to={`/dashboard/clients/${client.id}`}
+                to={`/dashboard/clients/${client.user_id}`}
                 onClick={(e) => e.stopPropagation()}
                 title="عرض التفاصيل"
                 className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F0F6FF] transition-colors hover:bg-[#e0eaff]"
