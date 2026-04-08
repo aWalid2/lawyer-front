@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { EditClientDialog } from './EditClientDialog';
 import type { ClientRelatedT } from '../types/clientT';
 import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
-import { useDeleteClient } from '../api/hooks/useDeleteClient';
+import { useDeleteClient } from '../../api/hooks/useDeleteClient';
 
 
 interface UserClientsActionProps {

@@ -1,24 +1,16 @@
 import type { Column } from "@/shared/components/DataTable";
 import { DataTable } from "@/shared/components/DataTable";
-import React, { useState } from "react";
-import type { ClientCase } from "../../types/typesClientDetails";
-import { TableCasesActions } from "./components/TableCasesActions";
-import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { Error } from "@/shared/components/Error";
+import LoadingPage from "@/shared/components/LoadingPage";
 import { PaginationApi } from "@/shared/components/PaginationApi";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetClientCases } from "../../api/hooks/useGetClientCases";
-import Loading from "@/shared/Loading";
-import { Error } from "@/shared/components/Error";
+import type { ClientCase } from "../../types/typesClientDetails";
+import { TableCasesActions } from "./components/TableCasesActions";
 
 export const ClientCases: React.FC = () => {
-
-  const { id } = useParams<{ id: string }>();
-  const [page, setPage] = useState(1);
-  const limit = 10;
-  const { data: clientCases, isPending: isClientCasesPending, isError: isClientCasesError } = useGetClientCases({ id: id!, page, limit });
-  const totalPages = clientCases?.meta?.last_page;
-
-
   const columns: Column<ClientCase>[] = [
     {
       header: "#",
@@ -61,11 +53,20 @@ export const ClientCases: React.FC = () => {
     },
   ]
 
-  const indexedClientData = useIndexedData(clientCases?.data || [])
+  const { id } = useParams<{ id: string }>();
+  const [page, setPage] = useState(1);
+  const limit = 15;
+  const { data: clientCases, isPending: isClientCasesPending, isError: isClientCasesError } = useGetClientCases({ id: id!, page, limit });
+  const indexedClientData = useIndexedData(clientCases?.data || [], page, limit)
+  const totalPages = clientCases?.meta?.last_page ?? 1;
+
+
+
+
 
 
   if (isClientCasesPending) {
-    return <Loading />
+    return <LoadingPage />
   }
   if (isClientCasesError) {
     return <Error />

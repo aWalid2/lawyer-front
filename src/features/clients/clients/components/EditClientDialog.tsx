@@ -12,7 +12,7 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { SelectForm } from "@/shared/components/SelectForm";
-import { useUpdateClient } from "../api/hooks/useUpdateClient";
+import { useUpdateClient } from "../../api/hooks/useUpdateClient";
 
 
 import * as Yup from "yup";

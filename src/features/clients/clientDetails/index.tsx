@@ -4,11 +4,19 @@ import { useState } from 'react'
 import { ClientCases } from './components/ClientCases'
 import { ClientInfo } from './components/ClientInfo'
 import { HeaderUserDetails } from './HeaderUserDetails'
+import { useGetClient } from './api/hooks/useGetClient'
+import { useParams } from 'react-router-dom'
+import LoadingPage from '@/shared/components/LoadingPage'
+import { Error } from '@/shared/components/Error'
 
 export const ClientDetails = () => {
     const [activeTab, setActiveTab] = useState("cases");
-    const [isEditing, setIsEditing] = useState(false);
+    const { id } = useParams();
+    const { data: client, isPending, isError } = useGetClient(id!);
+    console.log(client);
 
+    if (isPending) return <LoadingPage />
+    if (isError) return <Error />
 
 
 
@@ -16,8 +24,7 @@ export const ClientDetails = () => {
     return (
         <>      <HeaderUserDetails
             activeTab={activeTab}
-            isEditing={isEditing}
-            setIsEditing={setIsEditing}
+            client={client}
         />
 
             <Tabs

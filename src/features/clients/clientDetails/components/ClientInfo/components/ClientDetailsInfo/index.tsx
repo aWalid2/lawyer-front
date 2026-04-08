@@ -1,13 +1,17 @@
 
-import ImageFormDetails from "./components/ImageFormDetails";
+import LoadingPage from "@/shared/components/LoadingPage";
 import { InputBox } from "./components/InputBox";
 import { useGetClient } from "@/features/clients/clientDetails/api/hooks/useGetClient";
 import { useParams } from "react-router-dom";
+import { Error } from "@/shared/components/Error";
 
 const ClientDetailsInfo: React.FC = () => {
   const { id } = useParams();
-  const { data: client } = useGetClient(id!);
+  const { data: client, isPending, isError } = useGetClient(id!);
   console.log(client);
+
+  if (isPending) return <LoadingPage />
+  if (isError) return <Error />
 
   return (
 
@@ -30,14 +34,14 @@ const ClientDetailsInfo: React.FC = () => {
           <InputBox
 
             label="رقم الهاتف"
-            text={client?.phone}
+            text={client?.user?.phone}
           />
         </div>
         <div className="w-28">
 
           <InputBox
             label="الدولة"
-            text={client?.country}
+            text={client?.user?.country}
           />
         </div>
       </div>
@@ -45,13 +49,13 @@ const ClientDetailsInfo: React.FC = () => {
         <div className="flex-1">
           <InputBox
             label="الرقم المدني"
-            text={client?.national_id}
+            text={client?.user?.ssn}
           />
         </div>
         <div className="flex-1">
           <InputBox
             label="الجنسية"
-            text={client?.nationality}
+            text={client?.user?.nationality}
           />
         </div>
       </div>
@@ -59,14 +63,14 @@ const ClientDetailsInfo: React.FC = () => {
         <div className="flex-1">
           <InputBox
             label="الدولة"
-            text={client?.country}
+            text={client?.user?.country}
           />
         </div>
 
         <div className="flex-1">
           <InputBox
             label="العنوان"
-            text={client?.address}
+            text={client?.user?.address}
           />
         </div>
       </div>
@@ -74,18 +78,25 @@ const ClientDetailsInfo: React.FC = () => {
         <div className="flex-1">
           <InputBox
             label="البريد الإلكتروني"
-            text={client?.email}
+            text={client?.user?.email}
           />
         </div>
 
         <div className="flex-1">
           <InputBox
             label="تاريخ التسجيل"
-            text={client?.created_at}
+            text={client?.user?.created_at}
           />
         </div>
       </div>
-      {/* <ImageFormDetails /> */}
+
+
+      <div className="mt-6">
+        <h4>صورة التوكل</h4>
+        <div className="w-28 h-28 bg-gray-200 mt-4 rounded-main overflow-hidden">
+          <img src={client?.contract_photo} alt="" className="w-full h-full object-cover " />
+        </div>
+      </div>
 
 
     </div>

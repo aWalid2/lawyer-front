@@ -9,9 +9,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus, XIcon } from "lucide-react";
-import { InputForm } from "./components/ClientInfo/components/FormInfoDetails/components/InputForm";
-import ImageFormDetails from "./components/ClientInfo/components/FormInfoDetails/components/ImageFormDetails";
-import { ButtonSubmit } from "./components/ClientInfo/components/FormInfoDetails/components/ButtonSubmit";
+import { InputForm } from "./components/ClientInfo/components/ClientDetailsInfo/components/InputForm";
+
+import { ButtonSubmit } from "./components/ClientInfo/components/ClientDetailsInfo/components/ButtonSubmit";
 
 interface AddContractFormValues {
   startDate: string;
@@ -31,18 +31,18 @@ export const AddContractDialog: React.FC = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="bg-primary-gradient text-white px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 shadow-lg h-12.5 hover:shadow-xl transition-all">
+        <button className="bg-primary-gradient text-white px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 shadow-lg h-12.5 hover:shadow-xl transition-all">
           <Plus size={20} />
           اضافة عقد
         </button>
       </DialogTrigger>
       <DialogContent
-        className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none custom-scrollbar"
+        className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none custom-scrollbar"
         dir="rtl"
         showCloseButton={false}
       >
         <DialogClose asChild>
-          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all">
+          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all">
             <XIcon size={23} className="text-gray-500 " />
           </button>
         </DialogClose>
@@ -85,11 +85,7 @@ export const AddContractDialog: React.FC = () => {
                   disabled={false}
                 />
 
-                <ImageFormDetails
-                  isEditing={true}
-                  title="صورة العقد"
-                  name="contractImage"
-                />
+
               </div>
 
               <div className="pt-2">

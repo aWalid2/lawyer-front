@@ -5,17 +5,16 @@ import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { EditIcon } from "@/shared/icons/Edit";
 import { TrashIcon } from "@/shared/icons/Trash";
 import { AddContractDialog } from "./AddContractDialog";
+import { EditClientDialog } from "../clients/components/EditClientDialog";
 
 interface HeaderUserDetailsProps {
   activeTab?: string;
-  isEditing?: boolean;
-  setIsEditing?: (value: boolean) => void;
+  client?: any;
 }
 
 export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
   activeTab,
-  isEditing,
-  setIsEditing,
+  client,
 }) => {
   return (
     <div className="flex items-center  flex-wrap gap-y-3 justify-between mb-6">
@@ -23,15 +22,15 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
 
       {activeTab === "info" ? (
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsEditing?.(!isEditing)}
-            className={`${isEditing
-              ? "bg-primary text-white"
-              : "bg-[#F1F1F3] text-[#3D3C48]"
-              } hover:opacity-90 p-3 rounded-[8px] shadow-sm transition-all h-12.5 w-12.5 flex items-center justify-center`}
-          >
-            {isEditing ? <X size={20} /> : <EditIcon />}
-          </button>
+          <EditClientDialog
+            client={client}
+            trigger={
+              <button className={`bg-[#F1F1F3] text-[#3D3C48] hover:opacity-90 p-3 rounded-[8px] shadow-sm transition-all h-12.5 w-12.5 flex items-center justify-center`}
+              >
+                <EditIcon />
+              </button>
+            }
+          />
 
           <button className="bg-[#C60000]/8 hover:bg-red-100 text-[#C60000] p-3 rounded-[8px] shadow-sm transition-all h-12.5 w-12.5 flex items-center justify-center">
             <TrashIcon />
