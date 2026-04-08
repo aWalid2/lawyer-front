@@ -10,6 +10,7 @@ export const useUpdateCase = () => {
         retry: 1,
         onSuccess: (data: any) => {
             queryClient.invalidateQueries({ queryKey: ["cases"] });
+            queryClient.invalidateQueries({ queryKey: ["client-cases"] });
             toast.success(data.message || "تم تحديث القضية بنجاح");
         },
         onError: (error: any) => {

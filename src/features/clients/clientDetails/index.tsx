@@ -1,30 +1,17 @@
 
-import { HeaderUserDetails } from './HeaderUserDetails'
-import { Tabs } from '@/components/ui/tabs'
-import { TabsList } from '@/components/ui/tabs'
-import { TabsTrigger } from '@/components/ui/tabs'
-import { TabsContent } from '@/components/ui/tabs'
-import { ClientInfo } from './components/ClientInfo'
-import { ClientCases } from './components/ClientCases'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { useGetClientCases } from './api/hooks/useGetClientCases'
-import LoadingPage from '@/shared/components/LoadingPage'
-import { Error } from '@/shared/components/Error'
+import { ClientCases } from './components/ClientCases'
+import { ClientInfo } from './components/ClientInfo'
+import { HeaderUserDetails } from './HeaderUserDetails'
 
 export const ClientDetails = () => {
     const [activeTab, setActiveTab] = useState("cases");
     const [isEditing, setIsEditing] = useState(false);
-    const { id } = useParams<{ id: string }>();
-    const { data: clientCases, isPending: isClientCasesPending, isError: isClientCasesError } = useGetClientCases({ id: id! });
 
 
-    if (isClientCasesPending) {
-        return <LoadingPage />
-    }
-    if (isClientCasesError) {
-        return <Error />
-    }
+
+
 
     return (
         <>      <HeaderUserDetails
@@ -58,11 +45,11 @@ export const ClientDetails = () => {
                 </TabsList>
 
                 <TabsContent value="info" className="mt-0">
-                    <ClientInfo isEditing={isEditing} clientData={clientCases} />
+                    <ClientInfo isEditing={isEditing} />
                 </TabsContent>
 
                 <TabsContent value="cases" className="mt-0">
-                    <ClientCases clientData={clientCases || []} />
+                    <ClientCases />
                 </TabsContent>
             </Tabs></>
     )

@@ -10,7 +10,6 @@ import { InputForm } from "@/shared/components/InputForm";
 import { XIcon } from "lucide-react";
 import React from "react";
 import { Formik, Form } from "formik";
-import type { Case } from "../../../types/casesTypes";
 import { useUpdateCase } from "../../../api/hooks/useUpdateCase";
 import { SubmitButton } from "@/shared/components/SubmitButton";
 import { useFetchClients } from "@/shared/api/hooks/useGetClients";
@@ -20,36 +19,35 @@ import { useGetCaseType } from "../../../api/hooks/useGetCaseType";
 import { useGetCaseStatus } from "../../../api/hooks/useGetCaseStatus";
 
 interface EditCaseDialogProps {
-  caseItem: Case;
-  onSave: (values: Case) => void;
+  caseItem: any;
+  onSave?: (values: any) => void;
   trigger: React.ReactNode;
   isPending?: boolean;
 }
 
 export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
+  caseItem,
   trigger,
   onSave,
-  caseItem,
 }) => {
   const [open, setOpen] = React.useState(false);
   const { mutateAsync: updateCase, isPending } = useUpdateCase();
   const { data: clients } = useFetchClients()
   const { data: caseType } = useGetCaseType()
   const { data: caseStatus } = useGetCaseStatus()
-  const initialValues: Case = {
+  const initialValues = {
     ...caseItem,
     case_number: caseItem.case_number || "",
     case_number_at_prosecution: caseItem.case_number_at_prosecution || "",
-    client_id: String(caseItem.client?.id) || "",
+    client_id: caseItem.client_id ? String(caseItem.client_id) : (caseItem.client?.id ? String(caseItem.client.id) : ""),
     client_type: caseItem.client_type || "",
     created_at: caseItem.created_at || "",
     case_entry_date: caseItem.case_entry_date || "",
-    case_status_id: caseItem.case_status_id ? String(caseItem.case_status_id) : "",
-    case_type_id: caseItem.case_type?.id ? String(caseItem.case_type.id) : "",
+    case_status_id: caseItem.case_status_id ? String(caseItem.case_status_id) : (caseItem.caseStatus?.id ? String(caseItem.caseStatus.id) : ""),
+    case_type_id: caseItem.case_type_id ? String(caseItem.case_type_id) : (caseItem.case_type?.id ? String(caseItem.case_type.id) : ""),
     case_situation: caseItem.case_situation || "",
   };
 
-  console.log(caseItem)
 
   const options = clients?.map((client: any) => ({
     label: client.name,
@@ -88,6 +86,7 @@ export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
 
         <Formik
           initialValues={initialValues}
+          enableReinitialize={true}
           onSubmit={async (values, { setSubmitting }) => {
             try {
               const payload = {
@@ -97,7 +96,7 @@ export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
                 case_status_id: values.case_status_id ? Number(values.case_status_id) : undefined,
               };
               await updateCase({ id: caseItem.id, data: payload as any });
-              onSave(values);
+              onSave?.(values);
               setOpen(false);
             } catch (error) {
               console.error(error);

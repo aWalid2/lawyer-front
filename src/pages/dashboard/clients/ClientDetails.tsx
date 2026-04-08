@@ -4,9 +4,6 @@ import { ClientDetails } from "@/features/clients/clientDetails";
 
 const ClientDetailsPage: React.FC = () => {
 
-
-
-
   return (
     <PageLayout>
       <ClientDetails />
