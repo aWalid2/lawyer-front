@@ -1,7 +1,7 @@
-// documents/api/service/getDocument.ts
+// documents/api/service/getDocumentById.ts
 import api from "@/lib/api";
 
-export const getDocument = async (id: string) => {
-  const { data } = await api.get(`/document/create-document/${id}`);
-  return data;
+export const getDocumentById = async (id: string) => {
+    const response = await api.get(`/documnet/${id}`);
+    return response.data;
 };

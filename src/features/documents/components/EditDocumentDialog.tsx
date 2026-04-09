@@ -1,3 +1,4 @@
+// documents/components/EditDocumentDialog.tsx
 import React, { useMemo } from "react";
 import { Formik, Form } from "formik";
 import {
@@ -15,7 +16,7 @@ import { SelectForm } from "@/shared/components/SelectForm";
 import type { Document } from "../types/types";
 import { useFetchCases } from "@/features/UserTasks/api/hooks/useGetCase";
 import * as Yup from "yup";
-import { useUpdateDocument } from "../api/hooks/useUpdateDocument"; // ✅ تصحيح اسم الملف
+import { useUpdateDocument } from "../api/hooks/useUpdateDocument";
 
 interface EditDocumentDialogProps {
     document: Document;
@@ -23,13 +24,20 @@ interface EditDocumentDialogProps {
     onDocumentUpdated?: () => void;
 }
 
-export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({ document, trigger, onDocumentUpdated }) => {
+export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({ 
+    document, 
+    trigger, 
+    onDocumentUpdated,
+}) => {
     const { data: cases, isPending: isCasesLoading } = useFetchCases();
     const { mutate: updateDocument, isPending } = useUpdateDocument();
     const [open, setOpen] = React.useState(false);
 
+    // جيب الـ clientId من localStorage
+    const clientId = localStorage.getItem('clientId') || '';
+
     const initialValues = {
-        document_type: document.document_type || "case",
+        document_type: document.document_type || "NOT_CASE_RELATED",
         document_category: document.document_category || "",
         document_name: document.document_name || "",
         document_details: document.document_details || "",
@@ -40,20 +48,19 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({ document
     const validationSchema = Yup.object({
         document_type: Yup.string().required("يرجى اختيار نوع المستند"),
         document_category: Yup.string().when("document_type", {
-            is: "non_case",
+            is: "NOT_CASE_RELATED",
             then: (schema) => schema.required("نوع المستند مطلوب"),
             otherwise: (schema) => schema.notRequired(),
         }),
-        document_name: Yup.string().required("اسم المستند مطلوب"),
+        document_name: Yup.string(),
         document_details: Yup.string().required("تفاصيل المستند مطلوبة"),
         caseId: Yup.string().when("document_type", {
-            is: "case",
+            is: "CASE_RELATED",
             then: (schema) => schema.required("يرجى اختيار القضية"),
             otherwise: (schema) => schema.notRequired(),
         }),
     });
 
-    // خيارات القضايا للـ Select
     const caseOptions = useMemo(() => {
         if (!cases?.data || cases.data.length === 0) return [];
         return cases.data.map((caseItem: any) => ({
@@ -63,32 +70,37 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({ document
     }, [cases]);
 
     const handleSubmit = (values: any) => {
-        // ✅ تحويل البيانات إلى FormData
         const formData = new FormData();
         
         formData.append("document_type", values.document_type);
-        formData.append("document_name", values.document_name);
         formData.append("document_details", values.document_details);
         
-        if (values.document_type === "case") {
-            formData.append("caseId", values.caseId);
-            if (values.document_category) {
-                formData.append("document_category", values.document_category);
+        if (values.document_name) {
+            formData.append("document_name", values.document_name);
+        }
+        
+        if (values.document_type === "CASE_RELATED") {
+            const caseIdNumber = Number(values.caseId);
+            if (isNaN(caseIdNumber)) {
+                console.error("Invalid caseId:", values.caseId);
+                return;
             }
+            formData.append("caseId", String(caseIdNumber));
+            formData.append("document_category", "");
         } else {
             formData.append("document_category", values.document_category);
         }
         
-        if (values.file && values.file instanceof File) {
-            formData.append("file", values.file);
-        }
-
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
+        if (values.file && values.file instanceof FileList && values.file.length > 0) {
+            formData.append("file", values.file[0]);
         }
 
         updateDocument(
-            { id: document.id, data: formData },
+            { 
+                id: document.id, 
+                clientId: clientId,
+                data: formData 
+            },
             {
                 onSuccess: () => {
                     setOpen(false);
@@ -131,12 +143,12 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({ document
                                 name="document_type"
                                 label="اختار نوع المستند"
                                 options={[
-                                    { value: "case", label: "المستند تابع للقضايا" },
-                                    { value: "non_case", label: "المستند غير تابع للقضايا" },
+                                    { value: "CASE_RELATED", label: "المستند تابع للقضايا" },
+                                    { value: "NOT_CASE_RELATED", label: "المستند غير تابع للقضايا" },
                                 ]}
                             />
 
-                            {values.document_type === "case" ? (
+                            {values.document_type === "CASE_RELATED" ? (
                                 <SelectForm
                                     name="caseId"
                                     label="اختر القضية"
@@ -155,7 +167,7 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({ document
 
                             <InputForm
                                 name="document_name"
-                                label="اسم المستند"
+                                label="اسم المستند (اختياري)"
                                 type="text"
                                 placeholder="أدخل اسم المستند"
                             />

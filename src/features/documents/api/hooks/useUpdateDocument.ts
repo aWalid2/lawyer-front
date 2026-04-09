@@ -3,18 +3,24 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { updateDocument } from "../service/updateDocument";
 
-export const useUpdateDocument = () => {
-  const queryClient = useQueryClient();
+interface UpdateDocumentParams {
+    id: number;
+    clientId: string;
+    data: FormData;
+}
 
-  return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: FormData }) => 
-      updateDocument(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] });
-      toast.success("تم تعديل المستند بنجاح");
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || "حدث خطأ أثناء تعديل المستند");
-    },
-  });
+export const useUpdateDocument = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (params: UpdateDocumentParams) => updateDocument(params),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["documents"] });
+            toast.success("تم تحديث المستند بنجاح");
+        },
+        onError: (error: any) => {
+            console.error("Error details:", error);
+            toast.error(error?.response?.data?.message || "حدث خطأ أثناء تحديث المستند");
+        },
+    });
 };

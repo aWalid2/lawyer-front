@@ -1,25 +1,18 @@
-// documents/types/types.ts
-
 export interface Document {
-    id: string;
-    document_type: string;      
-    document_category: string;  
-    document_name: string;      
-    document_details: string;  
-    file: string;              
-    caseId?: string;            
+    id: number;
+    document_type: "CASE_RELATED" | "NOT_CASE_RELATED";
+    document_category: string;
+    document_name: string;
+    document_details: string;
+    caseId?: string;
+    case_title?: string;
+    case_name?: string;
+    case?: {
+        id: number;
+        title: string;
+        name: string;
+    };
+    file?: string;
     created_at?: string;
     updated_at?: string;
-}
-
-export interface DocumentsTableProps {
-    documents: Document[];
-    currentPage: number;
-    onPageChange: (page: number) => void;
-    onDocumentClick?: (doc: Document) => void;
-    onEdit?: (doc: Document) => void;
-    onDelete?: (doc: Document) => void;
-    totalPages?: number;
-    totalItems?: number;
-    itemsPerPage?: number;
 }

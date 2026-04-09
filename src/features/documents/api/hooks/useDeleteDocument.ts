@@ -4,16 +4,17 @@ import { toast } from "sonner";
 import { deleteDocument } from "../service/deleteDocument";
 
 export const useDeleteDocument = () => {
-  const queryClient = useQueryClient();
+    const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (id: string) => deleteDocument(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] });
-      toast.success("تم حذف المستند بنجاح");
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || "حدث خطأ أثناء حذف المستند");
-    },
-  });
+    return useMutation({
+        mutationFn: (id: number) => deleteDocument(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["documents"] });
+            toast.success("تم حذف المستند بنجاح");
+        },
+        onError: (error: any) => {
+            console.error("Error details:", error);
+            toast.error(error?.response?.data?.message || "حدث خطأ أثناء حذف المستند");
+        },
+    });
 };
