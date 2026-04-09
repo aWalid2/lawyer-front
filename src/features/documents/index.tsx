@@ -1,139 +1,184 @@
-import { useState, useMemo, useEffect } from "react";
+// documents/DocumentsFeature.tsx
+import React, { useState, useMemo, useEffect } from 'react'
 import { HeaderPageDocuments } from "./components/HeaderPageDocuments";
-import type { Document } from "./types";
+import type { Document } from "./types/types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { TableDocumentsActions } from "./components/TableDocumentsActions";
 import { Pagination } from "@/shared/components/Pagination";
+import { useFetchDocuments } from "./api/hooks/useGetDocuments";
+import { useFetchCases } from "@/features/UserTasks/api/hooks/useGetCase";
+import { Error } from '@/shared/components/Error';
+import LoadingPage from '@/shared/components/LoadingPage';
 
-const MOCK_DOCUMENTS: Document[] = Array.from({ length: 45 }, (_, i) => ({
-  id: `${i + 1}`,
-  autoNumber: "16365",
-  caseNumber: "13/05/2025",
-  caseTitle: i % 3 === 0 ? "قضية عمالية" : i % 3 === 1 ? "قضية مدنية" : "ارشيف",
-  clientCode: `CL-${16265 + i}`,
-  clientName: i % 2 === 0 ? "احمد محمد علي" : "شركة النور للتجارة",
-  phone: "0123456789",
-  date: "13/05/2025",
-  type: i % 2 === 0 ? "clients" : "cases",
-}));
+export const DocumentsFeature: React.FC = () => {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filter, setFilter] = useState("all");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 15;
 
-const DocumentsFeature = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("clients");
-  const itemsPerPage = 15;
+    const { data: documentsResponse, isPending, isError, refetch } = useFetchDocuments();
+    const { data: cases, isPending: isCasesLoading } = useFetchCases();
 
-  const handleEdit = (doc: Document) => {
-    console.log("Edit document:", doc);
-  };
+    const documents = documentsResponse?.data || documentsResponse || [];
 
-  const handleDelete = (doc: Document) => {
-    console.log("Delete document:", doc);
-  };
+    // عمل Map للقضايا زي ما عملت في Tasks
+    const casesMap = useMemo(() => {
+        if (!cases?.data) return new Map();
+        return new Map(cases.data.map((caseItem: any) => [
+            String(caseItem.id || caseItem.case_id),
+            caseItem.case_title
+        ]));
+    }, [cases]);
 
-  const filteredDocuments = useMemo(() => {
-    return MOCK_DOCUMENTS.filter((doc) => {
-      const searchStr = searchTerm.toLowerCase();
-      const matchesSearch =
-        filter === "clients"
-          ? (doc.clientName?.toLowerCase() || "").includes(searchStr) ||
-          (doc.clientCode?.toLowerCase() || "").includes(searchStr) ||
-          (doc.phone?.toLowerCase() || "").includes(searchStr)
-          : (doc.caseTitle?.toLowerCase() || "").includes(searchStr) ||
-          (doc.caseNumber?.toLowerCase() || "").includes(searchStr) ||
-          (doc.autoNumber?.toLowerCase() || "").includes(searchStr);
+    // دالة لجلب اسم القضية زي ما عملت في Tasks
+    const getCaseTitle = (caseId: string): string => {
+        if (!caseId) return "-";
+        return casesMap.get(String(caseId)) || caseId;
+    };
 
-      const matchesFilter = doc.type === filter;
+    const filteredDocuments = useMemo(() => {
+        if (!documents.length) return [];
 
-      return matchesSearch && matchesFilter;
-    });
-  }, [searchTerm, filter]);
+        let filtered = [...documents];
 
-  const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
+        if (searchTerm) {
+            const term = searchTerm.toLowerCase();
+            filtered = filtered.filter((doc) =>
+                doc.document_name?.toLowerCase().includes(term) ||
+                doc.document_category?.toLowerCase().includes(term) ||
+                doc.document_details?.toLowerCase().includes(term)
+            );
+        }
 
-  const paginatedDocuments = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredDocuments.slice(start, start + itemsPerPage);
-  }, [filteredDocuments, currentPage]);
+        if (filter !== "all") {
+            filtered = filtered.filter((doc) => {
+                if (filter === "case") return doc.document_type === "CASE_RELATED";
+                if (filter === "non_case") return doc.document_type === "NOT_CASE_RELATED";
+                return true;
+            });
+        }
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, filter]);
+        return filtered;
+    }, [documents, searchTerm, filter]);
 
-  const columns: Column<Document>[] = [
-    {
-      header: "#",
-      accessor: (item) => filteredDocuments.findIndex((d) => d.id === item.id) + 1,
-      headerClassName: "w-15",
-    },
-    ...(filter === "clients"
-      ? [
+    const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
+
+    const paginatedDocuments = useMemo(() => {
+        const start = (currentPage - 1) * itemsPerPage;
+        return filteredDocuments.slice(start, start + itemsPerPage);
+    }, [filteredDocuments, currentPage]);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, filter]);
+
+    const indexedData = useMemo(() => {
+        return paginatedDocuments.map((item, index) => ({
+            ...item,
+            rowNumber: ((currentPage - 1) * itemsPerPage) + index + 1
+        }));
+    }, [paginatedDocuments, currentPage]);
+
+    const columns: Column<Document & { rowNumber: number }>[] = [
         {
-          header: "كود الموكل",
-          accessor: "clientCode" as keyof Document,
+            header: "#",
+            accessor: (item) => item.rowNumber,
+            headerClassName: "w-13",
+            className: "w-13 text-center",
         },
         {
-          header: "اسم الموكل",
-          accessor: "clientName" as keyof Document,
+            header: "نوع المستند",
+            accessor: (item) => item.document_type === "CASE_RELATED" ? "تابع لقضية" : "غير تابع لقضية",
+            headerClassName: "w-35",
+            className: "w-35",
         },
         {
-          header: "رقم الهاتف",
-          accessor: "phone" as keyof Document,
-        },
-      ]
-      : [
-        {
-          header: "الرقم الآلي للقضية",
-          accessor: "autoNumber" as keyof Document,
-        },
-        {
-          header: "كود القضية",
-          accessor: "caseNumber" as keyof Document,
+            header: "نوع المستند",
+            accessor: (item) => {
+                if (item.document_type === "CASE_RELATED") {
+                    return getCaseTitle(item.caseId || "");
+                } else {
+                    return item.document_category || "-";
+                }
+            },
+            headerClassName: "w-35",
+            className: "w-35",
         },
         {
-          header: "عنوان القضية",
-          accessor: "caseTitle" as keyof Document,
+            header: "اسم المستند",
+            accessor: (item) => item.document_name || "-",
+            headerClassName: "w-35",
+            className: "w-35",
         },
-      ]),
-    {
-      header: "إجراء",
-      accessor: (item) => (
-        <TableDocumentsActions
-          document={item}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      ),
-    },
-  ];
+        {
+            header: "إجراء",
+            accessor: (item) => (
+                <TableDocumentsActions
+                    document={item}
+                    onDocumentUpdated={() => {
+                        refetch();
+                    }}
+                />
+            ),
+            headerClassName: "w-35",
+            className: "w-35",
+        },
+    ];
 
-  return (
-    <div className="w-full pt-6 space-y-6">
-      <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
-        <HeaderPageDocuments
-          searchTerm={searchTerm}
-          onSearch={setSearchTerm}
-          onFilterChange={setFilter}
-          filter={filter}
-        />
+    if (isPending) return <LoadingPage />
+    if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
+    
+    if (documents.length === 0) {
+        return (
+            <div className="w-full pt-6 space-y-6">
+                <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
+                    <HeaderPageDocuments
+                        searchTerm={searchTerm}
+                        onSearch={setSearchTerm}
+                        onFilterChange={setFilter}
+                        filter={filter}
+                        onDocumentAdded={() => {
+                            refetch();
+                        }}
+                    />
+                    <div className="text-center py-10 text-gray-500">
+                        لا توجد مستندات
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
-        <DataTable
-          rowKey={'id'}
-          columns={columns}
-          data={paginatedDocuments}
-          rowIdField="id"
-        />
+    return (
+        <div className="w-full pt-6 space-y-6">
+            <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
+                <HeaderPageDocuments
+                    searchTerm={searchTerm}
+                    onSearch={setSearchTerm}
+                    onFilterChange={setFilter}
+                    filter={filter}
+                    onDocumentAdded={() => {
+                        refetch();
+                    }}
+                />
 
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        )}
-      </div>
-    </div>
-  );
+                <DataTable
+                    rowKey="id"
+                    columns={columns}
+                    data={indexedData}
+                    rowIdField="id"
+                />
+
+                {totalPages > 1 && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default DocumentsFeature;
