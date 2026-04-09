@@ -3,10 +3,11 @@ import { Form, Formik } from 'formik';
 import { useLogin } from './api/hooks/useLogin';
 
 import useCustomLogin from './hooks/useCustomlogin';
+import { SubmitButton } from '@/shared/components/SubmitButton';
 
 const Login = () => {
   const { initialValues, validationSchema } = useCustomLogin();
-  const { mutate: login } = useLogin();
+  const { mutate: login, isPending } = useLogin();
 
   return (
     <div className="flex justify-center items-center h-screen bg-secondary bg-[url('/images/backgroundAuth.png')] bg-cover bg-center">
@@ -29,13 +30,8 @@ const Login = () => {
               labelColor="text-white!"
             />
 
-            <button
-              type="submit"
-              className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity"
-            >
-              تسجيل الدخول
-            </button>
 
+            <SubmitButton isPending={isPending}>تسجيل الدخول</SubmitButton>
           </Form>
         )}
       </Formik>

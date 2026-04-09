@@ -16,6 +16,8 @@ import { useUpdateClient } from "../../api/hooks/useUpdateClient";
 
 
 import * as Yup from "yup";
+import { isValidPhoneNumber, parsePhoneNumberFromString } from "libphonenumber-js";
+import { COUNTRY_OPTIONS } from "@/shared/constants/countryOptions";
 import { SubmitButton } from "@/shared/components/SubmitButton";
 
 interface EditClientDialogProps {
@@ -32,14 +34,16 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
     const [open, setOpen] = React.useState(false);
     const { mutateAsync: updateClient, isPending } = useUpdateClient();
 
+    const phoneData = client?.user?.phone ? parsePhoneNumberFromString(client.user.phone) : null;
+
     const initialValues: any = {
         ...client,
         client_type: client?.client_type || "individual",
         first_name: client?.user?.first_name || "",
         last_name: client?.user?.last_name || "",
         ssn: client?.user?.ssn || "",
-        phone: client?.user?.phone || "",
-        country_code: "+966",
+        phone: phoneData ? phoneData.nationalNumber : (client?.user?.phone || ""),
+        country_code: phoneData ? `+${phoneData.countryCallingCode}` : "+966",
         email: client?.user?.email || "",
         nationality: client?.user?.nationality || "",
         country: client?.user?.country || "",
@@ -57,9 +61,13 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
             .matches(/^[0-9]+$/, "الرقم المدني يجب أن يكون أرقام")
             .length(10, "الرقم المدني يجب أن يكون 10 أرقام"),
         phone: Yup.string()
-            .matches(/^[0-9]+$/, "رقم الهاتف يجب أن يكون أرقام")
-            .length(9, "رقم الهاتف يجب أن يكون 9 أرقام"),
-        country_code: Yup.string(),
+            .required("رقم الهاتف مطلوب")
+            .test("is-valid-phone", "رقم الهاتف غير صحيح", function (value) {
+                const { country_code } = this.parent;
+                if (!value) return false;
+                return isValidPhoneNumber(country_code + value);
+            }),
+        country_code: Yup.string().required("كود الدولة مطلوب"),
         email: Yup.string().email("البريد الإلكتروني غير صالح"),
         nationality: Yup.string().nullable(),
         country: Yup.string().nullable(),
@@ -74,7 +82,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                 {trigger}
             </DialogTrigger>
             <DialogContent
-                className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-main rounded-main border-none"
+                className="sm:max-w-[772px] max-h-[95vh] flex flex-col overflow-hidden sm:px-16 px-6 sm:py-8 py-4 sm:rounded-main rounded-main border-none"
                 dir="rtl"
                 showCloseButton={false}
                 onClick={(e) => e.stopPropagation()}
@@ -82,13 +90,13 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                 <DialogClose asChild>
                     <button
                         onClick={(e) => e.stopPropagation()}
-                        className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all outline-none"
+                        className="absolute top-4 sm:top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all outline-none"
                     >
                         <XIcon size={23} className="text-gray-500" />
                     </button>
                 </DialogClose>
 
-                <DialogHeader className="mb-2 mt-15">
+                <DialogHeader className="mb-2 sm:mt-10 mt-6 lh-0">
                     <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
                         تعديل بيانات الموكل
                     </DialogTitle>
@@ -100,8 +108,12 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                     enableReinitialize
                     onSubmit={async (values, { setSubmitting }) => {
                         try {
-                            await updateClient({ id: client.user_id, data: values });
-                            onSave?.(values);
+                            const formattedValues = {
+                                ...values,
+                                phone: `${values.country_code}${values.phone}`,
+                            };
+                            await updateClient({ id: client.user_id, data: formattedValues });
+                            onSave?.(formattedValues);
                             setOpen(false);
                         } catch (error) {
                             console.error(error);
@@ -153,17 +165,8 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                         <SelectForm
                                             name="country_code"
                                             label="كود الدولة"
-                                            options={[
-                                                { value: "+966", label: "🇸🇦 +966" },
-                                                { value: "+971", label: "🇦🇪 +971" },
-                                                { value: "+974", label: "🇶🇦 +974" },
-                                                { value: "+965", label: "🇰🇼 +965" },
-                                                { value: "+973", label: "🇧🇭 +973" },
-                                                { value: "+968", label: "🇴🇲 +968" },
-                                                { value: "+20", label: "🇪🇬 +20" },
-                                                { value: "+962", label: "🇯🇴 +962" },
-                                                { value: "+961", label: "🇱🇧 +961" },
-                                            ]}
+                                            showSearch={true}
+                                            options={COUNTRY_OPTIONS}
                                         />
                                     </div>
                                 </div>
