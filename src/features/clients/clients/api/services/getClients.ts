@@ -1,6 +1,6 @@
 import api from "@/lib/api";
 
-export const fetchClients = async () => {
-  const { data } = await api.get("/client-profile");
+export const fetchClients = async (page: number, limit: number) => {
+  const { data } = await api.get(`/client-profile?page=${page}&limit=${limit}`);
   return data;
 };

@@ -8,7 +8,6 @@ import { Error } from "@/shared/components/Error";
 const ClientDetailsInfo: React.FC = () => {
   const { id } = useParams();
   const { data: client, isPending, isError } = useGetClient(id!);
-  console.log(client);
 
   if (isPending) return <LoadingPage />
   if (isError) return <Error />

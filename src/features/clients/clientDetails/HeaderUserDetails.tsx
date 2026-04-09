@@ -53,7 +53,7 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
       ) : (
         <Link
           to="/dashboard/case-management/add-case"
-          className="bg-primary-gradient text-white px-6 py-2.5 rounded-mainfont-semibold flex items-center gap-2 shadow-lg h-12.5 hover:shadow-xl transition-all"
+          className="bg-primary-gradient text-white px-6 py-2.5 rounded-mainfont-semibold flex items-center gap-2 shadow-lg h-12.5 hover:shadow-xl transition-all rounded-main"
         >
           <Plus size={20} />
           قضية جديدة

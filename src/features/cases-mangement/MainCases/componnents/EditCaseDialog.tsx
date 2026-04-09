@@ -51,11 +51,11 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
 
   console.log(caseItem)
 
-  const options = clients?.map((client: any) => ({
+  const options = clients?.data?.map((client: any) => ({
     label: client.name,
     value: String(client.user_id)
   })) || []
-  const caseTypeOptions = caseType?.map((caseType: any) => ({
+  const caseTypeOptions = caseType?.data?.map((caseType: any) => ({
     label: caseType.name,
     value: String(caseType.id)
   })) || []

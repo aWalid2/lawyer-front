@@ -9,19 +9,16 @@ import { EmptyTable } from '@/shared/components/EmptyTable';
 import LoadingPage from '@/shared/components/LoadingPage';
 import { Error } from '@/shared/components/Error';
 import type { ClientRelatedT } from './types/clientT';
-import { usePagination } from '@/shared/hooks/usePagination';
+
 
 
 export const ClientsFeature: React.FC = () => {
-    const { data: clientsData, isPending, isError, error } = useFetchClients();
-    const indexedData = useIndexedData(clientsData);
-    const [searchTerm, setSearchTerm] = useState("");
-    console.log(clientsData);
-    const {
-        currentPage,
-        setCurrentPage,
-        totalPages,
-    } = usePagination<ClientRelatedT>(indexedData || [], 15);
+    const [page, setPage] = useState(1);
+    const limit = 15;
+    const { data: clientsData, isPending, isError, error } = useFetchClients(page, limit);
+    const indexedData = useIndexedData(clientsData?.data);
+    const totalPages = clientsData?.meta?.total_pages;
+
 
     const columns: Column<ClientRelatedT>[] = [
         {
@@ -80,8 +77,10 @@ export const ClientsFeature: React.FC = () => {
     return (
         <div className="space-y-6">
             <HeaderClient
-                searchTerm={searchTerm}
-                onSearch={setSearchTerm}
+                searchTerm={""}
+                onSearch={(value) => {
+                    console.log(value);
+                }}
             />
 
             <DataTable
@@ -91,16 +90,16 @@ export const ClientsFeature: React.FC = () => {
             />
 
 
-            {clientsData?.length > 0 ? (
+            {indexedData?.length > 0 ? (
                 totalPages > 1 && (
                     <Pagination
-                        currentPage={currentPage}
+                        currentPage={page}
                         totalPages={totalPages}
-                        onPageChange={setCurrentPage}
+                        onPageChange={setPage}
                     />
                 )
             ) : (
-                <EmptyTable message="لا يوجد عملاء مطابقين لمعايير البحث" />
+                <EmptyTable message="لا يوجد عملاء" />
             )}
 
         </div >

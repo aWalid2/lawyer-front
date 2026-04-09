@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { useGetClientCases } from "../../api/hooks/useGetClientCases";
 import type { ClientCase } from "../../types/typesClientDetails";
 import { TableCasesActions } from "./components/TableCasesActions";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 export const ClientCases: React.FC = () => {
   const columns: Column<ClientCase>[] = [
@@ -71,11 +72,16 @@ export const ClientCases: React.FC = () => {
   return (
 
     <div className="container pt-6">
-      <DataTable
-        data={indexedClientData}
-        columns={columns}
-        rowIdField="id"
-      />
+
+      {indexedClientData.length > 0 ? (
+        <DataTable
+          data={indexedClientData}
+          columns={columns}
+          rowKey="id"
+        />
+      ) : (
+        <EmptyTable message="لا يوجد قضايا" />
+      )}
       {totalPages > 1 && (
         <PaginationApi
           currentPage={page}
