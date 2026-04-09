@@ -96,7 +96,6 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                                     {options.map((option) => (
                                         <CommandItem
                                             key={String(option.value)}
-                                            // Search based on label if it's a string, otherwise fallback to value
                                             value={typeof option.label === 'string' ? option.label : String(option.value)}
                                             onSelect={() => {
                                                 handleValueChange(option.value);
