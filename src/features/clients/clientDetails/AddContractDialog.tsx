@@ -1,5 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
+import * as Yup from "yup";
 import {
   Dialog,
   DialogClose,
@@ -11,26 +12,42 @@ import {
 import { Plus, XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SubmitButton } from "@/shared/components/SubmitButton";
+import { FileUpload } from "@/shared/components/FileUpload";
+import { useAddContract } from "./api/hooks/useAddContract";
 
 interface AddContractFormValues {
-  startDate: string;
-  agreedValue: string;
-  duration: string;
-  contractImage: string | File;
+  start_date: string;
+  contract_value: string;
+  contract_duration: string;
+  file: string | File;
 }
 
-export const AddContractDialog: React.FC = () => {
+interface AddContractDialogProps {
+  clientId: string;
+}
+
+export const AddContractDialog: React.FC<AddContractDialogProps> = ({ clientId }) => {
+  const [open, setOpen] = React.useState(false);
+  const { mutateAsync: addContract, isPending } = useAddContract();
+
   const initialValues: AddContractFormValues = {
-    startDate: "",
-    agreedValue: "",
-    duration: "",
-    contractImage: "",
+    start_date: "",
+    contract_value: "",
+    contract_duration: "",
+    file: "",
   };
 
+  const validationSchema = Yup.object().shape({
+    start_date: Yup.string().required("تاريخ بداية العقد مطلوب"),
+    contract_value: Yup.string().required("القيمة المتفق عليها مطلوبة"),
+    contract_duration: Yup.string().required("مدة العقد مطلوبة"),
+    file: Yup.mixed().required("صورة العقد مطلوبة"),
+  });
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="bg-primary-gradient text-white px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 shadow-lg h-12.5 hover:shadow-xl transition-all">
+        <button className="bg-primary-gradient text-white px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 shadow-lg h-12.5 hover:shadow-xl transition-all font-outfit">
           <Plus size={20} />
           اضافة عقد
         </button>
@@ -41,7 +58,7 @@ export const AddContractDialog: React.FC = () => {
         showCloseButton={false}
       >
         <DialogClose asChild>
-          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all">
+          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all outline-none">
             <XIcon size={23} className="text-gray-500 " />
           </button>
         </DialogClose>
@@ -53,41 +70,51 @@ export const AddContractDialog: React.FC = () => {
 
         <Formik
           initialValues={initialValues}
-          onSubmit={(values) => {
-            console.log("Adding contract:", values);
+          validationSchema={validationSchema}
+          onSubmit={async (values, { setSubmitting, resetForm }) => {
+            try {
+              await addContract({ clientId, data: values });
+              resetForm();
+              setOpen(false);
+            } catch (error) {
+              console.error(error);
+            } finally {
+              setSubmitting(false);
+            }
           }}
         >
           {() => (
             <Form className="space-y-4">
               <div className="space-y-3">
                 <InputForm
-                  name="startDate"
+                  name="start_date"
                   label="تاريخ بداية العقد"
                   placeholder="2024-01-01"
                   type="date"
-                  disabled={false}
                 />
 
                 <InputForm
-                  name="agreedValue"
+                  name="contract_value"
                   label="القيمة المتفق عليها"
                   placeholder="مثال: 5000"
                   type="text"
-                  disabled={false}
                 />
 
                 <InputForm
-                  name="duration"
+                  name="contract_duration"
                   label="مدة العقد"
                   placeholder="مثال: 6 أشهر"
-                  type="text"
-                  disabled={false}
+                  type="date"
                 />
-
-
               </div>
 
-              <SubmitButton isPending={false}>
+              <FileUpload
+                name="file"
+                label="صورة العقد"
+                placeholder="اختر ملف"
+              />
+
+              <SubmitButton isPending={isPending} className="mt-6">
                 حفظ التغييرات
               </SubmitButton>
             </Form>

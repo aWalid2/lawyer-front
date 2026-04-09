@@ -48,7 +48,7 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
             }}
           />
 
-          <AddContractDialog />
+          <AddContractDialog clientId={client.user_id} />
         </div>
       ) : (
         <Link
