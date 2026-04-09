@@ -13,7 +13,7 @@ interface CaseTypesActionProps {
 export const CaseTypesAction: React.FC<CaseTypesActionProps> = ({
   caseType,
 }) => {
-  const { mutateAsync: deleteCaseType, isPending } = useDeleteCaseType();
+  const { mutateAsync: deleteCaseType } = useDeleteCaseType();
 
   return (
     <div className="flex items-center justify-center gap-2">

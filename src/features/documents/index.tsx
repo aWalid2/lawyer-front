@@ -17,7 +17,7 @@ export const DocumentsFeature: React.FC = () => {
     const itemsPerPage = 15;
 
     const { data: documentsResponse, isPending, isError, refetch } = useFetchDocuments();
-    const { data: cases, isPending: isCasesLoading } = useFetchCases();
+    const { data: cases } = useFetchCases();
 
     const documents = documentsResponse?.data || documentsResponse || [];
 
@@ -127,7 +127,7 @@ export const DocumentsFeature: React.FC = () => {
 
     if (isPending) return <LoadingPage />
     if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
-    
+
     if (documents.length === 0) {
         return (
             <div className="w-full pt-6 space-y-6">
