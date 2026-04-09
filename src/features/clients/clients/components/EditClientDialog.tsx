@@ -65,7 +65,17 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
             .test("is-valid-phone", "رقم الهاتف غير صحيح", function (value) {
                 const { country_code } = this.parent;
                 if (!value) return false;
-                return isValidPhoneNumber(country_code + value);
+                
+                // Find the ISO code for the selected country code
+                const country = COUNTRY_OPTIONS.find(opt => opt.value === country_code);
+                const iso = (country as any)?.iso;
+                
+                try {
+                    const phoneNumber = parsePhoneNumberFromString(value, iso);
+                    return phoneNumber?.isValid() || false;
+                } catch {
+                    return false;
+                }
             }),
         country_code: Yup.string().required("كود الدولة مطلوب"),
         email: Yup.string().email("البريد الإلكتروني غير صالح"),
@@ -108,9 +118,13 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                     enableReinitialize
                     onSubmit={async (values, { setSubmitting }) => {
                         try {
+                            const country = COUNTRY_OPTIONS.find(opt => opt.value === values.country_code);
+                            const iso = (country as any)?.iso;
+                            const phoneNumber = parsePhoneNumberFromString(values.phone, iso);
+
                             const formattedValues = {
                                 ...values,
-                                phone: `${values.country_code}${values.phone}`,
+                                phone: phoneNumber ? phoneNumber.format("E.164") : `${values.country_code}${values.phone}`,
                             };
                             await updateClient({ id: client.user_id, data: formattedValues });
                             onSave?.(formattedValues);
