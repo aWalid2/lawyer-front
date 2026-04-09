@@ -10,7 +10,7 @@ import {
 
 export interface Column<T> {
     header: React.ReactNode;
-    accessor: keyof T | ((item: T) => React.ReactNode);
+    accessor: keyof T | ((item: T, index: number) => React.ReactNode);
     className?: string;
     headerClassName?: string;
     colSpan?: number;
@@ -72,7 +72,7 @@ export const DataTable = <T,>({
                                         className={`p-3 h-[60px] text-center text-sm text-gray-600 border-r border-[#F1F1F4] ${column.className || ""}`}
                                     >
                                         {typeof column.accessor === "function"
-                                            ? column.accessor(item)
+                                            ? column.accessor(item, index)
                                             : (item[column.accessor] as React.ReactNode)}
                                     </TableCell>
                                 ))}

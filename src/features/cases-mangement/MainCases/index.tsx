@@ -75,7 +75,7 @@ const MainCases = () => {
 
   const { data: cases, isPending, isError } = useGetCases(page, limit);
 
-  const indexedData = useIndexedData(cases?.data || []);
+  const indexedData = useIndexedData(cases?.data || [], page, limit);
   const totalPages = cases?.meta?.total_pages ?? 1;
 
 

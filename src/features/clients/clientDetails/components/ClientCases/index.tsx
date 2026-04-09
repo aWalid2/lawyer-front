@@ -1,46 +1,94 @@
-import React from "react";
-import { type ClientCase } from "../typesClientDetails";
-import { ClientsCasesTable } from "./components/casesClientTable/componnents/ClientsCasesTable";
-
-const mockCases: ClientCase[] = [
-  {
-    id: 1,
-    code: "#6341",
-    autoNumber: "979",
-    subject: "سرقة",
-    status: "متداولة",
-    role: "صفة1",
-    date: "11/10/2025",
-  },
-  {
-    id: 2,
-    code: "#6342",
-    autoNumber: "345",
-    subject: "قتل",
-    status: "متداولة",
-    role: "صفة1",
-    date: "11/10/2025",
-  },
-  {
-    id: 3,
-    code: "#6345",
-    autoNumber: "556",
-    subject: "سرقة",
-    status: "متداولة",
-    role: "صفة1",
-    date: "11/10/2025",
-  },
-];
+import type { Column } from "@/shared/components/DataTable";
+import { DataTable } from "@/shared/components/DataTable";
+import { Error } from "@/shared/components/Error";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { PaginationApi } from "@/shared/components/PaginationApi";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useGetClientCases } from "../../api/hooks/useGetClientCases";
+import type { ClientCase } from "../../types/typesClientDetails";
+import { TableCasesActions } from "./components/TableCasesActions";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 export const ClientCases: React.FC = () => {
-  const [currentPage, setCurrentPage] = React.useState(1);
+  const columns: Column<ClientCase>[] = [
+    {
+      header: "#",
+      accessor: (item) => item.rowNumber,
+      className: "w-16",
+    },
+    {
+      header: "كود القضية",
+      accessor: (item) => item.case_sequence,
+    },
+    {
+      header: "الرقم الآلي للقضية",
+      accessor: (item) => item.case_number,
+    },
+    {
+      header: "موضوع القضية",
+      accessor: (item) => item.case_title,
+    },
+    {
+      header: "الحالة",
+      accessor: (item) => (
+        <span className="px-4 py-2 h-[30px] rounded-xl bg-[#5570F1]/20 text-[#5570F1] text-xs font-normal shadow-sm">
+          {item.case_status_id}
+        </span>
+      ),
+    },
+    {
+      header: "الصفة",
+      accessor: (item) => item.client_type,
+    },
+    {
+      header: "تاريخ القضية",
+      accessor: (item) => item.created_at,
+    },
+    {
+      header: "الإجراءات",
+      accessor: (item) => (
+        <TableCasesActions client={item} />
+      ),
+    },
+  ]
+
+  const { id } = useParams<{ id: string }>();
+  const [page, setPage] = useState(1);
+  const limit = 15;
+  const { data: clientCases, isPending: isClientCasesPending, isError: isClientCasesError, error } = useGetClientCases({ id: id!, page, limit });
+  const indexedClientData = useIndexedData(clientCases?.data || [], page, limit)
+  const totalPages = clientCases?.meta?.last_page ?? 1;
+
+
+
+  if (isClientCasesPending) {
+    return <LoadingPage />
+  }
+  if (isClientCasesError) {
+    return <Error error={error} />
+  }
   return (
-    <div className="space-y-6">
-      <ClientsCasesTable 
-        clients={mockCases} 
-        currentPage={currentPage} 
-        setCurrentPage={setCurrentPage} 
-      />
+
+    <div className="container pt-6">
+
+      {indexedClientData.length > 0 ? (
+        <DataTable
+          data={indexedClientData}
+          columns={columns}
+          rowKey="id"
+        />
+      ) : (
+        <EmptyTable message="لا يوجد قضايا" />
+      )}
+      {totalPages > 1 && (
+        <PaginationApi
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      )}
     </div>
   );
 };

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { EditClientDialog } from './EditClientDialog';
 import type { ClientRelatedT } from '../types/clientT';
 import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
-import { useDeleteClient } from '../api/hooks/useDeleteClient';
+import { useDeleteClient } from '../../api/hooks/useDeleteClient';
 
 
 interface UserClientsActionProps {
@@ -23,7 +23,7 @@ export const UserClientsAction: React.FC<UserClientsActionProps> = ({ client, on
     return (
         <div className="flex items-center justify-center gap-2" onClick={(e) => e.stopPropagation()}>
             <Link
-                to={`/dashboard/clients/${client.id}`}
+                to={`/dashboard/clients/${client.user_id}`}
                 onClick={(e) => e.stopPropagation()}
                 title="عرض التفاصيل"
                 className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F0F6FF] transition-colors hover:bg-[#e0eaff]"
@@ -50,7 +50,7 @@ export const UserClientsAction: React.FC<UserClientsActionProps> = ({ client, on
 
             <ConfirmDeleteDialog
                 title="حذف الموكل"
-                description={`هل أنت متأكد من حذف الموكل ${client.user.first_name} ${client.user.last_name}؟`}
+                description={`هل أنت متأكد من حذف الموكل ${client.user.first_name} ؟`}
                 onConfirm={() => {
                     deleteClient({ id: client.user_id });
                 }}

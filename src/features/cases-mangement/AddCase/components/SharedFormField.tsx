@@ -10,7 +10,7 @@ export function SharedFormField() {
   const { data: clients } = useFetchClients()
   const { data: caseStatus } = useGetCaseStatus()
   const { data: caseType } = useGetCaseType()
-  const options = clients?.map((client: any) => ({
+  const options = clients?.data?.map((client: any) => ({
     label: client.name,
     value: String(client.user_id)
   })) || []

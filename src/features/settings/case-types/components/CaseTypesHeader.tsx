@@ -7,14 +7,13 @@ import { CaseTypeFormDialog } from "./CaseTypeFormDialog";
 
 interface CaseTypesHeaderProps {
   searchTerm: string;
-  onSearch: (term: string) => void;
-  onTypeAdded: () => void;
+  onSearch?: (term: string) => void;
+  onTypeAdded?: () => void;
 }
 
 export const CaseTypesHeader: React.FC<CaseTypesHeaderProps> = ({
   searchTerm,
   onSearch,
-  onTypeAdded,
 }) => {
   return (
 
@@ -27,10 +26,6 @@ export const CaseTypesHeader: React.FC<CaseTypesHeaderProps> = ({
         placeholder="بحث ..."
       />
       <CaseTypeFormDialog
-        onSave={(values) => {
-          console.log("Adding case type:", values);
-          onTypeAdded();
-        }}
         trigger={
           <HeaderActionButton
             label="نوع جديد"

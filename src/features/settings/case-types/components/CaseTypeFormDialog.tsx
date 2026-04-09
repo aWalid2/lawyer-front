@@ -1,13 +1,15 @@
 import { InputForm } from "@/shared/components/InputForm";
 import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { SubmitButton } from "@/shared/components/SubmitButton";
 import { Form, Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
-import type { CaseTypeT } from "../types";
+import type { CaseTypeT } from "../types/casesT";
+import { useCreateCaseType } from "../api/hooks/useCreateCaseType";
+import { useUpdateCaseType } from "../api/hooks/useUpdateCaseType";
 
 interface CaseTypeFormDialogProps {
   caseType?: CaseTypeT;
-  onSave: (values: Partial<CaseTypeT>) => void;
   trigger: React.ReactNode;
 }
 
@@ -17,10 +19,13 @@ const CaseTypeSchema = Yup.object().shape({
 
 export const CaseTypeFormDialog: React.FC<CaseTypeFormDialogProps> = ({
   caseType,
-  onSave,
   trigger,
 }) => {
   const [open, setOpen] = React.useState(false);
+  const { mutateAsync: createCaseType, isPending: isCreating } = useCreateCaseType();
+  const { mutateAsync: updateCaseType, isPending: isUpdating } = useUpdateCaseType();
+
+  const isPending = isCreating || isUpdating;
 
   return (
     <LayoutDialog
@@ -34,9 +39,19 @@ export const CaseTypeFormDialog: React.FC<CaseTypeFormDialogProps> = ({
           name: caseType?.name || "",
         }}
         validationSchema={CaseTypeSchema}
-        onSubmit={(values) => {
-          onSave(values);
-          setOpen(false);
+        onSubmit={async (values, { setSubmitting }) => {
+          try {
+            if (caseType) {
+              await updateCaseType({ id: caseType.id, data: values });
+            } else {
+              await createCaseType(values);
+            }
+            setOpen(false);
+          } catch (error) {
+            console.error(error);
+          } finally {
+            setSubmitting(false);
+          }
         }}
       >
         {() => (
@@ -48,13 +63,9 @@ export const CaseTypeFormDialog: React.FC<CaseTypeFormDialogProps> = ({
               placeholder="أدخل نوع القضية"
             />
 
-            <button
-              type="submit"
-              className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity"
-            >
+            <SubmitButton isPending={isPending} className="w-full">
               {caseType ? "تعديل النوع" : "إضافة نوع جديد"}
-            </button>
-
+            </SubmitButton>
           </Form>
         )}
       </Formik>
