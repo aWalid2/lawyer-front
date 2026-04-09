@@ -1,139 +1,110 @@
-import { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from 'react'
 import { HeaderPageDocuments } from "./components/HeaderPageDocuments";
-import type { Document } from "./types";
+import type { Document } from "./types/types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { TableDocumentsActions } from "./components/TableDocumentsActions";
-import { Pagination } from "@/shared/components/Pagination";
+import { PaginationApi } from "@/shared/components/PaginationApi";
+import { useFetchDocuments } from "./api/hooks/useGetDocuments";
+import { Error } from '@/shared/components/Error';
+import LoadingPage from '@/shared/components/LoadingPage';
 
-const MOCK_DOCUMENTS: Document[] = Array.from({ length: 45 }, (_, i) => ({
-  id: `${i + 1}`,
-  autoNumber: "16365",
-  caseNumber: "13/05/2025",
-  caseTitle: i % 3 === 0 ? "قضية عمالية" : i % 3 === 1 ? "قضية مدنية" : "ارشيف",
-  clientCode: `CL-${16265 + i}`,
-  clientName: i % 2 === 0 ? "احمد محمد علي" : "شركة النور للتجارة",
-  phone: "0123456789",
-  date: "13/05/2025",
-  type: i % 2 === 0 ? "clients" : "cases",
-}));
+export const DocumentsFeature: React.FC = () => {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filter, setFilter] = useState("all");
+    const [page, setPage] = useState(1);
+    const limit = 15;
 
-const DocumentsFeature = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("clients");
-  const itemsPerPage = 15;
+    const { data: documentsResponse, isPending, isError, refetch } = useFetchDocuments(page, limit, searchTerm, filter);
+    
+    const documents = documentsResponse?.data || [];
+    const totalPages = documentsResponse?.meta?.total_pages ?? 1;
 
-  const handleEdit = (doc: Document) => {
-    console.log("Edit document:", doc);
-  };
+    const indexedData = useMemo(() => {
+        return documents.map((item: Document, index: number) => ({
+            ...item,
+            rowNumber: ((page - 1) * limit) + index + 1
+        }));
+    }, [documents, page, limit]);
 
-  const handleDelete = (doc: Document) => {
-    console.log("Delete document:", doc);
-  };
-
-  const filteredDocuments = useMemo(() => {
-    return MOCK_DOCUMENTS.filter((doc) => {
-      const searchStr = searchTerm.toLowerCase();
-      const matchesSearch =
-        filter === "clients"
-          ? (doc.clientName?.toLowerCase() || "").includes(searchStr) ||
-          (doc.clientCode?.toLowerCase() || "").includes(searchStr) ||
-          (doc.phone?.toLowerCase() || "").includes(searchStr)
-          : (doc.caseTitle?.toLowerCase() || "").includes(searchStr) ||
-          (doc.caseNumber?.toLowerCase() || "").includes(searchStr) ||
-          (doc.autoNumber?.toLowerCase() || "").includes(searchStr);
-
-      const matchesFilter = doc.type === filter;
-
-      return matchesSearch && matchesFilter;
-    });
-  }, [searchTerm, filter]);
-
-  const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
-
-  const paginatedDocuments = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredDocuments.slice(start, start + itemsPerPage);
-  }, [filteredDocuments, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, filter]);
-
-  const columns: Column<Document>[] = [
-    {
-      header: "#",
-      accessor: (item) => filteredDocuments.findIndex((d) => d.id === item.id) + 1,
-      headerClassName: "w-15",
-    },
-    ...(filter === "clients"
-      ? [
+    const columns: Column<Document & { rowNumber: number }>[] = [
         {
-          header: "كود الموكل",
-          accessor: "clientCode" as keyof Document,
+            header: "#",
+            accessor: (item) => item.rowNumber,
+            headerClassName: "w-13",
+            className: "w-13 text-center",
         },
         {
-          header: "اسم الموكل",
-          accessor: "clientName" as keyof Document,
+            header: "نوع المستند",
+            accessor: (item) => item.document_type === "case" ? "تابع لقضية" : "غير تابع لقضية",
+            headerClassName: "w-35",
+            className: "w-35",
         },
         {
-          header: "رقم الهاتف",
-          accessor: "phone" as keyof Document,
-        },
-      ]
-      : [
-        {
-          header: "الرقم الآلي للقضية",
-          accessor: "autoNumber" as keyof Document,
+            header: "نوع المستند",
+            accessor: "document_category",
+            headerClassName: "w-35",
+            className: "w-35",
         },
         {
-          header: "كود القضية",
-          accessor: "caseNumber" as keyof Document,
+            header: "اسم المستند",
+            accessor: "document_name",
+            headerClassName: "w-35",
+            className: "w-35",
         },
         {
-          header: "عنوان القضية",
-          accessor: "caseTitle" as keyof Document,
+            header: "التفاصيل",
+            accessor: "document_details",
+            headerClassName: "w-35",
+            className: "w-35",
         },
-      ]),
-    {
-      header: "إجراء",
-      accessor: (item) => (
-        <TableDocumentsActions
-          document={item}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      ),
-    },
-  ];
+        {
+            header: "إجراء",
+            accessor: (item) => (
+                <TableDocumentsActions 
+                    document={item} 
+                    onDocumentUpdated={() => {
+                        refetch();
+                    }} 
+                />
+            ),
+            headerClassName: "w-35",
+            className: "w-35",
+        },
+    ];
 
-  return (
-    <div className="w-full pt-6 space-y-6">
-      <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
-        <HeaderPageDocuments
-          searchTerm={searchTerm}
-          onSearch={setSearchTerm}
-          onFilterChange={setFilter}
-          filter={filter}
-        />
+    if (isPending) return <LoadingPage />
+    if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
 
-        <DataTable
-          rowKey={'id'}
-          columns={columns}
-          data={paginatedDocuments}
-          rowIdField="id"
-        />
+    return (
+        <div className="w-full pt-6 space-y-6">
+            <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
+                <HeaderPageDocuments
+                    searchTerm={searchTerm}
+                    onSearch={setSearchTerm}
+                    onFilterChange={setFilter}
+                    filter={filter}
+                    onDocumentAdded={() => {
+                        refetch();
+                    }}
+                />
 
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        )}
-      </div>
-    </div>
-  );
+                <DataTable
+                    rowKey="id"
+                    columns={columns}
+                    data={indexedData}
+                    rowIdField="id"
+                />
+
+                {totalPages > 1 && (
+                    <PaginationApi
+                        currentPage={page}
+                        totalPages={totalPages}
+                        onPageChange={setPage}
+                    />
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default DocumentsFeature;

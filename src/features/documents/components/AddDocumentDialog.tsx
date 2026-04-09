@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Formik, Form } from "formik";
+import * as Yup from "yup";
 import {
     Dialog,
     DialogClose,
@@ -11,29 +12,85 @@ import {
 import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { FileUpload } from "@/shared/components/FileUpload";
-import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
 import { SelectForm } from "@/shared/components/SelectForm";
-
+import { useFetchCases } from "@/features/UserTasks/api/hooks/useGetCase";
+import { useAddDocument } from "../api/hooks/useAddDocument";
 
 interface AddDocumentDialogProps {
     filter: string;
+    onDocumentAdded?: () => void;
 }
 
-export const AddDocumentDialog: React.FC<AddDocumentDialogProps> = ({ filter }) => {
-    const isCases = filter === "cases";
+const validationSchema = Yup.object({
+    document_type: Yup.string().required("يرجى اختيار نوع المستند"),
+    document_category: Yup.string().when("document_type", {
+        is: "non_case",
+        then: (schema) => schema.required("نوع المستند مطلوب"),
+        otherwise: (schema) => schema.notRequired(),
+    }),
+    document_name: Yup.string().required("اسم المستند مطلوب"),
+    document_details: Yup.string().required("تفاصيل المستند مطلوبة"),
+    caseId: Yup.string().when("document_type", {
+        is: "case",
+        then: (schema) => schema.required("يرجى اختيار القضية"),
+        otherwise: (schema) => schema.notRequired(),
+    }),
+});
+
+export const AddDocumentDialog: React.FC<AddDocumentDialogProps> = ({ filter, onDocumentAdded }) => {
+    const { data: cases, isPending: isCasesLoading } = useFetchCases();
+    const { mutate: addDocument, isPending } = useAddDocument();
+    const [open, setOpen] = React.useState(false);
 
     const initialValues = {
-        documentType: isCases ? "case_doc1" : "client_doc1",
-        code: isCases ? "1249" : "12143",
-        name: isCases ? "قضية" : "محمد احمد",
-        details: isCases ? "عقد ايجار مكان" : "01012345678",
-        uploadFiles: null,
-        notes: isCases ? "ملاحظات قضية" : "ملاحظات موكل",
+        document_type: "case",
+        document_category: "",
+        document_name: "",
+        document_details: "",
+        file: null,
+        caseId: "",
+    };
+
+    // خيارات القضايا للـ Select
+    const caseOptions = useMemo(() => {
+        if (!cases?.data || cases.data.length === 0) return [];
+        return cases.data.map((caseItem: any) => ({
+            value: caseItem.id || caseItem.case_id,
+            label: caseItem.case_title
+        }));
+    }, [cases]);
+
+    const handleSubmit = (values: any) => {
+        const formData = new FormData();
+        
+        formData.append("document_type", values.document_type);
+        formData.append("document_name", values.document_name);
+        formData.append("document_details", values.document_details);
+        
+        if (values.document_type === "case") {
+            formData.append("caseId", values.caseId);
+            if (values.document_category) {
+                formData.append("document_category", values.document_category);
+            }
+        } else {
+            formData.append("document_category", values.document_category);
+        }
+        
+        if (values.file && values.file instanceof File) {
+            formData.append("file", values.file);
+        }
+
+        addDocument(formData, {
+            onSuccess: () => {
+                setOpen(false);
+                if (onDocumentAdded) onDocumentAdded();
+            },
+        });
     };
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <HeaderActionButton
                     label="مستند جديد"
@@ -50,7 +107,7 @@ export const AddDocumentDialog: React.FC<AddDocumentDialogProps> = ({ filter }) 
             >
                 <DialogClose asChild>
                     <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all">
-                        <XIcon size={23} className="text-gray-500 " />
+                        <XIcon size={23} className="text-gray-500" />
                     </button>
                 </DialogClose>
                 <DialogHeader className="mb-2 mt-15">
@@ -61,61 +118,63 @@ export const AddDocumentDialog: React.FC<AddDocumentDialogProps> = ({ filter }) 
 
                 <Formik
                     initialValues={initialValues}
+                    validationSchema={validationSchema}
+                    onSubmit={handleSubmit}
                     enableReinitialize
-                    onSubmit={(values) => {
-                        console.log("Adding contract:", values);
-                    }}
                 >
-                    {() => (
+                    {({ values }) => (
                         <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
-
                             <SelectForm
-                                name="documentType"
-                                label="نوع المستند"
-                                options={isCases ? [
-                                    { value: "case_doc1", label: "قضية" },
-                                    { value: "case_doc2", label: "مستند قضية" },
-                                ] : [
-                                    { value: "client_doc1", label: " موكل 1" },
-                                    { value: "client_doc2", label: "موكل   2" },
+                                name="document_type"
+                                label="اختار نوع المستند"
+                                options={[
+                                    { value: "case", label: "المستند تابع للقضايا" },
+                                    { value: "non_case", label: "المستند غير تابع للقضايا" },
                                 ]}
                             />
 
+                            {values.document_type === "case" ? (
+                                <SelectForm
+                                    name="caseId"
+                                    label="اختر القضية"
+                                    options={caseOptions}
+                                    placeholder={isCasesLoading ? "جاري تحميل القضايا..." : "اختر القضية"}
+                                    disabled={isCasesLoading || caseOptions.length === 0}
+                                />
+                            ) : (
+                                <InputForm
+                                    name="document_category"
+                                    label="نوع المستند"
+                                    type="text"
+                                    placeholder="أدخل نوع المستند"
+                                />
+                            )}
+
                             <InputForm
-                                name="code"
-                                label={isCases ? "الرقم الآلي للقضية" : "كود الموكل"}
+                                name="document_name"
+                                label="اسم المستند"
                                 type="text"
+                                placeholder="أدخل اسم المستند"
                             />
 
                             <InputForm
-                                name="name"
-                                label={isCases ? "كود القضية" : "اسم الموكل"}
+                                name="document_details"
+                                label="تفاصيل المستند"
                                 type="text"
-                            />
-
-                            <InputForm
-                                name="details"
-                                label={isCases ? "عنوان القضية" : "رقم الهاتف"}
-                                type="text"
+                                placeholder="أدخل تفاصيل المستند"
                             />
 
                             <FileUpload
-                                name="uploadFiles"
+                                name="file"
                                 label="رفع الملفات"
                             />
 
-                            <TextAreaForm
-                                name="notes"
-                                label="ملاحظات"
-                                placeholder="ملاحظات"
-                            />
-
-
                             <button
                                 type="submit"
-                                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity"
+                                disabled={isPending}
+                                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity disabled:opacity-50"
                             >
-                                إضافة مستند
+                                {isPending ? "جاري الإضافة..." : "إضافة مستند"}
                             </button>
                         </Form>
                     )}
