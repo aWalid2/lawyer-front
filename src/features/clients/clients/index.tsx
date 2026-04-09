@@ -13,7 +13,7 @@ import { usePagination } from '@/shared/hooks/usePagination';
 
 
 export const ClientsFeature: React.FC = () => {
-    const { data: clientsData, isPending, isError } = useFetchClients();
+    const { data: clientsData, isPending, isError, error } = useFetchClients();
     const indexedData = useIndexedData(clientsData);
     const [searchTerm, setSearchTerm] = useState("");
     console.log(clientsData);
@@ -76,7 +76,7 @@ export const ClientsFeature: React.FC = () => {
     ];
 
     if (isPending) return <LoadingPage />
-    if (isError) return <Error message="حدث خطأ في تحميل البيانات" />
+    if (isError) return <Error message="حدث خطأ في تحميل البيانات" error={error} />
     return (
         <div className="space-y-6">
             <HeaderClient

@@ -44,7 +44,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
         nationality: client?.user?.nationality || "",
         country: client?.user?.country || "",
         address: client?.user?.address || "",
-        uploadFiles: client?.user?.uploadFiles || null,
+        contract_photo: client?.contract_photo || null,
         notes: client?.user?.notes || "",
     };
 
@@ -206,7 +206,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
 
                             <div className="w-[121px] h-[99px] mb-16">
                                 <FileUpload
-                                    name="uploadFiles"
+                                    name="contract_photo"
                                     label="صورة التوكيل"
                                 />
                             </div>

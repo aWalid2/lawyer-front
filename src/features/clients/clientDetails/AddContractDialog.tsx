@@ -9,9 +9,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus, XIcon } from "lucide-react";
-import { InputForm } from "./components/ClientInfo/components/ClientDetailsInfo/components/InputForm";
-
-import { ButtonSubmit } from "./components/ClientInfo/components/ClientDetailsInfo/components/ButtonSubmit";
+import { InputForm } from "@/shared/components/InputForm";
+import { SubmitButton } from "@/shared/components/SubmitButton";
 
 interface AddContractFormValues {
   startDate: string;
@@ -88,9 +87,9 @@ export const AddContractDialog: React.FC = () => {
 
               </div>
 
-              <div className="pt-2">
-                <ButtonSubmit label="حفظ التغييرات" />
-              </div>
+              <SubmitButton isPending={false}>
+                حفظ التغييرات
+              </SubmitButton>
             </Form>
           )}
         </Formik>

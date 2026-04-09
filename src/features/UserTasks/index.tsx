@@ -30,7 +30,7 @@ export const UsersTask: React.FC = () => {
     const [statusFilter, setStatusFilter] = useState<string>("all");
     const [page, setPage] = useState(1);
     const limit = 15;
-    const { data: tasksResponse, isPending, isError, refetch } = useFetchTasks(page, limit, statusFilter, searchTerm);
+    const { data: tasksResponse, isPending, isError, error, refetch } = useFetchTasks(page, limit, statusFilter, searchTerm);
     const tasks = tasksResponse?.data;
     const totalPages = tasksResponse?.meta?.total_pages ?? 1;
     const indexedData = useIndexedData(tasks || []);
@@ -131,7 +131,7 @@ export const UsersTask: React.FC = () => {
     }, []);
 
     if (isPending) return <LoadingPage />
-    if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
+    if (isError) return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
 
     return (
         <div className="space-y-4">

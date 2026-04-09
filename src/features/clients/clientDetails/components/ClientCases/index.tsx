@@ -56,12 +56,9 @@ export const ClientCases: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [page, setPage] = useState(1);
   const limit = 15;
-  const { data: clientCases, isPending: isClientCasesPending, isError: isClientCasesError } = useGetClientCases({ id: id!, page, limit });
+  const { data: clientCases, isPending: isClientCasesPending, isError: isClientCasesError, error } = useGetClientCases({ id: id!, page, limit });
   const indexedClientData = useIndexedData(clientCases?.data || [], page, limit)
   const totalPages = clientCases?.meta?.last_page ?? 1;
-
-
-
 
 
 
@@ -69,7 +66,7 @@ export const ClientCases: React.FC = () => {
     return <LoadingPage />
   }
   if (isClientCasesError) {
-    return <Error />
+    return <Error error={error} />
   }
   return (
 

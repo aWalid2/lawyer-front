@@ -12,20 +12,18 @@ import { Error } from '@/shared/components/Error'
 export const ClientDetails = () => {
     const [activeTab, setActiveTab] = useState("cases");
     const { id } = useParams();
-    const { data: client, isPending, isError } = useGetClient(id!);
-    console.log(client);
+    const { data: client, isPending, isError, error } = useGetClient(id!);
+
 
     if (isPending) return <LoadingPage />
-    if (isError) return <Error />
-
-
-
+    if (isError) return <Error error={error} />
 
     return (
-        <>      <HeaderUserDetails
-            activeTab={activeTab}
-            client={client}
-        />
+        <>
+            <HeaderUserDetails
+                activeTab={activeTab}
+                client={client}
+            />
 
             <Tabs
                 value={activeTab}

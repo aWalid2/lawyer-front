@@ -50,7 +50,7 @@ export const UserClientsAction: React.FC<UserClientsActionProps> = ({ client, on
 
             <ConfirmDeleteDialog
                 title="حذف الموكل"
-                description={`هل أنت متأكد من حذف الموكل ${client.user.first_name} ${client.user.last_name}؟`}
+                description={`هل أنت متأكد من حذف الموكل ${client.user.first_name} ؟`}
                 onConfirm={() => {
                     deleteClient({ id: client.user_id });
                 }}
