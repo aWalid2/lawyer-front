@@ -16,7 +16,7 @@ import { useUpdateClient } from "../../api/hooks/useUpdateClient";
 
 
 import * as Yup from "yup";
-import { isValidPhoneNumber, parsePhoneNumberFromString } from "libphonenumber-js";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { COUNTRY_OPTIONS } from "@/shared/constants/countryOptions";
 import { SubmitButton } from "@/shared/components/SubmitButton";
 
@@ -65,11 +65,11 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
             .test("is-valid-phone", "رقم الهاتف غير صحيح", function (value) {
                 const { country_code } = this.parent;
                 if (!value) return false;
-                
-                // Find the ISO code for the selected country code
+
+
                 const country = COUNTRY_OPTIONS.find(opt => opt.value === country_code);
                 const iso = (country as any)?.iso;
-                
+
                 try {
                     const phoneNumber = parsePhoneNumberFromString(value, iso);
                     return phoneNumber?.isValid() || false;
@@ -148,6 +148,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                         { value: "company", label: "شركة" },
                                         { value: "government", label: "جهة حكومية" },
                                     ]}
+                                    showSearch={true}
                                 />
 
                                 <InputForm
@@ -181,6 +182,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                             label="كود الدولة"
                                             showSearch={true}
                                             options={COUNTRY_OPTIONS}
+
                                         />
                                     </div>
                                 </div>

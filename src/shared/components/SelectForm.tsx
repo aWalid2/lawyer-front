@@ -36,7 +36,7 @@ type SelectFormProps = {
     placeholder?: string;
     disabled?: boolean;
     className?: string;
-    showSearch?: boolean; // New optional prop
+    showSearch?: boolean;
     onChange?: (value: string | number) => void;
 };
 
@@ -96,7 +96,8 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                                     {options.map((option) => (
                                         <CommandItem
                                             key={String(option.value)}
-                                            value={String(option.value)}
+                                            // Search based on label if it's a string, otherwise fallback to value
+                                            value={typeof option.label === 'string' ? option.label : String(option.value)}
                                             onSelect={() => {
                                                 handleValueChange(option.value);
                                                 setOpen(false);
@@ -153,4 +154,4 @@ export const SelectForm: React.FC<SelectFormProps> = ({
             )}
         </div>
     );
-};
+};
