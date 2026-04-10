@@ -172,7 +172,7 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
 
                             <InputForm
                                 name="document_name"
-                                label="اسم المستند (اختياري)"
+                                label="اسم المستند"
                                 type="text"
                                 placeholder="أدخل اسم المستند"
                             />

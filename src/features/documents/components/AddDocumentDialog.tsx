@@ -157,13 +157,13 @@ export const AddDocumentDialog: React.FC<AddDocumentDialogProps> = ({ onDocument
                                     name="document_category"
                                     label="نوع المستند"
                                     type="text"
-                                    placeholder="أدخل نوع المستند (مثال: personal, work, ...)"
+                                    placeholder="أدخل نوع المستند "
                                 />
                             )}
 
                             <InputForm
                                 name="document_name"
-                                label="اسم المستند (اختياري)"
+                                label="اسم المستند "
                                 type="text"
                                 placeholder="أدخل اسم المستند"
                             />
