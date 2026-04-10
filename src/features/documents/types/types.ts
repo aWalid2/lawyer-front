@@ -7,6 +7,7 @@ export interface Document {
     caseId?: string;
     case_title?: string;
     case_name?: string;
+    case_id?: string;
     case?: {
         id: number;
         title: string;

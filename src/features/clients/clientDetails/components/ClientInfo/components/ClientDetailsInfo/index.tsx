@@ -11,7 +11,6 @@ const ClientDetailsInfo: React.FC = () => {
 
   if (isPending) return <LoadingPage />
   if (isError) return <Error />
-
   return (
 
     <div className="border border-[#E8E8E8] p-4 rounded-xl  ">

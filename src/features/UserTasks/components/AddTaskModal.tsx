@@ -111,12 +111,9 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
       end_date: submitValues.end_date,
     };
     
-    // معالجة task_type حسب العلاقة
     if (values.task_relation === "case") {
-      // تابعة لقضية - الـ task_type هو ID القضية
       apiValues.task_type = submitValues.task_type;
     } else {
-      // غير تابعة لقضية - الـ task_type هو النص المكتوب
       apiValues.task_type = submitValues.task_type;
     }
     

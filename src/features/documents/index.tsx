@@ -21,19 +21,20 @@ export const DocumentsFeature: React.FC = () => {
 
     const documents = documentsResponse?.data || documentsResponse || [];
 
-    // عمل Map للقضايا زي ما عملت في Tasks
+    // عمل Map للقضايا باستخدام case_title
     const casesMap = useMemo(() => {
         if (!cases?.data) return new Map();
         return new Map(cases.data.map((caseItem: any) => [
             String(caseItem.id || caseItem.case_id),
-            caseItem.case_title
+            caseItem.case_title // استخدام case_title
         ]));
     }, [cases]);
 
-    // دالة لجلب اسم القضية زي ما عملت في Tasks
-    const getCaseTitle = (caseId: string): string => {
+    // دالة لجلب اسم القضية
+    const getCaseTitle = (caseId: string | number): string => {
         if (!caseId) return "-";
-        return casesMap.get(String(caseId)) || caseId;
+        const key = String(caseId);
+        return casesMap.get(key) || String(caseId);
     };
 
     const filteredDocuments = useMemo(() => {
@@ -93,10 +94,12 @@ export const DocumentsFeature: React.FC = () => {
             className: "w-35",
         },
         {
-            header: "نوع المستند",
+            header: "اسم القضية / نوع المستند",
             accessor: (item) => {
                 if (item.document_type === "CASE_RELATED") {
-                    return getCaseTitle(item.caseId || "");
+                    // تأكد من اسم الحقل الصحيح (caseId أو case_id)
+                    const caseIdValue = (item as any).caseId || (item as any).case_id;
+                    return getCaseTitle(caseIdValue);
                 } else {
                     return item.document_category || "-";
                 }

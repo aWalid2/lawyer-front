@@ -1,5 +1,5 @@
 // documents/components/EditDocumentDialog.tsx
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { Formik, Form } from "formik";
 import {
     Dialog,
@@ -33,8 +33,21 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
     const { mutate: updateDocument, isPending } = useUpdateDocument();
     const [open, setOpen] = React.useState(false);
 
-    // جيب الـ clientId من localStorage
     const clientId = localStorage.getItem('clientId') || '';
+
+    const caseOptions = useMemo(() => {
+        if (!cases?.data || cases.data.length === 0) return [];
+        return cases.data.map((caseItem: any) => ({
+            value: String(caseItem.id || caseItem.case_id),
+            label: caseItem.case_title
+        }));
+    }, [cases]);
+
+    // جلب قيمة case_id الحالية من المستند
+    const currentCaseValue = useMemo(() => {
+        const caseValue = (document as any).case_id || (document as any).case || (document as any).caseId || "";
+        return String(caseValue);
+    }, [document]);
 
     const initialValues = {
         document_type: document.document_type || "NOT_CASE_RELATED",
@@ -42,7 +55,7 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
         document_name: document.document_name || "",
         document_details: document.document_details || "",
         file: null,
-        caseId: document.caseId || "",
+        case: currentCaseValue,
     };
 
     const validationSchema = Yup.object({
@@ -54,20 +67,12 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
         }),
         document_name: Yup.string(),
         document_details: Yup.string().required("تفاصيل المستند مطلوبة"),
-        caseId: Yup.string().when("document_type", {
+        case: Yup.string().when("document_type", {
             is: "CASE_RELATED",
             then: (schema) => schema.required("يرجى اختيار القضية"),
             otherwise: (schema) => schema.notRequired(),
         }),
     });
-
-    const caseOptions = useMemo(() => {
-        if (!cases?.data || cases.data.length === 0) return [];
-        return cases.data.map((caseItem: any) => ({
-            value: caseItem.id || caseItem.case_id,
-            label: caseItem.case_title
-        }));
-    }, [cases]);
 
     const handleSubmit = (values: any) => {
         const formData = new FormData();
@@ -80,12 +85,12 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
         }
         
         if (values.document_type === "CASE_RELATED") {
-            const caseIdNumber = Number(values.caseId);
-            if (isNaN(caseIdNumber)) {
-                console.error("Invalid caseId:", values.caseId);
+            const caseNumber = Number(values.case);
+            if (isNaN(caseNumber)) {
+                console.error("Invalid case:", values.case);
                 return;
             }
-            formData.append("caseId", String(caseIdNumber));
+            formData.append("case", String(caseNumber));
             formData.append("document_category", "");
         } else {
             formData.append("document_category", values.document_category);
@@ -116,7 +121,7 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
                 {trigger}
             </DialogTrigger>
             <DialogContent
-                className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
+                className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none text-right"
                 dir="rtl"
                 showCloseButton={false}
             >
@@ -150,7 +155,7 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
 
                             {values.document_type === "CASE_RELATED" ? (
                                 <SelectForm
-                                    name="caseId"
+                                    name="case"
                                     label="اختر القضية"
                                     options={caseOptions}
                                     placeholder={isCasesLoading ? "جاري تحميل القضايا..." : "اختر القضية"}
@@ -187,7 +192,7 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
                             <button
                                 type="submit"
                                 disabled={isPending}
-                                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+                                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity disabled:opacity-50"
                             >
                                 {isPending ? "جاري الحفظ..." : "حفظ التغييرات"}
                             </button>
