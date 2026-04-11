@@ -4,6 +4,10 @@ import { InputBox } from "./components/InputBox";
 import { useGetClient } from "@/features/clients/clientDetails/api/hooks/useGetClient";
 import { useParams } from "react-router-dom";
 import { Error } from "@/shared/components/Error";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+
+
+
 
 const ClientDetailsInfo: React.FC = () => {
   const { id } = useParams();
@@ -83,7 +87,7 @@ const ClientDetailsInfo: React.FC = () => {
         <div className="flex-1">
           <InputBox
             label="تاريخ التسجيل"
-            text={client?.user?.created_at}
+            text={formatDateToYYYYMMDD(client?.user?.created_at)}
           />
         </div>
       </div>
