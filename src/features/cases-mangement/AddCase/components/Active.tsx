@@ -1,10 +1,15 @@
+import { useState } from "react";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { SharedFormField } from "./SharedFormField";
-import { useGetCourts } from "@/features/settings/courts/api/hooks/useGetCourts";
+import { useGetCourts } from "@/shared/api/hooks/useGetCourts";
 
 export function Active() {
-  const { data: courts } = useGetCourts(1, 100);
+  const [courtSearch, setCourtSearch] = useState("");
+  const debouncedCourtSearch = useDebounce(courtSearch, 500);
+
+  const { data: courts } = useGetCourts(undefined, undefined, debouncedCourtSearch);
 
   const courtOptions = courts?.data?.map((court: any) => ({
     label: court.name,
@@ -36,6 +41,7 @@ export function Active() {
         options={courtOptions}
         placeholder="اختر المحكمة"
         showSearch={true}
+        onSearchChange={setCourtSearch}
       />
       <SelectForm
         label="درجة التقاضي الحالية"
@@ -44,8 +50,6 @@ export function Active() {
         placeholder="اختر درجة التقاضي الحالية"
         showSearch={true}
       />
-
-
 
     </>
   );

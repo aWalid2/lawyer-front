@@ -33,9 +33,9 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const { mutateAsync: updateCase, isPending } = useUpdateCase();
-  const { data: clients } = useFetchClients()
-  const { data: caseType } = useGetCaseType()
-  const { data: caseStatus } = useGetCaseStatus()
+  const { data: clients } = useFetchClients(undefined, undefined, undefined, open)
+  const { data: caseType } = useGetCaseType(open)
+  const { data: caseStatus } = useGetCaseStatus(open)
   const initialValues: Case = {
     ...caseItem,
     case_number: caseItem.case_number || "",
