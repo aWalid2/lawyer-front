@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-export const useIndexedData = (data: any[], page: number = 1, limit: number = 10) => {
+export const useIndexedData = (data: any[], page: number = 1, limit: number = 15) => {
     const indexedData = useMemo(() => {
         return (data ?? []).map((item: any, index: number) => ({
             ...item,

@@ -13,11 +13,11 @@ import type { ClientRelatedT } from './types/clientT';
 
 
 export const ClientsFeature: React.FC = () => {
-    const [page, setPage] = useState(1);
-    const limit = 15;
-    const { data: clientsData, isPending, isError, error } = useFetchClients(page, limit);
-    const indexedData = useIndexedData(clientsData?.data);
+    const [page, setPage] = useState<number>(1);
+    const { data: clientsData, isPending, isError, error } = useFetchClients(page);
     const totalPages = clientsData?.meta?.total_pages;
+    const limit = clientsData?.meta?.limit || 15;
+    const indexedData = useIndexedData(clientsData?.data, page, limit);
 
 
     const columns: Column<ClientRelatedT>[] = [
@@ -83,23 +83,21 @@ export const ClientsFeature: React.FC = () => {
                 }}
             />
 
-            <DataTable
-                data={indexedData}
-                columns={columns}
-                rowKey="user_id"
-            />
 
+            {indexedData?.length === 0 ? <EmptyTable message="لا يوجد عملاء" /> : (
+                <DataTable
+                    data={indexedData}
+                    columns={columns}
+                    rowKey="user_id"
+                />
 
-            {indexedData?.length > 0 ? (
-                totalPages > 1 && (
-                    <Pagination
-                        currentPage={page}
-                        totalPages={totalPages}
-                        onPageChange={setPage}
-                    />
-                )
-            ) : (
-                <EmptyTable message="لا يوجد عملاء" />
+            )}
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                />
             )}
 
         </div >
