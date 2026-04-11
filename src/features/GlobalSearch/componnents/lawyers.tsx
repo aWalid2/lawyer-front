@@ -71,7 +71,7 @@ export const TableLawyers: React.FC = () => {
             header: "الإجراءات",
             accessor: (item: Lawyer) => (
                 <LawyersAction
-                    caseItem={item}
+                    lawyer={item}
                     onLawyerUpdated={() => {
                         refetch();
                     }}

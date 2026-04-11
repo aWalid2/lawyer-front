@@ -6,36 +6,24 @@ import { Link } from 'react-router-dom';
 import { Editlawyers } from './Editlawyers';
 import { useDeleteLawyer } from '../api/hooks/useDeletLawyers';
 import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
-
-interface Lawyer {
-    user_id: number;
-    license_number: string | null;
-    specialization: string;
-    experience_years: number | null;
-    is_verified: boolean;
-    user: {
-        id: number;
-        first_name: string;
-        last_name: string | null;
-        email: string;
-        phone: string;
-    };
-}
+import type { Lawyer } from '../lawyers/types';
 
 interface LawyersActionProps {
-    caseItem: Lawyer;
+    lawyer?: Lawyer;
     onLawyerUpdated?: () => void;
 }
 
-export const LawyersAction: React.FC<LawyersActionProps> = ({ caseItem, onLawyerUpdated }) => {
+export const LawyersAction: React.FC<LawyersActionProps> = ({ lawyer , onLawyerUpdated }) => {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const { mutateAsync: deleteLawyer } = useDeleteLawyer();
     
     const handleDelete = async () => {
         try {
-            await deleteLawyer({ id: caseItem.user_id.toString() });
-            if (onLawyerUpdated) {
-                onLawyerUpdated();
+            if (lawyer) {
+                await deleteLawyer({ id: lawyer.user_id.toString() });
+                if (onLawyerUpdated) {
+                    onLawyerUpdated();
+                }
             }
         } catch (error) {
             console.error('Error deleting lawyer:', error);
@@ -46,7 +34,7 @@ export const LawyersAction: React.FC<LawyersActionProps> = ({ caseItem, onLawyer
         <>
             <div className="flex items-center justify-center gap-2">
                 <Link
-                    to={`/dashboard/users/lawyers/${caseItem.user_id}`}
+                    to={`/dashboard/users/lawyers/${lawyer?.user_id}`}
                     title="عرض التفاصيل"
                     className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F0F6FF] transition-colors hover:bg-[#e0eaff]"
                 >
@@ -63,7 +51,7 @@ export const LawyersAction: React.FC<LawyersActionProps> = ({ caseItem, onLawyer
 
                 <ConfirmDeleteDialog
                     title="حذف المحامي"
-                    description={`هل أنت متأكد من حذف المحامي ${caseItem.user.first_name} ؟`}
+                    description={`هل أنت متأكد من حذف المحامي ${lawyer?.user.first_name} ؟`}
                     onConfirm={handleDelete}
                     trigger={
                         <button
@@ -79,7 +67,7 @@ export const LawyersAction: React.FC<LawyersActionProps> = ({ caseItem, onLawyer
             </div>
 
             <Editlawyers
-                lawyer={caseItem}
+                lawyer={lawyer}
                 open={isEditDialogOpen}
                 onOpenChange={setIsEditDialogOpen}
                 onLawyerUpdated={onLawyerUpdated}

@@ -13,7 +13,6 @@ import { Error } from '@/shared/components/Error';
 export const UsersLawyer: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    
     const { data: lawyers, isPending, isError, refetch } = useFetchLawyers();
     
     const filteredLawyers = lawyers?.filter((lawyer: Lawyer) => 
@@ -81,7 +80,7 @@ export const UsersLawyer: React.FC = () => {
             header: "الإجراءات",
             accessor: (item: Lawyer) => (
                 <LawyersAction
-                    caseItem={item}
+                    lawyer={item}
                     onLawyerUpdated={() => {
                         refetch();
                     }}
