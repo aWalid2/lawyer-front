@@ -27,7 +27,7 @@ export interface FormValues {
 
   nationality: string;
   country: string;
-  address: string;
+
   email: string;
 
   case_arrival_date_at_police_station: string;
@@ -57,7 +57,7 @@ case_fees_type: "fixed_profits" | "percentage_of_profits" | "contract_based";
 
 fixed_profits?: number;
 percentage_of_profits?: number;
-contract_based?: number;
+contract_based?: undefined;
 
 
 
@@ -122,7 +122,7 @@ const case_fees: CaseFees = {
       case_situation: "UNDER_APPEAL",
       case_fees,
       opponents: values.name
-        ? [{ name: values.name, address: values.address }]
+        ? [{ name: values.name}]
         : [],
     };
   }
@@ -143,7 +143,6 @@ const case_fees: CaseFees = {
               name: values.name,
               ssn: values.ssn,
               phone_number: `${values.country_code}${values.phone}`,
-              address: values.address,
             },
           ]
         : [],
@@ -166,7 +165,6 @@ const case_fees: CaseFees = {
               name: values.name,
               ssn: values.ssn,
               phone_number: `${values.country_code}${values.phone}`,
-              address: values.address,
             },
           ]
         : [],
@@ -205,7 +203,6 @@ const case_fees: CaseFees = {
             name: values.name,
             ssn: values.ssn,
             phone_number: `${values.country_code}${values.phone}`,
-            address: values.address,
           },
         ]
       : [],

@@ -25,7 +25,6 @@ export const initialValues: FormValues = {
   ssn: "",
   nationality: "",
   country: "",
-  address: "",
   email: "",
 
   case_arrival_date_at_police_station: "",
@@ -45,8 +44,8 @@ export const initialValues: FormValues = {
 
  case_fees_type: "fixed_profits",
 
-fixed_profits: undefined,
-percentage_of_profits: undefined,
+fixed_profits: 0,
+percentage_of_profits: 0,
 contract_based: undefined,
 
 

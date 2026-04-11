@@ -2,9 +2,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useEffect } from "react";
-import { fetchProsecutions } from "../service/getProsecutions";
+import { fetchProsecutions } from "../services/getProsecutions";
 
-export const useFetchProsecutions = (page: number, limit: number, search?: string) => {
+export const useFetchProsecutions = (page?: number, limit?: number, search?: string) => {
   const query = useQuery({
     queryKey: ["prosecutions", page, limit, search],
     queryFn: () => fetchProsecutions(page, limit, search),

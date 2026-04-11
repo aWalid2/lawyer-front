@@ -43,6 +43,7 @@ export function SharedFormField() {
       />
 
       <SelectForm
+        showSearch={true}
         label="حالة القضية"
         name="case_status_id"
         options={caseStatusOptions}
@@ -60,6 +61,7 @@ export function SharedFormField() {
       />
 
       <SelectForm
+        showSearch={true}
         label="نوع القضية"
         name="case_type_id"
         options={caseTypeOptions}

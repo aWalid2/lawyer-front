@@ -49,7 +49,6 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
     case_situation: caseItem.case_situation || "",
   };
 
-  console.log(caseItem)
 
   const options = clients?.data?.map((client: any) => ({
     label: client.name,
@@ -123,6 +122,7 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
                   name="client_id"
                   label="اسم العميل"
                   options={options}
+                  showSearch={true}
                 />
 
                 <SelectForm name="client_type"
@@ -147,6 +147,8 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
                     { value: "AT_PROSECUTOR_OFFICE", label: "في النيابة" },
                     { value: "PUBLIC_PROSECUTION", label: "الادعاء العام" },
                     { value: "UNDER_APPEAL", label: "تحت الرفع " },
+                    { value: "ACTIVE", label: "نشط" },
+                    { value: "OTHER", label: "أخرى" },
                   ]}
                 />
                 <SelectForm name="case_status_at_receipt"
