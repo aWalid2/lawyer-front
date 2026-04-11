@@ -1,11 +1,13 @@
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
+import { SharedFormField } from "./SharedFormField";
 
 
 export function PublicProsecution() {
 
   return (
     <>
+      <SharedFormField />
       <SelectForm
         label="المخفر التابع له القضية"
         name="case_police_station"

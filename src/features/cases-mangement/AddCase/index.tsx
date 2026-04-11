@@ -10,6 +10,8 @@ import { toast } from "sonner";
 import { useAddPublicProsecutionCase } from "./api/hooks/useAddPublicProsecutionCase";
 import { useAddPublicProsecutionOfficeCase } from "./api/hooks/useAddPublicProsecutionOfficeCase";
 import { useAddUnderAppealCase } from "./api/hooks/useAddUnderAppealCase";
+import { useAddActiveCase } from "./api/hooks/useAddActiveCase";
+import { useAddOtherCase } from "./api/hooks/useAddOtherCase";
 import { FeesForm } from "./components/FeesForm";
 import { InProsecution } from "./components/InProsecution";
 import { OpponentForm } from "./components/Opponent";
@@ -17,11 +19,15 @@ import { PublicProsecution } from "./components/PublicProsecution";
 import { SharedFormField } from "./components/SharedFormField";
 import { validationSchema } from "./components/ValidationSchema";
 import { initialValues } from "./hooks/initialValues";
+import { Active } from "./components/Active";
+import { Other } from "./components/Other";
 
 const FormCase = () => {
   const { mutateAsync: addUnderAppealCase, isPending: isPendingUnderAppealCase } = useAddUnderAppealCase()
   const { mutateAsync: addPublicProsecutionCase, isPending: isPendingPublicProsecutionCase } = useAddPublicProsecutionCase()
   const { mutateAsync: addPublicProsecutionOfficeCase, isPending: isPendingPublicProsecutionOfficeCase } = useAddPublicProsecutionOfficeCase()
+  const { mutateAsync: addActiveCase, isPending: isPendingActiveCase } = useAddActiveCase()
+  const { mutateAsync: addOtherCase, isPending: isPendingOtherCase } = useAddOtherCase()
 
   return (
     <Formik
@@ -34,6 +40,10 @@ const FormCase = () => {
           await addPublicProsecutionCase(values);
         } else if (values.case_situation === "AT_PROSECUTOR_OFFICE") {
           await addPublicProsecutionOfficeCase(values);
+        } else if (values.case_situation === "ACTIVE") {
+          await addActiveCase(values);
+        } else if (values.case_situation === "OTHER") {
+          await addOtherCase(values);
         }
       }}
     >
@@ -73,11 +83,13 @@ const FormCase = () => {
                 </div>
 
                 <div className={" grid grid-cols-1 md:grid-cols-2 gap-4"}>
-                  <SharedFormField />
+
+                  {values.case_situation === "UNDER_APPEAL" && <SharedFormField />}
                   {values.case_situation === "PUBLIC_PROSECUTION" && <PublicProsecution />}
                   {values.case_situation === "AT_PROSECUTOR_OFFICE" && values.case_status_id && <InProsecution />}
-                  {/* {values.case_situation === "ACTIVE" && <Active />}
-                  {values.case_situation === "OTHER" && <Other />} */}
+                  {values.case_situation === "ACTIVE" && <Active />}
+                  {values.case_situation === "OTHER" && <Other />}
+
                   <InputForm label="تاريخ ورود القضية داخل المكتب" name="case_entry_date" type="date" />
                 </div>
 
@@ -94,7 +106,13 @@ const FormCase = () => {
                 </div>
                 <FeesForm />
                 <SubmitButton
-                  isPending={isPendingUnderAppealCase || isPendingPublicProsecutionCase || isPendingPublicProsecutionOfficeCase}
+                  isPending={
+                    isPendingUnderAppealCase ||
+                    isPendingPublicProsecutionCase ||
+                    isPendingPublicProsecutionOfficeCase ||
+                    isPendingActiveCase ||
+                    isPendingOtherCase
+                  }
                   loadingText="جاري الإضافة..."
                   className="mt-6"
                 >

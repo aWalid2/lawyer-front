@@ -2,6 +2,7 @@ import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { useFormikContext } from "formik";
 import type { FormValues } from "../utils/mapToApiPayload";
+import { SharedFormField } from "./SharedFormField";
 
 
 export function InProsecution() {
@@ -9,6 +10,8 @@ export function InProsecution() {
 
   return (
     <>
+
+      <SharedFormField />
       <SelectForm
         label="النيابة"
         name="case_police_station"

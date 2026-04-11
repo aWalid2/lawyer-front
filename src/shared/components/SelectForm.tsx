@@ -36,6 +36,7 @@ type SelectFormProps = {
     disabled?: boolean;
     className?: string;
     showSearch?: boolean;
+    onSearchChange?: (value: string) => void;
     onChange?: (value: string | number) => void;
 };
 
@@ -47,6 +48,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
     disabled,
     className,
     showSearch = false,
+    onSearchChange,
     onChange,
 }) => {
     const [field, meta] = useField(name);
@@ -88,7 +90,11 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                     </PopoverTrigger>
                     <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
                         <Command className="w-full" dir="rtl">
-                            <CommandInput placeholder="بحث..." className="h-10" />
+                            <CommandInput
+                                placeholder="بحث..."
+                                className="h-10"
+                                onValueChange={onSearchChange}
+                            />
                             <CommandList>
                                 <CommandEmpty>لا توجد نتائج</CommandEmpty>
                                 <CommandGroup>
