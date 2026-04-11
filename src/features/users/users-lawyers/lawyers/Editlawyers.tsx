@@ -14,6 +14,8 @@ import * as Yup from "yup";
 import { useUpdateLawyer } from "../api/hooks/useLawyersUpdate";
 import { useAddLawyer } from "../api/hooks/useLawyers";
 import type { Lawyer } from "../lawyers/types";
+import { COUNTRY_OPTIONS } from "@/shared/constants/countryOptions";
+import parsePhoneNumberFromString from "libphonenumber-js";
 
 interface EditLawyersProps {
     lawyer?: Lawyer;
@@ -30,11 +32,12 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
 }) => {
     const isEditMode = !!lawyer;
     const [showPassword, setShowPassword] = useState(false);
-
+        const phoneData = lawyer?.user?.phone ? parsePhoneNumberFromString(lawyer.user.phone) : null;
+    
     const initialValues = {
         first_name: lawyer?.user?.first_name || "",
-        phone: lawyer?.user?.phone?.replace(/^\+?\d{1,3}/, "") || "",
-        countryCode: lawyer?.user?.phone?.match(/^\+\d{1,3}/)?.[0] || "+966",
+        phone: phoneData ? phoneData.nationalNumber : (lawyer?.user?.phone || ""),
+        countryCode: phoneData ? `+${phoneData.countryCallingCode}` : "+966",
         email: lawyer?.user?.email || "",
         specialization: lawyer?.specialization || "",
         license_number: lawyer?.license_number || "",
@@ -47,8 +50,22 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
 
     const validationSchema = Yup.object().shape({
         first_name: Yup.string().required("اسم المحامي مطلوب"),
-        phone: Yup.string().required("رقم الهاتف مطلوب"),
-        countryCode: Yup.string().required("كود الدولة مطلوب"),
+        phone: Yup.string()
+            .required("رقم الهاتف مطلوب")
+            .test("is-valid-phone", "رقم الهاتف غير صحيح", function (value) {
+                const { countryCode } = this.parent;
+                if (!value) return false;
+
+                const country = COUNTRY_OPTIONS.find(opt => opt.value === countryCode);
+                const iso = (country as any)?.iso;
+
+                try {
+                    const phoneNumber = parsePhoneNumberFromString(value, iso);
+                    return phoneNumber?.isValid() || false;
+                } catch {
+                    return false;
+                }
+            }),
         email: Yup.string().email("البريد الإلكتروني غير صالح").required("البريد الإلكتروني مطلوب"),
         specialization: Yup.string().required("التخصص مطلوب"),
         license_number: Yup.string(),
@@ -65,9 +82,6 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
     const isLoading = isEditMode ? isUpdating : isAdding;
 
     const handleSubmit = async (values: typeof initialValues) => {
-        let cleanPhone = values.phone.replace(/\s/g, '').replace(/-/g, '');
-        cleanPhone = cleanPhone.replace(/^\+\d{1,3}/, '');
-        const fullPhone = `${values.countryCode}${cleanPhone}`;
 
         if (isEditMode && lawyer?.user_id) {
             await updateLawyer({
@@ -75,7 +89,7 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
                 data: {
                     first_name: values.first_name,
                     email: values.email,
-                    phone: fullPhone,
+                    phone: values.phone ? `${values.countryCode}${values.phone}` : undefined,
                     nationality: values.nationality,
                     password: values.password || undefined,
                     country: values.country,
@@ -88,7 +102,7 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
         } else {
             await addLawyer({
                 ...values,
-                phone: fullPhone,
+                phone: values.phone ? `${values.countryCode}${values.phone}` : undefined,
             });
         }
         onLawyerUpdated?.();
@@ -140,7 +154,7 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="grid grid-cols-12 gap-2">
-                                    <div className="col-span-8">
+                                    <div className="col-span-7">
                                         <InputForm
                                             name="phone"
                                             label="رقم الهاتف"
@@ -148,21 +162,12 @@ export const Editlawyers: React.FC<EditLawyersProps> = ({
                                             placeholder="أدخل رقم الهاتف"
                                         />
                                     </div>
-                                    <div className="col-span-4">
+                                    <div className="col-span-5">
                                         <SelectForm
                                             name="countryCode"
                                             label="كود الدولة"
-                                            options={[
-                                                { value: "+966", label: "🇸🇦 +966" },
-                                                { value: "+971", label: "🇦🇪 +971" },
-                                                { value: "+974", label: "🇶🇦 +974" },
-                                                { value: "+965", label: "🇰🇼 +965" },
-                                                { value: "+973", label: "🇧🇭 +973" },
-                                                { value: "+968", label: "🇴🇲 +968" },
-                                                { value: "+20", label: "🇪🇬 +20" },
-                                                { value: "+962", label: "🇯🇴 +962" },
-                                                { value: "+961", label: "🇱🇧 +961" },
-                                            ]}
+                                            options={COUNTRY_OPTIONS}
+                                            showSearch ={true}
                                         />
                                     </div>
                                 </div>

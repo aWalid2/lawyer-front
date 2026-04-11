@@ -4,6 +4,9 @@ export interface Lawyer {
     specialization: string;
     experience_years: number | null;
     is_verified: boolean;
+    nationality: string | null;
+    country: string | null;
+    address: string | null;
     user: {
         id: number;
         first_name: string;
