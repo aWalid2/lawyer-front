@@ -58,7 +58,6 @@ const FormDetails = () => {
   };
 
   const handleSubmit = (values: FormValues) => {
-    // معالجة رقم الهاتف بشكل صحيح
     let formattedPhone = values.phone || "";
     let countryCode = values.countryCode || "+966";
     

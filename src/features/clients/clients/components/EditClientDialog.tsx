@@ -12,13 +12,11 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { SelectForm } from "@/shared/components/SelectForm";
-import { useUpdateClient } from "../../api/hooks/useUpdateClient";
-
-
 import * as Yup from "yup";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { COUNTRY_OPTIONS } from "@/shared/constants/countryOptions";
 import { SubmitButton } from "@/shared/components/SubmitButton";
+import { useUpdateClient } from "@/features/users/users-clients/api/hooks/useUpdateClients";
 
 interface EditClientDialogProps {
     client: any

@@ -14,6 +14,8 @@ import type { Employee } from "./types";
 import * as Yup from "yup";
 import { useAddEmployee } from "./api/hooks/useAddEmployee";
 import { useUpdateEmployee } from "./api/hooks/useUpdateEmployee";
+import { COUNTRY_OPTIONS } from "@/shared/constants/countryOptions";
+import parsePhoneNumberFromString from "libphonenumber-js";
 
 interface EditemployeesProps {
     employee?: Employee;
@@ -30,11 +32,12 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
 }) => {
     const isEditMode = !!employee;
     const [showPassword, setShowPassword] = useState(false);
-
+    const phoneData = employee?.user?.phone ? parsePhoneNumberFromString(employee.user.phone) : null;
+    
     const initialValues = {
         first_name: employee?.user?.first_name || "",
-        phone: employee?.user?.phone?.replace(/^\+\d{1,3}/, "") || "",
-        countryCode: employee?.user?.phone?.match(/^\+\d{1,3}/)?.[0] || "+966",
+        phone: phoneData ? phoneData.nationalNumber : (employee?.user?.phone || ""),
+        countryCode: phoneData ? `+${phoneData.countryCallingCode}` : "+966",
         email: employee?.user?.email || "",
         password: "",
         position: employee?.position || "",
@@ -43,7 +46,22 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
 
     const validationSchema = Yup.object().shape({
         first_name: Yup.string().required("اسم الموظف مطلوب"),
-        phone: Yup.string().required("رقم الهاتف مطلوب"),
+        phone: Yup.string()
+            .required("رقم الهاتف مطلوب")
+            .test("is-valid-phone", "رقم الهاتف غير صحيح", function (value) {
+                const { countryCode } = this.parent;
+                if (!value) return false;
+
+                const country = COUNTRY_OPTIONS.find(opt => opt.value === countryCode);
+                const iso = (country as any)?.iso;
+
+                try {
+                    const phoneNumber = parsePhoneNumberFromString(value, iso);
+                    return phoneNumber?.isValid() || false;
+                } catch {
+                    return false;
+                }
+            }),
         countryCode: Yup.string().required("كود الدولة مطلوب"),
         email: Yup.string().email("البريد الإلكتروني غير صالح").required("البريد الإلكتروني مطلوب"),
         password: !isEditMode
@@ -57,20 +75,15 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
     const { mutate: updateEmployee, isPending: isUpdating } = useUpdateEmployee();
     const isLoading = isEditMode ? isUpdating : isAdding;
 
-    const handleSubmit = (values: typeof initialValues) => {
-        let cleanPhone = values.phone.replace(/\s/g, '').replace(/-/g, '');
-        cleanPhone = cleanPhone.replace(/^\+\d{1,3}/, '');
+    const handleSubmit = (values: typeof initialValues, { setSubmitting }: any) => {
         const submitData: any = {
             first_name: values.first_name,
-            phone: `${values.countryCode}${cleanPhone}`,
+            phone: `${values.countryCode}${values.phone}`,
             email: values.email,
             role: "employee",
             position: values.position,
             notes: values.notes
-
         };
-
-        // لو في حالة الإضافة أو لو المستخدم أدخل كلمة مرور جديدة
         if (!isEditMode) {
             submitData.password = values.password;
         } else if (values.password) {
@@ -86,6 +99,10 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
                 onSuccess: () => {
                     onEmployeeUpdated?.();
                     onOpenChange?.(false);
+                    setSubmitting(false);
+                },
+                onError: () => {
+                    setSubmitting(false);
                 }
             });
         } else {
@@ -94,6 +111,10 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
                 onSuccess: () => {
                     onEmployeeUpdated?.();
                     onOpenChange?.(false);
+                    setSubmitting(false);
+                },
+                onError: () => {
+                    setSubmitting(false);
                 }
             });
         }
@@ -124,7 +145,7 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
                     enableReinitialize
                     onSubmit={handleSubmit}
                 >
-                    {() => (
+                    {({ isSubmitting }) => (
                         <Form className="space-y-6 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
                             <InputForm
                                 name="first_name"
@@ -146,17 +167,7 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
                                     <SelectForm
                                         name="countryCode"
                                         label="كود الدولة"
-                                        options={[
-                                            { value: "+966", label: "🇸🇦 +966" },
-                                            { value: "+971", label: "🇦🇪 +971" },
-                                            { value: "+974", label: "🇶🇦 +974" },
-                                            { value: "+965", label: "🇰🇼 +965" },
-                                            { value: "+973", label: "🇧🇭 +973" },
-                                            { value: "+968", label: "🇴🇲 +968" },
-                                            { value: "+20", label: "🇪🇬 +20" },
-                                            { value: "+962", label: "🇯🇴 +962" },
-                                            { value: "+961", label: "🇱🇧 +961" },
-                                        ]}
+                                        options={COUNTRY_OPTIONS}
                                     />
                                 </div>
                             </div>
@@ -187,7 +198,7 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
                                     type={showPassword ? "text" : "password"}
                                     name="password"
                                     placeholder="********"
-                                    label={isEditMode ? "كلمة المرور " : "كلمة المرور"}
+                                    label={isEditMode ? "كلمة المرور" : "كلمة المرور"}
                                 />
                                 <button
                                     type="button"
@@ -200,10 +211,10 @@ export const Editemployees: React.FC<EditemployeesProps> = ({
 
                             <button
                                 type="submit"
-                                disabled={isLoading}
+                                disabled={isLoading || isSubmitting}
                                 className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {isLoading ? (
+                                {(isLoading || isSubmitting) ? (
                                     <span className="flex items-center justify-center gap-2">
                                         <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
                                         {isEditMode ? "جاري الحفظ..." : "جاري الإضافة..."}
