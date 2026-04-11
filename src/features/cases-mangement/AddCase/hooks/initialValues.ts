@@ -22,6 +22,7 @@ export const initialValues: FormValues = {
   phone: "",
 
   civil_id: "",
+  ssn: "",
   nationality: "",
   country: "",
   address: "",
@@ -55,4 +56,13 @@ contract_based: undefined,
 
   notes: "",
   has_opponent: false,
+
+  // Active Fields
+  case_sequence: "",
+  Complaint_Number: "",
+  court_id: "",
+  Current_court_degree: "",
+
+  // Other Fields
+  Case_Arrival_Date_at_the_Authority: "",
 };

@@ -10,7 +10,7 @@ export type BasePayload = {
   client_id: number;
   case_type_id: number;
   notes: string;
-  case_entry_date: string;
+  case_entry_date?: string;
 };
 
 export type CaseFees = {
@@ -39,6 +39,7 @@ export type ProsecutionPayload = BasePayload & {
   case_situation:
     | "PUBLIC_PROSECUTION"
     | "AT_PROSECUTOR_OFFICE";
+    
 
   case_police_station?: string;
   case_number_at_police_station?: number;
@@ -60,7 +61,41 @@ export type ProsecutionPayload = BasePayload & {
   }[];
 };
 
+// ================= ACTIVE =================
+export type ActivePayload = BasePayload & {
+  case_situation: "ACTIVE";
+  case_sequence: number;
+  Complaint_Number: number;
+  court_id: number;
+  Current_court_degree: string;
+  case_fees: CaseFees;
+  opponents: {
+    name: string;
+    ssn: string;
+    phone_number: string;
+    address: string;
+  }[];
+};
+
+// ================= OTHER =================
+export type OtherPayload = BasePayload & {
+  case_situation: "OTHER";
+  Complaint_Number: number;
+  detective_name: string;
+  investigation_name: string;
+  Case_Arrival_Date_at_the_Authority?: string;
+  case_fees: CaseFees;
+  opponents: {
+    name: string;
+    ssn: string;
+    phone_number: string;
+    address: string;
+  }[];
+};
+
 // ================= UNION =================
 export type CasePayload =
   | UnderAppealPayload
-  | ProsecutionPayload;
+  | ProsecutionPayload
+  | ActivePayload
+  | OtherPayload;
