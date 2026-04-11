@@ -13,6 +13,8 @@ import { SelectForm } from "@/shared/components/SelectForm";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
 import { useAddClient } from "./api/hooks/useAddClient";
+import parsePhoneNumberFromString from "libphonenumber-js";
+import { COUNTRY_OPTIONS } from "@/shared/constants/countryOptions";
 
 const CLASSES = {
   fieldWithIcon:
@@ -56,38 +58,63 @@ const FormDetails = () => {
   };
 
   const handleSubmit = (values: FormValues) => {
-    console.log("=== Form Submitted ===");
-    console.log("Values:", values);
+    // معالجة رقم الهاتف بشكل صحيح
+    let formattedPhone = values.phone || "";
+    let countryCode = values.countryCode || "+966";
     
-    const cleanPhone = values.phone.replace(/\D/g, '');
+    if (values.phone) {
+      // البحث عن خيار الدولة للحصول على الـ iso
+      const countryOption = COUNTRY_OPTIONS.find(opt => opt.value === values.countryCode);
+      const iso = (countryOption as any)?.iso;
+      
+      if (iso) {
+        const phoneNumber = parsePhoneNumberFromString(values.phone, iso);
+        if (phoneNumber && phoneNumber.isValid()) {
+          formattedPhone = phoneNumber.format("E.164");
+        } else {
+          // محاولة بدون iso
+          const phoneNumberSimple = parsePhoneNumberFromString(values.phone);
+          if (phoneNumberSimple && phoneNumberSimple.isValid()) {
+            formattedPhone = phoneNumberSimple.format("E.164");
+          }
+        }
+      } else {
+        const phoneNumber = parsePhoneNumberFromString(values.phone);
+        if (phoneNumber && phoneNumber.isValid()) {
+          formattedPhone = phoneNumber.format("E.164");
+        }
+      }
+    }
     
     const dataToSend = {
-        first_name: values.first_name,
-        email: values.email,
-        nationality: values.nationality,
-        address: values.address,
-        ssn: values.ssn,
-        country: values.country,
-        phone: `${values.countryCode}${cleanPhone}`,
-        client_type: values.client_type,
-        notes: values.notes,
-        has_contract: values.has_contract,
-        contract_start_date: values.contract_start_date,
-        contract_value: values.contract_value,
-        contract_duration: values.contract_duration,
-        add_clients: values.add_clients,
-        password: values.password,
-        confirmation_password: values.confirmation_password,
-        contract_photo: values.contract_photo,
-        authorization_photo: values.authorization_photo,
+      first_name: values.first_name,
+      email: values.email,
+      nationality: values.nationality,
+      address: values.address,
+      ssn: values.ssn,
+      country: values.country,
+      phone: formattedPhone,
+      countryCode: countryCode,
+      notes: values.notes,
+      has_contract: values.has_contract,
+      contract_start_date: values.contract_start_date,
+      contract_value: values.contract_value,
+      contract_duration: values.contract_duration,
+      add_clients: values.add_clients,
+      password: values.password,
+      confirmation_password: values.confirmation_password,
+      contract_photo: values.contract_photo,
+      authorization_photo: values.authorization_photo,
+      client_type: values.client_type,
     };
     
-    console.log("Data to send:", dataToSend);
     mutate(dataToSend);
   };
 
   if (isPending) return <LoadingPage />;
   if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
+
+
 
   return (
     <Formik<FormValues>
@@ -141,17 +168,8 @@ const FormDetails = () => {
                         <SelectForm
                           name="countryCode"
                           label="كود الدولة"
-                          options={[
-                            { value: "+966", label: "🇸🇦 +966" },
-                            { value: "+971", label: "🇦🇪 +971" },
-                            { value: "+974", label: "🇶🇦 +974" },
-                            { value: "+965", label: "🇰🇼 +965" },
-                            { value: "+973", label: "🇧🇭 +973" },
-                            { value: "+968", label: "🇴🇲 +968" },
-                            { value: "+20", label: "🇪🇬 +20" },
-                            { value: "+962", label: "🇯🇴 +962" },
-                            { value: "+961", label: "🇱🇧 +961" },
-                          ]}
+                          options={COUNTRY_OPTIONS}
+                          showSearch={true}
                         />
                       </div>
                     </div>
