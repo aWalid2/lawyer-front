@@ -7,8 +7,6 @@ export const useFetchPoliceStations = (page?: number, limit?: number, search?: s
   const query = useQuery({
     queryKey: ["policeStations", page, limit, search],
     queryFn: () => fetchPoliceStations(page, limit, search),
-    staleTime: 1000 * 60 * 2,
-    retry: 2,
   });
 
   useEffect(() => {

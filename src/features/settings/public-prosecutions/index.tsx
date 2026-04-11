@@ -16,7 +16,7 @@ export const PublicProsecutionsFeature: React.FC = () => {
     const limit = 15;
 
     const { data: prosecutionsResponse, isPending, isError, refetch } = useFetchProsecutions(page, limit, searchTerm);
-    
+
     const prosecutions = prosecutionsResponse?.data || [];
     const totalPages = prosecutionsResponse?.meta?.total_pages ?? 1;
     const indexedData = useIndexedData(prosecutions || []);
@@ -43,11 +43,11 @@ export const PublicProsecutionsFeature: React.FC = () => {
         {
             header: "الإجراءات",
             accessor: (item: ProsecutionT) => (
-                <ProsecutionsAction 
-                    prosecution={item} 
+                <ProsecutionsAction
+                    prosecution={item}
                     onProsecutionUpdated={() => {
                         refetch();
-                    }} 
+                    }}
                 />
             ),
             headerClassName: "w-35",

@@ -1,22 +1,32 @@
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { SharedFormField } from "./SharedFormField";
+import { useFetchPoliceStations } from "@/shared/api/hooks/useGetStation";
 
+interface PoliceStation {
+  id: string;
+  name: string;
+}
+
+interface PoliceStationsResponse {
+  data: PoliceStation[];
+}
 
 export function PublicProsecution() {
+  const { data: policeStations } = useFetchPoliceStations() as { data: PoliceStationsResponse };
 
+  const policeStationsOptions = policeStations?.data?.map((policeStation: PoliceStation) => ({
+    label: policeStation.name,
+    value: policeStation.id,
+  })) || [];
   return (
     <>
       <SharedFormField />
       <SelectForm
+        showSearch={true}
         label="المخفر التابع له القضية"
         name="case_police_station"
-        options={[
-          { label: "مخفر الأزاريطة", value: "police1" },
-          { label: "مخفر سيدي جابر", value: "police2" },
-          { label: "مخفر محرم بك", value: "police3" },
-          { label: "مخفر كرموز", value: "police4" }
-        ]}
+        options={policeStationsOptions}
         placeholder="اختر المخفر"
       />
 

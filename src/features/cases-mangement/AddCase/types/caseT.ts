@@ -30,7 +30,6 @@ export type UnderAppealPayload = BasePayload & {
   case_fees: CaseFees;
   opponents: {
     name: string;
-    address: string;
   }[];
 };
 
@@ -57,7 +56,6 @@ export type ProsecutionPayload = BasePayload & {
     name: string;
     ssn: string;
     phone_number: string;
-    address: string;
   }[];
 };
 
@@ -73,7 +71,6 @@ export type ActivePayload = BasePayload & {
     name: string;
     ssn: string;
     phone_number: string;
-    address: string;
   }[];
 };
 
@@ -89,7 +86,7 @@ export type OtherPayload = BasePayload & {
     name: string;
     ssn: string;
     phone_number: string;
-    address: string;
+
   }[];
 };
 
