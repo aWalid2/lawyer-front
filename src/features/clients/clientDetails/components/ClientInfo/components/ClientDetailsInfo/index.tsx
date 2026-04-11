@@ -90,9 +90,9 @@ const ClientDetailsInfo: React.FC = () => {
 
 
       <div className="mt-6">
-        <h4>صورة التوكل</h4>
+        <h4>صورة التوكيل</h4>
         <div className="w-28 h-28 bg-gray-200 mt-4 rounded-main overflow-hidden">
-          <img src={client?.contract_photo} alt="" className="w-full h-full object-cover " />
+          <img src={client?.authorization_photo} alt="" className="w-full h-full object-cover " />
         </div>
       </div>
 

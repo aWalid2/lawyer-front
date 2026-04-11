@@ -62,6 +62,8 @@ const FormCase = () => {
                       { value: "UNDER_APPEAL", label: "تحت الرفع" },
                       { value: "PUBLIC_PROSECUTION", label: "الادعاء العام" },
                       { value: "AT_PROSECUTOR_OFFICE", label: "في النيابة" },
+                      { value: "ACTIVE", label: "متداولة" },
+                      { value: "OTHER", label: "أخرى" },
                     ]}
                     placeholder="اختر وضع القضية"
                     onChange={(value) => {
@@ -74,6 +76,8 @@ const FormCase = () => {
                   <SharedFormField />
                   {values.case_situation === "PUBLIC_PROSECUTION" && <PublicProsecution />}
                   {values.case_situation === "AT_PROSECUTOR_OFFICE" && values.case_status_id && <InProsecution />}
+                  {/* {values.case_situation === "ACTIVE" && <Active />}
+                  {values.case_situation === "OTHER" && <Other />} */}
                   <InputForm label="تاريخ ورود القضية داخل المكتب" name="case_entry_date" type="date" />
                 </div>
 
