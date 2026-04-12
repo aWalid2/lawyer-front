@@ -13,7 +13,7 @@ export const TableClients: React.FC = () => {
     const [page, setPage] = useState(1);
     const limit = 15;
     const { data: clientsData, isPending, isError, error } = useFetchClients(page, limit);
-    const indexedData = useIndexedData(clientsData?.data);
+    const indexedData = useIndexedData(clientsData?.data, page, limit);
     const totalPages = clientsData?.meta?.total_pages;
 
 
