@@ -40,9 +40,8 @@ export const HeaderPageConsultations: React.FC<HeaderPageConsultationsProps> = (
           onFilterChange={(v) => onFilterChange("status", v)}
           options={[
             { value: "all", label: "الحالة" },
-            { value: "approved", label: "مكتملة" },
-            { value: "rejected", label: "مرفوضة" },
-            { value: "under_study", label: "قيد المراجعة" },
+            { value: "completed", label: "مكتملة" },
+            { value: "pending", label: "قيد المراجعة" },
           ]}
           className="md:w-[130px]"
         />
