@@ -31,10 +31,10 @@ import {
 export const FormCaseDialog: React.FC = () => {
   const { id } = useParams();
   const { data: caseInfo } = useGetCaseInfo(id!) || {};
-  const { data: caseStatus } = useGetCaseStatus();
-  const { data: clients } = useFetchClients();
-  const { data: caseTypes } = useGetCaseType();
   const [open, setOpen] = React.useState(false);
+  const { data: caseStatus } = useGetCaseStatus(open);
+  const { data: clients } = useFetchClients(undefined, undefined, undefined, open);
+  const { data: caseTypes } = useGetCaseType(open);
   const { mutateAsync: updateCase, isPending } = useUpdateCase();
 
   const caseStatusOptions = caseStatus?.data?.map((status: any) => ({
@@ -105,7 +105,6 @@ export const FormCaseDialog: React.FC = () => {
                 case_type_id: values.case_type_id ? Number(values.case_type_id) : undefined,
                 case_status_id: values.case_status_id ? Number(values.case_status_id) : undefined,
               };
-              console.log("Saving case changes:", payload);
               await updateCase({ id: id!, data: payload as any });
               setOpen(false);
             } catch (error) {
