@@ -1,21 +1,18 @@
 import { useState, useMemo, useEffect } from "react";
 import { HeaderPageConsultations } from "./components/HeaderPageConsultations";
-import type { Consultation, ConsultationStatus } from "./types";
+import type { Consultation } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
 import { TableConsultationsActions } from "./components/TableConsultationsActions";
+import { useFetchConsultations } from "../api/hooks/useGetConsultations";
+import { Error } from "@/shared/components/Error";
+import LoadingPage from "@/shared/components/LoadingPage";
 
-const MOCK_CONSULTATIONS: Consultation[] = Array.from({ length: 45 }, (_, i) => ({
-  id: `${i + 1}`,
-  title: "نزاع عقاري",
-  clientName: "خالد العمودي",
-  lawyerName: "أ. محمد العشري",
-  consultationType: "أحوال شخصية",
-  contactMethod: "حضوري",
-  details: "تفاصيل الاستشارة هنا...",
-  status: (["approved", "rejected", "under_study"][i % 3]) as ConsultationStatus,
-  requestDate: "2025-09-30",
-}));
+// Status labels configuration - بس حالتين
+const statusLabels: Record<string, { text: string; className: string }> = {
+  pending: { text: "قيد الانتظار", className: "bg-yellow-100 text-yellow-800" },
+  completed: { text: "مكتملة", className: "bg-green-100 text-green-800" },
+};
 
 const ConsultationsFeature = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,23 +22,27 @@ const ConsultationsFeature = () => {
   });
   const itemsPerPage = 15;
 
+  const { data: consultationsData, isPending, isError, error } = useFetchConsultations();
+
   const handleFilterChange = (key: string, value: any) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
   const filteredData = useMemo(() => {
-    return MOCK_CONSULTATIONS.filter((item) => {
+    if (!consultationsData) return [];
+
+    return consultationsData.filter((item: Consultation) => {
       const searchStr = searchTerm.toLowerCase();
       const matchesSearch =
-        item.title.toLowerCase().includes(searchStr) ||
-        item.clientName.toLowerCase().includes(searchStr) ||
-        item.lawyerName.toLowerCase().includes(searchStr);
+        item.consultation_details?.toLowerCase().includes(searchStr) ||
+        item.client?.first_name?.toLowerCase().includes(searchStr) ||
+        `${item.client?.first_name} ${item.client?.last_name}`.toLowerCase().includes(searchStr);
 
       const matchesStatus = filters.status === "all" || item.status === filters.status;
 
       return matchesSearch && matchesStatus;
     });
-  }, [searchTerm, filters]);
+  }, [consultationsData, searchTerm, filters]);
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
@@ -54,44 +55,52 @@ const ConsultationsFeature = () => {
     setCurrentPage(1);
   }, [searchTerm, filters]);
 
-  const statusLabels: Record<ConsultationStatus, { text: string; className: string }> = {
-    approved: { text: "مكتملة", className: "bg-[#E6F9F0] text-[#00C566]" },
-    rejected: { text: "مرفوضة", className: "bg-[#FFF0F0] text-[#FF4D4D]" },
-    under_study: { text: "قيد المراجعة", className: "bg-[#FFF9E6] text-[#FFC107]" },
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("ar-EG", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
   };
 
   const columns: Column<Consultation>[] = [
     {
       header: "#",
-      accessor: (item) => filteredData.findIndex((d) => d.id === item.id) + 1,
+      accessor: (item) => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const indexInPage = paginatedData.findIndex((d: Consultation) => d.id === item.id);
+        return startIndex + indexInPage + 1;
+      },
       headerClassName: "w-15",
     },
     {
-      header: "عنوان الاستشارة",
-      accessor: "title",
+      header: "عنوان الاستشارات",
+      accessor: (item) => item.consultation_details || "-",
     },
     {
       header: "الموكل",
-      accessor: "clientName",
+      accessor: (item) => item.client?.first_name || "-",
     },
     {
       header: "اسم المستشار",
-      accessor: "lawyerName",
+      accessor: (item) => item.lawyer?.first_name || "-",
     },
+
     {
-      header: "الحالة",
+      header: "نوع الحاله",
       accessor: (item) => (
-        <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusLabels[item.status].className}`}>
-          {statusLabels[item.status].text}
+        <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusLabels[item.status]?.className || "bg-gray-100 text-gray-800"}`}>
+          {statusLabels[item.status]?.text || item.status}
         </span>
       ),
     },
     {
       header: "تاريخ الطلب",
-      accessor: "requestDate",
+      accessor: (item) => formatDate(item.request_date),
     },
     {
-      header: "الحالة", // Actually Actions column in the screenshot
+      header: "الإجراءات",
       accessor: (item) => (
         <TableConsultationsActions
           consultation={item}
@@ -101,6 +110,9 @@ const ConsultationsFeature = () => {
       ),
     },
   ];
+
+  if (isPending) { <LoadingPage />}
+  if (isError) {<Error message={error?.message || "حدث خطأ أثناء جلب البيانات"} />}
 
   return (
     <div className="w-full pt-6 space-y-6">

@@ -10,7 +10,7 @@ export const ConsultationDescriptionCard: React.FC<ConsultationDescriptionCardPr
     <CardLayout>
       <h3 className="text-lg font-bold text-secondary">تفاصيل الاستشارة</h3>
       <p className="text-paragraph leading-9 text-xl font-regular mt-4 opacity-75">
-        {description}
+        {description || "لا توجد تفاصيل"}
       </p>
     </CardLayout>
   );
