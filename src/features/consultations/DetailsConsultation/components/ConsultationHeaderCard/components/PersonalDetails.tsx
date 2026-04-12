@@ -5,14 +5,10 @@ interface PersonalDetailsProps {
 }
 
 export const PersonalDetails: React.FC<PersonalDetailsProps> = ({ consultation }) => {
-  // Get client name from client object
-  const clientName = consultation.client 
-    ? `${consultation.client.first_name} ${consultation.client.last_name || ''}`.trim()
-    : "غير محدد";
+
   
-  // Get lawyer name from lawyer object
   const lawyerName = consultation.lawyer 
-    ? `${consultation.lawyer.first_name} ${consultation.lawyer.last_name || ''}`.trim()
+    ? `${consultation.lawyer.first_name} `.trim()
     : "غير محدد";
 
   return (
