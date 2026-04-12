@@ -1,16 +1,15 @@
 export interface CaseFormValues {
-  autoNumber: string;
-  complaintNumber: string;
-  clientName: string;
-  caseTitle: string;
-  court: string;
-  litigationLevel: string;
-  status: string;
-  caseType: string;
-  clientRelation: string;
-  statusOnReceipt: string;
-  creationDate: string;
-  receiptDate: string;
+  case_sequence: string;
+  Complaint_Number: string;
+  client_id: string;
+  case_title: string;
+  Current_court_degree: string;
+  case_status_id: string;
+  case_type_id: string;
+  client_type: string;
+  case_situation: string;
+  created_at: string;
+  case_entry_date: string;
   notes: string;
 }
 

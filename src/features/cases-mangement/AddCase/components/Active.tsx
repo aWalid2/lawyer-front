@@ -4,6 +4,7 @@ import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { SharedFormField } from "./SharedFormField";
 import { useGetCourts } from "@/shared/api/hooks/useGetCourts";
+import { LITIGATION_LEVEL_OPTIONS } from "@/shared/constants/caseOptions";
 
 export function Active() {
   const [courtSearch, setCourtSearch] = useState("");
@@ -16,11 +17,7 @@ export function Active() {
     value: String(court.id)
   })) || [];
 
-  const degreeOptions = [
-    { label: "أول درجة", value: "أول درجة" },
-    { label: "استئناف", value: "استئناف" },
-    { label: "تميز", value: "تميز" },
-  ];
+
 
   return (
     <>
@@ -46,7 +43,7 @@ export function Active() {
       <SelectForm
         label="درجة التقاضي الحالية"
         name="Current_court_degree"
-        options={degreeOptions}
+        options={LITIGATION_LEVEL_OPTIONS}
         placeholder="اختر درجة التقاضي الحالية"
         showSearch={true}
       />

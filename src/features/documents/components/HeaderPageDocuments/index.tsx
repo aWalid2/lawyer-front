@@ -1,4 +1,4 @@
-// documents/components/HeaderPageDocuments.tsx
+
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { HeaderFilter } from "@/shared/components/HeaderFilter";
 import { AddDocumentDialog } from "../AddDocumentDialog";

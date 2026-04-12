@@ -9,7 +9,7 @@ export const useUpdateCase = () => {
         mutationFn: updateCase,
         retry: 1,
         onSuccess: (data: any) => {
-            queryClient.invalidateQueries({ queryKey: ["cases"] });
+            queryClient.invalidateQueries();
             toast.success(data.message || "تم تحديث القضية بنجاح");
         },
         onError: (error: any) => {

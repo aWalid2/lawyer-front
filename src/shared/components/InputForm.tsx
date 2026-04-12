@@ -45,7 +45,7 @@ export const InputForm: React.FC<InputFormProps> = ({
             <Button
               variant={"outline"}
               className={cn(
-                "w-full justify-between gap-2 items-center text-left font-normal h-[50px] border-[#E8E8E8] rounded-[10px] bg-[#FBFBFB] px-4",
+                "w-full justify-between gap-2 items-center text-left font-normal h-[50px] border-[#E8E8E8] rounded-[10px] bg-[#FBFBFB] px-4 hover:bg-white hover:text-primary hover:border-primary transition-all",
                 !field.value && "text-muted-foreground",
                 meta.touched && meta.error && "border-red-500",
                 readonly && "bg-gray-100",

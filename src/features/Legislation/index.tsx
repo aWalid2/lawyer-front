@@ -11,15 +11,15 @@ interface LegislationTableProps {
 
 interface LegislationRelatedT {
     id: string;
-    legislationNumber: string;      // رقم التشريع/الحكم
-    legislationType: string;        // النوع (قانون/لائحة/حكم)
-    legislationTitle: string;       // عنوان التشريع
-    issuingBody: string;            // جهة الإصدار
-    issueDate: string;              // تاريخ الإصدار
-    effectiveDate?: string;         // تاريخ النفاذ (اختياري)
-    courtLevel?: string;            // درجة المحكمة (للأحكام)
-    status: string;                 // الحالة (ساري/ملغي)
-    summary?: string;               // ملخص (اختياري)
+    legislationNumber: string;
+    legislationType: string;
+    legislationTitle: string;
+    issuingBody: string;
+    issueDate: string;
+    effectiveDate?: string;
+    courtLevel?: string;
+    status: string;
+    summary?: string;
 }
 
 const legislations: LegislationRelatedT[] = [
@@ -104,7 +104,7 @@ const legislations: LegislationRelatedT[] = [
     },
 ];
 
-// مكون عرض النوع مع لون مناسب
+
 const TypeCell: React.FC<{ type: string }> = ({ type }) => {
     const getTypeStyle = (type: string): string => {
         switch (type) {
@@ -128,7 +128,7 @@ const TypeCell: React.FC<{ type: string }> = ({ type }) => {
     );
 };
 
-// مكون عرض الحالة مع لون مناسب
+
 const StatusCell: React.FC<{ status: string }> = ({ status }) => {
     const getStatusStyle = (status: string): string => {
         switch (status) {
@@ -160,7 +160,6 @@ export const LegislationTable: React.FC<LegislationTableProps> = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
-    // فلترة التشريعات بناءً على البحث
     const filteredLegislations = useMemo(() => {
         if (!searchTerm) return legislationsData;
 
@@ -174,7 +173,6 @@ export const LegislationTable: React.FC<LegislationTableProps> = () => {
 
     const totalPages = Math.ceil(filteredLegislations.length / itemsPerPage);
 
-    // إعادة تعيين الصفحة الحالية إذا كانت أكبر من إجمالي الصفحات
     useEffect(() => {
         if (totalPages > 0 && currentPage > totalPages) {
             setCurrentPage(totalPages);
@@ -183,13 +181,10 @@ export const LegislationTable: React.FC<LegislationTableProps> = () => {
         }
     }, [totalPages, currentPage]);
 
-    // حساب التشريعات للصفحة الحالية
     const currentLegislations = useMemo(() => {
         const startIndex = (currentPage - 1) * itemsPerPage;
         return filteredLegislations.slice(startIndex, startIndex + itemsPerPage);
     }, [filteredLegislations, currentPage, itemsPerPage]);
-
-    // دالة مساعدة لحساب الرقم التسلسلي
     const getSerialNumber = (item: LegislationRelatedT): number => {
         const indexInFiltered = filteredLegislations.findIndex(c => c.id === item.id);
         return indexInFiltered + 1;
@@ -212,7 +207,6 @@ export const LegislationTable: React.FC<LegislationTableProps> = () => {
 
     const handleSaveLegislation = (values: any) => {
         if (editingLegislation) {
-            // تعديل تشريع موجود
             const updatedLegislations = legislationsData.map(item =>
                 item.id === editingLegislation.id
                     ? { ...item, ...values }
@@ -221,7 +215,6 @@ export const LegislationTable: React.FC<LegislationTableProps> = () => {
             setLegislationsData(updatedLegislations);
             console.log("تم تعديل التشريع:", { ...editingLegislation, ...values });
         } else {
-            // إضافة تشريع جديد
             const newLegislation = {
                 id: (legislationsData.length + 1).toString(),
                 ...values
@@ -316,14 +309,12 @@ export const LegislationTable: React.FC<LegislationTableProps> = () => {
 
     return (
         <div className="w-full">
-            {/* استخدام الكمبوننت الجديد */}
             <HeaderLegislations
                 searchTerm={searchTerm}
                 onSearch={setSearchTerm}
                 onAddClick={handleOpenModal}
             />
 
-            {/* الجدول */}
             {filteredLegislations.length > 0 ? (
                 <>
                     <DataTable
@@ -332,7 +323,6 @@ export const LegislationTable: React.FC<LegislationTableProps> = () => {
                         rowIdField="id"
                     />
 
-                    {/* Pagination */}
                     {totalPages > 1 && (
                         <div className="flex justify-center mt-4">
                             <Pagination
@@ -349,7 +339,6 @@ export const LegislationTable: React.FC<LegislationTableProps> = () => {
                 </div>
             )}
 
-            {/* مودال إضافة/تعديل تشريع */}
             {isModalOpen && (
                 <AddLegislationModal
                     onClose={handleCloseModal}

@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCaseType } from "../services/getCaseType";
+import { getCaseInfo } from "../services/getCaseInfo";
 
-export const useGetCaseType = (enabled = true) => {
+export const useGetCaseInfo = (caseId: string) => {
     return useQuery({
-        queryKey: ["caseType"],
-        queryFn: () => getCaseType(),
+        queryKey: ["caseInfo", caseId],
+        queryFn: () => getCaseInfo(caseId),
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 10,
         retry: 1,
-        enabled,
         select: (data) => data
     });
 };

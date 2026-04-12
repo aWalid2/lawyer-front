@@ -13,65 +13,62 @@ import { EditIcon } from "@/shared/icons/Edit";
 import { InputForm } from "../../../../../shared/components/InputForm";
 import { SelectForm } from "../../../../../shared/components/SelectForm";
 import type { CaseFormValues } from "./components/typesCaseInfo";
+import { useGetCaseInfo } from "../../api/hooks/useGetCaseInfo";
+import { useParams } from "react-router-dom";
+import { useGetCaseStatus } from "@/features/cases-mangement/api/hooks/useGetCaseStatus";
+import { useFetchClients } from "@/shared/api/hooks/useGetClients";
+import { useGetCaseType } from "@/features/cases-mangement/api/hooks/useGetCaseType";
+import { useUpdateCase } from "@/features/cases-mangement/MainCases/api/hooks/useUpdateCase";
+import { SubmitButton } from "@/shared/components/SubmitButton";
+import { TextAreaForm } from "@/shared/components/TextAreaForm";
+
+import {
+  CASE_SITUATION_OPTIONS,
+  CASE_TITLE_OPTIONS,
+  LITIGATION_LEVEL_OPTIONS,
+} from "@/shared/constants/caseOptions";
 
 export const FormCaseDialog: React.FC = () => {
+  const { id } = useParams();
+  const { data: caseInfo } = useGetCaseInfo(id!) || {};
+  const [open, setOpen] = React.useState(false);
+  const { data: caseStatus } = useGetCaseStatus(open);
+  const { data: clients } = useFetchClients(undefined, undefined, undefined, open);
+  const { data: caseTypes } = useGetCaseType(open);
+  const { mutateAsync: updateCase, isPending } = useUpdateCase();
+
+  const caseStatusOptions = caseStatus?.data?.map((status: any) => ({
+    label: status.name,
+    value: String(status.id),
+  })) || [];
+
+  const clientNameOptions = clients?.data?.map((client: any) => ({
+    label: client.name,
+    value: String(client.user_id),
+  })) || [];
+
+  const caseTypeOptions = caseTypes?.data?.map((type: any) => ({
+    label: type.name,
+    value: String(type.id),
+  })) || [];
+
   const initialValues: CaseFormValues = {
-    autoNumber: "7363",
-    complaintNumber: "543257",
-    clientName: "خليل محمد",
-    caseTitle: "مدعي",
-    court: "محكمة ابتدائية",
-    status: "جديد",
-    litigationLevel: "أول درجة",
-    caseType: "مدني",
-    clientRelation: "مدعي عليه",
-    statusOnReceipt: "مستلم",
-    creationDate: "2026-01-20",
-    receiptDate: "2026-01-20",
-    notes: "-",
+    case_sequence: caseInfo?.case_sequence || "",
+    Complaint_Number: caseInfo?.Complaint_Number || "",
+    client_id: caseInfo?.client?.id || "",
+    case_title: caseInfo?.case_title || "",
+    case_status_id: caseInfo?.caseStatus?.id || "",
+    Current_court_degree: caseInfo?.Current_court_degree || "",
+    case_type_id: caseInfo?.case_type?.id || "",
+    client_type: caseInfo?.client_type || "",
+    case_situation: caseInfo?.case_situation || "",
+    created_at: caseInfo?.created_at || "",
+    case_entry_date: caseInfo?.case_entry_date || "",
+    notes: caseInfo?.notes || "",
   };
 
-  const clientNameOptions = [
-    { label: "خليل محمد", value: "خليل محمد" },
-    { label: "أحمد علي", value: "أحمد علي" },
-    { label: "سارة محمود", value: "سارة محمود" },
-  ];
-
-  const caseTitleOptions = [
-    { label: "مدعي", value: "مدعي" },
-    { label: "مدعي عليه", value: "مدعي عليه" },
-    { label: "مستأنف", value: "مستأنف" },
-    { label: "مستأنف ضده", value: "مستأنف ضده" },
-  ];
-
-  const courtOptions = [
-    { label: "محكمة ابتدائية", value: "محكمة ابتدائية" },
-    { label: "محكمة استئناف", value: "محكمة استئناف" },
-    { label: "محكمة النقض", value: "محكمة النقض" },
-    { label: "محكمة الأسرة", value: "محكمة الأسرة" },
-  ];
-
-  const litigationLevelOptions = [
-    { label: "أول درجة", value: "أول درجة" },
-    { label: "استئناف", value: "استئناف" },
-    { label: "نقض", value: "نقض" },
-  ];
-
-  const statusOptions = [
-    { label: "جديد", value: "جديد" },
-    { label: "قيد المراجعة", value: "قيد المراجعة" },
-    { label: "مستلم", value: "مستلم" },
-  ];
-
-  const caseTypeOptions = [
-    { label: "مدني", value: "مدني" },
-    { label: "جنائي", value: "جنائي" },
-    { label: "تجاري", value: "تجاري" },
-    { label: "عمالي", value: "عمالي" },
-  ];
-
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <button
           type="button"
@@ -82,12 +79,12 @@ export const FormCaseDialog: React.FC = () => {
         </button>
       </DialogTrigger>
       <DialogContent
-        className="sm:max-w-[772px] max-h-[90vh] overflow-y-auto sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none custom-scrollbar"
+        className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
         dir="rtl"
         showCloseButton={false}
       >
         <DialogClose asChild>
-          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all">
+          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all">
             <XIcon size={23} className="text-gray-500 " />
           </button>
         </DialogClose>
@@ -99,85 +96,91 @@ export const FormCaseDialog: React.FC = () => {
 
         <Formik
           initialValues={initialValues}
-          onSubmit={(values) => {
-            console.log("Adding contract:", values);
+          enableReinitialize={true}
+          onSubmit={async (values, { setSubmitting }) => {
+            try {
+              const payload = {
+                ...values,
+                client_id: values.client_id ? Number(values.client_id) : undefined,
+                case_type_id: values.case_type_id ? Number(values.case_type_id) : undefined,
+                case_status_id: values.case_status_id ? Number(values.case_status_id) : undefined,
+              };
+              await updateCase({ id: id!, data: payload as any });
+              setOpen(false);
+            } catch (error) {
+              console.error(error);
+            } finally {
+              setSubmitting(false);
+            }
           }}
         >
           {() => (
-            <Form className="space-y-4">
-              <div
-                className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4"
-
-              >
-                <InputForm name="autoNumber" label="كود القضية" type="text" />
+            <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                <InputForm name="case_sequence" label="كود القضية" type="text" />
                 <InputForm
-                  name="complaintNumber"
+                  name="Complaint_Number"
                   label="الرقم الآلي للقضية"
                   type="text"
                 />
 
                 <SelectForm
-                  name="clientName"
+                  name="client_id"
                   label="اسم الموكل"
                   options={clientNameOptions}
                 />
                 <SelectForm
-                  name="caseTitle"
+                  name="case_title"
                   label="صفة الموكل"
-                  options={caseTitleOptions}
+                  options={CASE_TITLE_OPTIONS}
                 />
 
                 <SelectForm
-                  name="court"
+                  name="case_type_id"
                   label="نوع القضية"
-                  options={courtOptions}
-                />
-                <SelectForm
-                  name="litigationLevel"
-                  label="حالة القضية"
-                  options={litigationLevelOptions}
-                />
-
-                <SelectForm
-                  name="status"
-                  label="وضع القضية عند الاستلام"
-                  options={statusOptions}
-                />
-                <SelectForm
-                  name="caseType"
-                  label="درجة التقاضي"
                   options={caseTypeOptions}
+                />
+                <SelectForm
+                  name="case_status_id"
+                  label="حالة القضية"
+                  options={caseStatusOptions}
+                />
+                <SelectForm
+                  name="case_situation"
+                  label="وضع القضية عند الاستلام"
+                  options={CASE_SITUATION_OPTIONS}
+                />
+                <SelectForm
+                  name="Current_court_degree"
+                  label="درجة التقاضي"
+                  options={LITIGATION_LEVEL_OPTIONS}
                 />
 
                 <InputForm
-                  dir="ltr"
-                  name="creationDate"
+                  name="created_at"
                   label="تاريخ إنشاء القضية"
                   type="date"
                 />
+
                 <InputForm
-                  dir="ltr"
-                  name="receiptDate"
+                  name="case_entry_date"
                   label="تاريخ ورود القضية في المكتب"
                   type="date"
                 />
 
-                <div className="md:col-span-2 mt-2 flex flex-col w-full">
-                  <label className="block mb-2 text-sm font-medium text-secondary text-right pr-2">
-                    ملاحظات
-                  </label>
-                  <textarea
-                    name="notes"
-                    className="w-full border border-[#E8E8E8] rounded-xl p-4 bg-[#FBFBFB] min-h-[50px] text-secondary text-sm text-right pr-6 disabled:opacity-70"
-                  />
-                </div>
+                <TextAreaForm
+                  className="md:col-span-2"
+                  name="notes"
+                  label="ملاحظات"
+                />
               </div>
-              <button
-                type="submit"
-                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
+              <SubmitButton
+                isPending={isPending}
+                loadingText="جاري التعديل..."
+                className="mt-6"
               >
                 حفظ التغييرات
-              </button>
+              </SubmitButton>
             </Form>
           )}
         </Formik>

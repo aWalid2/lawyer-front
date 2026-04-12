@@ -21,16 +21,15 @@ export const DocumentsFeature: React.FC = () => {
 
     const documents = documentsResponse?.data || documentsResponse || [];
 
-    // عمل Map للقضايا باستخدام case_title
+
     const casesMap = useMemo(() => {
         if (!cases?.data) return new Map();
         return new Map(cases.data.map((caseItem: any) => [
             String(caseItem.id || caseItem.case_id),
-            caseItem.case_title // استخدام case_title
+            caseItem.case_title
         ]));
     }, [cases]);
 
-    // دالة لجلب اسم القضية
     const getCaseTitle = (caseId: string | number): string => {
         if (!caseId) return "-";
         const key = String(caseId);
@@ -97,7 +96,7 @@ export const DocumentsFeature: React.FC = () => {
             header: "اسم القضية / نوع المستند",
             accessor: (item) => {
                 if (item.document_type === "CASE_RELATED") {
-                    // تأكد من اسم الحقل الصحيح (caseId أو case_id)
+
                     const caseIdValue = (item as any).caseId || (item as any).case_id;
                     return getCaseTitle(caseIdValue);
                 } else {

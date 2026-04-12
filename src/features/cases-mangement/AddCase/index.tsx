@@ -21,6 +21,7 @@ import { validationSchema } from "./components/ValidationSchema";
 import { initialValues } from "./hooks/initialValues";
 import { Active } from "./components/Active";
 import { Other } from "./components/Other";
+import { CASE_SITUATION_OPTIONS } from "@/shared/constants/caseOptions";
 
 const FormCase = () => {
   const { mutateAsync: addUnderAppealCase, isPending: isPendingUnderAppealCase } = useAddUnderAppealCase()
@@ -68,13 +69,7 @@ const FormCase = () => {
                     label="وضع القضية عند الاستلام"
                     name="case_situation"
 
-                    options={[
-                      { value: "UNDER_APPEAL", label: "تحت الرفع" },
-                      { value: "PUBLIC_PROSECUTION", label: "الادعاء العام" },
-                      { value: "AT_PROSECUTOR_OFFICE", label: "في النيابة" },
-                      { value: "ACTIVE", label: "متداولة" },
-                      { value: "OTHER", label: "أخرى" },
-                    ]}
+                    options={CASE_SITUATION_OPTIONS}
                     placeholder="اختر وضع القضية"
                     onChange={(value) => {
                       setFieldValue("case_situation", value);
