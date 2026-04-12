@@ -259,7 +259,6 @@ export const LegislationDetails: React.FC = () => {
                         </div>
                     )}
 
-                    {/* درجة المحكمة (للأحكام) */}
                     {legislation.courtLevel && (
                         <div className="bg-gray-50 p-4 rounded-lg">
                             <div className="flex items-center gap-2 text-gray-500 mb-2">

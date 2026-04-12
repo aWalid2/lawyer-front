@@ -5,6 +5,7 @@ import { SelectForm } from "@/shared/components/SelectForm";
 import { useFetchClients } from "@/shared/api/hooks/useGetClients";
 import { useGetCaseStatus } from "../../MainCases/api/hooks/useGetCaseStatus";
 import { useGetCaseType } from "../../MainCases/api/hooks/useGetCaseType";
+import { CASE_TITLE_OPTIONS } from "@/shared/constants/caseOptions";
 
 export function SharedFormField() {
   const [clientSearch, setClientSearch] = useState("");
@@ -53,10 +54,7 @@ export function SharedFormField() {
       <SelectForm
         label="صفة الموكل"
         name="client_type"
-        options={[
-          { label: "مدعي", value: "plaintiff" },
-          { label: "مدعى عليه", value: "defendant" }
-        ]}
+        options={CASE_TITLE_OPTIONS}
         placeholder="اختر صفة الموكل"
       />
 

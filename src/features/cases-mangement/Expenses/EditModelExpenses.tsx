@@ -93,7 +93,7 @@ export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
                                 />
                             </div>
 
-                            {/* صف مكون من عمودين - السطر الثاني */}
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="caseType"
@@ -109,7 +109,7 @@ export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
                                 />
                             </div>
 
-                            {/* صف مكون من عمودين - السطر الثالث */}
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="currentDegree"

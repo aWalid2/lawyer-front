@@ -18,6 +18,7 @@ import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { useGetCaseType } from "../api/hooks/useGetCaseType";
 import { useGetCaseStatus } from "../api/hooks/useGetCaseStatus";
+import { CASE_SITUATION_OPTIONS, CASE_TITLE_OPTIONS } from "@/shared/constants/caseOptions";
 
 interface EditCaseDialogProps {
   caseItem: Case;
@@ -127,10 +128,7 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
 
                 <SelectForm name="client_type"
                   label="صفة المدعي"
-                  options={[
-                    { value: "plaintiff", label: "مدعي" },
-                    { value: "defendant", label: "مدعى عليه" },
-                  ]}
+                  options={CASE_TITLE_OPTIONS}
                 />
 
                 <SelectForm name="case_type_id"
@@ -143,13 +141,7 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
                 />
                 <SelectForm name="case_situation"
                   label="وضع القضية عند الاستلام"
-                  options={[
-                    { value: "AT_PROSECUTOR_OFFICE", label: "في النيابة" },
-                    { value: "PUBLIC_PROSECUTION", label: "الادعاء العام" },
-                    { value: "UNDER_APPEAL", label: "تحت الرفع " },
-                    { value: "ACTIVE", label: "نشط" },
-                    { value: "OTHER", label: "أخرى" },
-                  ]}
+                  options={CASE_SITUATION_OPTIONS}
                 />
                 <SelectForm name="case_status_at_receipt"
                   label="درجة التقاضي"

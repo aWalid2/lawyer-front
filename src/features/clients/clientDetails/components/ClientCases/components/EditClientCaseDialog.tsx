@@ -17,6 +17,7 @@ import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { useGetCaseType } from "../../../api/hooks/useGetCaseType";
 import { useGetCaseStatus } from "../../../api/hooks/useGetCaseStatus";
+import { CASE_TITLE_OPTIONS } from "@/shared/constants/caseOptions";
 
 interface EditCaseDialogProps {
   caseItem: any;
@@ -126,10 +127,7 @@ export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
 
                 <SelectForm name="client_type"
                   label="صفة المدعي"
-                  options={[
-                    { value: "plaintiff", label: "مدعي" },
-                    { value: "defendant", label: "مدعى عليه" },
-                  ]}
+                  options={CASE_TITLE_OPTIONS}
                 />
 
                 <SelectForm name="case_type_id"
