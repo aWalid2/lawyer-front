@@ -72,7 +72,7 @@ const ConsultationsFeature = () => {
         const indexInPage = paginatedData.findIndex((d: Consultation) => d.id === item.id);
         return startIndex + indexInPage + 1;
       },
-      headerClassName: "w-15",
+      headerClassName: "w-14",
     },
     {
       header: "عنوان الاستشارات",
