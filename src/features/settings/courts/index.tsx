@@ -10,7 +10,7 @@ import type { CourtT } from "./types/courtTypes";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
-import { useGetCourts } from "./api/hooks/useGetCourts";
+import { useGetCourts } from "@/shared/api/hooks/useGetCourts";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 import { PaginationApi } from "@/shared/components/PaginationApi";
 

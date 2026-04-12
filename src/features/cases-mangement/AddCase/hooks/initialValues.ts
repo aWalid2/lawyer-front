@@ -22,9 +22,9 @@ export const initialValues: FormValues = {
   phone: "",
 
   civil_id: "",
+  ssn: "",
   nationality: "",
   country: "",
-  address: "",
   email: "",
 
   case_arrival_date_at_police_station: "",
@@ -44,8 +44,8 @@ export const initialValues: FormValues = {
 
  case_fees_type: "fixed_profits",
 
-fixed_profits: undefined,
-percentage_of_profits: undefined,
+fixed_profits: 0,
+percentage_of_profits: 0,
 contract_based: undefined,
 
 
@@ -55,4 +55,13 @@ contract_based: undefined,
 
   notes: "",
   has_opponent: false,
+
+  // Active Fields
+  case_sequence: "",
+  Complaint_Number: "",
+  court_id: "",
+  Current_court_degree: "",
+
+  // Other Fields
+  Case_Arrival_Date_at_the_Authority: "",
 };

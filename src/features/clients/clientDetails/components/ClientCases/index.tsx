@@ -10,6 +10,7 @@ import { useGetClientCases } from "../../api/hooks/useGetClientCases";
 import type { ClientCase } from "../../types/typesClientDetails";
 import { TableCasesActions } from "./components/TableCasesActions";
 import { EmptyTable } from "@/shared/components/EmptyTable";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
 export const ClientCases: React.FC = () => {
   const columns: Column<ClientCase>[] = [
@@ -44,7 +45,7 @@ export const ClientCases: React.FC = () => {
     },
     {
       header: "تاريخ القضية",
-      accessor: (item) => item.created_at,
+      accessor: (item) => formatDateToYYYYMMDD(item.created_at),
     },
     {
       header: "الإجراءات",

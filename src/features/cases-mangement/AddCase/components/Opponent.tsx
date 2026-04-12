@@ -1,5 +1,6 @@
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
+import { COUNTRY_OPTIONS } from "@/shared/constants/countryOptions";
 import { useFormikContext } from "formik";
 
 export function OpponentForm() {
@@ -33,12 +34,8 @@ export function OpponentForm() {
             <SelectForm
               label="الكود"
               name="country_code"
-              options={[
-                { value: "+20", label: "🇪🇬 +20" },
-                { value: "+966", label: "🇸🇦 +966" },
-                { value: "+971", label: "🇦🇪 +971" },
-                { value: "+1", label: "🇺🇸 +1" },
-              ]}
+              showSearch={true}
+              options={COUNTRY_OPTIONS}
               placeholder="الكود"
 
             />

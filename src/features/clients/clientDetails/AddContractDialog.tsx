@@ -53,7 +53,7 @@ export const AddContractDialog: React.FC<AddContractDialogProps> = ({ clientId }
         </button>
       </DialogTrigger>
       <DialogContent
-        className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none custom-scrollbar"
+        className="sm:max-w-[540px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
         dir="rtl"
         showCloseButton={false}
       >
@@ -84,7 +84,7 @@ export const AddContractDialog: React.FC<AddContractDialogProps> = ({ clientId }
           }}
         >
           {() => (
-            <Form className="space-y-4">
+            <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
               <div className="space-y-3">
                 <InputForm
                   name="start_date"
@@ -104,7 +104,7 @@ export const AddContractDialog: React.FC<AddContractDialogProps> = ({ clientId }
                   name="contract_duration"
                   label="مدة العقد"
                   placeholder="مثال: 6 أشهر"
-                  type="date"
+                  type="text"
                 />
               </div>
 

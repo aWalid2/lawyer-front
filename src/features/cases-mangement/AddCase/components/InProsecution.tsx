@@ -2,22 +2,27 @@ import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { useFormikContext } from "formik";
 import type { FormValues } from "../utils/mapToApiPayload";
+import { SharedFormField } from "./SharedFormField";
+import { useFetchProsecutions } from "@/shared/api/hooks/useGetProsecutions";
 
 
 export function InProsecution() {
   const { setFieldValue } = useFormikContext<FormValues>();
-
+  const { data } = useFetchProsecutions();
+  const prosecutions = data?.data || [];
+  const prosecutionOptions = prosecutions.map((prosecution: any) => ({
+    label: prosecution.name,
+    value: prosecution.id,
+  }));
   return (
     <>
+
+      <SharedFormField />
       <SelectForm
+        showSearch={true}
         label="النيابة"
         name="case_police_station"
-        options={[
-          { label: "نيابة شرق الإسكندرية", value: "prosecution1" },
-          { label: "نيابة غرب الإسكندرية", value: "prosecution2" },
-          { label: "نيابة وسط الإسكندرية", value: "prosecution3" },
-          { label: "نيابة المنتزه", value: "prosecution4" },
-        ]}
+        options={prosecutionOptions}
         onChange={(value) => setFieldValue("case_police_station", value)}
       />
 

@@ -71,12 +71,11 @@ const MainCases = () => {
   ];
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
-  const limit = 15;
 
-  const { data: cases, isPending, isError } = useGetCases(page, limit);
-
-  const indexedData = useIndexedData(cases?.data || [], page, limit);
+  const { data: cases, isPending, isError } = useGetCases(page);
   const totalPages = cases?.meta?.total_pages ?? 1;
+  const limit = cases?.meta?.limit || 15;
+  const indexedData = useIndexedData(cases?.data || [], page, limit);
 
 
   if (isPending) return <LoadingPage />
