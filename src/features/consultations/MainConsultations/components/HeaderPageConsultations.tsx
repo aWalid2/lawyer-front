@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
@@ -9,7 +9,7 @@ import { ConsultationsDialog } from "./ConsultationsDialog";
 
 interface HeaderPageConsultationsProps {
   onSearch: (term: string) => void;
-  onFilterChange: (key: string, value: any) => void;
+  onFilterChange: (status: string) => void;
   searchTerm: string;
   filters: {
     status: string;
@@ -22,6 +22,12 @@ export const HeaderPageConsultations: React.FC<HeaderPageConsultationsProps> = (
   searchTerm,
   filters,
 }) => {
+  // Add logging to debug
+  const handleFilterChange = (value: string) => {
+    console.log("Filter changed to:", value); // Debug log
+    onFilterChange(value);
+  };
+
   return (
     <HeaderPageLayout>
       <HeaderTitle innerPage title="الاستشارات" />
@@ -35,15 +41,15 @@ export const HeaderPageConsultations: React.FC<HeaderPageConsultationsProps> = (
 
       <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
         <HeaderFilter
-          placeholder="الحالة"
+          placeholder="اختر الحالة"
           value={filters.status}
-          onFilterChange={(v) => onFilterChange("status", v)}
+          onFilterChange={handleFilterChange}
           options={[
-            { value: "all", label: "الحالة" },
+            { value: "all", label: "جميع الحالات" },
+            { value: "pending", label: "قيد الانتظار" },
             { value: "completed", label: "مكتملة" },
-            { value: "pending", label: "قيد المراجعة" },
           ]}
-          className="md:w-[130px]"
+          className="md:w-[150px]"
         />
 
         <ConsultationsDialog

@@ -33,8 +33,8 @@ export const HeaderPageDocuments: React.FC<HeaderPageDocumentsProps> = ({
                     onFilterChange={onFilterChange}
                     options={[
                         { value: "all", label: "الكل" },
-                        { value: "case", label: "تابع للقضايا" },
-                        { value: "non_case", label: "غير تابع للقضايا" },
+                        { value: "CASE_RELATED", label: "تابع للقضايا" },
+                        { value: "NOT_CASE_RELATED", label: "غير تابع للقضايا" },
                     ]}
                 />
                 <AddDocumentDialog

@@ -1,6 +1,7 @@
 
 export interface Consultation {
   id: string;
+  rowNumber?: number; 
   consultation_title: string;
   client_id: number;
   lawyer_id: number;

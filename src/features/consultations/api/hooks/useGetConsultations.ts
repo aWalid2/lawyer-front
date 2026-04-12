@@ -4,10 +4,10 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 import { getConsultations } from "../service/getConsultations";
 
-export const useFetchConsultations = () => {
+export const useFetchConsultations = (page: number, limit: number, status?: string, search?: string) => {
   const query = useQuery({
-    queryKey: ["consultations"],
-    queryFn: getConsultations,
+    queryKey: ["consultations", page, limit, status, search],
+    queryFn: () => getConsultations(page, limit, status, search),
     staleTime: 1000 * 60 * 2,
     retry: 2,
 
@@ -22,3 +22,5 @@ export const useFetchConsultations = () => {
 
   return query;
 };
+
+
