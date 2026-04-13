@@ -12,12 +12,12 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 
-// تعريف الـ interface للـ props
+
 interface EditModelProps {
   initialValues: FormValues;
   onClose: () => void;
   onSave: (values: FormValues) => void;
-  mode?: "add" | "edit"; // إضافة prop mode
+  mode?: "add" | "edit";
 }
 
 interface FormValues {
@@ -28,7 +28,6 @@ interface FormValues {
   caseReceiptDate: string;
 }
 
-// Validation Schema
 const validationSchema = Yup.object({
   caseTitle: Yup.string().required("رقم القضية في المخفر مطلوب"),
   notes: Yup.string().required("المخفر التابع له القضية مطلوب"),
@@ -37,7 +36,7 @@ const validationSchema = Yup.object({
   caseReceiptDate: Yup.string().required("تاريخ ورود القضية مطلوب"),
 });
 
-function EditModel({ initialValues, onClose, onSave, mode = "add" }: EditModelProps) {
+function PoliceStationInfoModel({ initialValues, onClose, onSave, mode = "add" }: EditModelProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   const handleCloseModal = () => {
@@ -116,7 +115,7 @@ function EditModel({ initialValues, onClose, onSave, mode = "add" }: EditModelPr
 
               <button
                 type="submit"
-                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
+                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity"
               >
                 {mode === "add" ? "إضافة" : "حفظ التعديلات"}
               </button>
@@ -128,4 +127,4 @@ function EditModel({ initialValues, onClose, onSave, mode = "add" }: EditModelPr
   );
 }
 
-export default EditModel;
+export default PoliceStationInfoModel;
