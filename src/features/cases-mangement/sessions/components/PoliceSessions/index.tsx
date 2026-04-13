@@ -1,12 +1,12 @@
 
-import AddPoliceStationsession from "./components/AddPoliceStationsession";
+import PoliceStationsession from "./components/PoliceStationSessions";
 import FormPoliceSessions from "./components/FormPoliceSessions";
 function PoliceSessions() {
   return (
     <div className="w-full ">
       <div >
         <FormPoliceSessions />
-        <AddPoliceStationsession />
+        <PoliceStationsession />
       </div>
     </div>
   );

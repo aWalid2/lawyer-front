@@ -1,7 +1,7 @@
 import { Formik, Form } from "formik";
 import { useState } from "react";
-import type { FormValues } from "../typsePolice";
-import { validationSchema } from "../ValidationSchema";
+import type { FormValues } from "../types/typsePolice";
+import { validationSchema } from "./ValidationSchema";
 import Frame from "@/public/images/Frame.svg";
 import EditModel from "../components/EditModel";
 import { InputForm } from "@/shared/components/InputForm";
