@@ -7,23 +7,21 @@ import { ActionsCoulmn } from "./components/ActionsCoulmn";
 import HeaderPoliceStaionSessions from "./components/HeaderPoliceStaionSessions";
 import { useGetPoliceSessions } from "../../api/hooks/useGetPoliceSessions";
 import type { PoliceSession } from "../../types/typsePolice";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+
 
 
 const PoliceStationsession = () => {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [page, setPage] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingSession, setEditingSession] = useState<PoliceSession | null>(null);
-    const itemsPerPage = 10;
 
     const { data: sessionsResponse } = useGetPoliceSessions();
+    const totalPages = sessionsResponse?.data?.data?.meta?.total_pages || 1
+    const sessions = sessionsResponse?.data?.data || []
+    const indexedData = useIndexedData(sessions, page)
 
-    const sessions = Array.isArray(sessionsResponse) ? sessionsResponse : (sessionsResponse as any)?.data || [];
-
-    const totalPages = Math.ceil(sessions.length / itemsPerPage);
-    const currentData = sessions.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
 
     const handleAdd = () => {
         setEditingSession(null);
@@ -51,20 +49,20 @@ const PoliceStationsession = () => {
         },
         {
             header: "تاريخ الجلسة",
-            accessor: (item) => item.session_date ? new Date(item.session_date).toLocaleDateString("ar-EG") : "-",
+            accessor: (item) => formatDateToYYYYMMDD(item.session_date),
         },
         {
             header: "وقت الجلسة",
-            accessor: "session_time",
+            accessor: (item) => item.session_time,
         },
         {
             header: "المحامي المتابع",
-            accessor: (item) => `${item.lawyer?.first_name || ""} ${item.lawyer?.last_name || ""}`.trim() || "-",
+            accessor: (item) => (item?.lawyer?.first_name),
             className: "font-medium text-gray-800",
         },
         {
             header: "قرار الجلسة",
-            accessor: "session_ruling",
+            accessor: (item) => (item.session_ruling),
         },
         {
             header: "الإجراءات",
@@ -77,15 +75,15 @@ const PoliceStationsession = () => {
             <HeaderPoliceStaionSessions onAdd={handleAdd} />
             <div className="overflow-hidden">
                 <DataTable
-                    data={currentData}
+                    data={indexedData}
                     columns={columns}
                     rowIdField="id"
                 />
                 {totalPages > 1 && (
                     <Pagination
-                        currentPage={currentPage}
+                        currentPage={page}
                         totalPages={totalPages}
-                        onPageChange={setCurrentPage}
+                        onPageChange={setPage}
                     />
                 )}
             </div>

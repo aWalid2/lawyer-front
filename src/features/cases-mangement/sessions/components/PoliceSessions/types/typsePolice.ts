@@ -38,7 +38,7 @@ export interface PoliceSession {
 }
 
 export interface CreatePoliceSessionPayload {
-    case_id: number;
+    case_id?: number;
     lawyer_id: number;
     session_date: string;
     session_ruling: string;
@@ -50,5 +50,5 @@ export interface SessionFormValues {
     session_time: string;
     lawyer_id: string; 
     session_ruling: string;
-    case_id: string; 
+    case_id?: string; 
 }
