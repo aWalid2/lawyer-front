@@ -1,20 +1,20 @@
+import { formatDateToYYYYMMDD } from '@/shared/utils/convertDate'
 import { InputBox } from './InputBox'
-import type { FormValues } from '../../../types/typsePolice'
 
-export const BodyInfo = ({ items }: { items: FormValues }) => {
+export const BodyInfo = ({ items }: { items: any }) => {
     return (
         <>
             <div className="flex flex-col md:flex-row gap-3 mb-4">
                 <div className="flex-1">
                     <InputBox
-                        text={items.caseTitle}
+                        text={items?.case_number}
                         label="رقم القضية في المخفر"
                     />
                 </div>
 
                 <div className="flex-1">
                     <InputBox
-                        text={items.clientName}
+                        text={items?.judge_name}
                         label="اسم المحقق"
                     />
                 </div>
@@ -23,14 +23,14 @@ export const BodyInfo = ({ items }: { items: FormValues }) => {
             <div className="flex flex-col md:flex-row gap-3 mb-4">
                 <div className="flex-1">
                     <InputBox
-                        text={items.investigationSource}
+                        text={items?.investigation_authirity_transferd_from}
                         label="جهة التحقيق المحول منها"
                     />
                 </div>
 
                 <div className="flex-1">
                     <InputBox
-                        text={items.caseReceiptDate}
+                        text={formatDateToYYYYMMDD(items?.case_entry) || ""}
                         label="تاريخ ورود القضية داخل المكتب"
                     />
                 </div>
@@ -38,7 +38,7 @@ export const BodyInfo = ({ items }: { items: FormValues }) => {
 
             <div className="flex flex-col" dir="rtl">
                 <InputBox
-                    text={items.notes}
+                    text={items?.station?.name}
                     label="المخفر التابع له القضية"
                 />
             </div>

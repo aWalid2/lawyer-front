@@ -1,8 +1,9 @@
-export function formatDateToYYYYMMDD(isoString: string): string {
+export function formatDateToYYYYMMDD(isoString: string | null | undefined): string {
+  if (!isoString) return "";
   const date = new Date(isoString);
 
   if (isNaN(date.getTime())) {
-    throw new Error("Invalid date");
+    return "";
   }
 
   return date.toISOString().split("T")[0];

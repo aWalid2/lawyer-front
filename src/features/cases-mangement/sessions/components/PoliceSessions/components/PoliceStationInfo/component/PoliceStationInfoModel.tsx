@@ -21,19 +21,19 @@ interface EditModelProps {
 }
 
 interface FormValues {
-  caseTitle: string;
-  notes: string;
-  clientName: string;
-  investigationSource: string;
-  caseReceiptDate: string;
+  case_number: string;
+  station_id: string;
+  judge_name: string;
+  investigation_authirity_transferd_from: string;
+  case_entry: string;
 }
 
 const validationSchema = Yup.object({
-  caseTitle: Yup.string().required("رقم القضية في المخفر مطلوب"),
-  notes: Yup.string().required("المخفر التابع له القضية مطلوب"),
-  clientName: Yup.string().required("اسم المحقق مطلوب"),
-  investigationSource: Yup.string().required("جهة التحقيق المحول منها مطلوبة"),
-  caseReceiptDate: Yup.string().required("تاريخ ورود القضية مطلوب"),
+  case_number: Yup.string().required("رقم القضية في المخفر مطلوب"),
+  station_id: Yup.string().required("المخفر التابع له القضية مطلوب"),
+  judge_name: Yup.string().required("اسم المحقق مطلوب"),
+  investigation_authirity_transferd_from: Yup.string().required("جهة التحقيق المحول منها مطلوبة"),
+  case_entry: Yup.string().required("تاريخ ورود القضية مطلوب"),
 });
 
 function PoliceStationInfoModel({ initialValues, onClose, onSave, mode = "add" }: EditModelProps) {
@@ -55,12 +55,12 @@ function PoliceStationInfoModel({ initialValues, onClose, onSave, mode = "add" }
   return (
     <Dialog open={true} onOpenChange={handleCloseModal}>
       <DialogContent
-        className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none"
+        className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
         dir="rtl"
         showCloseButton={false}
       >
         <DialogClose asChild onClick={handleCloseModal}>
-          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all">
+          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all">
             <XIcon size={23} className="text-gray-500" />
           </button>
         </DialogClose>
@@ -80,13 +80,13 @@ function PoliceStationInfoModel({ initialValues, onClose, onSave, mode = "add" }
             <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
               <div className="grid grid-cols-1 gap-4">
                 <InputForm
-                  name="caseTitle"
+                  name="case_number"
                   label="رقم القضية في المخفر"
                   type="text"
                   placeholder="رقم القضية في المخفر"
                 />
                 <InputForm
-                  name="clientName"
+                  name="judge_name"
                   label="اسم المحقق"
                   type="text"
                   placeholder="اسم المحقق"
@@ -95,12 +95,12 @@ function PoliceStationInfoModel({ initialValues, onClose, onSave, mode = "add" }
 
               <div className="grid grid-cols-1 gap-4">
                 <TextAreaForm
-                  name="notes"
+                  name="station_id"
                   label="المخفر التابع له القضية"
                   placeholder="المخفر التابع له القضية"
                 />
                 <InputForm
-                  name="investigationSource"
+                  name="investigation_authirity_transferd_from"
                   label="جهة التحقيق المحول منها"
                   type="text"
                   placeholder="جهة التحقيق المحول منها"
@@ -108,7 +108,7 @@ function PoliceStationInfoModel({ initialValues, onClose, onSave, mode = "add" }
               </div>
 
               <InputForm
-                name="caseReceiptDate"
+                name="case_entry"
                 label="تاريخ ورود القضية داخل المكتب"
                 type="date"
               />

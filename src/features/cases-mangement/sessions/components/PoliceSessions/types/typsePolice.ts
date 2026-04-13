@@ -1,10 +1,10 @@
 export interface FormValues {
   
-    caseTitle: string;           
-    clientName: string;           
-    investigationSource: string;  
-    caseReceiptDate: string;      
-    notes: string;                
+    case_number: string;           
+    judge_name: string;           
+    investigation_authirity_transferd_from: string;  
+    case_entry: string;      
+    station_id: string;                
 }
 
 export interface PoliceSession {

@@ -1,20 +1,24 @@
 
 import { useState } from "react";
 import type { FormValues } from "../../types/typsePolice";
-import { InputBox } from "./component/InputBox";
 import EditModel from "./component/PoliceStationInfoModel";
 import { HeaderPoliceSessionsInfo } from "./component/HeaderPoliceSessionsInfo";
 import { BodyInfo } from "./component/BodyInfo";
+import { useGetPoliceSessionInfo } from "../../api/hooks/useGetPoliceSessionInfo";
+import { useParams } from "react-router-dom";
 const PoliceStationInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit">("add");
 
+  const { id } = useParams<{ id: string }>();
+  console.log(id);
+  const { data } = useGetPoliceSessionInfo(Number(id));
   const initialValues: FormValues = {
-    caseTitle: "قضية 123",
-    clientName: "أحمد محمد",
-    investigationSource: "النيابة العامة",
-    caseReceiptDate: "2024-03-20",
-    notes: "مخفر الشرطة",
+    case_number: data?.case_number,
+    judge_name: data?.judge_name,
+    investigation_authirity_transferd_from: data?.investigation_authirity_transferd_from,
+    case_entry: data?.case_entry,
+    station_id: data?.station_id,
   };
 
   const handleAddClick = () => {
@@ -41,23 +45,21 @@ const PoliceStationInfo = () => {
   };
 
   const emptyValues: FormValues = {
-    caseTitle: "",
-    clientName: "",
-    investigationSource: "",
-    caseReceiptDate: "",
-    notes: "",
+    case_number: "",
+    judge_name: "",
+    investigation_authirity_transferd_from: "",
+    case_entry: "",
+    station_id: "",
   };
 
   return (
     <>
-
       <div className="border border-gray-300 p-4 rounded-xl mb-6">
-
 
         <HeaderPoliceSessionsInfo handleAddClick={handleAddClick} handleEditClick={handleEditClick} />
 
 
-        <BodyInfo items={initialValues} />
+        <BodyInfo items={data} />
 
         {isModalOpen && (
           <EditModel
