@@ -6,12 +6,12 @@ import { HeaderPoliceSessionsInfo } from "./component/HeaderPoliceSessionsInfo";
 import { BodyInfo } from "./component/BodyInfo";
 import { useGetPoliceSessionInfo } from "../../api/hooks/useGetPoliceSessionInfo";
 import { useParams } from "react-router-dom";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 const PoliceStationInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit">("add");
 
   const { id } = useParams<{ id: string }>();
-  console.log(id);
   const { data } = useGetPoliceSessionInfo(Number(id));
   const initialValues: FormValues = {
     case_number: data?.case_number,
@@ -55,11 +55,10 @@ const PoliceStationInfo = () => {
   return (
     <>
       <div className="border border-gray-300 p-4 rounded-xl mb-6">
+        <HeaderPoliceSessionsInfo handleAddClick={handleAddClick} handleEditClick={handleEditClick} hasData={!!data} />
 
-        <HeaderPoliceSessionsInfo handleAddClick={handleAddClick} handleEditClick={handleEditClick} />
 
-
-        <BodyInfo items={data} />
+        {data ? <BodyInfo items={data} /> : <EmptyTable message="لا توجد بيانات" />}
 
         {isModalOpen && (
           <EditModel
