@@ -8,6 +8,7 @@ export interface FormValues {
 }
 
 export interface PoliceSession {
+    rowNumber?: number;
     id: number;
     case_id: number;
     lawyer_id: number;

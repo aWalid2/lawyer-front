@@ -96,8 +96,6 @@ function PoliceStationSessionsModel({
 
         });
 
-
-        toast.success("تم تعديل الجلسة بنجاح");
       }
 
       queryClient.invalidateQueries({ queryKey: ["police-sessions"] });
@@ -132,7 +130,7 @@ function PoliceStationSessionsModel({
           onSubmit={handleSubmit}
           enableReinitialize
         >
-          {({ isSubmitting }) => (
+          {() => (
             <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InputForm

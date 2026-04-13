@@ -1,12 +1,15 @@
-import editefff from "@/public/images/edit.svg";
 import deleteic from "@/public/images/delete.svg";
+import editefff from "@/public/images/edit.svg";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { useRemovePoliceSessions } from "../../../api/hooks/useRemovePoliceSessions";
 import type { PoliceSession } from "../../../types/typsePolice";
 interface ActionsCoulmnProps {
     item: PoliceSession;
     onEdit: () => void;
 }
 
-export const ActionsCoulmn = ({ onEdit }: ActionsCoulmnProps) => {
+export const ActionsCoulmn = ({ onEdit, item }: ActionsCoulmnProps) => {
+    const { mutateAsync: deleteSessionAsync, isPending: isDeleting } = useRemovePoliceSessions();
     return (
         <div className="flex items-center justify-center gap-2 md:gap-3 flex-nowrap">
             <button
@@ -16,12 +19,20 @@ export const ActionsCoulmn = ({ onEdit }: ActionsCoulmnProps) => {
             >
                 <img src={editefff} alt="تعديل" />
             </button>
-            <button
-                title="حذف"
-                className="hover:scale-110 transition shrink-0 text-red-500"
-            >
-                <img src={deleteic} alt="حذف" />
-            </button>
+            <ConfirmDeleteDialog
+                trigger={
+                    <button
+                        title="حذف"
+                        disabled={isDeleting}
+                        className="hover:scale-110 transition shrink-0 text-red-500 disabled:opacity-50"
+                    >
+                        <img src={deleteic} alt="حذف" />
+                    </button>
+                }
+                onConfirm={async () => {
+                    await deleteSessionAsync(Number(item.id));
+                }}
+            />
         </div>
     );
 };

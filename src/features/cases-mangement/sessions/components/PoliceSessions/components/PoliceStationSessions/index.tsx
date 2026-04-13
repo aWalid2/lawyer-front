@@ -9,6 +9,9 @@ import { useGetPoliceSessions } from "../../api/hooks/useGetPoliceSessions";
 import type { PoliceSession } from "../../types/typsePolice";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { useParams } from "react-router-dom";
+import { EmptyTable } from "@/shared/components/EmptyTable";
+import LoadingPage from "@/shared/components/LoadingPage";
 
 
 
@@ -17,11 +20,12 @@ const PoliceStationsession = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingSession, setEditingSession] = useState<PoliceSession | null>(null);
 
-    const { data: sessionsResponse } = useGetPoliceSessions();
-    const totalPages = sessionsResponse?.data?.data?.meta?.total_pages || 1
-    const sessions = sessionsResponse?.data?.data || []
-    const indexedData = useIndexedData(sessions, page)
+    const { id } = useParams<{ id: string }>();
+    const { data: sessionsResponse, isPending } = useGetPoliceSessions(Number(id), page, 3);
+    const sessions = sessionsResponse?.data || [];
+    const totalPages = sessionsResponse?.meta?.lastPage || 1;
 
+    const indexedData = useIndexedData(sessions, page, 3)
 
     const handleAdd = () => {
         setEditingSession(null);
@@ -41,10 +45,7 @@ const PoliceStationsession = () => {
     const columns: Column<PoliceSession>[] = [
         {
             header: "#",
-            accessor: (item) => {
-                const index = sessions.findIndex((s: PoliceSession) => s.id === item.id);
-                return index + 1;
-            },
+            accessor: (item) => item.rowNumber,
             headerClassName: "w-[60px]",
         },
         {
@@ -73,20 +74,28 @@ const PoliceStationsession = () => {
     return (
         <div className="bg-white rounded-2xl p-4 md:p-6 border border-[#eeeeee] mt-6">
             <HeaderPoliceStaionSessions onAdd={handleAdd} />
-            <div className="overflow-hidden">
-                <DataTable
-                    data={indexedData}
-                    columns={columns}
-                    rowIdField="id"
-                />
-                {totalPages > 1 && (
-                    <Pagination
-                        currentPage={page}
-                        totalPages={totalPages}
-                        onPageChange={setPage}
-                    />
-                )}
-            </div>
+
+            {sessions.length > 0 ? (
+                <>
+                    {isPending ? <LoadingPage /> : (
+                        <DataTable
+                            data={indexedData}
+                            columns={columns}
+                            rowIdField="id"
+                        />
+                    )}
+                    {totalPages > 1 && (
+                        <Pagination
+                            currentPage={page}
+                            totalPages={totalPages}
+                            onPageChange={setPage}
+                        />
+                    )}
+                </>
+            ) : (
+                <EmptyTable message="لا توجد جلسات" />
+            )}
+
 
             {isModalOpen && (
                 <PoliceStationSessionsModel
