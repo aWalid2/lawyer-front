@@ -1,6 +1,3 @@
-import { Formik, Form } from "formik";
-import { useState } from "react";
-import * as Yup from "yup";
 import {
   Dialog,
   DialogClose,
@@ -8,9 +5,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { XIcon } from "lucide-react";
+import { useFetchPoliceStations } from "@/shared/api/hooks/useGetStation";
 import { InputForm } from "@/shared/components/InputForm";
-import { TextAreaForm } from "@/shared/components/TextAreaForm";
+import { SelectForm } from "@/shared/components/SelectForm";
+import { Form, Formik } from "formik";
+import { XIcon } from "lucide-react";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import * as Yup from "yup";
+import { useCreatePoliceDepartment } from "../../../api/hooks/useCreatePoliceDepartment";
+import { useUpdatePoliceDepartment } from "../../../api/hooks/useUpdatePoliceDepartment";
 
 
 interface EditModelProps {
@@ -21,33 +25,53 @@ interface EditModelProps {
 }
 
 interface FormValues {
-  case_number: string;
-  station_id: string;
+  case_number: number;
+  station_id: number;
   judge_name: string;
   investigation_authirity_transferd_from: string;
   case_entry: string;
 }
 
 const validationSchema = Yup.object({
-  case_number: Yup.string().required("رقم القضية في المخفر مطلوب"),
-  station_id: Yup.string().required("المخفر التابع له القضية مطلوب"),
+  case_number: Yup.number().required("رقم القضية في المخفر مطلوب"),
+  station_id: Yup.number().required("المخفر التابع له القضية مطلوب"),
   judge_name: Yup.string().required("اسم المحقق مطلوب"),
   investigation_authirity_transferd_from: Yup.string().required("جهة التحقيق المحول منها مطلوبة"),
   case_entry: Yup.string().required("تاريخ ورود القضية مطلوب"),
 });
 
 function PoliceStationInfoModel({ initialValues, onClose, onSave, mode = "add" }: EditModelProps) {
-  const [isModalOpen, setIsModalOpen] = useState(true);
 
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync: createDepartment, isPending: isCreating } = useCreatePoliceDepartment();
+  const { mutateAsync: updateDepartment, isPending: isUpdating } = useUpdatePoliceDepartment();
+  const isPending = isCreating || isUpdating;
+  const { data: policeStations } = useFetchPoliceStations();
+
+  const policeStationsOptions = policeStations?.data?.map((station: any) => ({
+    value: station.id,
+    label: station.name,
+  })) || [];
   const handleCloseModal = () => {
     setIsModalOpen(false);
     onClose();
   };
 
-  const handleSaveChanges = (values: FormValues) => {
-    console.log("تم حفظ التغييرات:", values);
-    setIsModalOpen(false);
-    onSave(values);
+  const handleSaveChanges = async (values: FormValues) => {
+    const caseId = Number(id);
+    try {
+      if (mode === "add") {
+        await createDepartment({ caseId, data: { case_number: Number(values.case_number), station_id: Number(values.station_id), judge_name: values.judge_name, investigation_authirity_transferd_from: values.investigation_authirity_transferd_from, case_entry: values.case_entry } });
+      } else {
+        await updateDepartment({ caseId, data: { case_number: Number(values.case_number), station_id: Number(values.station_id), judge_name: values.judge_name, investigation_authirity_transferd_from: values.investigation_authirity_transferd_from, case_entry: values.case_entry } });
+        console.log(values);
+      }
+      setIsModalOpen(false);
+      onSave(values);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   if (!isModalOpen) return null;
@@ -94,11 +118,17 @@ function PoliceStationInfoModel({ initialValues, onClose, onSave, mode = "add" }
               </div>
 
               <div className="grid grid-cols-1 gap-4">
-                <TextAreaForm
+
+
+                <SelectForm
                   name="station_id"
                   label="المخفر التابع له القضية"
                   placeholder="المخفر التابع له القضية"
+                  options={policeStationsOptions}
+
                 />
+
+
                 <InputForm
                   name="investigation_authirity_transferd_from"
                   label="جهة التحقيق المحول منها"
@@ -115,8 +145,10 @@ function PoliceStationInfoModel({ initialValues, onClose, onSave, mode = "add" }
 
               <button
                 type="submit"
-                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity"
+                disabled={isPending}
+                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity disabled:opacity-70 flex justify-center items-center gap-2"
               >
+                {isPending && <span className="animate-spin h-5 w-5 border-2 border-white rounded-full border-t-transparent"></span>}
                 {mode === "add" ? "إضافة" : "حفظ التعديلات"}
               </button>
             </Form>
