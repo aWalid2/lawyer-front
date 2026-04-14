@@ -39,9 +39,6 @@ export const CaseStatusesFeature: React.FC = () => {
             accessor: (item: CaseStatusT) => (
                 <CaseStatusesAction 
                     status={item} 
-                    onStatusUpdated={() => {
-                        refetch();
-                    }} 
                 />
             ),
             headerClassName: "w-35",
@@ -57,9 +54,6 @@ export const CaseStatusesFeature: React.FC = () => {
             <CaseStatusesHeader
                 searchTerm={searchTerm}
                 onSearch={setSearchTerm}
-                onStatusAdded={() => {
-                    refetch();
-                }}
             />
 
             <DataTable

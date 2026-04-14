@@ -19,4 +19,5 @@ export interface FormValues {
   contract_value: string;
   contract_duration: string;
   confirmation_password: string;
+  user_status: string;
 }

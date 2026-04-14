@@ -7,18 +7,15 @@ import { HeaderTitle } from '@/shared/components/HeaderTitle';
 interface CaseStatusesHeaderProps {
     searchTerm: string;
     onSearch: (value: string) => void;
-    onStatusAdded: () => void;
 }
 
 export const CaseStatusesHeader: React.FC<CaseStatusesHeaderProps> = ({
     searchTerm,
     onSearch,
-    onStatusAdded,
 }) => {
     const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
 
     const handleSaveStatus = () => {
-        onStatusAdded();
         setIsAddModalOpen(false);
     };
 

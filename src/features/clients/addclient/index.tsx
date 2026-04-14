@@ -55,6 +55,7 @@ const FormDetails = () => {
     contract_value: "",
     contract_duration: "",
     confirmation_password: "",
+    user_status: "",
   };
 
   const handleSubmit = (values: FormValues) => {
@@ -105,6 +106,7 @@ const FormDetails = () => {
       contract_photo: values.contract_photo,
       authorization_photo: values.authorization_photo,
       client_type: values.client_type,
+      user_status: values.user_status,
     };
     
     mutate(dataToSend);
@@ -221,7 +223,18 @@ const FormDetails = () => {
                   />
                 </div>
               </div>
-
+              <div className={`${CLASSES.flexRow} ${CLASSES.sectionPadding}`}>
+                <div className="flex-1">
+                  <SelectForm 
+                    name="user_status"
+                    label="حالة المستخدم"
+                    options={[
+                      { value: "active", label: "نشط" },
+                      { value: "inactive", label: "غير نشط" },
+                    ]}
+                  />
+                </div>
+              </div>
               <div
                 className={`${CLASSES.flexBetween} ${CLASSES.extraLargeSectionPadding}`}
               >

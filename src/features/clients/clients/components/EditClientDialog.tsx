@@ -48,6 +48,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
         address: client?.user?.address || "",
         contract_photo: client?.contract_photo || null,
         notes: client?.user?.notes || "",
+        user_status: client?.user?.user_status || "",
     };
 
 
@@ -81,6 +82,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
         country: Yup.string().nullable(),
         address: Yup.string().nullable(),
         uploadFiles: Yup.mixed().nullable(),
+        user_status: Yup.string().required("حالة المستخدم مطلوبة"),
     });
 
 
@@ -219,7 +221,17 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                     placeholder="أدخل العنوان بالتفصيل"
                                 />
                             </div>
-
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <SelectForm
+                                    name="user_status"
+                                    label="حالة المستخدم"
+                                    placeholder="أدخل حالة المستخدم"
+                                    options={[
+                                        { value: "active", label: "نشط" },
+                                        { value: "inactive", label: "غير نشط" },
+                                    ]}
+                                />
+                            </div>
 
                             <div className="w-[121px] h-[99px] mb-16">
                                 <FileUpload

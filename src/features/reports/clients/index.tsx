@@ -1,76 +1,62 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState } from "react";
 import { HeaderPageReportsClients } from "./components/HeaderPageReportsClients";
 import type { ReportClient } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { Pagination } from "@/shared/components/Pagination";
-
-const MOCK_REPORT_CLIENTS: ReportClient[] = Array.from({ length: 39 }, (_, i) => ({
-  id: `${i + 1}`,
-  name: i % 2 === 0 ? "محمد علي" : "أحمد محمود",
-  casesCount: (i % 5) + 1,
-  assignedLawyer: "علي العتيبي",
-  status: i % 2 === 0 ? "active" : "inactive",
-}));
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { PaginationApi } from "@/shared/components/PaginationApi";
+import { useGetClients } from "./api/hooks/useGetClients";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { Error } from "@/shared/components/Error";
 
 const ReportsClientsFeature = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("all");
-  const itemsPerPage = 15;
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [page, setPage] = useState(1);
+  const limit = 15;
+  
+  const { data: clientsData, isPending, isError, error } = useGetClients(page, limit, statusFilter, searchTerm);
+  const totalPages = clientsData?.meta?.total_pages ?? 1;
+  const indexedData = useIndexedData(clientsData?.data, page, limit);
 
-  const filteredClients = useMemo(() => {
-    return MOCK_REPORT_CLIENTS.filter((client) => {
-      const searchStr = searchTerm.toLowerCase();
-      const matchesSearch = client.name.toLowerCase().includes(searchStr);
-      const matchesFilter = filter === "all" || client.status === filter;
+  const getStatusStyles = (status: string) => {
+    switch (status) {
+      case "active":
+        return "bg-success/20 text-success";
+      case "inactive":
+        return "bg-error/20 text-error";
+      default:
+        return "bg-gray-100 text-gray-600";
+    }
+  };
 
-      return matchesSearch && matchesFilter;
-    });
-  }, [searchTerm, filter]);
-
-  const totalPages = Math.ceil(filteredClients.length / itemsPerPage);
-
-  const paginatedClients = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredClients.slice(start, start + itemsPerPage);
-  }, [filteredClients, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, filter]);
+  if (isPending) return <LoadingPage />;
+  if (isError) return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
 
   const columns: Column<ReportClient>[] = [
     {
       header: "#",
-      accessor: (item) => filteredClients.findIndex((d) => d.id === item.id) + 1,
-      headerClassName: "w-15",
+      accessor: (item: ReportClient) => item.rowNumber,
+      headerClassName: "w-16",
     },
     {
       header: "اسم الموكل",
-      accessor: "name",
+      accessor: (item: ReportClient) => item.user.first_name,
     },
     {
       header: "عدد القضايا",
       accessor: (item) => (
         <span className="bg-[#A6A6A6] text-white px-3 py-1 rounded-[8px] text-xs font-semibold">
-          {item.casesCount}
+          {item.case_count}
         </span>
       ),
-    },
-    {
-      header: "المحامي المسؤول",
-      accessor: "assignedLawyer",
     },
     {
       header: "الحالة",
       accessor: (item) => (
         <span
-          className={`px-3 py-1 rounded-full text-xs font-regular ${item.status === "active"
-            ? "bg-success/20 text-success"
-            : "bg-error/20 text-error"
-            }`}
+          className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(item.user.user_status)}`}
         >
-          {item.status === "active" ? "نشط" : "غير نشط"}
+          {item.user.user_status === "active" ? "نشط" : "غير نشط"}
         </span>
       ),
     },
@@ -82,21 +68,22 @@ const ReportsClientsFeature = () => {
         <HeaderPageReportsClients
           searchTerm={searchTerm}
           onSearch={setSearchTerm}
-          onFilterChange={setFilter}
-          filter={filter}
+          onFilterChange={setStatusFilter}
+          filter={statusFilter}
         />
 
         <DataTable
           columns={columns}
-          data={paginatedClients}
-          rowIdField="id"
+          data={indexedData}
+          rowKey="user_id"
+          
         />
 
         {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
+          <PaginationApi
+            currentPage={page}
             totalPages={totalPages}
-            onPageChange={setCurrentPage}
+            onPageChange={setPage}
           />
         )}
       </div>

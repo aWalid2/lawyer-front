@@ -34,6 +34,7 @@ export const addClients = async (data: any) => {
     formData.append("phone", data.phone);
     formData.append("profile[client_type]", data.client_type);
     formData.append("profile[notes]", data.notes);
+    formData.append("user_status", data.user_status);
 
         formData.append("clientId", "");
 

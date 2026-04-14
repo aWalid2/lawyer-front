@@ -7,10 +7,9 @@ import { useDeleteCaseStatus } from '../api/hooks/useDeleteCaseStatus';
 
 interface CaseStatusesActionProps {
     status: any;
-    onStatusUpdated?: () => void;
 }
 
-export const CaseStatusesAction: React.FC<CaseStatusesActionProps> = ({ status, onStatusUpdated }) => {
+export const CaseStatusesAction: React.FC<CaseStatusesActionProps> = ({ status}) => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const { mutateAsync: deleteCaseStatus, isPending: isDeleting } = useDeleteCaseStatus();
 
@@ -23,19 +22,13 @@ export const CaseStatusesAction: React.FC<CaseStatusesActionProps> = ({ status, 
     };
 
     const handleSaveStatus = () => {
-        console.log("تم حفظ الحالة");
-        if (onStatusUpdated) {
-            onStatusUpdated();
-        }
+
         handleCloseModal();
     };
     
     const handleDelete = async () => {
         try {
             await deleteCaseStatus(status.id.toString());
-            if (onStatusUpdated) {
-                onStatusUpdated();
-            }
         } catch (error) {
             console.error('Error deleting case status:', error);
         }
