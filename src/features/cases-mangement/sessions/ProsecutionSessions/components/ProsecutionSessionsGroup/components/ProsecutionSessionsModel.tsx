@@ -9,24 +9,23 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import type { SessionFormValues } from "./typseProsecution";
+import { useParams } from "react-router-dom";
+import { useCreateProsecutionSession } from "../../../api/hooks/useCreateProsecutionSession";
+import { useUpdateProsecutionSession } from "../../../api/hooks/useUpdateProsecutionSession";
 
-// تعريف الـ interface للـ props
-interface AddProsecutionModelProps {
+interface ProsecutionSessionsModelProps {
     onClose: () => void;
-    onSave?: (values: SessionFormValues) => void;
-    initialValues?: SessionFormValues;
+    initialValues?: any;
+    mode?: "add" | "edit";
 }
 
-// Validation Schema
 const validationSchema = Yup.object({
-    sessionDate: Yup.string().required("تاريخ الجلسة مطلوب"),
-    sessionTime: Yup.string().required("وقت الجلسة مطلوب"),
-    lawyer: Yup.string().required("اسم المحامي المسؤول مطلوب"),
-    decision: Yup.string().required("قرار الجلسة مطلوب"),
+    session_date: Yup.string().required("تاريخ الجلسة مطلوب"),
+    session_time: Yup.string().required("وقت الجلسة مطلوب"),
+    lawyer_id: Yup.string().required("اسم المحامي المسؤول مطلوب"),
+    session_ruling: Yup.string().required("قرار الجلسة مطلوب"),
 });
 
-// تعريف CSS classes مجمعة
 const modalClasses = {
     overlay: "fixed inset-0 z-50 flex items-center justify-center px-3 sm:px-6",
     backdrop: "absolute inset-0 bg-black/30",
@@ -42,32 +41,51 @@ const modalClasses = {
     input: "w-full h-10 sm:h-11 rounded-xl bg-[#FBFBFB] border border-transparent px-4 text-right text-sm outline-none focus:ring-2 focus:ring-[#CBA462]/40",
     select: "w-full h-10 sm:h-11 rounded-xl bg-[#FBFBFB] border border-transparent px-4 text-right text-sm outline-none focus:ring-2 focus:ring-[#CBA462]/40 cursor-pointer",
     footer: "absolute inset-x-0 bottom-0 bg-white px-5 sm:px-7 py-4 border-t border-gray-100",
-    submitButton: "w-full h-11 sm:h-12 rounded-xl text-sm sm:text-base font-medium text-white bg-[linear-gradient(to_right,#E3C086,#CBA462)] hover:brightness-95 transition"
+    submitButton: "w-full h-11 sm:h-12 rounded-xl text-sm sm:text-base font-medium text-white bg-[linear-gradient(to_right,#E3C086,#CBA462)] hover:brightness-95 transition flex justify-center items-center gap-2 disabled:opacity-70"
 };
 
-// ✅ القيم الافتراضية
-const defaultValues: SessionFormValues = {
-    sessionDate: "",
-    sessionTime: "",
-    lawyer: "",
-    decision: "",
+const defaultValues = {
+    session_date: "",
+    session_time: "",
+    lawyer_id: "",
+    session_ruling: "",
 };
 
-function AddProsecutionModel({ onClose, onSave, initialValues = defaultValues }: AddProsecutionModelProps) {
+function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: ProsecutionSessionsModelProps) {
     const [isModalOpen, setIsModalOpen] = useState(true);
+    const { id } = useParams<{ id: string }>();
+
+    const { mutateAsync: createSessionAsync, isPending: isCreating } = useCreateProsecutionSession();
+    const { mutateAsync: updateSessionAsync, isPending: isUpdating } = useUpdateProsecutionSession();
+
+    const isPending = isCreating || isUpdating;
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
         onClose();
     };
 
-    const handleSubmit = (values: SessionFormValues) => {
-        console.log("تم حفظ بيانات الجلسة:", values);
-        if (onSave) {
-            onSave(values);
+    const handleSubmit = async (values: any) => {
+        const case_id = Number(id);
+        const payload = {
+            case_id: case_id,
+            session_date: values.session_date,
+            session_time: values.session_time,
+            lawyer_id: values.lawyer_id,
+            session_ruling: values.session_ruling,
+        };
+
+        try {
+            if (mode === "add") {
+                await createSessionAsync(payload);
+            } else {
+                await updateSessionAsync({ id: initialValues?.id, data: payload });
+            }
+            setIsModalOpen(false);
+            onClose();
+        } catch (error) {
+            console.error(error);
         }
-        setIsModalOpen(false);
-        onClose();
     };
 
     if (!isModalOpen) return null;
@@ -87,85 +105,77 @@ function AddProsecutionModel({ onClose, onSave, initialValues = defaultValues }:
                         <img src={close} alt="Close" className={modalClasses.closeIcon} />
                     </button>
 
-                    {/* ✅ غير العنوان */}
                     <h2 className={modalClasses.title}>
-                        إضافة جلسة نيابة
+                        {mode === "edit" ? "تعديل جلسة نيابة" : "إضافة جلسة نيابة"}
                     </h2>
                 </div>
 
-                <Formik<SessionFormValues>
-                    initialValues={initialValues}
+                <Formik
+                    initialValues={initialValues || defaultValues}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
+                    enableReinitialize
                 >
                     {({ errors, touched, setFieldValue, values }) => (
                         <Form>
                             <div className={modalClasses.body}>
                                 <div className={modalClasses.formContainer}>
-                                    {/* المحامي المسؤول */}
                                     <div className={modalClasses.fieldWrapper}>
                                         <label className={modalClasses.label}>
                                             المحامي المسؤول
                                         </label>
                                         <input
-                                            name="lawyer"
+                                            name="lawyer_id"
                                             type="text"
                                             placeholder="أدخل اسم المحامي المسؤول"
-                                            value={values.lawyer}
-                                            onChange={(e) => setFieldValue("lawyer", e.target.value)}
-                                            className={`${modalClasses.input} ${errors.lawyer && touched.lawyer ? "border-red-500" : ""
-                                                }`}
+                                            value={values.lawyer_id}
+                                            onChange={(e) => setFieldValue("lawyer_id", e.target.value)}
+                                            className={`${modalClasses.input} ${errors.lawyer_id && touched.lawyer_id ? "border-red-500" : ""}`}
                                         />
-                                        {errors.lawyer && touched.lawyer && (
-                                            <div className="text-red-500 text-xs mt-1">{errors.lawyer}</div>
+                                        {errors.lawyer_id && touched.lawyer_id && (
+                                            <div className="text-red-500 text-xs mt-1">{String(errors.lawyer_id)}</div>
                                         )}
                                     </div>
 
-                                    {/* تاريخ الجلسة */}
                                     <div className={modalClasses.fieldWrapper}>
                                         <label className={modalClasses.label}>
                                             تاريخ الجلسة
                                         </label>
                                         <input
-                                            name="sessionDate"
+                                            name="session_date"
                                             type="date"
-                                            value={values.sessionDate}
-                                            onChange={(e) => setFieldValue("sessionDate", e.target.value)}
-                                            className={`${modalClasses.input} ${errors.sessionDate && touched.sessionDate ? "border-red-500" : ""
-                                                }`}
+                                            value={values.session_date}
+                                            onChange={(e) => setFieldValue("session_date", e.target.value)}
+                                            className={`${modalClasses.input} ${errors.session_date && touched.session_date ? "border-red-500" : ""}`}
                                         />
-                                        {errors.sessionDate && touched.sessionDate && (
-                                            <div className="text-red-500 text-xs mt-1">{errors.sessionDate}</div>
+                                        {errors.session_date && touched.session_date && (
+                                            <div className="text-red-500 text-xs mt-1">{String(errors.session_date)}</div>
                                         )}
                                     </div>
 
-                                    {/* وقت الجلسة */}
                                     <div className={modalClasses.fieldWrapper}>
                                         <label className={modalClasses.label}>وقت الجلسة</label>
                                         <input
-                                            name="sessionTime"
+                                            name="session_time"
                                             type="time"
-                                            value={values.sessionTime}
-                                            onChange={(e) => setFieldValue("sessionTime", e.target.value)}
-                                            className={`${modalClasses.input} ${errors.sessionTime && touched.sessionTime ? "border-red-500" : ""
-                                                }`}
+                                            value={values.session_time}
+                                            onChange={(e) => setFieldValue("session_time", e.target.value)}
+                                            className={`${modalClasses.input} ${errors.session_time && touched.session_time ? "border-red-500" : ""}`}
                                         />
-                                        {errors.sessionTime && touched.sessionTime && (
-                                            <div className="text-red-500 text-xs mt-1">{errors.sessionTime}</div>
+                                        {errors.session_time && touched.session_time && (
+                                            <div className="text-red-500 text-xs mt-1">{String(errors.session_time)}</div>
                                         )}
                                     </div>
 
-                                    {/* قرار الجلسة */}
                                     <div className={modalClasses.fieldWrapper}>
                                         <label className={modalClasses.label}>
                                             قرار الجلسة
                                         </label>
                                         <Select
-                                            value={values.decision}
-                                            onValueChange={(value) => setFieldValue("decision", value)}
+                                            value={values.session_ruling}
+                                            onValueChange={(value) => setFieldValue("session_ruling", value)}
                                         >
-                                            <SelectTrigger className={`${modalClasses.select} ${errors.decision && touched.decision ? "border-red-500" : ""
-                                                }`}>
+                                            <SelectTrigger className={`${modalClasses.select} ${errors.session_ruling && touched.session_ruling ? "border-red-500" : ""}`}>
                                                 <SelectValue placeholder="اختر قرار الجلسة" />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -176,8 +186,8 @@ function AddProsecutionModel({ onClose, onSave, initialValues = defaultValues }:
                                                 <SelectItem value="تم الحبس">تم الحبس</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        {errors.decision && touched.decision && (
-                                            <div className="text-red-500 text-xs mt-1">{errors.decision}</div>
+                                        {errors.session_ruling && touched.session_ruling && (
+                                            <div className="text-red-500 text-xs mt-1">{String(errors.session_ruling)}</div>
                                         )}
                                     </div>
                                 </div>
@@ -187,8 +197,10 @@ function AddProsecutionModel({ onClose, onSave, initialValues = defaultValues }:
                                 <button
                                     type="submit"
                                     className={modalClasses.submitButton}
+                                    disabled={isPending}
                                 >
-                                    إضافة
+                                    {isPending && <span className="animate-spin h-5 w-5 border-2 border-white rounded-full border-t-transparent"></span>}
+                                    {mode === "add" ? "إضافة الجلسة" : "حفظ التعديلات"}
                                 </button>
                             </div>
                         </Form>
@@ -199,4 +211,4 @@ function AddProsecutionModel({ onClose, onSave, initialValues = defaultValues }:
     );
 }
 
-export default AddProsecutionModel;
+export default ProsecutionSessionsModel;

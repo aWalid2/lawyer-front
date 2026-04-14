@@ -1,14 +1,12 @@
-import ProsecutionSessions from "./components/ProsecutionSessions";
-import TableProsecution from "./components/TableProsecution";
+import ProsecutionInfo from "./components/ProsecutionInfo";
+import ProsecutionSessionsGroup from "./components/ProsecutionSessionsGroup";
 
 function Prosecution() {
   return (
-    <div >
-      <div >
-        <ProsecutionSessions />
-        <TableProsecution />
-      </div>
-    </div>
+    <>
+      <ProsecutionInfo />
+      <ProsecutionSessionsGroup />
+    </>
   );
 }
 

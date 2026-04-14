@@ -1,11 +1,11 @@
 import { Formik, Form, Field } from "formik";
 import Frame from "@/public/images/Frame.svg";
 import { useState } from "react";
-import type { FormValues } from "./typseProsecution";
-import { validationSchema } from "./ValidationSchema";
-import EditModelProsecution from "./EditModelProsecution";
+import type { FormValues } from "../../types/typseProsecution";
+import { validationSchema } from "./component/ValidationSchema";
+import ProsecutionInfoModel from "./component/ProsecutionInfoModel";
 
-// ثوابت الكلاسات (كما هي بدون أي تغيير)
+
 const CLASSES = {
   inputBase: "w-full border rounded-md p-2 bg-[#FBFBFB]",
   inputMedium: "h-10 md:h-[50px]",
@@ -37,13 +37,13 @@ const CLASSES = {
   errorText: "text-red-500 text-xs mt-1",
 };
 
-const ProsecutionSessions = () => {
+const ProsecutionInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formValues, setFormValues] = useState<FormValues>({
-    caseNumberInProsecution: "", // رقم القضية في النيابة
-    prosecutionName: "", // النيابة
-    prosecutionRegistrationDate: "", // تاريخ تسجيل القضية داخل النيابة
-    policeStation: "", // المخفر التابع له القضية
+    caseNumberInProsecution: "",
+    prosecutionName: "",
+    prosecutionRegistrationDate: "",
+    policeStation: "",
   });
 
   const handleOpenModal = () => {
@@ -87,7 +87,7 @@ const ProsecutionSessions = () => {
             </div>
 
             <Form>
-              {/* رقم القضية في النيابة - بمفرده في صف كامل */}
+
               <div className="mb-4">
                 <label className={CLASSES.labelText}>
                   رقم القضية داخل النيابة:
@@ -106,7 +106,7 @@ const ProsecutionSessions = () => {
                 )}
               </div>
 
-              {/* النيابة + تاريخ تسجيل القضية في النيابة */}
+
               <div className={CLASSES.flexRow + " mb-4"}>
                 <div className="flex-1">
                   <label className={CLASSES.labelText}>
@@ -148,16 +148,17 @@ const ProsecutionSessions = () => {
         )}
       </Formik>
 
-      {/* موديل التعديل */}
+
       {isModalOpen && (
-        <EditModelProsecution
+        <ProsecutionInfoModel
           initialValues={formValues}
           onClose={handleCloseModal}
           onSave={handleSaveChanges}
+          mode={formValues.caseNumberInProsecution ? "edit" : "add"}
         />
       )}
     </>
   );
 };
 
-export default ProsecutionSessions;
+export default ProsecutionInfo;

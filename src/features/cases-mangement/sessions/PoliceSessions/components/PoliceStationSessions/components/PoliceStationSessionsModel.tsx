@@ -18,6 +18,7 @@ import * as Yup from "yup";
 import { useCreatePoliceSessions } from "../../../api/hooks/useCreatePoliceSessions";
 import { useUpdatePoliceSessions } from "../../../api/hooks/useUpdatePoliceSessions";
 import type { CreatePoliceSessionPayload, PoliceSession, SessionFormValues } from "../../../types/typsePolice";
+import { validationSchema } from "./ValidationSchema";
 
 interface PoliceStationSessionsModelProps {
   onClose: () => void;
@@ -25,12 +26,7 @@ interface PoliceStationSessionsModelProps {
   mode?: "add" | "edit";
 }
 
-const validationSchema = Yup.object({
-  session_date: Yup.string().required("تاريخ الجلسة مطلوب"),
-  session_time: Yup.string().required("وقت الجلسة مطلوب"),
-  lawyer_id: Yup.string().required("اسم المحامي مطلوب"),
-  session_ruling: Yup.string().required("قرار الجلسة مطلوب"),
-});
+
 
 function PoliceStationSessionsModel({
   onClose,

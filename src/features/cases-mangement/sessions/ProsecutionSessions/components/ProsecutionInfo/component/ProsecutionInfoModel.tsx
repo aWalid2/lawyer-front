@@ -2,13 +2,13 @@ import { Formik, Form, Field } from "formik";
 import close from "@/public/images/close.svg";
 import { useState } from "react";
 import { validationSchema } from "./ValidationSchema";
-import type { FormValues } from "./typseProsecution";
+import type { FormValues } from "../../../types/typseProsecution";
 
-// تعريف الـ interface للـ props
 interface EditModelProps {
-  initialValues: FormValues;  // الآن يستخدم FormValues الكامل
+  initialValues: FormValues;
   onClose: () => void;
   onSave: (values: FormValues) => void;
+  mode?: "add" | "edit";
 }
 
 const modalClasses = {
@@ -29,7 +29,7 @@ const modalClasses = {
   submitButton: "w-full h-11 sm:h-12 rounded-xl text-sm sm:text-base font-medium text-white bg-[linear-gradient(to_right,#E3C086,#CBA462)] hover:brightness-95 transition"
 };
 
-function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps) {
+function ProsecutionInfoModel({ initialValues, onClose, onSave, mode = "add" }: EditModelProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   const handleCloseModal = () => {
@@ -61,7 +61,7 @@ function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps
           </button>
 
           <h2 className={modalClasses.title}>
-            تعديل بيانات النيابة
+            {mode === "edit" ? "تعديل بيانات النيابة" : "إضافة بيانات النيابة"}
           </h2>
         </div>
 
@@ -108,7 +108,7 @@ function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps
                     )}
                   </div>
 
-                  {/* تاريخ تسجيل القضية داخل النيابة */}
+
                   <div className={modalClasses.fieldWrapper}>
                     <label className={modalClasses.label}>
                       تاريخ تسجيل القضية داخل النيابة
@@ -131,7 +131,7 @@ function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps
                   type="submit"
                   className={modalClasses.submitButton}
                 >
-                  إضافة
+                  {mode === "edit" ? "حفظ التعديلات" : "إضافة"}
                 </button>
               </div>
             </Form>
@@ -142,4 +142,4 @@ function EditModelProsecution({ initialValues, onClose, onSave }: EditModelProps
   );
 }
 
-export default EditModelProsecution;
+export default ProsecutionInfoModel;
