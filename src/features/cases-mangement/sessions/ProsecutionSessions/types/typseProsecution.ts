@@ -1,8 +1,7 @@
 export interface FormValues {
-  caseNumberInProsecution: string; 
-  prosecutionName: string; 
-  prosecutionRegistrationDate: string; 
-  policeStation: string; 
+  case_number_at_Presecution: string; 
+  prosecution_id: number; 
+  case_regestration_date_at_presecution: string; 
 }
 
 export interface SessionFormValues {

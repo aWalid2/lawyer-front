@@ -16,10 +16,10 @@ const ProsecutionInfo = () => {
   const { data } = useGetProsecutionSessionInfo(Number(id));
 
   const initialValues: FormValues = {
-    caseNumberInProsecution: data?.caseNumberInProsecution,
-    prosecutionName: data?.prosecutionName,
-    prosecutionRegistrationDate: data?.prosecutionRegistrationDate,
-    policeStation: data?.policeStation,
+    case_number_at_Presecution: data?.case_number_at_Presecution,
+    prosecution_id: data?.prosecution_id,
+    case_regestration_date_at_presecution: data?.case_regestration_date_at_presecution,
+
   };
 
   const handleAddClick = () => {
@@ -46,15 +46,15 @@ const ProsecutionInfo = () => {
   };
 
   const emptyValues: FormValues = {
-    caseNumberInProsecution: "",
-    prosecutionName: "",
-    prosecutionRegistrationDate: "",
-    policeStation: "",
+    case_number_at_Presecution: "",
+    prosecution_id: 0,
+    case_regestration_date_at_presecution: "",
+
   };
 
   return (
     <>
-      <div className="border border-gray-300 p-4 rounded-xl mb-6">
+      <div className="border border-gray-300 p-6 rounded-xl mb-6">
         <HeaderProsecutionInfo handleAddClick={handleAddClick} handleEditClick={handleEditClick} hasData={!!data} />
 
         {data ? <BodyProsecutionInf data={data} /> : <EmptyTable message="لا توجد بيانات" />}

@@ -8,12 +8,14 @@ import {
 import { InputForm } from "@/shared/components/InputForm";
 import { Form, Formik } from "formik";
 import { XIcon } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { useCreateProsecutionSession } from "../../../api/hooks/useCreateProsecutionSession";
 import { useUpdateProsecutionSession } from "../../../api/hooks/useUpdateProsecutionSession";
 import type { FormValues } from "../../../types/typseProsecution";
+import { useFetchProsecutions } from "@/features/settings/public-prosecutions/api/hooks/useGetProsecutions";
+import { SelectForm } from "@/shared/components/SelectForm";
 
 interface EditModelProps {
   initialValues: FormValues;
@@ -23,10 +25,9 @@ interface EditModelProps {
 }
 
 const validationSchema = Yup.object({
-  caseNumberInProsecution: Yup.string().required("رقم القضية في النيابة مطلوب"),
-  prosecutionName: Yup.string().required("اسم النيابة مطلوب"),
-  prosecutionRegistrationDate: Yup.string().required("تاريخ تسجيل القضية في النيابة مطلوب"),
-  policeStation: Yup.string().required("المخفر التابع له القضية مطلوب"),
+  case_number_at_Presecution: Yup.string().required("رقم القضية في النيابة مطلوب"),
+  prosecution_id: Yup.number().required("اسم النيابة مطلوب"),
+  case_regestration_date_at_presecution: Yup.string().required("تاريخ تسجيل القضية في النيابة مطلوب"),
 });
 
 function ProsecutionInfoModel({ initialValues, onClose, onSave, mode = "add" }: EditModelProps) {
@@ -35,6 +36,14 @@ function ProsecutionInfoModel({ initialValues, onClose, onSave, mode = "add" }: 
   const { mutateAsync: createProsecution, isPending: isCreating } = useCreateProsecutionSession();
   const { mutateAsync: updateProsecution, isPending: isUpdating } = useUpdateProsecutionSession();
   const isPending = isCreating || isUpdating;
+  const { data: prosecutions } = useFetchProsecutions();
+
+  const prosecutionOptions = useMemo(() => {
+    return prosecutions?.data?.map((prosecution: any) => ({
+      value: prosecution.id,
+      label: prosecution.name,
+    })) || [];
+  }, [prosecutions]);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -48,20 +57,18 @@ function ProsecutionInfoModel({ initialValues, onClose, onSave, mode = "add" }: 
         await createProsecution({
           caseId,
           data: {
-            caseNumberInProsecution: values.caseNumberInProsecution,
-            prosecutionName: values.prosecutionName,
-            prosecutionRegistrationDate: values.prosecutionRegistrationDate,
-            policeStation: values.policeStation,
+            case_number_at_Presecution: Number(values.case_number_at_Presecution),
+            prosecution_id: Number(values.prosecution_id),
+            case_regestration_date_at_presecution: values.case_regestration_date_at_presecution,
           },
         });
       } else {
         await updateProsecution({
           caseId,
           data: {
-            caseNumberInProsecution: values.caseNumberInProsecution,
-            prosecutionName: values.prosecutionName,
-            prosecutionRegistrationDate: values.prosecutionRegistrationDate,
-            policeStation: values.policeStation,
+            case_number_at_Presecution: Number(values.case_number_at_Presecution),
+            prosecution_id: Number(values.prosecution_id),
+            case_regestration_date_at_presecution: values.case_regestration_date_at_presecution,
           },
         });
       }
@@ -101,31 +108,23 @@ function ProsecutionInfoModel({ initialValues, onClose, onSave, mode = "add" }: 
           {() => (
             <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
               <div className="grid grid-cols-1 gap-4">
-                <InputForm
-                  name="prosecutionName"
+                <SelectForm
+                  name="prosecution_id"
                   label="النيابة"
-                  type="text"
-                  placeholder="النيابة"
+                  options={prosecutionOptions}
+                  placeholder="اختر النيابة"
                 />
                 <InputForm
-                  name="caseNumberInProsecution"
+                  name="case_number_at_Presecution"
                   label="رقم القضية في النيابة"
                   type="text"
                   placeholder="رقم القضية في النيابة"
                 />
-              </div>
 
-              <div className="grid grid-cols-1 gap-4">
                 <InputForm
-                  name="prosecutionRegistrationDate"
+                  name="case_regestration_date_at_presecution"
                   label="تاريخ تسجيل القضية داخل النيابة"
                   type="date"
-                />
-                <InputForm
-                  name="policeStation"
-                  label="المخفر التابع له القضية"
-                  type="text"
-                  placeholder="المخفر التابع له القضية"
                 />
               </div>
 
