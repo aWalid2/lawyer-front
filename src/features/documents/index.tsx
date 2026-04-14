@@ -1,26 +1,39 @@
 // documents/DocumentsFeature.tsx
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'  // ✅ أضف useEffect
 import { HeaderPageDocuments } from "./components/HeaderPageDocuments";
 import type { Document } from "./types/types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { TableDocumentsActions } from "./components/TableDocumentsActions";
-import { Pagination } from "@/shared/components/Pagination";
 import { useFetchDocuments } from "./api/hooks/useGetDocuments";
 import { useFetchCases } from "@/features/UserTasks/api/hooks/useGetCase";
 import { Error } from '@/shared/components/Error';
 import LoadingPage from '@/shared/components/LoadingPage';
+import { useIndexedData } from '@/shared/utils/useIndexedData';
+import { PaginationApi } from '@/shared/components/PaginationApi';
 
 export const DocumentsFeature: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [filter, setFilter] = useState("all");
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 15;
+    const [statusFilter, setStatusFilter] = useState<string>("all");
+    const [page, setPage] = useState(1);
+    const limit = 15;
 
-    const { data: documentsResponse, isPending, isError, refetch } = useFetchDocuments();
+    // ✅ إعادة تعيين الصفحة إلى 1 عند تغيير الفلتر أو البحث
+    useEffect(() => {
+        setPage(1);
+    }, [statusFilter, searchTerm]);
+
+    const { data: documentsResponse, isPending, isError, refetch } = useFetchDocuments(page, limit, statusFilter, searchTerm);
     const { data: cases } = useFetchCases();
+    
+    const documents = useMemo(() => {
+        if (!documentsResponse) return [];
+        if (Array.isArray(documentsResponse.data)) return documentsResponse.data;
+        if (Array.isArray(documentsResponse)) return documentsResponse;
+        return [];
+    }, [documentsResponse]);
 
-    const documents = documentsResponse?.data || documentsResponse || [];
-
+    const totalPages = documentsResponse?.meta?.total_pages ?? 1;
+    const indexedData = useIndexedData(documents, page, limit);
 
     const casesMap = useMemo(() => {
         if (!cases?.data) return new Map();
@@ -35,49 +48,6 @@ export const DocumentsFeature: React.FC = () => {
         const key = String(caseId);
         return casesMap.get(key) || String(caseId);
     };
-
-    const filteredDocuments = useMemo(() => {
-        if (!documents.length) return [];
-
-        let filtered = [...documents];
-
-        if (searchTerm) {
-            const term = searchTerm.toLowerCase();
-            filtered = filtered.filter((doc) =>
-                doc.document_name?.toLowerCase().includes(term) ||
-                doc.document_category?.toLowerCase().includes(term) ||
-                doc.document_details?.toLowerCase().includes(term)
-            );
-        }
-
-        if (filter !== "all") {
-            filtered = filtered.filter((doc) => {
-                if (filter === "case") return doc.document_type === "CASE_RELATED";
-                if (filter === "non_case") return doc.document_type === "NOT_CASE_RELATED";
-                return true;
-            });
-        }
-
-        return filtered;
-    }, [documents, searchTerm, filter]);
-
-    const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
-
-    const paginatedDocuments = useMemo(() => {
-        const start = (currentPage - 1) * itemsPerPage;
-        return filteredDocuments.slice(start, start + itemsPerPage);
-    }, [filteredDocuments, currentPage]);
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchTerm, filter]);
-
-    const indexedData = useMemo(() => {
-        return paginatedDocuments.map((item, index) => ({
-            ...item,
-            rowNumber: ((currentPage - 1) * itemsPerPage) + index + 1
-        }));
-    }, [paginatedDocuments, currentPage]);
 
     const columns: Column<Document & { rowNumber: number }>[] = [
         {
@@ -96,7 +66,6 @@ export const DocumentsFeature: React.FC = () => {
             header: "اسم القضية / نوع المستند",
             accessor: (item) => {
                 if (item.document_type === "CASE_RELATED") {
-
                     const caseIdValue = (item as any).caseId || (item as any).case_id;
                     return getCaseTitle(caseIdValue);
                 } else {
@@ -130,6 +99,13 @@ export const DocumentsFeature: React.FC = () => {
     if (isPending) return <LoadingPage />
     if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
 
+    // ✅ رسالة مخصصة حسب الفلتر
+    const getEmptyMessage = () => {
+        if (statusFilter === "CASE_RELATED") return "لا توجد مستندات تابعة للقضايا";
+        if (statusFilter === "NON_CASE_RELATED") return "لا توجد مستندات غير تابعة للقضايا";
+        return "لا توجد مستندات";
+    };
+
     if (documents.length === 0) {
         return (
             <div className="w-full pt-6 space-y-6">
@@ -137,14 +113,14 @@ export const DocumentsFeature: React.FC = () => {
                     <HeaderPageDocuments
                         searchTerm={searchTerm}
                         onSearch={setSearchTerm}
-                        onFilterChange={setFilter}
-                        filter={filter}
+                        onFilterChange={setStatusFilter}
+                        filter={statusFilter}
                         onDocumentAdded={() => {
                             refetch();
                         }}
                     />
                     <div className="text-center py-10 text-gray-500">
-                        لا توجد مستندات
+                        {getEmptyMessage()}
                     </div>
                 </div>
             </div>
@@ -157,8 +133,8 @@ export const DocumentsFeature: React.FC = () => {
                 <HeaderPageDocuments
                     searchTerm={searchTerm}
                     onSearch={setSearchTerm}
-                    onFilterChange={setFilter}
-                    filter={filter}
+                    onFilterChange={setStatusFilter}
+                    filter={statusFilter}
                     onDocumentAdded={() => {
                         refetch();
                     }}
@@ -172,10 +148,10 @@ export const DocumentsFeature: React.FC = () => {
                 />
 
                 {totalPages > 1 && (
-                    <Pagination
-                        currentPage={currentPage}
+                    <PaginationApi
+                        currentPage={page}
                         totalPages={totalPages}
-                        onPageChange={setCurrentPage}
+                        onPageChange={setPage}
                     />
                 )}
             </div>

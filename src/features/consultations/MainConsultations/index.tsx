@@ -1,94 +1,68 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState } from "react";
 import { HeaderPageConsultations } from "./components/HeaderPageConsultations";
 import type { Consultation } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { Pagination } from "@/shared/components/Pagination";
 import { TableConsultationsActions } from "./components/TableConsultationsActions";
 import { useFetchConsultations } from "../api/hooks/useGetConsultations";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { PaginationApi } from "@/shared/components/PaginationApi";
 
-// Status labels configuration - بس حالتين
+const formatDateToArabic = (dateString: string): string => {
+  if (!dateString) return "-";
+  
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "-";
+  
+  return new Intl.DateTimeFormat('ar-EG', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date);
+};
+
 const statusLabels: Record<string, { text: string; className: string }> = {
   pending: { text: "قيد الانتظار", className: "bg-yellow-100 text-yellow-800" },
   completed: { text: "مكتملة", className: "bg-green-100 text-green-800" },
 };
 
 const ConsultationsFeature = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState<{ status: string }>({
-    status: "all",
-  });
-  const itemsPerPage = 15;
-
-  const { data: consultationsData, isPending, isError, error } = useFetchConsultations();
-
-  const handleFilterChange = (key: string, value: any) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const filteredData = useMemo(() => {
-    if (!consultationsData) return [];
-
-    return consultationsData.filter((item: Consultation) => {
-      const searchStr = searchTerm.toLowerCase();
-      const matchesSearch =
-        item.consultation_details?.toLowerCase().includes(searchStr) ||
-        item.client?.first_name?.toLowerCase().includes(searchStr) ||
-        `${item.client?.first_name} ${item.client?.last_name}`.toLowerCase().includes(searchStr);
-
-      const matchesStatus = filters.status === "all" || item.status === filters.status;
-
-      return matchesSearch && matchesStatus;
-    });
-  }, [consultationsData, searchTerm, filters]);
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-  const paginatedData = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredData.slice(start, start + itemsPerPage);
-  }, [filteredData, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, filters]);
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("ar-EG", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
-  };
-
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [page, setPage] = useState(1);
+  const limit = 15;
+  
+  const { data: consultationsData, isPending, isError, error } = useFetchConsultations(
+    page, 
+    limit, 
+    statusFilter, 
+    searchTerm
+  );
+  
+  const consultations = consultationsData?.data ?? [];
+  const totalPages = consultationsData?.meta?.total_pages ?? 1;
+  const indexedData = useIndexedData(consultations, page, limit);
   const columns: Column<Consultation>[] = [
     {
       header: "#",
-      accessor: (item) => {
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const indexInPage = paginatedData.findIndex((d: Consultation) => d.id === item.id);
-        return startIndex + indexInPage + 1;
-      },
-      headerClassName: "w-14",
+      accessor: (_item: Consultation, index: number) => index + 1,
+      headerClassName: "w-16",
     },
     {
-      header: "عنوان الاستشارات",
-      accessor: (item) => item.consultation_details || "-",
+      header: "عنوان الاستشارة",
+      accessor: (item) => item.consultation_title || "-",
     },
     {
-      header: "الموكل",
-      accessor: (item) => item.client?.first_name || "-",
+      header: "نوع الاستشارة",
+      accessor: (item) => item.consultation_type || "-",
     },
     {
-      header: "اسم المستشار",
-      accessor: (item) => item.lawyer?.first_name || "-",
+      header: "طريقة التواصل",
+      accessor: (item) => item.contact_method || "-",
     },
-
     {
-      header: "نوع الحاله",
+      header: "الحالة",
       accessor: (item) => (
         <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusLabels[item.status]?.className || "bg-gray-100 text-gray-800"}`}>
           {statusLabels[item.status]?.text || item.status}
@@ -97,7 +71,7 @@ const ConsultationsFeature = () => {
     },
     {
       header: "تاريخ الطلب",
-      accessor: (item) => formatDate(item.request_date),
+      accessor: (item) => formatDateToArabic(item.request_date),
     },
     {
       header: "الإجراءات",
@@ -110,9 +84,13 @@ const ConsultationsFeature = () => {
       ),
     },
   ];
-
-  if (isPending) { <LoadingPage />}
-  if (isError) {<Error message={error?.message || "حدث خطأ أثناء جلب البيانات"} />}
+  if (isPending) {
+    return <LoadingPage />;
+  }
+  
+  if (isError) {
+    return <Error message={error?.message || "حدث خطأ أثناء جلب البيانات"} />;
+  }
 
   return (
     <div className="w-full pt-6 space-y-6">
@@ -120,21 +98,21 @@ const ConsultationsFeature = () => {
         <HeaderPageConsultations
           searchTerm={searchTerm}
           onSearch={setSearchTerm}
-          onFilterChange={handleFilterChange}
-          filters={filters}
+          onFilterChange={setStatusFilter} // Pass setStatusFilter directly
+          filters={{ status: statusFilter }}
         />
 
         <DataTable
           columns={columns}
-          data={paginatedData}
+          data={indexedData}
           rowIdField="id"
         />
 
         {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
+          <PaginationApi
+            currentPage={page}
             totalPages={totalPages}
-            onPageChange={setCurrentPage}
+            onPageChange={setPage}
           />
         )}
       </div>

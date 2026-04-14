@@ -1,84 +1,57 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState  } from "react";
 import { HeaderPageReportsCases } from "./components/HeaderPageReportsCases";
-import type { ReportCase } from "./types";
+import type { ReportCase } from "./types/reportCase";
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { Pagination } from "@/shared/components/Pagination";
+import { useReportCase } from "./api/hooks/useReportCase";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { PaginationApi } from "@/shared/components/PaginationApi";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { Error } from "@/shared/components/Error";
 
-const MOCK_REPORT_CASES: ReportCase[] = Array.from({ length: 39 }, (_, i) => ({
-  id: `${i + 1}`,
-  caseNumber: "255",
-  clientName: i % 2 === 0 ? "محمد علي" : "أحمد محمود",
-  assignedLawyer: "16265",
-  responsibleLawyerCode: "16265",
-  status: ((): "pending" | "closed" | "active" | "on_hold" => {
-    const statuses = ["pending", "closed", "active", "on_hold"] as const;
-    return statuses[i % 4];
-  })(),
-}));
 
 const ReportsCasesFeature = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("all");
-  const itemsPerPage = 15;
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [page, setPage] = useState(1);
+  const limit = 15;
+  const { data, isPending, isError, error } = useReportCase(page, limit, statusFilter, searchTerm);
+  const totalPages = data?.meta?.total_pages ?? 1;
+  const indexedData = useIndexedData(data, page, limit);
 
-  const filteredCases = useMemo(() => {
-    return MOCK_REPORT_CASES.filter((c) => {
-      const searchStr = searchTerm.toLowerCase();
-      const matchesSearch =
-        c.clientName.toLowerCase().includes(searchStr) ||
-        c.caseNumber.includes(searchStr);
-      const matchesFilter = filter === "all" || c.status === filter;
 
-      return matchesSearch && matchesFilter;
-    });
-  }, [searchTerm, filter]);
+  const getStatusStyles = (status: string) => {
+  switch (status) {
+    default:
+      return "bg-gray-100 text-gray-600";
+  }
+};
 
-  const totalPages = Math.ceil(filteredCases.length / itemsPerPage);
-
-  const paginatedCases = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredCases.slice(start, start + itemsPerPage);
-  }, [filteredCases, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, filter]);
+  if (isPending) return <LoadingPage />
+  if (isError) return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
 
   const columns: Column<ReportCase>[] = [
     {
       header: "#",
-      accessor: (item) => filteredCases.findIndex((d) => d.id === item.id) + 1,
-      headerClassName: "w-15",
+      accessor: (item: ReportCase) => item.rowNumber,
+      headerClassName: "w-16",
     },
     {
       header: "الرقم الآلي للقضية",
-      accessor: "caseNumber",
+      accessor: "case_sequence",
     },
     {
       header: "اسم الموكل",
-      accessor: "clientName",
-    },
-    {
-      header: "المحامي المسؤول",
-      accessor: "assignedLawyer",
+      accessor: (item: ReportCase) => (item.client.first_name), 
     },
     {
       header: "الحالة",
-      accessor: (item) => {
-        const statusMap = {
-          pending: { label: "متداولة", color: "bg-success/20 text-success" },
-          closed: { label: "مغلقة", color: "bg-error/20 text-error" },
-          active: { label: "نشط", color: "bg-success/20 text-success" },
-          on_hold: { label: "غير نشط", color: "bg-error/20 text-error" },
-        };
-        const config = statusMap[item.status];
-        return (
-          <span className={`px-3 py-1 rounded-full text-xs font-regular ${config.color}`}>
-            {config.label}
-          </span>
-        );
-      },
+      accessor: (item) => (
+        <span
+          className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(item?.caseStatus?.name || "")} `}
+        >
+          {item?.caseStatus?.name}
+        </span>
+      ),
     },
   ];
 
@@ -88,21 +61,21 @@ const ReportsCasesFeature = () => {
         <HeaderPageReportsCases
           searchTerm={searchTerm}
           onSearch={setSearchTerm}
-          onFilterChange={setFilter}
-          filter={filter}
+          onFilterChange={setStatusFilter}
+          filter={statusFilter}
         />
 
         <DataTable
           columns={columns}
-          data={paginatedCases}
+          data={indexedData}
           rowIdField="id"
         />
 
         {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
+          <PaginationApi
+            currentPage={page}
             totalPages={totalPages}
-            onPageChange={setCurrentPage}
+            onPageChange={setPage}
           />
         )}
       </div>

@@ -11,7 +11,7 @@ interface UserTaskFilter {
 export const UserTaskFilter: React.FC<UserTaskFilter> = ({
   onFilterChange,
   currentFilter = "all",
-  filterOptions = [ // القيم الافتراضية (إنجليزي value, عربي label)
+  filterOptions = [
     { value: "all", label: "جميع الحالات" },
     { value: "done", label: "مُنجزة" },
     { value: "late", label: "متأخرة" },
@@ -27,7 +27,6 @@ export const UserTaskFilter: React.FC<UserTaskFilter> = ({
     return option ? option.label : "جميع الحالات";
   };
 
-  // إغلاق القائمة عند النقر خارجها
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {

@@ -6,7 +6,6 @@ export const fetchTasks = async (page: number, limit: number, status?: string, s
   if (status && status !== "all") {
     params.status = status;
   }
-  
   if (search && search.trim()) {
     params.search = search;
   }

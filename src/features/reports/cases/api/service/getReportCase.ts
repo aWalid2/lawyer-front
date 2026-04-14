@@ -1,6 +1,6 @@
 import api from "@/lib/api";
 
-export const getConsultations = async (page: number, limit: number, status?: string, search?: string) => {
+export const fetchReportCase = async (page: number, limit: number, status?: string, search?: string)=> {
     const params: any = { page, limit };
   
     if (status && status !== "all") {
@@ -11,7 +11,8 @@ export const getConsultations = async (page: number, limit: number, status?: str
       params.search = search;
     }
 
-    const response = await api.get("/consultation", { params });
-    return response.data;
-};
+    const {data} = await api.get("/reports/caseReports", { params });
+    return data;
+
+}
 
