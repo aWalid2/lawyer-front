@@ -2,10 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { updateProsecutionSessions } from "../services/updateProsecutionSessions";
 
-export const useUpdateProsecutionSessions = () => {
+export const useUpdateProsecutionSessions = ({ caseId }: { caseId: number }) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: updateProsecutionSessions,
+        mutationFn: (data: any) => updateProsecutionSessions({ caseId, data }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["prosecution-sessions"] });
             toast.success("تم تعديل الجلسة بنجاح", { position: "top-center" });

@@ -1,6 +1,6 @@
 import api from "@/lib/api";
 
-export const updateProsecutionSessions = async ({ id, data }: { id: number; data: any }) => {
-    const response = await api.patch(`/prosecution-sessions/update-prosecution-session/${id}`, data);
+export const updateProsecutionSessions = async ({ caseId, data }: { caseId: number; data: any }) => {
+    const response = await api.patch(`/prosecution/case-data/${caseId}`, data);
     return response.data;
 }

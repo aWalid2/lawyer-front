@@ -10,6 +10,7 @@ import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 import LoadingPage from "@/shared/components/LoadingPage";
+import { HeaderSessions } from "./components/HeaderSessions";
 
 const ProsecutionSessionsGroup = () => {
     const [page, setPage] = useState(1);
@@ -69,17 +70,8 @@ const ProsecutionSessionsGroup = () => {
 
     return (
         <div className="bg-white rounded-2xl p-4 md:p-6 border border-[#eeeeee] mt-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4">
-                <h1 className="text-xl font-cairo">جلسات النيابة</h1>
-                <button
-                    type="button"
-                    onClick={handleAdd}
-                    className="flex shrink-0 items-center justify-center gap-2 bg-[#CBA46226] rounded-md w-full sm:w-[180px] md:w-[200px] h-[50px] transition-colors duration-200 px-2 hover:bg-[#CBA46240]"
-                >
-                    <span className="text-[14px] sm:text-[16px] font-medium whitespace-nowrap text-[#CBA462]">+ إضافة جلسة نيابة</span>
-                </button>
-            </div>
 
+            <HeaderSessions handleAdd={handleAdd} />
             {sessions.length > 0 ? (
                 <>
                     {isPending ? <LoadingPage /> : (
