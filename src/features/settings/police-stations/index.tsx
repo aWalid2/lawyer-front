@@ -70,9 +70,7 @@ export const PoliceStationsFeature: React.FC = () => {
         <PoliceStationsHeader
           searchTerm={searchTerm}
           onSearch={setSearchTerm}
-          onStationAdded={() => {
-            refetch();
-          }}
+        
         />
 
         <DataTable

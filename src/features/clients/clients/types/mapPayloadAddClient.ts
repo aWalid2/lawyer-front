@@ -7,6 +7,7 @@ export const mapToApiPayload = (data: any) => ({
     country: data.country,
     ssn: data.ssn,
     address: data.address,
+    user_status: data.user_status,
     // Only send photo fields if they are strings (URLs). 
     // File objects/FileLists cannot be sent via JSON and cause Prisma errors.
     ...(typeof data.profile_photo === 'string' ? { profile_photo: data.profile_photo } : {}),
@@ -15,4 +16,4 @@ export const mapToApiPayload = (data: any) => ({
         notes: data.notes,
         ...(typeof data.contract_photo === 'string' ? { contract_photo: data.contract_photo } : {}),
     }
-});
+});

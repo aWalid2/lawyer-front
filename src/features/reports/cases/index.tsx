@@ -14,9 +14,9 @@ const ReportsCasesFeature = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const limit = 15;
-  const { data, isPending, isError, error } = useReportCase(page, limit, statusFilter, searchTerm);
-  const totalPages = data?.meta?.total_pages ?? 1;
-  const indexedData = useIndexedData(data, page, limit);
+  const { data: cases, isPending, isError, error } = useReportCase(page, limit, statusFilter, searchTerm);
+  const totalPages = cases?.meta?.total_pages ?? 1;
+  const indexedData = useIndexedData(cases?.data, page, limit);
 
 
   const getStatusStyles = (status: string) => {

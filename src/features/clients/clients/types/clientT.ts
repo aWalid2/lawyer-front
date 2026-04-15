@@ -19,7 +19,7 @@ export interface ClientRelatedT {
     rowNumber: number;
     created_at: string;
     updated_at: string;
-
+    
 }
 
 

@@ -7,18 +7,15 @@ import { HeaderTitle } from '@/shared/components/HeaderTitle';
 interface PoliceStationsHeaderProps {
     searchTerm: string;
     onSearch: (value: string) => void;
-    onStationAdded: () => void;
 }
 
 export const PoliceStationsHeader: React.FC<PoliceStationsHeaderProps> = ({
     searchTerm,
     onSearch,
-    onStationAdded,
 }) => {
     const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
 
     const handleSaveStation = () => {
-        onStationAdded();
         setIsAddModalOpen(false);
     };
 

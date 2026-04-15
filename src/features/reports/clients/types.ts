@@ -1,7 +1,12 @@
 export interface ReportClient {
-  id: string;
-  name: string;
-  casesCount: number;
-  assignedLawyer: string;
-  status: "active" | "inactive";
+    id: string;
+    user_id: string;
+    user: {
+        first_name: string;
+
+        user_status: string;
+    };
+    case_count: number;
+    rowNumber: number;
+
 }
