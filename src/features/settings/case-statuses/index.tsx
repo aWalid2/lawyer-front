@@ -15,7 +15,7 @@ export const CaseStatusesFeature: React.FC = () => {
     const [page, setPage] = useState(1);
     const limit = 15;
 
-    const { data: statusesResponse, isPending, isError, refetch } = useFetchCaseStatuses(page, limit, searchTerm);
+    const { data: statusesResponse, isPending, isError } = useFetchCaseStatuses(page, limit, searchTerm);
     
     const statuses = statusesResponse?.data || [];
     const totalPages = statusesResponse?.meta?.total_pages ?? 1;
@@ -25,7 +25,7 @@ export const CaseStatusesFeature: React.FC = () => {
         {
             header: "#",
             accessor: (item: CaseStatusT) => item.rowNumber,
-            headerClassName: "w-13",
+            headerClassName: "w-14",
             className: "w-13 text-center",
         },
         {
