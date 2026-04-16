@@ -15,6 +15,7 @@ import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { useCreatePoliceDepartment } from "../../../api/hooks/useCreatePoliceDepartment";
 import { useUpdatePoliceDepartment } from "../../../api/hooks/useUpdatePoliceDepartment";
+import type { FormValues } from "../../../types/typsePolice";
 
 
 interface EditModelProps {
@@ -22,14 +23,6 @@ interface EditModelProps {
   onClose: () => void;
   onSave: (values: FormValues) => void;
   mode?: "add" | "edit";
-}
-
-interface FormValues {
-  case_number: number;
-  station_id: number;
-  judge_name: string;
-  investigation_authirity_transferd_from: string;
-  case_entry: string;
 }
 
 const validationSchema = Yup.object({

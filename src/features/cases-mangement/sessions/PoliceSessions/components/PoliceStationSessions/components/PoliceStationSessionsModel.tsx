@@ -14,7 +14,6 @@ import { Form, Formik } from "formik";
 import { XIcon } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
-import * as Yup from "yup";
 import { useCreatePoliceSessions } from "../../../api/hooks/useCreatePoliceSessions";
 import { useUpdatePoliceSessions } from "../../../api/hooks/useUpdatePoliceSessions";
 import type { CreatePoliceSessionPayload, PoliceSession, SessionFormValues } from "../../../types/typsePolice";

@@ -10,12 +10,12 @@ import { Form, Formik } from "formik";
 import { XIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import * as Yup from "yup";
 import { useCreateProsecutionSession } from "../../../api/hooks/useCreateProsecutionSession";
 import { useUpdateProsecutionSession } from "../../../api/hooks/useUpdateProsecutionSession";
 import type { FormValues } from "../../../types/typseProsecution";
 import { useFetchProsecutions } from "@/features/settings/public-prosecutions/api/hooks/useGetProsecutions";
 import { SelectForm } from "@/shared/components/SelectForm";
+import * as Yup from "yup";
 
 interface EditModelProps {
   initialValues: FormValues;
