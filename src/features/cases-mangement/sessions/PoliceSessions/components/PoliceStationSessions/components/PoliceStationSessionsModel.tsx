@@ -67,8 +67,7 @@ function PoliceStationSessionsModel({
       const payload: CreatePoliceSessionPayload = {
         case_id: Number(id),
         lawyer_id: Number(values.lawyer_id),
-        session_date: values.session_date,
-        session_time: values.session_time,
+        session_date: values.session_date + "T" + values.session_time,
         session_ruling: values.session_ruling,
       };
 
@@ -137,8 +136,7 @@ function PoliceStationSessionsModel({
                 <InputForm
                   name="session_time"
                   label="وقت الجلسة"
-                  type="text"
-                  placeholder="مثال: 2:30"
+                  type="time"
                 />
               </div>
 

@@ -25,6 +25,7 @@ interface ProsecutionSessionsModelProps {
 
 const validationSchema = Yup.object({
     session_date: Yup.string().required("تاريخ الجلسة مطلوب"),
+    session_time: Yup.string().required("وقت الجلسة مطلوب"),
     lawyer_id: Yup.string().required("اسم المحامي المسؤول مطلوب"),
     session_ruling: Yup.string().required("قرار الجلسة مطلوب"),
 });
@@ -43,11 +44,16 @@ function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: Pros
     const lawyersOptions = lawyers.map((lawyer: any) => ({
         value: String(lawyer?.user_id),
         label: lawyer?.user?.first_name,
-    }));
+    })) || [];
+
+    console.log(lawyersOptions);
 
     const defaultFormValues = {
         session_date: initialValues?.session_date
             ? initialValues.session_date.split("T")[0]
+            : "",
+        session_time: initialValues?.session_time
+            ? initialValues.session_time.split("T")[1]
             : "",
         lawyer_id: initialValues?.lawyer_id ? String(initialValues.lawyer_id) : "",
         session_ruling: initialValues?.session_ruling || "",
@@ -55,7 +61,7 @@ function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: Pros
 
     const handleSubmit = async (values: any) => {
         const payload = {
-            session_date: values.session_date,
+            session_date: values.session_date + "T" + values.session_time,
             lawyer_id: Number(values.lawyer_id),
             session_ruling: values.session_ruling,
         };
@@ -113,15 +119,20 @@ function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: Pros
                                     label="تاريخ الجلسة"
                                     type="date"
                                 />
+                                <InputForm
+                                    name="session_time"
+                                    label="وقت الجلسة"
+                                    type="time"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-4">
                                 <SelectForm
                                     name="lawyer_id"
                                     label="المحامي المسؤول"
                                     options={lawyersOptions}
                                     placeholder="اختر المحامي المسؤول"
                                 />
-                            </div>
-
-                            <div className="grid grid-cols-1 gap-4">
                                 <TextAreaForm
                                     name="session_ruling"
                                     label="القرار "

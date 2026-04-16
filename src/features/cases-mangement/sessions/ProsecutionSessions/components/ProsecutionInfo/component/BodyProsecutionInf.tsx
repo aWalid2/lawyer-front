@@ -11,6 +11,7 @@ export const BodyProsecutionInf = ({ data }: { data: any }) => {
         <InputBox label="النيابة:" text={data.prosecution?.name} />
         <InputBox label="تاريخ تسجيل القضية داخل النيابة:" text={formatDateToYYYYMMDD(data.case_regestration_date_at_presecution)} />
       </div>
+      <InputBox label="وكيل النيابة:" text={data.Prosecutor_Name} />
     </div>
   )
 }

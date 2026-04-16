@@ -19,6 +19,7 @@ const ProsecutionInfo = () => {
     case_number_at_Presecution: data?.case_number_at_Presecution,
     prosecution_id: data?.prosecution_id,
     case_regestration_date_at_presecution: data?.case_regestration_date_at_presecution,
+    Prosecutor_Name: data?.Prosecutor_Name,
 
   };
 
@@ -49,6 +50,7 @@ const ProsecutionInfo = () => {
     case_number_at_Presecution: "",
     prosecution_id: 0,
     case_regestration_date_at_presecution: "",
+    Prosecutor_Name: "",
 
   };
 

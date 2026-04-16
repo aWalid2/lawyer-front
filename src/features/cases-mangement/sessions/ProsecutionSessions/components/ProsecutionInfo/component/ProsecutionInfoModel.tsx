@@ -59,6 +59,7 @@ function ProsecutionInfoModel({ initialValues, onClose, onSave, mode = "add" }: 
           data: {
             case_number_at_Presecution: Number(values.case_number_at_Presecution),
             prosecution_id: Number(values.prosecution_id),
+            Prosecutor_Name: values.Prosecutor_Name,
             case_regestration_date_at_presecution: values.case_regestration_date_at_presecution,
           },
         });
@@ -69,6 +70,7 @@ function ProsecutionInfoModel({ initialValues, onClose, onSave, mode = "add" }: 
             case_number_at_Presecution: Number(values.case_number_at_Presecution),
             prosecution_id: Number(values.prosecution_id),
             case_regestration_date_at_presecution: values.case_regestration_date_at_presecution,
+            Prosecutor_Name: values.Prosecutor_Name,
           },
         });
       }
@@ -119,6 +121,12 @@ function ProsecutionInfoModel({ initialValues, onClose, onSave, mode = "add" }: 
                   label="رقم القضية في النيابة"
                   type="text"
                   placeholder="رقم القضية في النيابة"
+                />
+                <InputForm
+                  name="Prosecutor_Name"
+                  label="وكيل النيابة"
+                  type="text"
+                  placeholder="وكيل النيابة"
                 />
 
                 <InputForm

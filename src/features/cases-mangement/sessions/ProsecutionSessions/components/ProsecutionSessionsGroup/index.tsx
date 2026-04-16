@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import ProsecutionSessionsModel from "./components/ProsecutionSessionsModel";
 import { ActionsCoulmn } from "./components/ActionsCoulmn";
 import { useGetProsecutionSessions } from "../../api/hooks/useGetProsecutionSessions";
-import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 import LoadingPage from "@/shared/components/LoadingPage";
@@ -18,13 +18,11 @@ const ProsecutionSessionsGroup = () => {
     const [editingSession, setEditingSession] = useState<any | null>(null);
 
     const { id } = useParams<{ id: string }>();
-    const { data: sessionsResponse, isPending } = useGetProsecutionSessions(Number(id), page, 5);
-    console.log(sessionsResponse);
+    const { data: sessionsResponse, isPending } = useGetProsecutionSessions(Number(id), page, 2);
     const sessions = sessionsResponse?.data || [];
     const totalPages = sessionsResponse?.meta?.lastPage || 1;
 
-    const indexedData = useIndexedData(sessions, page, 5);
-    console.log(indexedData);
+    const indexedData = useIndexedData(sessions, page, 2);
 
     const handleAdd = () => {
         setEditingSession(null);
@@ -52,13 +50,17 @@ const ProsecutionSessionsGroup = () => {
             accessor: (item) => formatDateToYYYYMMDD(item.session_date),
         },
         {
+            header: "وقت الجلسة",
+            accessor: (item) => formatDateToTime(item.session_date),
+        },
+        {
             header: "المحامي المتابع",
-            accessor: (item) => item?.lawyer?.first_name || item.lawyer,
+            accessor: (item) => item?.lawyer?.user?.first_name || "لا يوجد",
             className: "font-medium text-gray-800",
         },
         {
             header: "قرار الجلسة",
-            accessor: (item) => item.session_ruling || item.session_ruling,
+            accessor: (item) => item.session_ruling || "لا يوجد",
         },
         {
             header: "الإجراءات",

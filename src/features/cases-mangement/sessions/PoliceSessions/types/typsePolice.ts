@@ -43,7 +43,7 @@ export interface CreatePoliceSessionPayload {
     lawyer_id: number;
     session_date: string;
     session_ruling: string;
-    session_time: string;
+    session_time?: string;
 }
 
 export interface SessionFormValues {

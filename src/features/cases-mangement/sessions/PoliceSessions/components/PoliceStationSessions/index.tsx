@@ -7,7 +7,7 @@ import { ActionsCoulmn } from "./components/ActionsCoulmn";
 import HeaderPoliceStaionSessions from "./components/HeaderPoliceStaionSessions";
 import { useGetPoliceSessions } from "../../api/hooks/useGetPoliceSessions";
 import type { PoliceSession } from "../../types/typsePolice";
-import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import { useParams } from "react-router-dom";
 import { EmptyTable } from "@/shared/components/EmptyTable";
@@ -49,12 +49,12 @@ const PoliceStationsession = () => {
             headerClassName: "w-[60px]",
         },
         {
-            header: "تاريخ الجلسة",
+            header: " تاريخ الجلسة",
             accessor: (item) => formatDateToYYYYMMDD(item.session_date),
         },
         {
             header: "وقت الجلسة",
-            accessor: (item) => item.session_time,
+            accessor: (item) => formatDateToTime(item.session_date),
         },
         {
             header: "المحامي المتابع",
