@@ -25,50 +25,44 @@ interface ProsecutionSessionsModelProps {
 
 const validationSchema = Yup.object({
     session_date: Yup.string().required("تاريخ الجلسة مطلوب"),
-    session_time: Yup.string().required("وقت الجلسة مطلوب"),
     lawyer_id: Yup.string().required("اسم المحامي المسؤول مطلوب"),
     session_ruling: Yup.string().required("قرار الجلسة مطلوب"),
 });
 
-const defaultValues = {
-    session_date: "",
-    session_time: "",
-    lawyer_id: "",
-    session_ruling: "",
-};
-
-
-
 function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: ProsecutionSessionsModelProps) {
     const { id } = useParams<{ id: string }>();
 
-    const { mutateAsync: createSessionAsync, isPending: isCreating } = useCreateProsecutionSessions({ caseId: Number(id) });
-    const { mutateAsync: updateSessionAsync, isPending: isUpdating } = useUpdateProsecutionSessions({ caseId: Number(id) });
+    const { mutateAsync: createSessionAsync, isPending: isCreating } = useCreateProsecutionSessions();
+    const { mutateAsync: updateSessionAsync, isPending: isUpdating } = useUpdateProsecutionSessions();
 
     const isPending = isCreating || isUpdating;
 
-    const { data: lawyers } = useFetchLawyers();
-    console.log(lawyers);
+    const { data: lawyersResponse } = useFetchLawyers();
+    const lawyers = Array.isArray(lawyersResponse) ? lawyersResponse : (lawyersResponse as any)?.data || [];
 
-    const lawyersOptions = lawyers?.map((lawyer: any) => ({
-        value: lawyer.user.id,
-        label: lawyer.user.first_name,
-    })) || [];
+    const lawyersOptions = lawyers.map((lawyer: any) => ({
+        value: String(lawyer?.user_id),
+        label: lawyer?.user?.first_name,
+    }));
 
-    console.log(lawyersOptions);
+    const defaultFormValues = {
+        session_date: initialValues?.session_date
+            ? initialValues.session_date.split("T")[0]
+            : "",
+        lawyer_id: initialValues?.lawyer_id ? String(initialValues.lawyer_id) : "",
+        session_ruling: initialValues?.session_ruling || "",
+    };
 
     const handleSubmit = async (values: any) => {
-        const case_id = Number(id);
         const payload = {
-            case_id: case_id,
             session_date: values.session_date,
-            lawyer_id: values.lawyer_id,
+            lawyer_id: Number(values.lawyer_id),
             session_ruling: values.session_ruling,
         };
 
         try {
             if (mode === "add") {
-                await createSessionAsync(payload);
+                await createSessionAsync({ caseId: Number(id), data: payload });
             } else {
                 await updateSessionAsync({ id: initialValues?.id, data: payload });
             }
@@ -89,7 +83,10 @@ function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: Pros
                 <DialogClose asChild>
                     <button
                         type="button"
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onClose();
+                        }}
                         className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all"
                     >
                         <XIcon size={23} className="text-gray-500" />
@@ -103,26 +100,28 @@ function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: Pros
                 </DialogHeader>
 
                 <Formik
-                    initialValues={initialValues || defaultValues}
+                    initialValues={defaultFormValues}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                     enableReinitialize
                 >
                     {() => (
                         <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
-                            <div className="grid grid-cols-1 gap-x-4 gap-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <InputForm
+                                    name="session_date"
+                                    label="تاريخ الجلسة"
+                                    type="date"
+                                />
                                 <SelectForm
                                     name="lawyer_id"
                                     label="المحامي المسؤول"
                                     options={lawyersOptions}
                                     placeholder="اختر المحامي المسؤول"
                                 />
-                                <InputForm
-                                    name="session_date"
-                                    label="تاريخ الجلسة"
-                                    type="date"
-                                />
+                            </div>
 
+                            <div className="grid grid-cols-1 gap-4">
                                 <TextAreaForm
                                     name="session_ruling"
                                     label="القرار "

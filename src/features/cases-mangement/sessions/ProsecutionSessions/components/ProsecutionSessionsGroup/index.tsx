@@ -19,10 +19,12 @@ const ProsecutionSessionsGroup = () => {
 
     const { id } = useParams<{ id: string }>();
     const { data: sessionsResponse, isPending } = useGetProsecutionSessions(Number(id), page, 5);
+    console.log(sessionsResponse);
     const sessions = sessionsResponse?.data || [];
     const totalPages = sessionsResponse?.meta?.lastPage || 1;
 
     const indexedData = useIndexedData(sessions, page, 5);
+    console.log(indexedData);
 
     const handleAdd = () => {
         setEditingSession(null);
@@ -47,11 +49,7 @@ const ProsecutionSessionsGroup = () => {
         },
         {
             header: "تاريخ الجلسة",
-            accessor: (item) => item.session_date ? formatDateToYYYYMMDD(item.session_date) : item.sessionDate,
-        },
-        {
-            header: "وقت الجلسة",
-            accessor: (item) => item.session_time || item.sessionTime,
+            accessor: (item) => formatDateToYYYYMMDD(item.session_date),
         },
         {
             header: "المحامي المتابع",
@@ -60,7 +58,7 @@ const ProsecutionSessionsGroup = () => {
         },
         {
             header: "قرار الجلسة",
-            accessor: (item) => item.session_ruling || item.decision,
+            accessor: (item) => item.session_ruling || item.session_ruling,
         },
         {
             header: "الإجراءات",

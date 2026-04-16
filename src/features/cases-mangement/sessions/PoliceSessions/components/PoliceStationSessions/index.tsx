@@ -24,7 +24,6 @@ const PoliceStationsession = () => {
     const { data: sessionsResponse, isPending } = useGetPoliceSessions(Number(id), page, 3);
     const sessions = sessionsResponse?.data || [];
     const totalPages = sessionsResponse?.meta?.lastPage || 1;
-    // console.log(sessions);
 
     const indexedData = useIndexedData(sessions, page, 3)
 
