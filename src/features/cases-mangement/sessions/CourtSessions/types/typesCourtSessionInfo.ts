@@ -11,6 +11,12 @@ export interface CourtSessionInfoValues {
   secretary_office_number: number | null | string;
   registration_date: string | null;
   next_session_date: string | null;
+  court?: {
+    name: string;
+  };
+  lawyer?: {
+    name: string;
+  };
 }
 
 export interface CourtInfoInfProps {

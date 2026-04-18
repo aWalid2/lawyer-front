@@ -8,25 +8,25 @@ export const FirstDegreeInfoSessions: React.FC<CourtInfoInfProps> = ({ courtInfo
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-        <FirstDegreeBox label="اسم المحكمة" text={courtInfoData?.court_id} />
-        <FirstDegreeBox label="الدور في المحكمة" text={courtInfoData?.floor_number} />
+        <FirstDegreeBox label="اسم المحكمة" text={courtInfoData?.court?.name || "-"} />
+        <FirstDegreeBox label="الدور في المحكمة" text={courtInfoData?.floor_number || "-"} />
 
         <div className="flex flex-col md:flex-row gap-4 col-span-1 md:col-span-2">
-          <FirstDegreeBox label="رقم القاعة في المحكمة" text={courtInfoData?.hall_number} />
+          <FirstDegreeBox label="رقم القاعة في المحكمة" text={courtInfoData?.hall_number || "-"} />
 
-          <FirstDegreeBox label="رقم الدائرة" text={courtInfoData?.district_number} />
+          <FirstDegreeBox label="رقم الدائرة" text={courtInfoData?.district_number || "-"} />
 
-          <FirstDegreeBox label="نوع الدائرة" text={courtInfoData?.district_type} />
+          <FirstDegreeBox label="نوع الدائرة" text={courtInfoData?.district_type || "-"} />
         </div>
         <FirstDegreeBox
           label="اسم قاضي الدائرة"
-          text={courtInfoData?.judge_name}
+          text={courtInfoData?.judge_name || "-"}
         />
 
-        <FirstDegreeBox label="اسم سكرتير الدائرة" text={courtInfoData?.secretary_name} />
-        <FirstDegreeBox label="دور مكتب السكرتير" text={courtInfoData?.secretary_floor || ""} />
+        <FirstDegreeBox label="اسم سكرتير الدائرة" text={courtInfoData?.secretary_name || "-"} />
+        <FirstDegreeBox label="دور مكتب السكرتير" text={courtInfoData?.secretary_floor || "-"} />
 
-        <FirstDegreeBox label="رقم مكتب السكرتير" text={courtInfoData?.secretary_office_number || ""} />
+        <FirstDegreeBox label="رقم مكتب السكرتير" text={courtInfoData?.secretary_office_number || "-"} />
         <FirstDegreeBox
           label="تاريخ تسجيل القضية بالمحكمة:"
           text={formatDateToYYYYMMDD(courtInfoData?.registration_date) + " - " + formatDateToTime(courtInfoData?.registration_date)}
