@@ -134,19 +134,30 @@ export const FormSessionDialog: React.FC<{
                 label="رقم مكتب السكرتير"
                 type="text"
               />
+
               <InputForm
                 name="registration_date"
                 label="تاريخ تسجيل القضية بالمحكمة"
-                type="text"
+                type="date"
+              />
+              <InputForm
+                name="registration_time"
+                label="وقت تسجيل القضية بالمحكمة"
+                type="time"
               />
 
-              <div className="md:col-span-2">
-                <InputForm
-                  name="next_session_date"
-                  label="تاريخ ووقت الجلسة القادمة"
-                  type="text"
-                />
-              </div>
+
+              <InputForm
+                name="next_session_date"
+                label="تاريخ ووقت الجلسة القادمة"
+                type="date"
+              />
+              <InputForm
+                name="next_session_time"
+                label="وقت الجلسة القادمة"
+                type="time"
+              />
+
             </div>
             <button
               type="submit"

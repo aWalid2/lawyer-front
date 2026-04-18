@@ -9,7 +9,9 @@ export interface FirstDegreeFormValues {
   secretary_floor: string;
   secretary_office_number: string;
   registration_date: string;
+  registration_time?: string;
   next_session_date: string;
+  next_session_time?: string;
   lawyer_id: string;
 }
 

@@ -2,6 +2,7 @@ import React from "react";
 import { FirstDegreeBox } from "./components/FirstDegreeBox";
 import type { CourtInfoInfProps } from "../../../../types/typesCourtSessionInfo";
 import { DateIcon } from "@/shared/icons/Date";
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
 export const FirstDegreeInfoSessions: React.FC<CourtInfoInfProps> = ({ courtInfoData }) => {
   return (
@@ -28,11 +29,11 @@ export const FirstDegreeInfoSessions: React.FC<CourtInfoInfProps> = ({ courtInfo
         <FirstDegreeBox label="رقم مكتب السكرتير" text={courtInfoData?.secretary_office_number || ""} />
         <FirstDegreeBox
           label="تاريخ تسجيل القضية بالمحكمة:"
-          text={courtInfoData?.registration_date}
+          text={formatDateToYYYYMMDD(courtInfoData?.registration_date) + " - " + formatDateToTime(courtInfoData?.registration_date)}
           icon={<DateIcon />}
         />
 
-        <FirstDegreeBox label="تاريخ ووقت الجلسة القادمة" text={courtInfoData?.next_session_date} icon={<DateIcon />} />
+        <FirstDegreeBox label="تاريخ ووقت الجلسة القادمة" text={formatDateToYYYYMMDD(courtInfoData?.next_session_date) + " - " + formatDateToTime(courtInfoData?.next_session_date)} icon={<DateIcon />} />
 
       </div>
     </div>
