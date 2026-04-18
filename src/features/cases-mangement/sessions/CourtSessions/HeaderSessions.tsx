@@ -7,12 +7,12 @@ import LoadingPage from "@/shared/components/LoadingPage";
 
 export const HeaderSessions = ({ tab }: { tab: string }) => {
     const { id } = useParams<{ id: string }>();
-    const { data: appealDataArr, isPending: isAppealLoading } = useGetCourtSessionData(id || "", tab);
+    const { data: appealData, isPending: isAppealLoading } = useGetCourtSessionData(id || "", tab);
     const { mutate: updateAppeal } = useUpdateCourtSessionData();
     const { mutate: createAppeal } = useCreateCourtSessionData();
 
-    const hasData = appealDataArr && appealDataArr.length > 0;
-    const appealData = hasData ? appealDataArr[0] : null;
+    const hasData = appealData
+
 
     const initialValues = {
         court_id: tab === "appeal" && appealData ? appealData.court_id : "",
