@@ -4,6 +4,7 @@ import { useGetCourtSessionData } from "./api/hooks/useGetCourtSessionData";
 import { useUpdateCourtSessionData } from "./api/hooks/useUpdateCourtSessionData";
 import { useCreateCourtSessionData } from "./api/hooks/useCreateCourtSessionData";
 import LoadingPage from "@/shared/components/LoadingPage";
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
 export const HeaderSessions = ({ tab }: { tab: string }) => {
     const { id } = useParams<{ id: string }>();
@@ -24,10 +25,10 @@ export const HeaderSessions = ({ tab }: { tab: string }) => {
         secretary_name: courtSessionData?.secretary_name || "",
         secretary_floor: courtSessionData?.secretary_floor ? String(courtSessionData.secretary_floor) : "",
         secretary_office_number: courtSessionData?.secretary_office_number ? String(courtSessionData.secretary_office_number) : "",
-        registration_date: courtSessionData?.registration_date ? courtSessionData.registration_date.split("T")[0] : "",
-        registration_time: courtSessionData?.registration_date ? courtSessionData.registration_date.split("T")[1]?.substring(0, 5) : "",
-        next_session_date: courtSessionData?.next_session_date ? courtSessionData.next_session_date.split("T")[0] : "",
-        next_session_time: courtSessionData?.next_session_date ? courtSessionData.next_session_date.split("T")[1]?.substring(0, 5) : "",
+        registration_date: courtSessionData?.registration_date ? formatDateToYYYYMMDD(courtSessionData.registration_date) : "",
+        registration_time: courtSessionData?.registration_date ? formatDateToTime(courtSessionData.registration_date) : "",
+        next_session_date: courtSessionData?.next_session_date ? formatDateToYYYYMMDD(courtSessionData.next_session_date) : "",
+        next_session_time: courtSessionData?.next_session_date ? formatDateToTime(courtSessionData.next_session_date) : "",
     };
 
     const handleSave = (values: any) => {
@@ -40,8 +41,8 @@ export const HeaderSessions = ({ tab }: { tab: string }) => {
             district_number: Number(values.district_number),
             secretary_floor: Number(values.secretary_floor),
             secretary_office_number: Number(values.secretary_office_number),
-            registration_date: values.registration_date + "T" + (values.registration_time || "00:00") + ":00.000Z",
-            next_session_date: values.next_session_date + "T" + (values.next_session_time || "00:00") + ":00.000Z",
+            registration_date: values.registration_date + "T" + (values.registration_time || "00:00"),
+            next_session_date: values.next_session_date + "T" + (values.next_session_time || "00:00"),
             session_type: tab,
         };
 
