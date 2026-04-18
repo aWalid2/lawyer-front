@@ -8,7 +8,6 @@ export const AppealSessions = () => {
     const { id } = useParams<{ id: string }>();
     const { data: appealData, isPending } = useGetCourtSessionData(id || "", "appeal");
 
-    console.log(appealData);
     if (isPending) {
         return <LoadingPage />;
     }
@@ -16,12 +15,12 @@ export const AppealSessions = () => {
 
 
     return (
-        <div className="border border-gray-300 p-6 rounded-xl">
+        <>
             {appealData ? (
-                <AppealInfoSessions appealData={appealData} />
+                <AppealInfoSessions courtInfoData={appealData} />
             ) : (
                 <EmptyTable message="لا توجد بيانات للاستئناف" />
             )}
-        </div>
+        </>
     );
 };

@@ -2,7 +2,7 @@ import React from "react";
 
 interface AppealBoxProps {
     label: string;
-    text: string;
+    text: string | number | null;
     icon?: React.ReactNode;
 }
 

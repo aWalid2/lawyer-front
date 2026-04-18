@@ -7,60 +7,72 @@ import LoadingPage from "@/shared/components/LoadingPage";
 
 export const HeaderSessions = ({ tab }: { tab: string }) => {
     const { id } = useParams<{ id: string }>();
-    const { data: appealData, isPending: isAppealLoading } = useGetCourtSessionData(id || "", tab);
-    const { mutate: updateAppeal } = useUpdateCourtSessionData();
-    const { mutate: createAppeal } = useCreateCourtSessionData();
+    const { data: courtSessionData, isPending: isCourtSessionLoading } = useGetCourtSessionData(id || "", tab);
+    const { mutate: updateCourtSession } = useUpdateCourtSessionData();
+    const { mutate: createCourtSession } = useCreateCourtSessionData();
 
-    const hasData = appealData
-
+    const hasData = !!courtSessionData;
 
     const initialValues = {
-        court_id: tab === "appeal" && appealData ? appealData.court_id : "",
-        floor_number: tab === "appeal" && appealData ? appealData.floor_number : "",
-        hall_number: tab === "appeal" && appealData ? appealData.hall_number : "",
-        district_number: tab === "appeal" && appealData ? appealData.district_number : "",
-        district_type: tab === "appeal" && appealData ? appealData.district_type : "",
-        judge_name: tab === "appeal" && appealData ? appealData.judge_name : "",
-        secretary_name: tab === "appeal" && appealData ? appealData.secretary_name : "",
-        secretary_floor: tab === "appeal" && appealData ? appealData.secretary_floor : "",
-        secretary_office_number: tab === "appeal" && appealData ? appealData.secretary_office_number : "",
-        registration_date: tab === "appeal" && appealData ? appealData.registration_date : "",
-        next_session_date: tab === "appeal" && appealData ? appealData.next_session_date : "",
+        court_id: courtSessionData?.court_id ? String(courtSessionData.court_id) : "",
+        lawyer_id: courtSessionData?.lawyer_id ? String(courtSessionData.lawyer_id) : "",
+        floor_number: courtSessionData?.floor_number ? String(courtSessionData.floor_number) : "",
+        hall_number: courtSessionData?.hall_number ? String(courtSessionData.hall_number) : "",
+        district_number: courtSessionData?.district_number ? String(courtSessionData.district_number) : "",
+        district_type: courtSessionData?.district_type || "",
+        judge_name: courtSessionData?.judge_name || "",
+        secretary_name: courtSessionData?.secretary_name || "",
+        secretary_floor: courtSessionData?.secretary_floor ? String(courtSessionData.secretary_floor) : "",
+        secretary_office_number: courtSessionData?.secretary_office_number ? String(courtSessionData.secretary_office_number) : "",
+        registration_date: courtSessionData?.registration_date || "",
+        next_session_date: courtSessionData?.next_session_date || "",
     };
 
     const handleSave = (values: any) => {
-        if (tab === "appeal" && id) {
+        const payload = {
+            ...values,
+            court_id: Number(values.court_id),
+            lawyer_id: Number(values.lawyer_id),
+            floor_number: Number(values.floor_number),
+            hall_number: Number(values.hall_number),
+            district_number: Number(values.district_number),
+            secretary_floor: Number(values.secretary_floor),
+            secretary_office_number: Number(values.secretary_office_number),
+            session_type: tab, // session_type must match tab value ("first_instance", "appeal", "cassation")
+        };
+
+        if (id) {
             if (hasData) {
-                updateAppeal({ id, data: values, level: "appeal" });
+                updateCourtSession({ id, data: payload, level: tab });
             } else {
-                createAppeal({ id, data: values, level: "appeal" });
+                createCourtSession({ id, data: payload, level: tab });
             }
-        } else {
-            console.log(`Saving ${tab} sessions:`, values);
         }
     };
 
-    if (tab === "appeal" && isAppealLoading) {
+    if (isCourtSessionLoading) {
         return <LoadingPage />;
     }
+
+    const tabConfig: Record<string, { title: string; formTitle: string }> = {
+        first_instance: { title: "بيانات أول درجة", formTitle: "معلومات أول درجة" },
+        appeal: { title: "بيانات الاستئناف", formTitle: "معلومات الاستئناف" },
+        distinction: { title: "بيانات التمييز", formTitle: "معلومات التمييز" },
+    };
+
+    const currentTab = tabConfig[tab] || tabConfig.first_instance;
 
     return (
         <div className="flex flex-wrap items-center justify-between gap-2 w-full pb-6">
             <h2 className="text-xl font-semibold text-secondary font-cairo whitespace-nowrap self-start md:self-center">
-                {tab === "first" ? "بيانات أول درجة" : tab === "appeal" ? "بيانات الاستئناف" : "بيانات التمييز"}
+                {currentTab.title}
             </h2>
-            {tab === "first" && <FormSessionDialog title="تعديل معلومات أول درجة" initialValues={initialValues} onSubmit={handleSave} />}
-
-            {tab === "appeal" && (
-                <FormSessionDialog
-                    title={hasData ? "تعديل معلومات الاستئناف" : "إضافة معلومات الاستئناف"}
-                    buttonTitle={hasData ? "تعديل" : "إضافة"}
-                    initialValues={initialValues}
-                    onSubmit={handleSave}
-                />
-            )}
-
-            {tab === "distinction" && <FormSessionDialog title="تعديل معلومات التمييز" initialValues={initialValues} onSubmit={handleSave} />}
+            <FormSessionDialog
+                title={hasData ? `تعديل ${currentTab.formTitle}` : `إضافة ${currentTab.formTitle}`}
+                buttonTitle={hasData ? "تعديل" : "إضافة"}
+                initialValues={initialValues}
+                onSubmit={handleSave}
+            />
         </div>
     );
 };

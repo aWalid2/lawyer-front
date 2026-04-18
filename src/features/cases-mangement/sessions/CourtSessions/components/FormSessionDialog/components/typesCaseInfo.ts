@@ -10,6 +10,7 @@ export interface FirstDegreeFormValues {
   secretary_office_number: string;
   registration_date: string;
   next_session_date: string;
+  lawyer_id: string;
 }
 
 export interface FormFirsDegreeProps {

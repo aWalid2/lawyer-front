@@ -2,7 +2,7 @@ import React from "react";
 
 interface FirstDegreeBoxProps {
   label: string;
-  text: string;
+  text: string | number | null;
   icon?: React.ReactNode;
 }
 

@@ -17,6 +17,9 @@ import { useGetCourts } from "@/shared/api/hooks/useGetCourts";
 import { SelectForm } from "@/shared/components/SelectForm";
 
 
+import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
+
+
 export const FormSessionDialog: React.FC<{
   title: string;
   buttonTitle?: string;
@@ -25,12 +28,18 @@ export const FormSessionDialog: React.FC<{
 }> = ({ title, buttonTitle = "تعديل", initialValues, onSubmit }) => {
   const [open, setOpen] = useState<boolean>(false);
   const { data: courts } = useGetCourts();
+  const { data: lawyersResponse } = useFetchLawyers();
 
   const courtsOptions = courts?.data?.map((court: any) => ({
-    value: court.id,
+    value: String(court.id),
     label: court.name,
-  }));
+  })) || [];
 
+  const lawyers = Array.isArray(lawyersResponse) ? lawyersResponse : (lawyersResponse as any)?.data || [];
+  const lawyersOptions = lawyers.map((lawyer: any) => ({
+    value: String(lawyer?.user_id),
+    label: lawyer?.user?.first_name + " " + (lawyer?.user?.last_name || ""),
+  })) || [];
 
 
   return (
@@ -75,6 +84,12 @@ export const FormSessionDialog: React.FC<{
                 label="اسم المحكمة"
                 options={courtsOptions}
               />
+              <SelectForm
+                name="lawyer_id"
+                label="المحامي المسؤول"
+                options={lawyersOptions}
+              />
+
               <InputForm
                 name="floor_number"
                 label="الدور في المحكمة"
