@@ -2,6 +2,7 @@ import deleteic from "@/public/images/delete.svg";
 import editefff from "@/public/images/edit.svg";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { SessionDialog } from "./SessionDialog";
+import { useState } from "react";
 interface ActionsCoulmnProps {
     item: any;
     onEdit: (values: any) => void;
@@ -9,9 +10,12 @@ interface ActionsCoulmnProps {
 }
 
 export const TableSessionsActions = ({ item, onEdit, onDelete }: ActionsCoulmnProps) => {
+    const [open, setOpen] = useState(false);
     return (
         <div className="flex items-center justify-center gap-2 md:gap-3 flex-nowrap">
             <SessionDialog
+                open={open}
+                onOpenChange={setOpen}
                 initialValues={item}
                 trigger={
                     <button

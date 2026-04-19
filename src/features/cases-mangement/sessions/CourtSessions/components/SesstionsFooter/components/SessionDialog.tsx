@@ -26,6 +26,8 @@ interface SessionDialogProps {
   onSave: (values: Session) => void;
   initialValues?: Session;
   trigger: React.ReactNode;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 const validationSchema = Yup.object({
@@ -39,8 +41,10 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
   trigger,
   onSave,
   initialValues,
+  open,
+  onOpenChange,
 }) => {
-  const { data: courts } = useGetCourts();
+  const { data: courts } = useGetCourts(undefined, undefined, undefined, open);
 
   const courtsOptions = courts?.data.map((court: any) => ({
     value: court.id,
@@ -56,7 +60,7 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
   };
 
   return (
-    <Dialog >
+    <Dialog open={open} onOpenChange={onOpenChange} >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
         className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"

@@ -27,8 +27,8 @@ export const FormSessionDialog: React.FC<{
   onSubmit: (values: FirstDegreeFormValues) => void;
 }> = ({ title, buttonTitle = "تعديل", initialValues, onSubmit }) => {
   const [open, setOpen] = useState<boolean>(false);
-  const { data: courts } = useGetCourts();
-  const { data: lawyersResponse } = useFetchLawyers();
+  const { data: courts } = useGetCourts(undefined, undefined, undefined, open);
+  const { data: lawyersResponse } = useFetchLawyers(open);
 
   const courtsOptions = courts?.data?.map((court: any) => ({
     value: String(court.id),
