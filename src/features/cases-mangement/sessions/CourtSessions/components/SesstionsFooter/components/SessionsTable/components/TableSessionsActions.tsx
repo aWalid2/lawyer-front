@@ -5,10 +5,10 @@ import { SessionDialog } from "../../SessionDialog";
 
 interface Session {
     id?: number;
-    sessionTime: string;
-    courtName: string;
-    hallRole: string;
-    hallNumber: string;
+    session_date: string;
+    court_id: number;
+    hall_floor: number;
+    hall_number: number;
 }
 
 interface TableSessionsActionsProps {
