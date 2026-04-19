@@ -1,11 +1,11 @@
 import React from "react";
 import { ExpertsSessionInfo } from "./components/ExpertsSessionInfo";
-import { TableExpert } from "./components/TableExpert";
+import { TableExpertsSessions } from "./components/TableExpertsSessions";
 const ExpertSessions: React.FC = () => {
   return (
     <>
       <ExpertsSessionInfo />
-      <TableExpert />
+      <TableExpertsSessions />
     </>
   );
 };

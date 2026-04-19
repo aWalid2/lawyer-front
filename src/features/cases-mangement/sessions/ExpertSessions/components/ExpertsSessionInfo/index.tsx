@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { EditModelExperts } from "../EditModelExperts";
+import { EditModelExperts } from "./components/EditModelExperts";
 import { ExpertsSessionBox } from "./components/ExpertsSessionBox";
 import { HeaderExpertsSessionInfo } from "./components/HeaderExpertsSessionInfo";
 

@@ -1,22 +1,21 @@
 import React, { useState } from 'react'
 import { DataTable, type Column } from '@/shared/components/DataTable'
-import { ExpertsActions } from './ExpertsActions';
-import AddExpertModal from './AddExpertModal'; // هنعمله بعد كده
-
+import { ExpertsActions } from './components/ExpertsActions';
+import AddExpertModal from './components/AddExpertModal';
 interface ExpertsTableProps {
 
 }
 
 interface ExpertRelatedT {
     id: string;
-    expertReportNumber: string;      // رقم تقرير الخبير
-    assignedAuthority: string;       // الجهة المكلفة
-    assignmentDate: string;          // تاريخ التكليف
-    expertOfficeName: string;        // مكتب الخبراء
-    subjectOfExpertise: string;      // موضوع الخبرة
-    finalOpinion: string;            // الرأي النهائي
-    reportSubmissionDate: string;    // تاريخ إيداع التقرير
-    status: string;                  // حالة التقرير
+    expertReportNumber: string;
+    assignedAuthority: string;
+    assignmentDate: string;
+    expertOfficeName: string;
+    subjectOfExpertise: string;
+    finalOpinion: string;
+    reportSubmissionDate: string;
+    status: string;
 }
 
 const experts: ExpertRelatedT[] = [
@@ -111,7 +110,7 @@ const StatusCell: React.FC<{ status: string }> = ({ status }) => {
     );
 };
 
-export const TableExpert: React.FC<ExpertsTableProps> = () => {
+export const TableExpertsSessions: React.FC<ExpertsTableProps> = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingExpert, setEditingExpert] = useState<ExpertRelatedT | null>(null);
     const [expertsData, setExpertsData] = useState<ExpertRelatedT[]>(experts);
@@ -133,7 +132,7 @@ export const TableExpert: React.FC<ExpertsTableProps> = () => {
 
     const handleSaveExpert = (values: any) => {
         if (editingExpert) {
-            // تعديل خبير موجود
+
             const updatedExperts = expertsData.map(expert =>
                 expert.id === editingExpert.id
                     ? {
@@ -152,7 +151,6 @@ export const TableExpert: React.FC<ExpertsTableProps> = () => {
             setExpertsData(updatedExperts);
             console.log("تم تعديل الخبير:", { ...editingExpert, ...values });
         } else {
-            // إضافة خبير جديد
             const newExpert = {
                 id: (expertsData.length + 1).toString(),
                 expertReportNumber: values.expertReportNumber,
@@ -254,7 +252,6 @@ export const TableExpert: React.FC<ExpertsTableProps> = () => {
                 />
             </div>
 
-            {/* مودال إضافة/تعديل خبير */}
             {isModalOpen && (
                 <AddExpertModal
                     onClose={handleCloseModal}
