@@ -5,10 +5,10 @@ import { TableSessionsActions } from './components/TableSessionsActions';
 
 import LoadingPage from '@/shared/components/LoadingPage';
 import { EmptyTable } from '@/shared/components/EmptyTable';
-import { useGetCassaionSessionTable } from "../../api/hooks/useGetCassaionSessionTable";
-import { useCreateCassaionSessionTable } from "../../api/hooks/useCreateCassaionSessionTable";
-import { useUpdateCassaionSessionTable } from "../../api/hooks/useUpdateCassaionSessionTable";
-import { useRemoveCassaionSessionTable } from "../../api/hooks/useRemoveCassaionSessionTable";
+import { useGetCassaionSessionTable } from "./api/hooks/useGetCassaionSessionTable";
+import { useCreateCassaionSessionTable } from "./api/hooks/useCreateCassaionSessionTable";
+import { useUpdateCassaionSessionTable } from "./api/hooks/useUpdateCassaionSessionTable";
+import { useRemoveCassaionSessionTable } from "./api/hooks/useRemoveCassaionSessionTable";
 
 
 

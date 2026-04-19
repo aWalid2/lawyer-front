@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCassaionSessionTable } from "../services/createCassaionSessionTable";
 import { toast } from "sonner";
+import { createCassaionSessionTable } from "../services/createCassaionSessionTable";
 
 export const useCreateCassaionSessionTable = () => {
     const queryClient = useQueryClient();
