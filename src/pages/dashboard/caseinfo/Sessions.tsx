@@ -59,7 +59,7 @@ const Sessions: React.FC = () => {
           </TabsTrigger>
           <TabsTrigger
             value="other"
-            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-[12px] px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
+            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-main px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
           >
             إدارية أخرى
           </TabsTrigger>

@@ -8,18 +8,6 @@ interface ExpertsTableProps {
 
 }
 
-interface ExpertRelatedT {
-    id: string;
-    expertReportNumber: string;
-    assignedAuthority: string;
-    assignmentDate: string;
-    expertOfficeName: string;
-    subjectOfExpertise: string;
-    finalOpinion: string;
-    reportSubmissionDate: string;
-    status: string;
-}
-
 const experts: ExpertSessionType[] = [
     {
         id: "1",
@@ -233,24 +221,31 @@ export const TableExpertsSessions: React.FC<ExpertsTableProps> = () => {
     ];
 
     return (
-        <div className="border border-gray-300 p-4 rounded-xl w-full">
+        <div className="bg-white rounded-2xl p-4 md:p-6 border border-[#eeeeee] mt-6 ">
 
             <HeaderExpertsSessions handleOpenModal={handleOpenModal} />
-            <div className="overflow-x-hidden max-w-[600px] mx-auto">
+            <div className="max-w-full overflow-x-auto">
+
                 <DataTable
-                    data={expertsData}
+                    data={experts}
                     columns={columns}
-                    rowIdField="id"
+                    rowKey="id"
+
+
                 />
+
             </div>
 
-            {isModalOpen && (
-                <AddExpertModal
-                    onClose={handleCloseModal}
-                    onSave={handleSaveExpert}
-                    initialValues={editingExpert || undefined}
-                />
-            )}
-        </div>
+
+            {
+                isModalOpen && (
+                    <AddExpertModal
+                        onClose={handleCloseModal}
+                        onSave={handleSaveExpert}
+                        initialValues={editingExpert || undefined}
+                    />
+                )
+            }
+        </div >
     )
 }

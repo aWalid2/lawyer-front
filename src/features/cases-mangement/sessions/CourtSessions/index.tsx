@@ -39,7 +39,7 @@ const CourtSessions: React.FC = () => {
             </TabsTrigger>
           </TabsList>
 
-          <div className="">
+          <>
             <HeaderSessions tab={tab} />
             <TabsContent value="first_instance">
               <FirstDegreeSessions />
@@ -50,7 +50,7 @@ const CourtSessions: React.FC = () => {
             <TabsContent value="cassation">
               <DistinctionSessions />
             </TabsContent>
-          </div>
+          </>
         </Tabs>
       </div>
 

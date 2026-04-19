@@ -11,7 +11,7 @@ const CaseDetails = () => {
         <CaseSidebar />
       </div>
 
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col min-w-0">
         <Outlet context={{ isEditing, setIsEditing }} />
       </div>
     </div>
