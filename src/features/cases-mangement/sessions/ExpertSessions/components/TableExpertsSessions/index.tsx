@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { DataTable, type Column } from '@/shared/components/DataTable'
 import { ExpertsActions } from './components/ExpertsActions';
 import AddExpertModal from './components/AddExpertModal';
+import { HeaderExpertsSessions } from './components/HeaderExpertsSessions';
+import type { ExpertSessionType } from '../../types/ExperstSessionType';
 interface ExpertsTableProps {
 
 }
@@ -18,7 +20,7 @@ interface ExpertRelatedT {
     status: string;
 }
 
-const experts: ExpertRelatedT[] = [
+const experts: ExpertSessionType[] = [
     {
         id: "1",
         expertReportNumber: "EXP-2024-001",
@@ -112,15 +114,15 @@ const StatusCell: React.FC<{ status: string }> = ({ status }) => {
 
 export const TableExpertsSessions: React.FC<ExpertsTableProps> = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingExpert, setEditingExpert] = useState<ExpertRelatedT | null>(null);
-    const [expertsData, setExpertsData] = useState<ExpertRelatedT[]>(experts);
+    const [editingExpert, setEditingExpert] = useState<ExpertSessionType | null>(null);
+    const [expertsData, setExpertsData] = useState<ExpertSessionType[]>(experts);
 
     const handleOpenModal = () => {
         setEditingExpert(null);
         setIsModalOpen(true);
     };
 
-    const handleEditExpert = (item: ExpertRelatedT) => {
+    const handleEditExpert = (item: ExpertSessionType) => {
         setEditingExpert(item);
         setIsModalOpen(true);
     };
@@ -169,7 +171,7 @@ export const TableExpertsSessions: React.FC<ExpertsTableProps> = () => {
         setEditingExpert(null);
     };
 
-    const handleDelete = (item: ExpertRelatedT) => {
+    const handleDelete = (item: ExpertSessionType) => {
         if (window.confirm("هل أنت متأكد من حذف هذا الخبير؟")) {
             const filteredExperts = expertsData.filter(expert => expert.id !== item.id);
             setExpertsData(filteredExperts);
@@ -232,18 +234,8 @@ export const TableExpertsSessions: React.FC<ExpertsTableProps> = () => {
 
     return (
         <div className="border border-gray-300 p-4 rounded-xl w-full">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4">
-                <h1 className="text-xl font-cairo">الخبراء</h1>
-                <button
-                    type="button"
-                    onClick={handleOpenModal}
-                    className="flex shrink-0 items-center justify-center gap-2 bg-[#CBA46226] rounded-md w-full sm:w-[180px] md:w-[200px] h-[50px] transition-colors duration-200 px-2 hover:bg-[#CBA46240]"
-                >
-                    <span className="text-[14px] sm:text-[16px] font-medium whitespace-nowrap text-[#CBA462]">+ إضافة خبير</span>
-                </button>
-            </div>
 
-            {/* الجدول */}
+            <HeaderExpertsSessions handleOpenModal={handleOpenModal} />
             <div className="overflow-x-hidden max-w-[600px] mx-auto">
                 <DataTable
                     data={expertsData}
