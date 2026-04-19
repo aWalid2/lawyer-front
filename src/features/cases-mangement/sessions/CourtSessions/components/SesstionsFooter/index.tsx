@@ -8,6 +8,7 @@ import { EmptyTable } from '@/shared/components/EmptyTable';
 import { useGetCassaionSessionTable } from "../../api/hooks/useGetCassaionSessionTable";
 import { useCreateCassaionSessionTable } from "../../api/hooks/useCreateCassaionSessionTable";
 import { useUpdateCassaionSessionTable } from "../../api/hooks/useUpdateCassaionSessionTable";
+import { useRemoveCassaionSessionTable } from "../../api/hooks/useRemoveCassaionSessionTable";
 
 
 
@@ -17,6 +18,7 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
 
     const { mutateAsync: createMutationCassation } = useCreateCassaionSessionTable();
     const { mutateAsync: updateMutationCassation } = useUpdateCassaionSessionTable();
+    const { mutateAsync: deleteMutationCassation } = useRemoveCassaionSessionTable();
 
 
     const handleAdd = (values: any) => {
@@ -40,7 +42,7 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
     const handleDelete = (session: any) => {
 
         if (tab === "cassation") {
-            console.log(session);
+            deleteMutationCassation(session.id);
         }
 
     };
@@ -71,7 +73,8 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
             header: "إجراء",
             accessor: (item) => (
                 <TableSessionsActions
-                    onEdit={() => handleUpdate(item)}
+                    item={item}
+                    onEdit={handleUpdate}
                     onDelete={() => handleDelete(item)}
                 />
             ),

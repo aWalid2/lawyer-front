@@ -3,22 +3,24 @@ import editefff from "@/public/images/edit.svg";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { SessionDialog } from "./SessionDialog";
 interface ActionsCoulmnProps {
-    onEdit: () => void;
+    item: any;
+    onEdit: (values: any) => void;
     onDelete: () => void;
 }
 
-export const TableSessionsActions = ({ onEdit, onDelete }: ActionsCoulmnProps) => {
+export const TableSessionsActions = ({ item, onEdit, onDelete }: ActionsCoulmnProps) => {
     return (
         <div className="flex items-center justify-center gap-2 md:gap-3 flex-nowrap">
             <SessionDialog
+                initialValues={item}
                 trigger={
                     <button
                         title="تعديل"
-                        onClick={onEdit}
                         className="hover:scale-110 transition shrink-0 text-[#CBA462]"
                     >
                         <img src={editefff} alt="تعديل" />
                     </button>
+
                 }
                 onSave={onEdit}
             />

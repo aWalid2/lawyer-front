@@ -10,6 +10,7 @@ import { InputForm } from "@/shared/components/InputForm";
 import { XIcon } from "lucide-react";
 import React from "react";
 import { Formik, Form } from "formik";
+import * as Yup from "yup";
 
 interface Session {
   id?: number;
@@ -25,6 +26,13 @@ interface SessionDialogProps {
   trigger: React.ReactNode;
 }
 
+const validationSchema = Yup.object({
+  session_date: Yup.string().required("تاريخ ووقت الجلسة مطلوب"),
+  court_id: Yup.number().required("المحكمة مطلوبة"),
+  hall_floor: Yup.number().required("دور القاعة مطلوب"),
+  hall_number: Yup.number().required("رقم القاعة مطلوب"),
+});
+
 export const SessionDialog: React.FC<SessionDialogProps> = ({
   trigger,
   onSave,
@@ -39,7 +47,7 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
   };
 
   return (
-    <Dialog>
+    <Dialog >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
         className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
@@ -58,6 +66,7 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
         </DialogHeader>
 
         <Formik
+          validationSchema={validationSchema}
           initialValues={defaultValues}
           onSubmit={(values) => {
             onSave(values);
@@ -74,17 +83,17 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
                 <InputForm
                   name="court_id"
                   label="المحكمة"
-                  type="text"
+                  type="number"
                 />
                 <InputForm
                   name="hall_floor"
                   label="دور القاعة"
-                  type="text"
+                  type="number"
                 />
                 <InputForm
                   name="hall_number"
                   label="رقم القاعة"
-                  type="text"
+                  type="number"
                 />
               </div>
               <DialogClose asChild>
