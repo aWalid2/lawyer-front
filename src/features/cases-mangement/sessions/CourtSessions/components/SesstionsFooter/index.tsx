@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { DataTable, type Column } from '@/shared/components/DataTable';
 import { HeaderSessionsTable } from './components/HeaderSessionsTable';
-import { TableSessionsActions } from './components/SessionsTable/components/TableSessionsActions';
+import { TableSessionsActions } from './components/TableSessionsActions';
 
 import LoadingPage from '@/shared/components/LoadingPage';
 import { EmptyTable } from '@/shared/components/EmptyTable';
@@ -71,8 +71,7 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
             header: "إجراء",
             accessor: (item) => (
                 <TableSessionsActions
-                    item={item}
-                    onSave={handleUpdate}
+                    onEdit={() => handleUpdate(item)}
                     onDelete={() => handleDelete(item)}
                 />
             ),
