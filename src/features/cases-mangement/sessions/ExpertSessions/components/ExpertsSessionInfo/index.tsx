@@ -4,9 +4,7 @@ import { EditModelExperts } from "../EditModelExperts";
 import { ExpertsSessionBox } from "./components/ExpertsSessionBox";
 import { HeaderExpertsSessionInfo } from "./components/HeaderExpertsSessionInfo";
 
-const CLASSES = {
-  formSection: "border border-gray-300 p-4 rounded-xl mb-6",
-};
+
 
 export const ExpertsSessionInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,77 +55,54 @@ export const ExpertsSessionInfo = () => {
 
   return (
     <>
-
-
-      <div className={CLASSES.formSection}>
-
+      <div className="border border-gray-300 p-4 rounded-xl mb-6">
         <HeaderExpertsSessionInfo handleEditClick={handleEditClick} />
-        <>
-          <div className="mb-4">
-            <div className="grid md:grid-cols-2 gap-4">
-              <ExpertsSessionBox
-                label="رقم تقرير الخبير"
-                text={"123"}
-              />
-              <ExpertsSessionBox
-                label="الجهة المكلفة"
-                text={"123"}
-              />
-            </div>
-          </div>
+        <div className="space-y-6 grid md:grid-cols-2 gap-4">
+          <ExpertsSessionBox
+            label="رقم تقرير الخبير"
+            text={"123"}
+          />
+          <ExpertsSessionBox
+            label="الجهة المكلفة"
+            text={"123"}
+          />
 
-          <div className="mb-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ExpertsSessionBox
-                label="تاريخ التكليف"
-                text={"123"}
-              />
-              <ExpertsSessionBox
-                label="مكتب الخبراء / الخبير"
-                text={"123"}
-              />
-            </div>
-          </div>
+          <ExpertsSessionBox
+            label="تاريخ التكليف"
+            text={"123"}
+          />
+          <ExpertsSessionBox
+            label="مكتب الخبراء / الخبير"
+            text={"123"}
+          />
+          <ExpertsSessionBox
+            label="تاريخ مباشرة المهمة"
+            text={"123"}
+          />
+          <ExpertsSessionBox
+            label="موضوع الخبرة"
+            text={"123"}
+          />
 
-          <div className="mb-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ExpertsSessionBox
-                label="تاريخ مباشرة المهمة"
-                text={"123"}
-              />
-              <ExpertsSessionBox
-                label="موضوع الخبرة"
-                text={"123"}
-              />
-            </div>
-          </div>
+          <ExpertsSessionBox
+            label="الرأي النهائي للخبير"
+            text={"123"}
+          />
+          <ExpertsSessionBox
+            label="تاريخ إيداع التقرير"
+            text={"123"}
+          />
 
-          <div className="mb-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ExpertsSessionBox
-                label="الرأي النهائي للخبير"
-                text={"123"}
-              />
-              <ExpertsSessionBox
-                label="تاريخ إيداع التقرير"
-                text={"123"}
-              />
-            </div>
-          </div>
-
-          <div className="mb-4">
-            <ExpertsSessionBox
-              label="الاعتراضات"
-              text={"123"}
-            />
-          </div>
+          <ExpertsSessionBox
+            label="الاعتراضات"
+            text={"123"}
+          />
 
           <ExpertsSessionBox
             label="ملاحظات إضافية"
             text={"123"}
           />
-        </>
-
+        </div>
         <EditModelExperts
           document={documentForModal}
           open={isModalOpen}
