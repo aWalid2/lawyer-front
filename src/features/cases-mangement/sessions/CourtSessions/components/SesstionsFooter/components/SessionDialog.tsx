@@ -11,6 +11,8 @@ import { XIcon } from "lucide-react";
 import React from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { useGetCourts } from "@/shared/api/hooks/useGetCourts";
+import { SelectForm } from "@/shared/components/SelectForm";
 
 interface Session {
   id?: number;
@@ -38,9 +40,16 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
   onSave,
   initialValues,
 }) => {
+  const { data: courts } = useGetCourts();
+
+  const courtsOptions = courts?.data.map((court: any) => ({
+    value: court.id,
+    label: court.name,
+  })) || [];
+
   const defaultValues: Session = {
     id: initialValues?.id,
-    session_date: initialValues?.session_date || "",
+    session_date: initialValues?.session_date || "2026-04-20T13:46:00",
     court_id: initialValues?.court_id || 1,
     hall_floor: initialValues?.hall_floor || 1,
     hall_number: initialValues?.hall_number || 1,
@@ -80,10 +89,10 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
                   label="تاريخ ووقت الجلسة"
                   type="datetime-local"
                 />
-                <InputForm
+                <SelectForm
                   name="court_id"
                   label="المحكمة"
-                  type="number"
+                  options={courtsOptions}
                 />
                 <InputForm
                   name="hall_floor"

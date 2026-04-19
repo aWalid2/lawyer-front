@@ -9,7 +9,7 @@ import { useGetCassaionSessionTable } from "./api/hooks/useGetCassaionSessionTab
 import { useCreateCassaionSessionTable } from "./api/hooks/useCreateCassaionSessionTable";
 import { useUpdateCassaionSessionTable } from "./api/hooks/useUpdateCassaionSessionTable";
 import { useRemoveCassaionSessionTable } from "./api/hooks/useRemoveCassaionSessionTable";
-
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
 
 export const SesstionsFooter = ({ tab }: { tab: string }) => {
@@ -50,24 +50,27 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
     const columns: Column<any>[] = [
         {
             header: "#",
-            accessor: (_, index) => index + 1,
-            headerClassName: "w-[60px]",
+            accessor: (item) => item.rowIndex,
         },
         {
-            header: "تاريخ ووقت الجلسة",
-            accessor: "session_date",
+            header: "تاريخ الجلسة",
+            accessor: (item) => formatDateToYYYYMMDD(item.session_date),
+        },
+        {
+            header: "وقت الجلسة",
+            accessor: (item) => formatDateToTime(item.session_date),
         },
         {
             header: "المحكمة",
-            accessor: "court_id",
+            accessor: (item) => item.court_id,
         },
         {
             header: "دور القاعة",
-            accessor: "hall_floor",
+            accessor: (item) => item.hall_floor,
         },
         {
             header: "رقم القاعة",
-            accessor: "hall_number",
+            accessor: (item) => item.hall_number,
         },
         {
             header: "إجراء",

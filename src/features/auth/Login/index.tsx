@@ -31,7 +31,7 @@ const Login = () => {
             />
 
 
-            <SubmitButton isPending={isPending}>تسجيل الدخول</SubmitButton>
+            <SubmitButton isPending={isPending} loadingText='جاري تسجيل الدخول...'>تسجيل الدخول</SubmitButton>
           </Form>
         )}
       </Formik>
