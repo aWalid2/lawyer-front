@@ -47,18 +47,21 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
     const indexdFirstInstanceData = useIndexedData(firstInstanceData?.data, page, 3);
     const indexdAppealData = useIndexedData(appealData?.data, page, 3);
 
-    const { mutateAsync: createMutationCassation } = useCreateCassaionSessionTable();
-    const { mutateAsync: createMutationFirstInstance } = useCreateFirstInstanceSessionTable();
-    const { mutateAsync: createMutationAppeal } = useCreateAppealSessionTable();
+    const { mutateAsync: createMutationCassation, isPending: isPendingCreateCassation } = useCreateCassaionSessionTable();
+    const { mutateAsync: createMutationFirstInstance, isPending: isPendingCreateFirstInstance } = useCreateFirstInstanceSessionTable();
+    const { mutateAsync: createMutationAppeal, isPending: isPendingCreateAppeal } = useCreateAppealSessionTable();
 
-    const { mutateAsync: updateMutationCassation } = useUpdateCassaionSessionTable();
-    const { mutateAsync: updateMutationFirstInstance } = useUpdateFirstInstanceSessionTable();
-    const { mutateAsync: updateMutationAppeal } = useUpdateAppealSessionTable();
+    const { mutateAsync: updateMutationCassation, isPending: isPendingUpdateCassation } = useUpdateCassaionSessionTable();
+    const { mutateAsync: updateMutationFirstInstance, isPending: isPendingUpdateFirstInstance } = useUpdateFirstInstanceSessionTable();
+    const { mutateAsync: updateMutationAppeal, isPending: isPendingUpdateAppeal } = useUpdateAppealSessionTable();
 
-    const { mutateAsync: deleteMutationCassation } = useRemoveCassaionSessionTable();
-    const { mutateAsync: deleteMutationFirstInstance } = useRemoveFirstInstanceSessionTable();
-    const { mutateAsync: deleteMutationAppeal } = useRemoveAppealSessionTable();
+    const { mutateAsync: deleteMutationCassation, isPending: isPendingDeleteCassation } = useRemoveCassaionSessionTable();
+    const { mutateAsync: deleteMutationFirstInstance, isPending: isPendingDeleteFirstInstance } = useRemoveFirstInstanceSessionTable();
+    const { mutateAsync: deleteMutationAppeal, isPending: isPendingDeleteAppeal } = useRemoveAppealSessionTable();
 
+    const isPendingCreate = tab === "cassation" ? isPendingCreateCassation : tab === "first_instance" ? isPendingCreateFirstInstance : isPendingCreateAppeal;
+    const isPendingUpdate = tab === "cassation" ? isPendingUpdateCassation : tab === "first_instance" ? isPendingUpdateFirstInstance : isPendingUpdateAppeal;
+    const isPendingDelete = tab === "cassation" ? isPendingDeleteCassation : tab === "first_instance" ? isPendingDeleteFirstInstance : isPendingDeleteAppeal;
 
     const handleAdd = (values: any) => {
         if (tab === "cassation") {

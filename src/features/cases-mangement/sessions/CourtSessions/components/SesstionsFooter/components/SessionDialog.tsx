@@ -81,8 +81,9 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
         <Formik
           validationSchema={validationSchema}
           initialValues={defaultValues}
-          onSubmit={(values) => {
-            onSave(values);
+          onSubmit={async (values, { setSubmitting }) => {
+            await onSave(values);
+            setSubmitting(false);
           }}
         >
           {() => (
