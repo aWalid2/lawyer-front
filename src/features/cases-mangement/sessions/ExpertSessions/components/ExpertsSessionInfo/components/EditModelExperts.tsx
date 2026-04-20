@@ -10,11 +10,11 @@ import {
 import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
-import type { ExpertDocument } from "../typs";
+import type { ExpertSessionType } from "../../../types/ExperstSessionType";
 import * as Yup from "yup";
 
 interface EditModelExpertsProps {
-    document: ExpertDocument;
+    document: ExpertSessionType;
     open: boolean;
     onOpenChange: (open: boolean) => void;
     onSave: (values: any) => void;
