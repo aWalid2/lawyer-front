@@ -231,7 +231,6 @@ export const TableExpertsSessions: React.FC<ExpertsTableProps> = () => {
                     columns={columns}
                     rowKey="id"
 
-
                 />
 
             </div>

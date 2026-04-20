@@ -1,6 +1,8 @@
 import deleteIcon from '@/public/images/delete.svg';
 import edit from '@/public/images/edit.svg';
+import view from '@/public/images/view.svg';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface ExpertsActionsProps {
     expertItem: any;
@@ -9,6 +11,7 @@ interface ExpertsActionsProps {
 }
 
 export const ExpertsActions: React.FC<ExpertsActionsProps> = ({
+    expertItem,
     onEdit,
     onDelete
 }) => {
@@ -30,6 +33,9 @@ export const ExpertsActions: React.FC<ExpertsActionsProps> = ({
             >
                 <img src={deleteIcon} alt="delete" />
             </button>
+            <Link to={`/dashboard/case-management/sessions/expert-sessions/${expertItem?.id}`}>
+                <img src={view} alt="view" />
+            </Link>
         </div>
     );
 };
