@@ -53,7 +53,7 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
 
   const defaultValues: Session = {
     id: initialValues?.id,
-    session_date: initialValues?.session_date || "2026-04-20T13:46:00",
+    session_date: initialValues?.session_date || "",
     court_id: initialValues?.court_id || 1,
     hall_floor: initialValues?.hall_floor || 1,
     hall_number: initialValues?.hall_number || 1,

@@ -12,6 +12,7 @@ export const FirstDegreeSessions = () => {
     if (isPending) {
         return <LoadingPage />;
     }
+
     return (
         <>
             {firstDegreeData ? (

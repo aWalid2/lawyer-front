@@ -3,7 +3,7 @@ import { getFirstInstanceSessionTable } from "../services/getFirstInstanceSessio
 
 export const useGetFirstInstanceSessionTable = (caseId: string | number) => {
     return useQuery({
-        queryKey: ["first-instance-session", caseId],
+        queryKey: ["first-instance", caseId],
         queryFn: () => getFirstInstanceSessionTable(caseId),
     });
 };

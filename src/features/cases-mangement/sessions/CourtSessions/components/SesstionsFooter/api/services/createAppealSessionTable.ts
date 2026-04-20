@@ -1,9 +1,6 @@
 import api from "@/lib/api";
 
-export const createAppealSessionTable = async (payload: { caseId: number; data: any }) => {
-    const response = await api.post(`/appeal-session`, {
-        ...payload.data,
-        case_id: payload.caseId,
-    });
+export const createAppealSessionTable = async (case_id: number, data: any) => {
+    const response = await api.post(`/appeal-session/${case_id}`, data);
     return response.data;
 };

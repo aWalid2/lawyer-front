@@ -70,7 +70,7 @@ const MainCases = () => {
     },
   ];
   const [searchTerm, setSearchTerm] = useState("");
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number>(1);
 
   const { data: cases, isPending, isError } = useGetCases(page);
   const totalPages = cases?.meta?.total_pages ?? 1;
