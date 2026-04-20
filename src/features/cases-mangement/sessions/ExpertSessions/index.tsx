@@ -1,12 +1,12 @@
 import React from "react";
-import { FormExperts } from "./components/FormExperts";
-import { TableExpert } from "./components/TableExpert";
+import { ExpertsSessionInfo } from "./components/ExpertsSessionInfo";
+import { TableExpertsSessions } from "./components/TableExpertsSessions";
 const ExpertSessions: React.FC = () => {
   return (
-    <div className="" >
-      <FormExperts />
-      <TableExpert />
-    </div>
+    <>
+      <ExpertsSessionInfo />
+      <TableExpertsSessions />
+    </>
   );
 };
 

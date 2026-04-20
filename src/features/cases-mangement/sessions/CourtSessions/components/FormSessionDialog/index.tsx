@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import {
   Dialog,
@@ -13,23 +13,49 @@ import { EditIcon } from "@/shared/icons/Edit";
 import { InputForm } from "./components/InputForm";
 import type { FirstDegreeFormValues } from "./components/typesCaseInfo";
 import { Button } from "@/components/ui/button";
+import { useGetCourts } from "@/shared/api/hooks/useGetCourts";
+import { SelectForm } from "@/shared/components/SelectForm";
 
 
-export const FormSessionDialog: React.FC<{ title: string, initialValues: FirstDegreeFormValues }> = ({ title, initialValues }) => {
+import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
+
+
+export const FormSessionDialog: React.FC<{
+  title: string;
+  buttonTitle?: string;
+  initialValues: FirstDegreeFormValues;
+  onSubmit: (values: FirstDegreeFormValues) => void;
+}> = ({ title, buttonTitle = "تعديل", initialValues, onSubmit }) => {
+  const [open, setOpen] = useState<boolean>(false);
+  const { data: courts } = useGetCourts(undefined, undefined, undefined, open);
+  const { data: lawyersResponse } = useFetchLawyers(open);
+
+  const courtsOptions = courts?.data?.map((court: any) => ({
+    value: String(court.id),
+    label: court.name,
+  })) || [];
+
+  const lawyers = Array.isArray(lawyersResponse) ? lawyersResponse : (lawyersResponse as any)?.data || [];
+  const lawyersOptions = lawyers.map((lawyer: any) => ({
+    value: String(lawyer?.user_id),
+    label: lawyer?.user?.first_name + " " + (lawyer?.user?.last_name || ""),
+  })) || [];
 
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className='bg-[#f1f1f3] text-[#3D3C48] text-base h-12.5   font-semibold hover:text-white'> <EditIcon className="w-4 h-4" /> تعديل </Button>
+        <Button className='bg-[#f1f1f3] text-[#3D3C48] text-base h-12.5 font-semibold hover:text-white'>
+          {buttonTitle === "إضافة" ? null : <EditIcon className="w-4 h-4" />} {buttonTitle}
+        </Button>
       </DialogTrigger>
       <DialogContent
-        className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none"
+        className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-main rounded-main border-none"
         dir="rtl"
         showCloseButton={false}
       >
         <DialogClose asChild>
-          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all">
+          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all">
             <XIcon size={23} className="text-gray-500 " />
           </button>
         </DialogClose>
@@ -42,7 +68,8 @@ export const FormSessionDialog: React.FC<{ title: string, initialValues: FirstDe
         <Formik
           initialValues={initialValues}
           onSubmit={(values) => {
-            console.log("Saving first degree sessions:", values);
+            onSubmit(values);
+            setOpen(false);
           }}
 
         >
@@ -52,72 +79,89 @@ export const FormSessionDialog: React.FC<{ title: string, initialValues: FirstDe
               className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4"
               dir="rtl"
             >
-              <InputForm
-                name="courtName"
+              <SelectForm
+                name="court_id"
                 label="اسم المحكمة"
-                type="text"
+                options={courtsOptions}
               />
+              <SelectForm
+                name="lawyer_id"
+                label="المحامي المسؤول"
+                options={lawyersOptions}
+              />
+
               <InputForm
-                name="courtRole"
+                name="floor_number"
                 label="الدور في المحكمة"
                 type="text"
               />
 
               <InputForm
-                name="courtRoomNumber"
+                name="hall_number"
                 label="رقم القاعة في المحكمة"
                 type="text"
               />
               <InputForm
-                name="courtCircleNumber"
+                name="district_number"
                 label="رقم الدائرة"
                 type="text"
               />
 
               <InputForm
-                name="courtType"
+                name="district_type"
                 label="نوع الدائرة"
                 type="text"
               />
               <InputForm
-                name="courtJudge"
+                name="judge_name"
                 label="اسم قاضي الدائرة"
                 type="text"
               />
 
               <InputForm
-                name="courtSecretary"
+                name="secretary_name"
                 label="اسم سكرتير الدائرة"
                 type="text"
               />
               <InputForm
-                name="courtSecretaryRole"
+                name="secretary_floor"
                 label="دور مكتب السكرتير"
                 type="text"
               />
 
               <InputForm
-                name="courtSecretaryNumber"
+                name="secretary_office_number"
                 label="رقم مكتب السكرتير"
                 type="text"
               />
+
               <InputForm
-                name="caseRegistrationDate"
+                name="registration_date"
                 label="تاريخ تسجيل القضية بالمحكمة"
-                type="text"
+                type="date"
+              />
+              <InputForm
+                name="registration_time"
+                label="وقت تسجيل القضية بالمحكمة"
+                type="time"
               />
 
-              <div className="md:col-span-2">
-                <InputForm
-                  name="nextSessionDate"
-                  label="تاريخ ووقت الجلسة القادمة"
-                  type="text"
-                />
-              </div>
+
+              <InputForm
+                name="next_session_date"
+                label="تاريخ ووقت الجلسة القادمة"
+                type="date"
+              />
+              <InputForm
+                name="next_session_time"
+                label="وقت الجلسة القادمة"
+                type="time"
+              />
+
             </div>
             <button
               type="submit"
-              className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
+              className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity"
             >
               حفظ التغييرات
             </button>

@@ -1,24 +1,26 @@
+import LoadingPage from "@/shared/components/LoadingPage";
+import { useParams } from "react-router-dom";
+import { useGetCourtSessionData } from "../../api/hooks/useGetCourtSessionData";
 import { AppealInfoSessions } from "./components/AppealInfoSessions";
-
-const MOCK_APPEAL_DATA = {
-    courtName: "نيابة",
-    courtRole: "نيابة",
-    courtRoomNumber: "نيابة",
-    courtCircleNumber: "نيابة",
-    courtType: "نيابة",
-    courtJudge: "نيابة",
-    courtSecretary: "نيابة",
-    courtSecretaryRole: "نيابة",
-    courtSecretaryNumber: "نيابة",
-    caseRegistrationDate: "20/01/2026",
-    nextSessionDate: "20/01/2026 9:00AM",
-};
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 export const AppealSessions = () => {
+    const { id } = useParams<{ id: string }>();
+    const { data: appealData, isPending } = useGetCourtSessionData(id || "", "appeal");
+
+    if (isPending) {
+        return <LoadingPage />;
+    }
+
+
+
     return (
         <>
-            <AppealInfoSessions appealData={MOCK_APPEAL_DATA} />
-
+            {appealData ? (
+                <AppealInfoSessions courtInfoData={appealData} />
+            ) : (
+                <EmptyTable message="لا توجد بيانات للاستئناف" />
+            )}
         </>
     );
 };

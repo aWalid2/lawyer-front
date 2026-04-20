@@ -10,12 +10,11 @@ import {
 import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
-import type { ExpertDocument } from "../typs";
-
+import type { ExpertSessionType } from "../../../types/ExperstSessionType";
 import * as Yup from "yup";
 
 interface EditModelExpertsProps {
-    document: ExpertDocument;
+    document: ExpertSessionType;
     open: boolean;
     onOpenChange: (open: boolean) => void;
     onSave: (values: any) => void;
@@ -56,12 +55,12 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent
-                className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none"
+                className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
                 dir="rtl"
                 showCloseButton={false}
             >
                 <DialogClose asChild onClick={() => onOpenChange(false)}>
-                    <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all">
+                    <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all">
                         <XIcon size={23} className="text-gray-500 " />
                     </button>
                 </DialogClose>
@@ -82,7 +81,6 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
                 >
                     {() => (
                         <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
-                            {/* صف مكون من عمودين - السطر الأول */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <InputForm
                                     name="expertReportNumber"
@@ -96,10 +94,10 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
                                     type="text"
                                     placeholder="محكمة / نيابة / هيئة تحكيم"
                                 />
-                            </div>
 
-                            {/* صف مكون من عمودين - السطر الثاني */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+
+
                                 <InputForm
                                     name="assignmentDate"
                                     label="تاريخ التكليف"
@@ -111,10 +109,9 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
                                     type="text"
                                     placeholder="أدخل اسم مكتب الخبراء"
                                 />
-                            </div>
 
-                            {/* صف مكون من عمودين - السطر الثالث */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+
                                 <InputForm
                                     name="taskStartDate"
                                     label="تاريخ مباشرة المهمة"
@@ -126,10 +123,8 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
                                     type="text"
                                     placeholder="تقدير تعويض / فحص توقيع / فحص طبي ..."
                                 />
-                            </div>
 
-                            {/* صف مكون من عمودين - السطر الرابع */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
                                 <InputForm
                                     name="finalOpinion"
                                     label="الرأي النهائي للخبير"
@@ -143,7 +138,7 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
                                 />
                             </div>
 
-                            {/* صف كامل - الاعتراضات */}
+
                             <div className="grid grid-cols-1 gap-4">
                                 <TextAreaForm
                                     name="objections"
@@ -152,7 +147,7 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
                                 />
                             </div>
 
-                            {/* صف كامل - الملاحظات الإضافية */}
+
                             <div className="grid grid-cols-1 gap-4">
                                 <TextAreaForm
                                     name="notes"
@@ -163,7 +158,7 @@ export const EditModelExperts: React.FC<EditModelExpertsProps> = ({
 
                             <button
                                 type="submit"
-                                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
+                                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity"
                             >
                                 حفظ التغييرات
                             </button>

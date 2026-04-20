@@ -10,43 +10,65 @@ import { InputForm } from "@/shared/components/InputForm";
 import { XIcon } from "lucide-react";
 import React from "react";
 import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import { useGetCourts } from "@/shared/api/hooks/useGetCourts";
+import { SelectForm } from "@/shared/components/SelectForm";
 
 interface Session {
   id?: number;
-  sessionTime: string;
-  courtName: string;
-  hallRole: string;
-  hallNumber: string;
+  session_date: string;
+  court_id: number;
+  hall_floor: number;
+  hall_number: number;
 }
 
 interface SessionDialogProps {
   onSave: (values: Session) => void;
   initialValues?: Session;
   trigger: React.ReactNode;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
+
+const validationSchema = Yup.object({
+  session_date: Yup.string().required("تاريخ ووقت الجلسة مطلوب"),
+  court_id: Yup.number().required("المحكمة مطلوبة"),
+  hall_floor: Yup.number().required("دور القاعة مطلوب"),
+  hall_number: Yup.number().required("رقم القاعة مطلوب"),
+});
 
 export const SessionDialog: React.FC<SessionDialogProps> = ({
   trigger,
   onSave,
   initialValues,
+  open,
+  onOpenChange,
 }) => {
+  const { data: courts } = useGetCourts(undefined, undefined, undefined, open);
+
+  const courtsOptions = courts?.data.map((court: any) => ({
+    value: court.id,
+    label: court.name,
+  })) || [];
+
   const defaultValues: Session = {
-    sessionTime: initialValues?.sessionTime || "",
-    courtName: initialValues?.courtName || "",
-    hallRole: initialValues?.hallRole || "",
-    hallNumber: initialValues?.hallNumber || "",
+    id: initialValues?.id,
+    session_date: initialValues?.session_date || "",
+    court_id: initialValues?.court_id || 1,
+    hall_floor: initialValues?.hall_floor || 1,
+    hall_number: initialValues?.hall_number || 1,
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange} >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
-        className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none"
+        className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
         dir="rtl"
         showCloseButton={false}
       >
         <DialogClose asChild>
-          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all">
+          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all">
             <XIcon size={23} className="text-gray-500 " />
           </button>
         </DialogClose>
@@ -57,39 +79,41 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
         </DialogHeader>
 
         <Formik
+          validationSchema={validationSchema}
           initialValues={defaultValues}
-          onSubmit={(values) => {
-            onSave(values);
+          onSubmit={async (values, { setSubmitting }) => {
+            await onSave(values);
+            setSubmitting(false);
           }}
         >
           {() => (
             <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
                 <InputForm
-                  name="sessionTime"
+                  name="session_date"
                   label="تاريخ ووقت الجلسة"
-                  type="text"
+                  type="datetime-local"
                 />
-                <InputForm
-                  name="courtName"
+                <SelectForm
+                  name="court_id"
                   label="المحكمة"
-                  type="text"
+                  options={courtsOptions}
                 />
                 <InputForm
-                  name="hallRole"
+                  name="hall_floor"
                   label="دور القاعة"
-                  type="text"
+                  type="number"
                 />
                 <InputForm
-                  name="hallNumber"
+                  name="hall_number"
                   label="رقم القاعة"
-                  type="text"
+                  type="number"
                 />
               </div>
               <DialogClose asChild>
                 <button
                   type="submit"
-                  className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity font-cairo"
+                  className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity font-cairo"
                 >
                   {initialValues ? "حفظ التغييرات" : "إضافة الجلسة"}
                 </button>

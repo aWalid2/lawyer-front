@@ -1,24 +1,25 @@
 
 import { FirstDegreeInfoSessions } from './components/FirstDegreeInfoSessions'
+import { useParams } from "react-router-dom";
+import { useGetCourtSessionData } from '../../api';
+import LoadingPage from '@/shared/components/LoadingPage';
+import { EmptyTable } from '@/shared/components/EmptyTable';
 
 
 export const FirstDegreeSessions = () => {
+    const { id } = useParams<{ id: string }>();
+    const { data: firstDegreeData, isPending } = useGetCourtSessionData(id || "", "first_instance");
+    if (isPending) {
+        return <LoadingPage />;
+    }
+
     return (
         <>
-            <FirstDegreeInfoSessions firstDegreeData={{
-                courtName: "نيابة",
-                courtRole: "نيابة",
-                courtRoomNumber: "نيابة",
-                courtCircleNumber: "نيابة",
-                courtType: "نيابة",
-                courtJudge: "نيابة",
-                courtSecretary: "نيابة",
-                courtSecretaryRole: "نيابة",
-                courtSecretaryNumber: "نيابة",
-                caseRegistrationDate: "sdfsdf",
-                nextSessionDate: "sdfsdf",
-            }} />
-
+            {firstDegreeData ? (
+                <FirstDegreeInfoSessions courtInfoData={firstDegreeData} />
+            ) : (
+                <EmptyTable message="لا توجد بيانات أول درجة" />
+            )}
         </>
     )
 }

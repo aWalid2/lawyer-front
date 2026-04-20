@@ -1,25 +1,14 @@
 import React, { useState } from 'react'
 import { DataTable, type Column } from '@/shared/components/DataTable'
-import { ExpertsActions } from './ExpertsActions';
-import AddExpertModal from './AddExpertModal'; // هنعمله بعد كده
-
+import { ExpertsActions } from './components/ExpertsActions';
+import AddExpertModal from './components/AddExpertModal';
+import { HeaderExpertsSessions } from './components/HeaderExpertsSessions';
+import type { ExpertSessionType } from '../../types/ExperstSessionType';
 interface ExpertsTableProps {
 
 }
 
-interface ExpertRelatedT {
-    id: string;
-    expertReportNumber: string;      // رقم تقرير الخبير
-    assignedAuthority: string;       // الجهة المكلفة
-    assignmentDate: string;          // تاريخ التكليف
-    expertOfficeName: string;        // مكتب الخبراء
-    subjectOfExpertise: string;      // موضوع الخبرة
-    finalOpinion: string;            // الرأي النهائي
-    reportSubmissionDate: string;    // تاريخ إيداع التقرير
-    status: string;                  // حالة التقرير
-}
-
-const experts: ExpertRelatedT[] = [
+const experts: ExpertSessionType[] = [
     {
         id: "1",
         expertReportNumber: "EXP-2024-001",
@@ -111,17 +100,17 @@ const StatusCell: React.FC<{ status: string }> = ({ status }) => {
     );
 };
 
-export const TableExpert: React.FC<ExpertsTableProps> = () => {
+export const TableExpertsSessions: React.FC<ExpertsTableProps> = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingExpert, setEditingExpert] = useState<ExpertRelatedT | null>(null);
-    const [expertsData, setExpertsData] = useState<ExpertRelatedT[]>(experts);
+    const [editingExpert, setEditingExpert] = useState<ExpertSessionType | null>(null);
+    const [expertsData, setExpertsData] = useState<ExpertSessionType[]>(experts);
 
     const handleOpenModal = () => {
         setEditingExpert(null);
         setIsModalOpen(true);
     };
 
-    const handleEditExpert = (item: ExpertRelatedT) => {
+    const handleEditExpert = (item: ExpertSessionType) => {
         setEditingExpert(item);
         setIsModalOpen(true);
     };
@@ -133,7 +122,7 @@ export const TableExpert: React.FC<ExpertsTableProps> = () => {
 
     const handleSaveExpert = (values: any) => {
         if (editingExpert) {
-            // تعديل خبير موجود
+
             const updatedExperts = expertsData.map(expert =>
                 expert.id === editingExpert.id
                     ? {
@@ -152,7 +141,6 @@ export const TableExpert: React.FC<ExpertsTableProps> = () => {
             setExpertsData(updatedExperts);
             console.log("تم تعديل الخبير:", { ...editingExpert, ...values });
         } else {
-            // إضافة خبير جديد
             const newExpert = {
                 id: (expertsData.length + 1).toString(),
                 expertReportNumber: values.expertReportNumber,
@@ -171,7 +159,7 @@ export const TableExpert: React.FC<ExpertsTableProps> = () => {
         setEditingExpert(null);
     };
 
-    const handleDelete = (item: ExpertRelatedT) => {
+    const handleDelete = (item: ExpertSessionType) => {
         if (window.confirm("هل أنت متأكد من حذف هذا الخبير؟")) {
             const filteredExperts = expertsData.filter(expert => expert.id !== item.id);
             setExpertsData(filteredExperts);
@@ -233,35 +221,31 @@ export const TableExpert: React.FC<ExpertsTableProps> = () => {
     ];
 
     return (
-        <div className="border border-gray-300 p-4 rounded-xl w-full">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4">
-                <h1 className="text-xl font-cairo">الخبراء</h1>
-                <button
-                    type="button"
-                    onClick={handleOpenModal}
-                    className="flex shrink-0 items-center justify-center gap-2 bg-[#CBA46226] rounded-md w-full sm:w-[180px] md:w-[200px] h-[50px] transition-colors duration-200 px-2 hover:bg-[#CBA46240]"
-                >
-                    <span className="text-[14px] sm:text-[16px] font-medium whitespace-nowrap text-[#CBA462]">+ إضافة خبير</span>
-                </button>
-            </div>
+        <div className="bg-white rounded-2xl p-4 md:p-6 border border-[#eeeeee] mt-6 ">
 
-            {/* الجدول */}
-            <div className="overflow-x-hidden max-w-[600px] mx-auto">
+            <HeaderExpertsSessions handleOpenModal={handleOpenModal} />
+            <div className="max-w-full overflow-x-auto">
+
                 <DataTable
-                    data={expertsData}
+                    data={experts}
                     columns={columns}
-                    rowIdField="id"
+                    rowKey="id"
+
+
                 />
+
             </div>
 
-            {/* مودال إضافة/تعديل خبير */}
-            {isModalOpen && (
-                <AddExpertModal
-                    onClose={handleCloseModal}
-                    onSave={handleSaveExpert}
-                    initialValues={editingExpert || undefined}
-                />
-            )}
-        </div>
+
+            {
+                isModalOpen && (
+                    <AddExpertModal
+                        onClose={handleCloseModal}
+                        onSave={handleSaveExpert}
+                        initialValues={editingExpert || undefined}
+                    />
+                )
+            }
+        </div >
     )
 }

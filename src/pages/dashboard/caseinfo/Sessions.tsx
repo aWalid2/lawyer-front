@@ -35,31 +35,31 @@ const Sessions: React.FC = () => {
         <TabsList className="bg-transparent gap-4 p-0 h-auto  flex-wrap justify-start">
           <TabsTrigger
             value="police"
-            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-[12px] px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
+            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-main px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
           >
             جلسات المخفر
           </TabsTrigger>
           <TabsTrigger
             value="prosecution"
-            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-[12px] px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
+            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-main px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
           >
             جلسات النيابة
           </TabsTrigger>
           <TabsTrigger
             value="court"
-            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-[12px] px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
+            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-main px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
           >
             جلسات المحكمة
           </TabsTrigger>
           <TabsTrigger
             value="experts"
-            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-[12px] px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
+            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-main px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
           >
             الخبراء
           </TabsTrigger>
           <TabsTrigger
             value="other"
-            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-[12px] px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
+            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-main px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
           >
             إدارية أخرى
           </TabsTrigger>

@@ -2,7 +2,7 @@ import React from "react";
 
 interface DistinctionBoxProps {
     label: string;
-    text: string;
+    text: string | number | null;
     icon?: React.ReactNode;
 }
 
