@@ -1,19 +1,23 @@
 import React from "react";
 
 interface AppealBoxProps {
-    label: string;
-    text: string | number | null;
-    icon?: React.ReactNode;
+  label: string;
+  text: string | number | null;
+  icon?: React.ReactNode;
 }
 
-export const ExpertsSessionBox: React.FC<AppealBoxProps> = ({ label, text, icon }) => {
-    return (
-        <div className="flex flex-col w-full">
-            <label className="block mb-4 text-sm font-normal ">{label}</label>
-            <div className="w-full border border-[#E8E8E8] rounded-[10px] p-3 bg-[#FBFBFB] h-12.5 text-[#464646] text-base font-normal  disabled:opacity-70 flex justify-between">
-                {text || "لا يوجد"}
-                {icon}
-            </div>
-        </div>
-    );
+export const ExpertsSessionBox: React.FC<AppealBoxProps> = ({
+  label,
+  text,
+  icon,
+}) => {
+  return (
+    <div className="flex w-full flex-col">
+      <label className="mb-4 block text-sm font-normal">{label}</label>
+      <div className="flex min-h-12.5 w-full items-start justify-between rounded-[10px] border border-[#E8E8E8] bg-[#FBFBFB] p-3 text-base font-normal wrap-break-word text-[#464646] disabled:opacity-70">
+        {text || "لا يوجد"}
+        {icon}
+      </div>
+    </div>
+  );
 };

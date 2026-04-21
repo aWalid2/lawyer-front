@@ -9,6 +9,10 @@ export const useCreateExpertSession = (caseId: string | number) => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["expert-sessions", caseId],
+
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["expert-session-last", caseId],
       });
       toast.success("تم إضافة تقرير الخبير بنجاح");
     },
