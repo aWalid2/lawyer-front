@@ -19,6 +19,8 @@ import { Error } from "@/shared/components/Error";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 import { Pagination } from "@/shared/components/Pagination";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { truncateWords } from "@/shared/utils/truncate";
 
 const StatusCell: React.FC<{ status: ExpertSessionStatus }> = ({ status }) => {
   const getStatusStyle = (s: ExpertSessionStatus): string => {
@@ -97,37 +99,35 @@ export const TableExpertsSessions: React.FC = () => {
       accessor: (item) => item.rowNumber,
     },
     {
-      header: "رقم تقرير الخبير",
-      accessor: "expert_report_number",
-    },
-    {
       header: "الجهة المكلفة",
-      accessor: "assigning_authority",
-    },
-    {
-      header: "تاريخ التكليف",
-      accessor: "assignment_date",
-    },
-    {
-      header: "مكتب الخبراء",
-      accessor: "expert_office_name",
-    },
-    {
-      header: "موضوع الخبرة",
-      accessor: "subject_of_expertise",
-    },
-    {
-      header: "الرأي النهائي",
       accessor: (item) => (
-        <div className="truncate" title={item.final_opinion}>
-          {item.final_opinion}
-        </div>
+        <span title={item.assigning_authority}>
+          {truncateWords(item.assigning_authority, 3)}
+        </span>
       ),
     },
     {
-      header: "تاريخ إيداع التقرير",
-      accessor: "submission_date",
+      header: "تاريخ التكليف",
+      accessor: (item) => formatDateToYYYYMMDD(item.assignment_date),
     },
+    {
+      header: "مكتب الخبراء",
+      accessor: (item) => (
+        <span title={item.expert_office_name}>
+          {truncateWords(item.expert_office_name, 3)}
+        </span>
+      ),
+    },
+
+    {
+      header: "الرأي النهائي",
+      accessor: (item) => (
+        <span title={item.final_opinion}>
+          {truncateWords(item.final_opinion, 3)}
+        </span>
+      ),
+    },
+
     {
       header: "الحالة",
       accessor: (item) => <StatusCell status={item.status} />,

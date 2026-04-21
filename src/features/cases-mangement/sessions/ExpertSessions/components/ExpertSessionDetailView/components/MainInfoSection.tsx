@@ -23,7 +23,10 @@ export const MainInfoSection: React.FC<MainInfoSectionProps> = ({ expert }) => {
           label="الجهة المكلفة"
           text={expert.assigning_authority}
         />
-        <ExpertsSessionBox label="تاريخ التكليف" text={expert.assignment_date} />
+        <ExpertsSessionBox
+          label="تاريخ التكليف"
+          text={expert.assignment_date}
+        />
         <ExpertsSessionBox
           label="مكتب الخبراء / الخبير"
           text={expert.expert_office_name}
