@@ -1,250 +1,176 @@
-import React, { useState } from 'react'
-import { DataTable, type Column } from '@/shared/components/DataTable'
-import { ExpertsActions } from './components/ExpertsActions';
-import AddExpertModal from './components/AddExpertModal';
-import { HeaderExpertsSessions } from './components/HeaderExpertsSessions';
-import type { ExpertSessionType } from '../../types/ExperstSessionType';
-interface ExpertsTableProps {
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { ExpertsActions } from "./components/ExpertsActions";
+import AddExpertModal from "./components/AddExpertModal";
+import { HeaderExpertsSessions } from "./components/HeaderExpertsSessions";
+import { useGetExpertSessions } from "../../api/hooks/useGetExpertSessions";
+import { useCreateExpertSession } from "../../api/hooks/useCreateExpertSession";
+import { useUpdateExpertSession } from "../../api/hooks/useUpdateExpertSession";
+import { useDeleteExpertSession } from "../../api/hooks/useDeleteExpertSession";
+import type {
+  ExpertSessionRequest,
+  ExpertSessionResponse,
+  ExpertSessionStatus,
+} from "../../types/ExpertSessionApiTypes";
+import { STATUS_LABEL } from "../../types/ExpertSessionApiTypes";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { Error } from "@/shared/components/Error";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { EmptyTable } from "@/shared/components/EmptyTable";
+import { Pagination } from "@/shared/components/Pagination";
 
-}
-
-const experts: ExpertSessionType[] = [
-    {
-        id: "1",
-        expertReportNumber: "EXP-2024-001",
-        assignedAuthority: "محكمة استئناف القاهرة",
-        assignmentDate: "2024-01-15",
-        expertOfficeName: "مكتب الخبراء الهندسيين",
-        subjectOfExpertise: "فحص هندسي",
-        finalOpinion: "وجود عيوب إنشائية",
-        reportSubmissionDate: "2024-02-10",
-        status: "مُعتمد"
-    },
-    {
-        id: "2",
-        expertReportNumber: "EXP-2024-002",
-        assignedAuthority: "نيابة جنوب القاهرة",
-        assignmentDate: "2024-02-01",
-        expertOfficeName: "مكتب الخبراء الطبيين",
-        subjectOfExpertise: "فحص طبي",
-        finalOpinion: "نسبة عجز 25%",
-        reportSubmissionDate: "2024-02-20",
-        status: "قيد المراجعة"
-    },
-    {
-        id: "3",
-        expertReportNumber: "EXP-2024-003",
-        assignedAuthority: "محكمة الأسرة",
-        assignmentDate: "2024-02-10",
-        expertOfficeName: "مكتب الخبراء الماليين",
-        subjectOfExpertise: "تقدير تعويض",
-        finalOpinion: "تعويض 500,000 جنيه",
-        reportSubmissionDate: "2024-03-05",
-        status: "مُعترض عليه"
-    },
-    {
-        id: "4",
-        expertReportNumber: "EXP-2024-004",
-        assignedAuthority: "هيئة التحكيم",
-        assignmentDate: "2024-02-15",
-        expertOfficeName: "مكتب الخبراء القانونيين",
-        subjectOfExpertise: "فحص توقيع",
-        finalOpinion: "التوقيع سليم",
-        reportSubmissionDate: "2024-03-01",
-        status: "مُعتمد"
-    },
-    {
-        id: "5",
-        expertReportNumber: "EXP-2024-005",
-        assignedAuthority: "محكمة القضاء الإداري",
-        assignmentDate: "2024-02-20",
-        expertOfficeName: "مكتب الخبراء الهندسيين",
-        subjectOfExpertise: "تقدير تعويض",
-        finalOpinion: "تعويض 750,000 جنيه",
-        reportSubmissionDate: "2024-03-10",
-        status: "قيد المراجعة"
-    },
-    {
-        id: "6",
-        expertReportNumber: "EXP-2024-006",
-        assignedAuthority: "نيابة شمال القاهرة",
-        assignmentDate: "2024-02-25",
-        expertOfficeName: "مكتب الخبراء الجنائيين",
-        subjectOfExpertise: "فحص مستندات",
-        finalOpinion: "المستندات سليمة",
-        reportSubmissionDate: "2024-03-12",
-        status: "مُعترض عليه"
-    },
-];
-
-const StatusCell: React.FC<{ status: string }> = ({ status }) => {
-    const getStatusStyle = (status: string): string => {
-        const statusValue = status.trim();
-
-        switch (statusValue) {
-            case "مُعتمد":
-                return "bg-[#11B32433] text-[#0B6E1F]";
-            case "مُعترض عليه":
-                return "bg-[#C600001F] text-[#C60000]";
-            case "قيد المراجعة":
-                return "bg-[#DBC33B29] text-[#9E7F0F]";
-            default:
-                return "bg-gray-100 text-gray-700";
-        }
-    };
-
-    return (
-        <span className={`inline-block px-3 py-1.5 rounded-full text-sm font-medium ${getStatusStyle(status)}`}>
-            {status}
-        </span>
-    );
+const StatusCell: React.FC<{ status: ExpertSessionStatus }> = ({ status }) => {
+  const getStatusStyle = (s: ExpertSessionStatus): string => {
+    switch (s) {
+      case "APPROVED":
+        return "bg-[#11B32433] text-[#0B6E1F]";
+      case "UNDER_OBJECTION":
+        return "bg-[#C600001F] text-[#C60000]";
+      case "UNDER_REVIEW":
+        return "bg-[#DBC33B29] text-[#9E7F0F]";
+      default:
+        return "bg-gray-100 text-gray-700";
+    }
+  };
+  return (
+    <span
+      className={`inline-block rounded-full px-3 py-1.5 text-sm font-medium ${getStatusStyle(status)}`}
+    >
+      {STATUS_LABEL[status]}
+    </span>
+  );
 };
 
-export const TableExpertsSessions: React.FC<ExpertsTableProps> = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingExpert, setEditingExpert] = useState<ExpertSessionType | null>(null);
-    const [expertsData, setExpertsData] = useState<ExpertSessionType[]>(experts);
+export const TableExpertsSessions: React.FC = () => {
+  const [page, setPage] = useState(1);
+  const { id: caseId } = useParams<{ id: string }>();
 
-    const handleOpenModal = () => {
-        setEditingExpert(null);
-        setIsModalOpen(true);
-    };
+  const {
+    data: expertsResponse,
+    isPending,
+    isError,
+  } = useGetExpertSessions(caseId!, page, 4);
+  const expertsData: ExpertSessionResponse[] = expertsResponse?.data ?? [];
+  const indexedExpertsData = useIndexedData(expertsData, page, 4);
+  const totalPages = Math.ceil((expertsResponse?.meta?.total ?? 0) / 4) || 1;
 
-    const handleEditExpert = (item: ExpertSessionType) => {
-        setEditingExpert(item);
-        setIsModalOpen(true);
-    };
+  const createMutation = useCreateExpertSession(caseId!);
+  const updateMutation = useUpdateExpertSession(caseId!);
+  const deleteMutation = useDeleteExpertSession(caseId!);
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-        setEditingExpert(null);
-    };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingExpert, setEditingExpert] =
+    useState<ExpertSessionResponse | null>(null);
 
-    const handleSaveExpert = (values: any) => {
-        if (editingExpert) {
+  const handleOpenModal = () => {
+    setEditingExpert(null);
+    setIsModalOpen(true);
+  };
 
-            const updatedExperts = expertsData.map(expert =>
-                expert.id === editingExpert.id
-                    ? {
-                        ...expert,
-                        expertReportNumber: values.expertReportNumber,
-                        assignedAuthority: values.assignedAuthority,
-                        assignmentDate: values.assignmentDate,
-                        expertOfficeName: values.expertOfficeName,
-                        subjectOfExpertise: values.subjectOfExpertise,
-                        finalOpinion: values.finalOpinion,
-                        reportSubmissionDate: values.reportSubmissionDate,
-                        status: values.status,
-                    }
-                    : expert
-            );
-            setExpertsData(updatedExperts);
-            console.log("تم تعديل الخبير:", { ...editingExpert, ...values });
-        } else {
-            const newExpert = {
-                id: (expertsData.length + 1).toString(),
-                expertReportNumber: values.expertReportNumber,
-                assignedAuthority: values.assignedAuthority,
-                assignmentDate: values.assignmentDate,
-                expertOfficeName: values.expertOfficeName,
-                subjectOfExpertise: values.subjectOfExpertise,
-                finalOpinion: values.finalOpinion,
-                reportSubmissionDate: values.reportSubmissionDate,
-                status: values.status,
-            };
-            setExpertsData([...expertsData, newExpert]);
-            console.log("تم إضافة الخبير:", newExpert);
-        }
-        setIsModalOpen(false);
-        setEditingExpert(null);
-    };
+  const handleEditExpert = (item: ExpertSessionResponse) => {
+    setEditingExpert(item);
+    setIsModalOpen(true);
+  };
 
-    const handleDelete = (item: ExpertSessionType) => {
-        if (window.confirm("هل أنت متأكد من حذف هذا الخبير؟")) {
-            const filteredExperts = expertsData.filter(expert => expert.id !== item.id);
-            setExpertsData(filteredExperts);
-            console.log("تم حذف الخبير:", item);
-        }
-    };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingExpert(null);
+  };
 
-    const columns: Column<any>[] = [
-        {
-            header: "#",
-            accessor: (item) => expertsData.findIndex((e) => e.id === item.id) + 1,
-        },
-        {
-            header: "رقم تقرير الخبير",
-            accessor: "expertReportNumber",
-        },
-        {
-            header: "الجهة المكلفة",
-            accessor: "assignedAuthority",
-        },
-        {
-            header: "تاريخ التكليف",
-            accessor: "assignmentDate",
-        },
-        {
-            header: "مكتب الخبراء",
-            accessor: "expertOfficeName",
-        },
-        {
-            header: "موضوع الخبرة",
-            accessor: "subjectOfExpertise",
-        },
-        {
-            header: "الرأي النهائي",
-            accessor: (item) => (
-                <div className="truncate" title={item.finalOpinion}>
-                    {item.finalOpinion}
-                </div>
-            ),
-        },
-        {
-            header: "تاريخ إيداع التقرير",
-            accessor: "reportSubmissionDate",
-        },
-        {
-            header: "الحالة",
-            accessor: (item) => <StatusCell status={item.status} />,
-        },
-        {
-            header: "إجراء",
-            accessor: (item) => (
-                <ExpertsActions
-                    expertItem={item}
-                    onEdit={() => handleEditExpert(item)}
-                    onDelete={() => handleDelete(item)}
-                />
-            ),
-        },
-    ];
+  const handleSaveExpert = (values: ExpertSessionRequest) => {
+    if (editingExpert) {
+      updateMutation.mutate({ reportId: editingExpert.id, data: values });
+    } else {
+      createMutation.mutate({ caseId: caseId!, data: values });
+    }
+    handleCloseModal();
+  };
 
-    return (
-        <div className="bg-white rounded-2xl p-4 md:p-6 border border-[#eeeeee] mt-6 ">
+  const handleDelete = (item: ExpertSessionResponse) => {
+    deleteMutation.mutate(item.id);
+  };
 
-            <HeaderExpertsSessions handleOpenModal={handleOpenModal} />
-            <div className="max-w-full overflow-x-auto">
+  const columns: Column<ExpertSessionResponse>[] = [
+    {
+      header: "#",
+      accessor: (item) => item.rowNumber,
+    },
+    {
+      header: "رقم تقرير الخبير",
+      accessor: "expert_report_number",
+    },
+    {
+      header: "الجهة المكلفة",
+      accessor: "assigning_authority",
+    },
+    {
+      header: "تاريخ التكليف",
+      accessor: "assignment_date",
+    },
+    {
+      header: "مكتب الخبراء",
+      accessor: "expert_office_name",
+    },
+    {
+      header: "موضوع الخبرة",
+      accessor: "subject_of_expertise",
+    },
+    {
+      header: "الرأي النهائي",
+      accessor: (item) => (
+        <div className="truncate" title={item.final_opinion}>
+          {item.final_opinion}
+        </div>
+      ),
+    },
+    {
+      header: "تاريخ إيداع التقرير",
+      accessor: "submission_date",
+    },
+    {
+      header: "الحالة",
+      accessor: (item) => <StatusCell status={item.status} />,
+    },
+    {
+      header: "إجراء",
+      accessor: (item) => (
+        <ExpertsActions
+          expertItem={item}
+          onEdit={() => handleEditExpert(item)}
+          onDelete={() => handleDelete(item)}
+        />
+      ),
+    },
+  ];
 
-                <DataTable
-                    data={experts}
-                    columns={columns}
-                    rowKey="id"
+  if (isError) {
+    return <Error message="حدث خطأ أثناء جلب بيانات جلسات الخبراء." />;
+  }
+  if (isPending) return <LoadingPage />;
+  return (
+    <div className="mt-6 rounded-2xl border border-[#eeeeee] bg-white p-4 md:p-6">
+      <HeaderExpertsSessions handleOpenModal={handleOpenModal} />
 
-                />
-
-            </div>
-
-
-            {
-                isModalOpen && (
-                    <AddExpertModal
-                        onClose={handleCloseModal}
-                        onSave={handleSaveExpert}
-                        initialValues={editingExpert || undefined}
-                    />
-                )
-            }
-        </div >
-    )
-}
+      {indexedExpertsData?.length === 0 ? (
+        <EmptyTable message="لا يوجد جلسات خبراء" />
+      ) : (
+        <DataTable data={indexedExpertsData} columns={columns} rowKey="id" />
+      )}
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      )}
+      {isModalOpen && (
+        <AddExpertModal
+          onClose={handleCloseModal}
+          onSave={handleSaveExpert}
+          initialValues={editingExpert ?? undefined}
+        />
+      )}
+    </div>
+  );
+};

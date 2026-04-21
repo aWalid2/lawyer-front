@@ -5,7 +5,7 @@ import { ExpertSessionDetailView } from "@/features/cases-mangement/sessions/Exp
 
 const ExpertSessionDetails: React.FC = () => {
   return (
-    <PageLayout innerPage>
+    <PageLayout>
       <div className="mb-6 flex items-center justify-between">
         <HeaderTitle title="تفاصيل جلسة الخبير" />
       </div>
