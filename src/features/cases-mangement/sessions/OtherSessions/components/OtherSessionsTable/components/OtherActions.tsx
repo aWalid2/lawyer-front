@@ -1,5 +1,5 @@
 import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
-import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
+// import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { ViewIcon } from "@/shared/icons/View";
 import type { OtherSession } from "../../../types/typesOther";
@@ -7,16 +7,11 @@ import type { OtherSession } from "../../../types/typesOther";
 interface OtherActionsProps {
   item: OtherSession;
   onView: () => void;
-  onEdit: () => void;
+  onEdit?: () => void;
   onDelete: () => Promise<void> | void;
 }
 
-export const OtherActions = ({
-  item,
-  onView,
-  onEdit,
-  onDelete,
-}: OtherActionsProps) => {
+export const OtherActions = ({ item, onView, onDelete }: OtherActionsProps) => {
   return (
     <div className="flex items-center justify-center gap-3">
       <button
@@ -31,12 +26,12 @@ export const OtherActions = ({
         <ViewIcon className="size-4 text-[#63A4F9]" />
       </button>
 
-      <ButtonUpdateTable
+      {/* <ButtonUpdateTable
         onClick={(e) => {
           e.stopPropagation();
           onEdit();
         }}
-      />
+      /> */}
 
       <ConfirmDeleteDialog
         title="حذف الجلسة"

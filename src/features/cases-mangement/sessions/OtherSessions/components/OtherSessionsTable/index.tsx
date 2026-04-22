@@ -58,11 +58,11 @@ export const OtherSessionsTable: React.FC = () => {
     },
     {
       header: "تاريخ الجلسة",
-      accessor: (item) => {
-        const date = formatDateToYYYYMMDD(item.session_date);
-        const time = formatDateToTime(item.session_date);
-        return [date, time].filter(Boolean).join(" - ") || "-";
-      },
+      accessor: (item) => formatDateToYYYYMMDD(item.session_date),
+    },
+    {
+      header: "وقت الجلسة",
+      accessor: (item) => formatDateToTime(item.session_date),
     },
     {
       header: "المحامي المسؤول",
