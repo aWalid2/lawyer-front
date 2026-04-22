@@ -1,5 +1,6 @@
 import { Error } from "@/shared/components/Error";
 import { DateIcon } from "@/shared/icons/Date";
+import type { AxiosError } from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useGetLastOtherSession } from "../../api/hooks/useGetLastOtherSession";
@@ -12,9 +13,16 @@ export const OtherSessionsDataSection: React.FC = () => {
   const { id: caseId } = useParams<{ id: string }>();
   const {
     data: latestSession,
+    isPending,
     isError,
     error,
   } = useGetLastOtherSession(caseId);
+
+  const statusCode = (error as AxiosError | null)?.response?.status;
+
+  if (isPending || !latestSession?.id || statusCode === 404) {
+    return null;
+  }
 
   if (isError) {
     return <Error message="حدث خطأ أثناء جلب آخر جلسة إدارية." error={error} />;
@@ -51,7 +59,9 @@ export const OtherSessionsDataSection: React.FC = () => {
           label="موعد الجلسة"
           text={
             latestSession?.session_date
-              ? latestSession.session_date.replace("T", " ")
+              ? formatDateToYYYYMMDD(latestSession.session_date) +
+                " " +
+                latestSession.session_date.split("T")[1].slice(0, 5)
               : "-"
           }
         />

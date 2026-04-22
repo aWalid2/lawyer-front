@@ -1,26 +1,20 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { ExpertsActions } from "./components/ExpertsActions";
 import AddExpertModal from "./components/AddExpertModal";
 import { HeaderExpertsSessions } from "./components/HeaderExpertsSessions";
-import { useGetExpertSessions } from "../../api/hooks/useGetExpertSessions";
-import { useCreateExpertSession } from "../../api/hooks/useCreateExpertSession";
-import { useUpdateExpertSession } from "../../api/hooks/useUpdateExpertSession";
-import { useDeleteExpertSession } from "../../api/hooks/useDeleteExpertSession";
 import type {
-  ExpertSessionRequest,
   ExpertSessionResponse,
   ExpertSessionStatus,
 } from "../../types/ExpertSessionApiTypes";
 import { STATUS_LABEL } from "../../types/ExpertSessionApiTypes";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
-import { useIndexedData } from "@/shared/utils/useIndexedData";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 import { Pagination } from "@/shared/components/Pagination";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { truncateWords } from "@/shared/utils/truncate";
+import { useExpertSessionsTable } from "./hooks/useExpertSessionsTable";
 
 const StatusCell: React.FC<{ status: ExpertSessionStatus }> = ({ status }) => {
   const getStatusStyle = (s: ExpertSessionStatus): string => {
@@ -45,55 +39,22 @@ const StatusCell: React.FC<{ status: ExpertSessionStatus }> = ({ status }) => {
 };
 
 export const TableExpertsSessions: React.FC = () => {
-  const [page, setPage] = useState(1);
-  const { id: caseId } = useParams<{ id: string }>();
-
   const {
-    data: expertsResponse,
+    page,
+    setPage,
     isPending,
     isError,
-  } = useGetExpertSessions(caseId!, page, 5);
-  const expertsData: ExpertSessionResponse[] = expertsResponse?.data ?? [];
-  const indexedExpertsData = useIndexedData(expertsData, page, 5);
-  const totalPages = Math.ceil((expertsResponse?.meta?.total ?? 0) / 5) || 1;
-
-  const createMutation = useCreateExpertSession(caseId!);
-  const updateMutation = useUpdateExpertSession(caseId!);
-  const deleteMutation = useDeleteExpertSession(caseId!);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingExpert, setEditingExpert] =
-    useState<ExpertSessionResponse | null>(null);
-
-  const handleOpenModal = () => {
-    setEditingExpert(null);
-    setIsModalOpen(true);
-  };
-
-  const handleEditExpert = (item: ExpertSessionResponse) => {
-    setEditingExpert(item);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setEditingExpert(null);
-  };
-
-  const handleSaveExpert = async (values: ExpertSessionRequest) => {
-    if (editingExpert) {
-      await updateMutation.mutateAsync({
-        reportId: editingExpert.id,
-        data: values,
-      });
-    } else {
-      await createMutation.mutateAsync({ caseId: caseId!, data: values });
-    }
-  };
-
-  const handleDelete = (item: ExpertSessionResponse) => {
-    deleteMutation.mutate(item.id);
-  };
+    indexedExpertsData,
+    totalPages,
+    isModalOpen,
+    editingExpert,
+    handleOpenModal,
+    handleEditExpert,
+    handleCloseModal,
+    handleSaveExpert,
+    handleDelete,
+    isSubmitting,
+  } = useExpertSessionsTable();
 
   const columns: Column<ExpertSessionResponse>[] = [
     {
@@ -170,7 +131,7 @@ export const TableExpertsSessions: React.FC = () => {
         <AddExpertModal
           onClose={handleCloseModal}
           onSave={handleSaveExpert}
-          isPending={createMutation.isPending || updateMutation.isPending}
+          isPending={isSubmitting}
           initialValues={editingExpert ?? undefined}
         />
       )}

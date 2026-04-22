@@ -1,78 +1,44 @@
-import React, { useState } from "react";
+import React from "react";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
 import {
   getOtherSessionLawyerName,
   type OtherSession,
-  type OtherSessionFormValues,
-  toOtherSessionRequest,
 } from "../../types/typesOther";
 import { AddOtherSessionDialog } from "./components/AddOtherSessionDialog";
 import { OtherActions } from "./components/OtherActions";
-import { useParams } from "react-router-dom";
-import { useGetOtherSessions } from "../../api/hooks/useGetOtherSessions";
-import { useCreateOtherSession } from "../../api/hooks/useCreateOtherSession";
-import { useUpdateOtherSession } from "../../api/hooks/useUpdateOtherSession";
-import { useDeleteOtherSession } from "../../api/hooks/useDeleteOtherSession";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
 import { EmptyTable } from "@/shared/components/EmptyTable";
-import { useIndexedData } from "@/shared/utils/useIndexedData";
 import {
   formatDateToTime,
   formatDateToYYYYMMDD,
 } from "@/shared/utils/convertDate";
 import { OtherSessionDetailsDialog } from "./components/OtherSessionDetailsDialog";
+import { useOtherSessionsTable } from "./hooks/useOtherSessionsTable";
 
 export const OtherSessionsTable: React.FC = () => {
-  const { id: caseId } = useParams<{ id: string }>();
-  const [page, setPage] = useState(1);
-  const [selectedSessionId, setSelectedSessionId] = useState<number | null>(
-    null,
-  );
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isViewOpen, setIsViewOpen] = useState(false);
-
   const {
-    data: sessionsResponse,
+    page,
+    setPage,
+    selectedSessionId,
+    isFormOpen,
+    isViewOpen,
     isPending,
     isError,
     error,
-  } = useGetOtherSessions(caseId, page, 5);
-
-  const sessionsData: OtherSession[] = sessionsResponse?.data ?? [];
-  const indexedSessionsData = useIndexedData(sessionsData, page, 5);
-  const totalPages =
-    sessionsResponse?.meta?.totalPages ??
-    (Math.ceil((sessionsResponse?.meta?.total ?? 0) / 5) || 1);
-
-  const createMutation = useCreateOtherSession(caseId!);
-  const updateMutation = useUpdateOtherSession(caseId!);
-  const deleteMutation = useDeleteOtherSession(caseId!);
-
-  const handleSave = async (values: OtherSessionFormValues, id?: number) => {
-    const payload = toOtherSessionRequest(values);
-
-    if (id) {
-      await updateMutation.mutateAsync({ id, data: payload });
-    } else {
-      await createMutation.mutateAsync({ caseId: caseId!, data: payload });
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    await deleteMutation.mutateAsync(id);
-  };
-
-  const handleOpenEdit = (id: number) => {
-    setSelectedSessionId(id);
-    setIsFormOpen(true);
-  };
-
-  const handleOpenView = (id: number) => {
-    setSelectedSessionId(id);
-    setIsViewOpen(true);
-  };
+    indexedSessionsData,
+    totalPages,
+    handleSave,
+    handleDelete,
+    handleOpenEdit,
+    handleOpenView,
+    handleFormOpenChange,
+    handleViewOpenChange,
+    handleEditFromView,
+    isCreatePending,
+    isSubmitting,
+  } = useOtherSessionsTable();
 
   if (isPending) return <LoadingPage />;
   if (isError) {
@@ -128,7 +94,7 @@ export const OtherSessionsTable: React.FC = () => {
         </h1>
         <AddOtherSessionDialog
           onSave={handleSave}
-          isPending={createMutation.isPending}
+          isPending={isCreatePending}
           trigger={
             <button
               type="button"
@@ -164,32 +130,19 @@ export const OtherSessionsTable: React.FC = () => {
       {isFormOpen && (
         <AddOtherSessionDialog
           open={isFormOpen}
-          onOpenChange={(open: boolean) => {
-            setIsFormOpen(open);
-            if (!open) {
-              setSelectedSessionId(null);
-            }
-          }}
+          onOpenChange={handleFormOpenChange}
           sessionId={selectedSessionId ?? undefined}
           onSave={handleSave}
-          isPending={createMutation.isPending || updateMutation.isPending}
+          isPending={isSubmitting}
         />
       )}
 
       {selectedSessionId && (
         <OtherSessionDetailsDialog
           open={isViewOpen}
-          onOpenChange={(open: boolean) => {
-            setIsViewOpen(open);
-            if (!open) {
-              setSelectedSessionId(null);
-            }
-          }}
+          onOpenChange={handleViewOpenChange}
           sessionId={selectedSessionId}
-          onEdit={() => {
-            setIsViewOpen(false);
-            setIsFormOpen(true);
-          }}
+          onEdit={handleEditFromView}
         />
       )}
     </div>
