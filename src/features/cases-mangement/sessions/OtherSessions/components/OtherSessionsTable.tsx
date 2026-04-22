@@ -1,93 +1,140 @@
 import React from "react";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
-import type { OtherSession, OtherSessionFormValues } from "./typesOther";
+import {
+  getOtherSessionLawyerName,
+  type OtherSession,
+  type OtherSessionFormValues,
+  toOtherSessionRequest,
+} from "./typesOther";
 import { AddOtherSessionDialog } from "./AddOtherSessionDialog";
 import { OtherActions } from "./OtherActions";
+import { useParams } from "react-router-dom";
+import { useGetOtherSessions } from "../api/hooks/useGetOtherSessions";
+import { useCreateOtherSession } from "../api/hooks/useCreateOtherSession";
+import { useUpdateOtherSession } from "../api/hooks/useUpdateOtherSession";
+import { useDeleteOtherSession } from "../api/hooks/useDeleteOtherSession";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { Error } from "@/shared/components/Error";
+import { EmptyTable } from "@/shared/components/EmptyTable";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import {
+  formatDateToTime,
+  formatDateToYYYYMMDD,
+} from "@/shared/utils/convertDate";
+import { OtherSessionDetailsDialog } from "./OtherSessionDetailsDialog";
 
 export const OtherSessionsTable: React.FC = () => {
-  const [sessions, setSessions] = React.useState<OtherSession[]>([
-    {
-      id: "1",
-      sessionDate: "2024-03-15",
-      sessionTime: "10:30",
-      lawyer: "أحمد محمد",
-      decision: "تم الحضور",
-    },
-  ]);
+  const { id: caseId } = useParams<{ id: string }>();
   const [currentPage, setCurrentPage] = React.useState(1);
+  const [selectedSessionId, setSelectedSessionId] = React.useState<
+    number | null
+  >(null);
+  const [isFormOpen, setIsFormOpen] = React.useState(false);
+  const [isViewOpen, setIsViewOpen] = React.useState(false);
   const itemsPerPage = 10;
 
-  const totalPages = Math.ceil(sessions.length / itemsPerPage);
-  const currentData = React.useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return sessions.slice(startIndex, startIndex + itemsPerPage);
-  }, [sessions, currentPage]);
+  const {
+    data: sessionsResponse,
+    isPending,
+    isError,
+    error,
+  } = useGetOtherSessions(caseId, currentPage, itemsPerPage);
 
-  const handleSave = (values: OtherSessionFormValues, id?: string) => {
+  const sessions = sessionsResponse?.data ?? [];
+  const currentData = useIndexedData(sessions, currentPage, itemsPerPage);
+  const totalPages =
+    Math.ceil((sessionsResponse?.meta?.total ?? 0) / itemsPerPage) || 1;
+
+  const createMutation = useCreateOtherSession(caseId!);
+  const updateMutation = useUpdateOtherSession(caseId!);
+  const deleteMutation = useDeleteOtherSession(caseId!);
+
+  const handleSave = async (values: OtherSessionFormValues, id?: number) => {
+    const payload = toOtherSessionRequest(values);
+
     if (id) {
-      setSessions((prev) =>
-        prev.map((s) => (s.id === id ? { ...s, ...values } : s))
-      );
+      await updateMutation.mutateAsync({ id, data: payload });
     } else {
-      const newSession = {
-        id: (sessions.length + 1).toString(),
-        ...values,
-      };
-      setSessions((prev) => [...prev, newSession]);
+      await createMutation.mutateAsync({ caseId: caseId!, data: payload });
     }
   };
 
-  const handleDelete = (id: string) => {
-    setSessions((prev) => prev.filter((s) => s.id !== id));
+  const handleDelete = async (id: number) => {
+    await deleteMutation.mutateAsync(id);
+  };
+
+  const handleOpenEdit = (id: number) => {
+    setSelectedSessionId(id);
+    setIsFormOpen(true);
+  };
+
+  const handleOpenView = (id: number) => {
+    setSelectedSessionId(id);
+    setIsViewOpen(true);
   };
 
   const columns: Column<OtherSession>[] = [
     {
       header: "#",
-      accessor: (item) =>
-        (currentPage - 1) * itemsPerPage + currentData.indexOf(item) + 1,
+      accessor: (item) => item.rowNumber,
       headerClassName: "w-[60px]",
     },
     {
-      header: "وقت الجلسة",
-      accessor: "sessionTime",
+      header: "نوع الإجراء",
+      accessor: "actionType",
     },
     {
       header: "تاريخ الجلسة",
-      accessor: "sessionDate",
+      accessor: (item) => {
+        const date = formatDateToYYYYMMDD(item.session_date);
+        const time = formatDateToTime(item.session_date);
+        return [date, time].filter(Boolean).join(" - ") || "-";
+      },
     },
     {
       header: "المحامي المسؤول",
-      accessor: "lawyer",
+      accessor: (item) => getOtherSessionLawyerName(item),
       className: "font-medium text-gray-800",
     },
     {
       header: "قرار الجلسة",
-      accessor: "decision",
+      accessor: "session_decision",
     },
     {
       header: "إجراء",
       accessor: (item) => (
         <OtherActions
           item={item}
-          onDelete={handleDelete}
-          onSave={(values) => handleSave(values, item.id)}
+          onView={() => handleOpenView(item.id)}
+          onEdit={() => handleOpenEdit(item.id)}
+          onDelete={() => handleDelete(item.id)}
         />
       ),
     },
   ];
 
+  if (isPending) return <LoadingPage />;
+  if (isError) {
+    return (
+      <Error message="حدث خطأ أثناء جلب الجلسات الإدارية." error={error} />
+    );
+  }
+
   return (
-    <div className="bg-white rounded-2xl p-4 md:p-6 border border-[#eeeeee]">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6">
-        <h1 className="text-[18px] font-semibold text-secondary font-cairo text-right w-full sm:w-auto">
+    <div className="rounded-2xl border border-[#eeeeee] bg-white p-4 md:p-6">
+      <div className="flex flex-col items-start justify-between gap-4 pb-6 sm:flex-row sm:items-center">
+        <h1 className="text-secondary font-cairo w-full text-right text-[18px] font-semibold sm:w-auto">
           الجلسات الإدارية
         </h1>
         <AddOtherSessionDialog
-          onSave={(values) => handleSave(values)}
+          onSave={handleSave}
+          isPending={createMutation.isPending}
           trigger={
-            <button className="flex items-center justify-center gap-2 bg-[#CBA46226] rounded-md h-12.5 w-full sm:w-auto px-6 transition-all duration-200 hover:bg-[#CBA46240] text-[#CBA462] font-semibold font-cairo">
+            <button
+              type="button"
+              className="font-cairo flex h-12.5 w-full items-center justify-center gap-2 rounded-md bg-[#CBA46226] px-6 font-semibold text-[#CBA462] transition-all duration-200 hover:bg-[#CBA46240] sm:w-auto"
+            >
               + إضافة جلسة إدارية
             </button>
           }
@@ -95,7 +142,11 @@ export const OtherSessionsTable: React.FC = () => {
       </div>
 
       <div className="overflow-hidden">
-        <DataTable data={currentData} columns={columns} rowIdField="id" />
+        {currentData.length === 0 ? (
+          <EmptyTable message="لا يوجد جلسات إدارية" />
+        ) : (
+          <DataTable data={currentData} columns={columns} rowIdField="id" />
+        )}
         {totalPages > 1 && (
           <Pagination
             currentPage={currentPage}
@@ -104,6 +155,38 @@ export const OtherSessionsTable: React.FC = () => {
           />
         )}
       </div>
+
+      {isFormOpen && (
+        <AddOtherSessionDialog
+          open={isFormOpen}
+          onOpenChange={(open: boolean) => {
+            setIsFormOpen(open);
+            if (!open) {
+              setSelectedSessionId(null);
+            }
+          }}
+          sessionId={selectedSessionId ?? undefined}
+          onSave={handleSave}
+          isPending={createMutation.isPending || updateMutation.isPending}
+        />
+      )}
+
+      {selectedSessionId && (
+        <OtherSessionDetailsDialog
+          open={isViewOpen}
+          onOpenChange={(open: boolean) => {
+            setIsViewOpen(open);
+            if (!open) {
+              setSelectedSessionId(null);
+            }
+          }}
+          sessionId={selectedSessionId}
+          onEdit={() => {
+            setIsViewOpen(false);
+            setIsFormOpen(true);
+          }}
+        />
+      )}
     </div>
   );
 };
