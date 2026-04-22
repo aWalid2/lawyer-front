@@ -116,7 +116,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                         setOpen(false);
                       }}
                       className={cn(
-                        "flex cursor-pointer items-center justify-between",
+                        "data-[selected=true]:bg-primary/90 data-[selected=true]:text-primary-foreground flex cursor-pointer items-center justify-between",
                         String(field.value) === String(option.value) &&
                           "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground data-[selected=true]:bg-primary! data-[selected=true]:text-primary-foreground!",
                       )}
