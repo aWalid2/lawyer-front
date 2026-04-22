@@ -1,5 +1,5 @@
 import api from "@/lib/api";
-import type { OtherSessionListResponse } from "../../components/typesOther";
+import type { OtherSessionListResponse } from "../../types/typesOther";
 import { normalizeOtherSession } from "./normalizeOtherSession";
 
 export const getOtherSessions = async (

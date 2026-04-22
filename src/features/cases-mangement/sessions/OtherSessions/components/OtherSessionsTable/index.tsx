@@ -6,14 +6,14 @@ import {
   type OtherSession,
   type OtherSessionFormValues,
   toOtherSessionRequest,
-} from "./typesOther";
-import { AddOtherSessionDialog } from "./AddOtherSessionDialog";
-import { OtherActions } from "./OtherActions";
+} from "../../types/typesOther";
+import { AddOtherSessionDialog } from "./components/AddOtherSessionDialog";
+import { OtherActions } from "./components/OtherActions";
 import { useParams } from "react-router-dom";
-import { useGetOtherSessions } from "../api/hooks/useGetOtherSessions";
-import { useCreateOtherSession } from "../api/hooks/useCreateOtherSession";
-import { useUpdateOtherSession } from "../api/hooks/useUpdateOtherSession";
-import { useDeleteOtherSession } from "../api/hooks/useDeleteOtherSession";
+import { useGetOtherSessions } from "../../api/hooks/useGetOtherSessions";
+import { useCreateOtherSession } from "../../api/hooks/useCreateOtherSession";
+import { useUpdateOtherSession } from "../../api/hooks/useUpdateOtherSession";
+import { useDeleteOtherSession } from "../../api/hooks/useDeleteOtherSession";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
 import { EmptyTable } from "@/shared/components/EmptyTable";
@@ -22,7 +22,7 @@ import {
   formatDateToTime,
   formatDateToYYYYMMDD,
 } from "@/shared/utils/convertDate";
-import { OtherSessionDetailsDialog } from "./OtherSessionDetailsDialog";
+import { OtherSessionDetailsDialog } from "./components/OtherSessionDetailsDialog";
 
 export const OtherSessionsTable: React.FC = () => {
   const { id: caseId } = useParams<{ id: string }>();

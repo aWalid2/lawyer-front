@@ -1,4 +1,4 @@
-import type { OtherSession } from "../../components/typesOther";
+import type { OtherSession } from "../../types/typesOther";
 
 export const normalizeOtherSession = (session: any): OtherSession => {
   const normalizedLawyer = session?.lawyer || session?.lawayer || null;

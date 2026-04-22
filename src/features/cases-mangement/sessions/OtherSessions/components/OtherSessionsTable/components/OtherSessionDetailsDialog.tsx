@@ -8,8 +8,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
-import { useGetOtherSession } from "../api/hooks/useGetOtherSession";
-import { OtherBox } from "./OtherBox";
+import { useGetOtherSession } from "../../../api/hooks/useGetOtherSession";
+import { OtherBox } from "../../OtherSessionsDataSection/components/OtherBox";
 import { DateIcon } from "@/shared/icons/Date";
 import { Error } from "@/shared/components/Error";
 import {
@@ -17,7 +17,7 @@ import {
   formatDateToTime,
 } from "@/shared/utils/convertDate";
 import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
-import { getOtherSessionLawyerName } from "./typesOther";
+import { getOtherSessionLawyerName } from "../../../types/typesOther";
 
 interface OtherSessionDetailsDialogProps {
   sessionId: number | string;

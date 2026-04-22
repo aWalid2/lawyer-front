@@ -21,8 +21,8 @@ import {
   type OtherSession,
   type OtherSessionFormValues,
   toOtherSessionFormValues,
-} from "./typesOther";
-import { useGetOtherSession } from "../api/hooks/useGetOtherSession";
+} from "../../../../types/typesOther";
+import { useGetOtherSession } from "../../../../api/hooks/useGetOtherSession";
 
 interface AddOtherSessionDialogProps {
   onSave: (values: OtherSessionFormValues, id?: number) => Promise<void> | void;
@@ -76,8 +76,7 @@ export const AddOtherSessionDialog: React.FC<AddOtherSessionDialogProps> = ({
 
   const lawyersOptions = lawyers.map((lawyer: any) => ({
     value: String(lawyer?.user_id),
-    label:
-      `${lawyer?.user?.first_name || ""} ${lawyer?.user?.last_name || ""}`.trim(),
+    label: `${lawyer?.user?.first_name || ""} `,
   }));
 
   const resolvedSession = sessionDetails ?? initialValues ?? null;

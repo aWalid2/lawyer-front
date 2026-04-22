@@ -2,9 +2,9 @@ import { Error } from "@/shared/components/Error";
 import { DateIcon } from "@/shared/icons/Date";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useGetLastOtherSession } from "../api/hooks/useGetLastOtherSession";
-import { OtherBox } from "./OtherBox";
-import { getOtherSessionLawyerName } from "./typesOther";
+import { useGetLastOtherSession } from "../../api/hooks/useGetLastOtherSession";
+import { OtherBox } from "./components/OtherBox";
+import { getOtherSessionLawyerName } from "../../types/typesOther";
 
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
