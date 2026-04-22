@@ -7,9 +7,9 @@ export const useUpdateOtherSession = (caseId: string | number) => {
 
   return useMutation({
     mutationFn: updateOtherSession,
-    onSuccess: (_data, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["other-sessions", caseId] });
-      queryClient.invalidateQueries({ queryKey: ["other-session", variables.id] });
+      queryClient.invalidateQueries({ queryKey: ["other-session-last", caseId] });
       toast.success("تم تعديل الجلسة الإدارية بنجاح");
     },
     onError: () => {

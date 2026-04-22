@@ -10,10 +10,7 @@ export interface OtherSessionRequest {
 
 export interface OtherSessionLawyer {
   user_id?: number;
-  user?: {
-    first_name?: string;
-    last_name?: string;
-  };
+    name?: string;
 }
 
 export interface OtherSession {
@@ -28,6 +25,7 @@ export interface OtherSession {
   session_decision: string;
   notes: string;
   lawyer?: OtherSessionLawyer | null;
+  lawayer?: OtherSessionLawyer | null;
   lawyer_name?: string;
   created_at?: string;
   updated_at?: string;
@@ -88,10 +86,7 @@ export const getOtherSessionLawyerName = (session?: Partial<OtherSession> | null
   if (!session) return "-";
 
   if (session.lawyer_name) return session.lawyer_name;
+  const name = session.lawyer?.name || session.lawayer?.name || "";
 
-  const firstName = session.lawyer?.user?.first_name || "";
-  const lastName = session.lawyer?.user?.last_name || "";
-  const fullName = `${firstName} ${lastName}`.trim();
-
-  return fullName || "-";
+  return name || "-";
 };

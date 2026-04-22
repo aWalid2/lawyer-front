@@ -9,6 +9,7 @@ export const useDeleteOtherSession = (caseId: string | number) => {
     mutationFn: deleteOtherSession,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["other-sessions", caseId] });
+      queryClient.invalidateQueries({ queryKey: ["other-session-last", caseId] });
       toast.success("تم حذف الجلسة الإدارية بنجاح");
     },
     onError: () => {

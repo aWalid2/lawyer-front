@@ -9,6 +9,7 @@ export const useCreateOtherSession = (caseId: string | number) => {
     mutationFn: createOtherSession,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["other-sessions", caseId] });
+      queryClient.invalidateQueries({ queryKey: ["other-session-last", caseId] });
       toast.success("تم إضافة الجلسة الإدارية بنجاح");
     },
     onError: () => {

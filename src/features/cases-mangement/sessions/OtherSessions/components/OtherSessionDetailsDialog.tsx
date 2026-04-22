@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -54,6 +55,10 @@ export const OtherSessionDetailsDialog: React.FC<
             <DialogTitle className="text-center text-2xl font-bold text-[#153A4D]">
               تفاصيل الجلسة الإدارية
             </DialogTitle>
+            <DialogDescription className="sr-only">
+              عرض تفاصيل الجلسة الإدارية الحالية بما يشمل الإجراء والموعد
+              والمحامي المسؤول.
+            </DialogDescription>
           </DialogHeader>
           <ButtonUpdateTable
             onClick={(event) => {

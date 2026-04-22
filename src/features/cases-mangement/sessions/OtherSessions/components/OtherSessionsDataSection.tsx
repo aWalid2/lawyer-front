@@ -1,17 +1,11 @@
-import React from "react";
-import { EditIcon } from "@/shared/icons/Edit";
+import { Error } from "@/shared/components/Error";
 import { DateIcon } from "@/shared/icons/Date";
-import { OtherBox } from "./OtherBox";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { useGetLastOtherSession } from "../api/hooks/useGetLastOtherSession";
-import { Error } from "@/shared/components/Error";
-import {
-  getOtherSessionLawyerName,
-  toOtherSessionRequest,
-  type OtherSessionFormValues,
-} from "./typesOther";
-import { AddOtherSessionDialog } from "./AddOtherSessionDialog";
-import { useUpdateOtherSession } from "../api/hooks/useUpdateOtherSession";
+import { OtherBox } from "./OtherBox";
+import { getOtherSessionLawyerName } from "./typesOther";
+
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
 export const OtherSessionsDataSection: React.FC = () => {
@@ -21,20 +15,6 @@ export const OtherSessionsDataSection: React.FC = () => {
     isError,
     error,
   } = useGetLastOtherSession(caseId);
-  console.log("latestSession", latestSession);
-  console.log("error", error);
-  const updateMutation = useUpdateOtherSession(caseId!);
-
-  const handleSaveChanges = async (
-    values: OtherSessionFormValues,
-    id?: number,
-  ) => {
-    if (!id) return;
-    await updateMutation.mutateAsync({
-      id,
-      data: toOtherSessionRequest(values),
-    });
-  };
 
   if (isError) {
     return <Error message="حدث خطأ أثناء جلب آخر جلسة إدارية." error={error} />;
@@ -46,22 +26,6 @@ export const OtherSessionsDataSection: React.FC = () => {
         <h1 className="text-secondary font-cairo w-full text-right text-[18px] font-semibold">
           آخر جلسة إدارية
         </h1>
-        {latestSession ? (
-          <AddOtherSessionDialog
-            sessionId={latestSession.id}
-            onSave={handleSaveChanges}
-            isPending={updateMutation.isPending}
-            trigger={
-              <button
-                type="button"
-                className="hover:bg-secondary/90 font-cairo flex h-12.5 items-center gap-2 rounded-lg bg-[#f1f1f3] px-4 py-2 text-sm font-semibold text-[#3D3C48] transition-all hover:text-white"
-              >
-                <EditIcon className="h-4 w-4" />
-                تعديل
-              </button>
-            }
-          />
-        ) : null}
       </div>
 
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">

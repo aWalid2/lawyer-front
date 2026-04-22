@@ -2,6 +2,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -111,6 +112,11 @@ export const AddOtherSessionDialog: React.FC<AddOtherSessionDialogProps> = ({
           <DialogTitle className="text-center text-2xl font-bold text-[#153A4D]">
             {isEditMode ? "تعديل الجلسة الإدارية" : "إضافة جلسة إدارية"}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            {isEditMode
+              ? "نموذج تعديل بيانات الجلسة الإدارية الحالية."
+              : "نموذج إضافة جلسة إدارية جديدة."}
+          </DialogDescription>
         </DialogHeader>
 
         {showLoadingState ? (
