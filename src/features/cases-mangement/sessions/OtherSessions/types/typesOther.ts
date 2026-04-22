@@ -35,6 +35,7 @@ export interface OtherSessionListResponse {
   data: OtherSession[];
   meta: {
     total: number;
+    totalPages?: number;
   };
 }
 

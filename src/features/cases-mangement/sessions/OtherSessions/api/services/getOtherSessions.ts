@@ -21,7 +21,8 @@ export const getOtherSessions = async (
   return {
     data: (response.data?.data || []).map(normalizeOtherSession),
     meta: {
-      total: response.data?.meta?.total ?? response.data?.data?.length ?? 0,
+      total: response.data?.total ?? response.data?.data?.length ?? 0,
+      totalPages: response.data?.totalPages,
     },
   };
 };

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Dialog,
   DialogClose,
@@ -7,17 +6,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { XIcon } from "lucide-react";
-import { useGetOtherSession } from "../../../api/hooks/useGetOtherSession";
-import { OtherBox } from "../../OtherSessionsDataSection/components/OtherBox";
-import { DateIcon } from "@/shared/icons/Date";
 import { Error } from "@/shared/components/Error";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { DateIcon } from "@/shared/icons/Date";
 import {
-  formatDateToYYYYMMDD,
   formatDateToTime,
+  formatDateToYYYYMMDD,
 } from "@/shared/utils/convertDate";
-import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
+import { XIcon } from "lucide-react";
+import React from "react";
+import { useGetOtherSession } from "../../../api/hooks/useGetOtherSession";
 import { getOtherSessionLawyerName } from "../../../types/typesOther";
+import { OtherBox } from "../../OtherSessionsDataSection/components/OtherBox";
+import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
 
 interface OtherSessionDetailsDialogProps {
   sessionId: number | string;
@@ -39,7 +40,7 @@ export const OtherSessionDetailsDialog: React.FC<
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="custom-scrollbar max-h-[90vh] overflow-y-auto rounded-xl border-none px-6 py-6 sm:max-w-193 sm:rounded-[24px] sm:px-20 sm:py-10"
+        className="flex max-h-[90vh] flex-col overflow-hidden rounded-xl border-none px-6 py-6 sm:max-w-193 sm:rounded-[24px] sm:px-20 sm:py-10"
         dir="rtl"
         showCloseButton={false}
       >
@@ -50,7 +51,6 @@ export const OtherSessionDetailsDialog: React.FC<
         </DialogClose>
 
         <div className="mb-6 flex items-center justify-between gap-4 pt-8">
-          <div className="w-full" />
           <DialogHeader className="mb-0 text-center">
             <DialogTitle className="text-center text-2xl font-bold text-[#153A4D]">
               تفاصيل الجلسة الإدارية
@@ -60,56 +60,56 @@ export const OtherSessionDetailsDialog: React.FC<
               والمحامي المسؤول.
             </DialogDescription>
           </DialogHeader>
-          <ButtonUpdateTable
-            onClick={(event) => {
-              event.stopPropagation();
-              onEdit();
-            }}
-          />
+
+          <ButtonUpdateInfo onEdit={onEdit} />
         </div>
 
         {isPending ? (
-          <div className="flex min-h-48 items-center justify-center text-gray-500">
-            جاري تحميل التفاصيل...
+          <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pb-2 pl-2">
+            <LoadingPage />
           </div>
         ) : isError || !session ? (
-          <Error
-            message="حدث خطأ أثناء جلب تفاصيل الجلسة الإدارية."
-            error={error}
-          />
+          <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pb-2 pl-2">
+            <Error
+              message="حدث خطأ أثناء جلب تفاصيل الجلسة الإدارية."
+              error={error}
+            />
+          </div>
         ) : (
-          <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-            <OtherBox label="نوع الإجراء" text={session.actionType || "-"} />
-            <OtherBox
-              label="تاريخ الإحالة"
-              text={formatDateToYYYYMMDD(session.referral_date) || "-"}
-              icon={<DateIcon />}
-            />
-            <OtherBox
-              label="الجهة الإدارية"
-              text={session.admin_authority || "-"}
-            />
-            <OtherBox
-              label="موعد الجلسة"
-              text={
-                [
-                  formatDateToYYYYMMDD(session.session_date),
-                  formatDateToTime(session.session_date),
-                ]
-                  .filter(Boolean)
-                  .join(" - ") || "-"
-              }
-            />
-            <OtherBox
-              label="المحامي المسؤول"
-              text={getOtherSessionLawyerName(session)}
-            />
-            <OtherBox
-              label="قرار الجلسة"
-              text={session.session_decision || "-"}
-            />
-            <div className="col-span-1 md:col-span-2">
-              <OtherBox label="ملاحظات" text={session.notes || "-"} />
+          <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pb-2 pl-2">
+            <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
+              <OtherBox label="نوع الإجراء" text={session.actionType || "-"} />
+              <OtherBox
+                label="تاريخ الإحالة"
+                text={formatDateToYYYYMMDD(session.referral_date) || "-"}
+                icon={<DateIcon />}
+              />
+              <OtherBox
+                label="الجهة الإدارية"
+                text={session.admin_authority || "-"}
+              />
+              <OtherBox
+                label="موعد الجلسة"
+                text={
+                  [
+                    formatDateToYYYYMMDD(session.session_date),
+                    formatDateToTime(session.session_date),
+                  ]
+                    .filter(Boolean)
+                    .join(" - ") || "-"
+                }
+              />
+              <OtherBox
+                label="المحامي المسؤول"
+                text={getOtherSessionLawyerName(session)}
+              />
+              <OtherBox
+                label="قرار الجلسة"
+                text={session.session_decision || "-"}
+              />
+              <div className="col-span-1 md:col-span-2">
+                <OtherBox label="ملاحظات" text={session.notes || "-"} />
+              </div>
             </div>
           </div>
         )}

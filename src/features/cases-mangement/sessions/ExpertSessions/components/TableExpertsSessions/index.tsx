@@ -52,10 +52,10 @@ export const TableExpertsSessions: React.FC = () => {
     data: expertsResponse,
     isPending,
     isError,
-  } = useGetExpertSessions(caseId!, page, 4);
+  } = useGetExpertSessions(caseId!, page, 5);
   const expertsData: ExpertSessionResponse[] = expertsResponse?.data ?? [];
-  const indexedExpertsData = useIndexedData(expertsData, page, 4);
-  const totalPages = Math.ceil((expertsResponse?.meta?.total ?? 0) / 4) || 1;
+  const indexedExpertsData = useIndexedData(expertsData, page, 5);
+  const totalPages = Math.ceil((expertsResponse?.meta?.total ?? 0) / 5) || 1;
 
   const createMutation = useCreateExpertSession(caseId!);
   const updateMutation = useUpdateExpertSession(caseId!);
@@ -80,13 +80,15 @@ export const TableExpertsSessions: React.FC = () => {
     setEditingExpert(null);
   };
 
-  const handleSaveExpert = (values: ExpertSessionRequest) => {
+  const handleSaveExpert = async (values: ExpertSessionRequest) => {
     if (editingExpert) {
-      updateMutation.mutate({ reportId: editingExpert.id, data: values });
+      await updateMutation.mutateAsync({
+        reportId: editingExpert.id,
+        data: values,
+      });
     } else {
-      createMutation.mutate({ caseId: caseId!, data: values });
+      await createMutation.mutateAsync({ caseId: caseId!, data: values });
     }
-    handleCloseModal();
   };
 
   const handleDelete = (item: ExpertSessionResponse) => {
@@ -168,6 +170,7 @@ export const TableExpertsSessions: React.FC = () => {
         <AddExpertModal
           onClose={handleCloseModal}
           onSave={handleSaveExpert}
+          isPending={createMutation.isPending || updateMutation.isPending}
           initialValues={editingExpert ?? undefined}
         />
       )}

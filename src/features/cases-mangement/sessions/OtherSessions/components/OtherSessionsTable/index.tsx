@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
 import {
@@ -26,25 +26,25 @@ import { OtherSessionDetailsDialog } from "./components/OtherSessionDetailsDialo
 
 export const OtherSessionsTable: React.FC = () => {
   const { id: caseId } = useParams<{ id: string }>();
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [selectedSessionId, setSelectedSessionId] = React.useState<
-    number | null
-  >(null);
-  const [isFormOpen, setIsFormOpen] = React.useState(false);
-  const [isViewOpen, setIsViewOpen] = React.useState(false);
-  const itemsPerPage = 10;
+  const [page, setPage] = useState(1);
+  const [selectedSessionId, setSelectedSessionId] = useState<number | null>(
+    null,
+  );
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isViewOpen, setIsViewOpen] = useState(false);
 
   const {
     data: sessionsResponse,
     isPending,
     isError,
     error,
-  } = useGetOtherSessions(caseId, currentPage, itemsPerPage);
+  } = useGetOtherSessions(caseId, page, 5);
 
-  const sessions = sessionsResponse?.data ?? [];
-  const currentData = useIndexedData(sessions, currentPage, itemsPerPage);
+  const sessionsData: OtherSession[] = sessionsResponse?.data ?? [];
+  const indexedSessionsData = useIndexedData(sessionsData, page, 5);
   const totalPages =
-    Math.ceil((sessionsResponse?.meta?.total ?? 0) / itemsPerPage) || 1;
+    sessionsResponse?.meta?.totalPages ??
+    (Math.ceil((sessionsResponse?.meta?.total ?? 0) / 5) || 1);
 
   const createMutation = useCreateOtherSession(caseId!);
   const updateMutation = useUpdateOtherSession(caseId!);
@@ -74,6 +74,12 @@ export const OtherSessionsTable: React.FC = () => {
     setIsViewOpen(true);
   };
 
+  if (isPending) return <LoadingPage />;
+  if (isError) {
+    return (
+      <Error message="حدث خطأ أثناء جلب الجلسات الإدارية." error={error} />
+    );
+  }
   const columns: Column<OtherSession>[] = [
     {
       header: "#",
@@ -114,13 +120,6 @@ export const OtherSessionsTable: React.FC = () => {
     },
   ];
 
-  if (isPending) return <LoadingPage />;
-  if (isError) {
-    return (
-      <Error message="حدث خطأ أثناء جلب الجلسات الإدارية." error={error} />
-    );
-  }
-
   return (
     <div className="rounded-2xl border border-[#eeeeee] bg-white p-4 md:p-6">
       <div className="flex flex-col items-start justify-between gap-4 pb-6 sm:flex-row sm:items-center">
@@ -142,17 +141,23 @@ export const OtherSessionsTable: React.FC = () => {
       </div>
 
       <div className="overflow-hidden">
-        {currentData.length === 0 ? (
+        {indexedSessionsData.length === 0 ? (
           <EmptyTable message="لا يوجد جلسات إدارية" />
         ) : (
-          <DataTable data={currentData} columns={columns} rowIdField="id" />
-        )}
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
+          <>
+            <DataTable
+              data={indexedSessionsData}
+              columns={columns}
+              rowIdField="id"
+            />
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+              />
+            )}
+          </>
         )}
       </div>
 

@@ -10,6 +10,9 @@ export const useDeleteExpertSession = (caseId: string | number) => {
       queryClient.invalidateQueries({
         queryKey: ["expert-sessions", caseId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["expert-session-last", caseId],
+      });
       toast.success("تم حذف تقرير الخبير بنجاح");
     },
     onError: () => {
