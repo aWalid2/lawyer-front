@@ -1,88 +1,92 @@
-import React from 'react'
-import { HeaderRelationalCases } from './components/HeaderRelationalCases'
-import { DataTable, type Column } from '@/shared/components/DataTable'
-import { RelationalCasesActions } from './components/RelationalCasesActions';
-import { Pagination } from '@/shared/components/Pagination';
-import { useNavigate } from 'react-router-dom';
-
-
-
-interface CasesRelatedT {
-    id: string;
-    caseCode: string;
-    autoNumber: string;
-}
-
-const mockData: CasesRelatedT[] = [
-    { id: "1", caseCode: "#6341", autoNumber: "#6341" },
-    { id: "2", caseCode: "#4444", autoNumber: "#6341" },
-    { id: "3", caseCode: "#6341", autoNumber: "#3333" },
-    { id: "4", caseCode: "#6341", autoNumber: "#6341" },
-    { id: "5", caseCode: "#6341", autoNumber: "#6341" },
-    { id: "6", caseCode: "#6341", autoNumber: "#6341" },
-
-];
+import React from "react";
+import { HeaderRelationalCases } from "./components/HeaderRelationalCases";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { RelationalCasesActions } from "./components/RelationalCasesActions";
+// import { Pagination } from "@/shared/components/Pagination";
+import { useNavigate, useParams } from "react-router-dom";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { Error } from "@/shared/components/Error";
+import { useGetRelatedCases } from "./api/hooks/useGetRelatedCases";
+import { useDeleteRelatedCase } from "./api/hooks/useDeleteRelatedCase";
+import type { RelatedCaseTableItem } from "./types";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
 
 export const RelationalCases: React.FC = () => {
-    const navigate = useNavigate();
-    const [currentPage, setCurrentPage] = React.useState(1);
-    const itemsPerPage = 15;
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const caseId = id ?? "";
+  const {
+    data: relatedCases = [],
+    isPending,
+    isError,
+    error,
+  } = useGetRelatedCases(caseId);
+  const { mutateAsync: deleteRelatedCase } = useDeleteRelatedCase(caseId);
 
-    const totalPages = Math.ceil(mockData.length / itemsPerPage);
+  const relatedCasesTableData = React.useMemo(
+    () =>
+      relatedCases.map((item) => ({
+        id: item.related_case.id,
+        related_case_id: item.related_case_id,
+        case_sequence: item.related_case.case_sequence,
+      })),
+    [relatedCases],
+  );
 
-    const currentData = React.useMemo(() => {
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        return mockData.slice(startIndex, startIndex + itemsPerPage);
-    }, [currentPage]);
+  const currentData = useIndexedData(relatedCasesTableData);
 
-    const columns: Column<any>[] = [
-        {
-            header: "#",
-            accessor: (item) => mockData.findIndex((e) => e.id === item.id) + 1,
-            headerClassName: "w-13",
-            className: "w-13",
-        },
-        {
-            header: "كود القضية",
-            accessor: "caseCode",
-            headerClassName: "w-35",
-            className: "w-35",
-        },
-        {
-            header: "الرقم الآلي",
-            accessor: "autoNumber",
-            headerClassName: "w-35",
-            className: "w-35",
-        },
-        {
-            header: "إجراء",
-            accessor: (item) => (
-                <RelationalCasesActions
-                    caseItem={item}
-                    onEdit={(caseItem) => console.log("Edit", caseItem)}
-                    onView={(caseItem) => navigate(`/dashboard/case-management/${caseItem.id}`)}
-                    onDelete={(caseItem) => console.log("Delete", caseItem)}
-                />
-            ),
-            headerClassName: "w-35",
-            className: "w-35",
-        },
-    ];
+  if (isPending) return <LoadingPage />;
+  if (isError)
     return (
-        <div>
-            <HeaderRelationalCases title="القضايا ذات الصلة" />
-            <DataTable
-                data={currentData}
-                columns={columns}
-                rowIdField="id"
-            />
-            {totalPages > 1 && (
+      <Error message="حدث خطأ أثناء جلب القضايا ذات الصلة." error={error} />
+    );
+
+  const columns: Column<RelatedCaseTableItem>[] = [
+    {
+      header: "#",
+      accessor: (item) => item.rowNumber,
+      headerClassName: "w-13",
+      className: "w-13",
+    },
+    {
+      header: "كود القضية",
+      accessor: "id",
+      headerClassName: "w-35",
+      className: "w-35",
+    },
+    {
+      header: "الرقم الآلي",
+      accessor: "case_sequence",
+      headerClassName: "w-35",
+      className: "w-35",
+    },
+    {
+      header: "إجراء",
+      accessor: (item) => (
+        <RelationalCasesActions
+          caseId={caseId}
+          caseItem={item}
+          onView={(caseItem) =>
+            navigate(`/dashboard/case-management/${caseItem.id}`)
+          }
+          onDelete={(caseItem) => deleteRelatedCase(caseItem.related_case_id)}
+        />
+      ),
+      headerClassName: "w-35",
+      className: "w-35",
+    },
+  ];
+  return (
+    <div>
+      <HeaderRelationalCases title="القضايا ذات الصلة" caseId={caseId} />
+      <DataTable data={currentData} columns={columns} rowIdField="id" />
+      {/* {totalPages > 1 && (
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
                 />
-            )}
-        </div>
-    )
-}
+            )} */}
+    </div>
+  );
+};

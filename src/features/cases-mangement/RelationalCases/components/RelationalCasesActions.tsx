@@ -4,17 +4,18 @@ import { EditIcon } from "@/shared/icons/Edit";
 import { RelationalCaseDialog } from "./RelationalCaseDialog";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { TrashIcon } from "@/shared/icons/Trash";
+import type { RelatedCaseTableItem } from "../types";
 
 interface RelationalCasesProps {
-  caseItem: any;
-  onEdit: (caseItem: any) => void;
-  onView: (caseItem: any) => void;
-  onDelete: (caseItem: any) => void;
+  caseId: string;
+  caseItem: RelatedCaseTableItem;
+  onView: (caseItem: RelatedCaseTableItem) => void;
+  onDelete: (caseItem: RelatedCaseTableItem) => Promise<void> | void;
 }
 
 export const RelationalCasesActions: React.FC<RelationalCasesProps> = ({
+  caseId,
   caseItem,
-  onEdit,
   onView,
   onDelete,
 }) => {
@@ -34,14 +35,12 @@ export const RelationalCasesActions: React.FC<RelationalCasesProps> = ({
 
       <RelationalCaseDialog
         title="تعديل قضية مرتبطة"
+        caseId={caseId}
         caseItem={caseItem}
         trigger={
           <button
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onEdit?.(caseItem);
-            }}
+            onClick={(e) => e.stopPropagation()}
             title="تعديل"
             className="flex h-9 w-9 items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
           >
