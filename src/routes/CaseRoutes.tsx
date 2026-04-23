@@ -35,7 +35,6 @@ const CaseRoutes = () => {
         <Route path="employees" element={<Employees />} />
         <Route path="employees/:employeeId" element={<EmployeeDetails />} />
       </Route>
-
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

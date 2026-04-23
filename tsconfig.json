@@ -10,7 +10,7 @@
   ],
   "compilerOptions": {
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
+ 
     "paths": {
       "@/public/*": [
         "./public/*"

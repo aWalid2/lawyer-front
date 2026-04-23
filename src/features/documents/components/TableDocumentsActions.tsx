@@ -1,79 +1,50 @@
-// documents/components/TableDocumentsActions.tsx
-import React from "react";
-import { Link } from "react-router-dom";
-import type { Document } from "../types/types";
-import { ViewIcon } from "@/shared/icons/View";
-import { EditIcon } from "@/shared/icons/Edit";
-import { TrashIcon } from "@/shared/icons/Trash";
-import { EditDocumentDialog } from "./EditDocumentDialog";
+import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
+import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
+import React from "react";
 import { useDeleteDocument } from "../api/hooks/useDeleteDocument";
+import type { Document } from "../types/types";
+import { EditDocumentDialog } from "./EditDocumentDialog";
 
 interface TableDocumentsActionsProps {
-    document: Document;
-    onDocumentUpdated?: () => void;
+  document: Document;
+  onDocumentUpdated?: () => void;
 }
 
 export const TableDocumentsActions: React.FC<TableDocumentsActionsProps> = ({
-    document,
-    onDocumentUpdated,
+  document,
+  onDocumentUpdated,
 }) => {
-    const { mutateAsync: deleteDocument, isPending: isDeleting } = useDeleteDocument();
+  const { mutateAsync: deleteDocument } = useDeleteDocument();
 
-    const handleDelete = async () => {
-        try {
-            await deleteDocument(document.id);
-            if (onDocumentUpdated) onDocumentUpdated();
-        } catch (error) {
-            console.error("Error deleting document:", error);
-        }
-    };
+  const handleDelete = async () => {
+    try {
+      await deleteDocument(document.id);
+      if (onDocumentUpdated) onDocumentUpdated();
+    } catch (error) {
+      console.error("Error deleting document:", error);
+    }
+  };
 
-    const documentName = document.document_name || "هذا المستند";
+  const documentName = document.document_name || "هذا المستند";
 
-    return (
-        <div className="flex items-center justify-center gap-2">
-            <Link
-                to={`/dashboard/documents/${document.id}`}
-                title="عرض"
-                className="h-9 w-9 flex items-center justify-center rounded-[12px] bg-[#F0F6FF]"
-            >
-                <ViewIcon className="size-[16px] text-[#63A4F9]" />
-            </Link>
+  return (
+    <div className="flex items-center justify-center gap-2">
+      <ViewLinkTablePageDetails to={`/dashboard/documents/${document.id}`} />
 
-            <EditDocumentDialog
-                document={document}
-                trigger={
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                        }}
-                        title="تعديل"
-                        className="h-9 w-9 flex items-center justify-center rounded-[12px] bg-[#F1F1F3]"
-                    >
-                        <EditIcon className="size-[14px] text-[#3D3C48]" />
-                    </button>
-                }
-                onDocumentUpdated={onDocumentUpdated}
-            />
+      <EditDocumentDialog
+        document={document}
+        trigger={<ButtonUpdateTable />}
+        onDocumentUpdated={onDocumentUpdated}
+      />
 
-            <ConfirmDeleteDialog
-                title="حذف المستند"
-                description={`هل أنت متأكد من حذف المستند (${documentName})؟`}
-                onConfirm={handleDelete}
-                trigger={
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                        }}
-                        title="حذف"
-                        disabled={isDeleting}
-                        className="h-9 w-9 flex items-center justify-center rounded-[12px] bg-[#C60000]/8 disabled:opacity-50"
-                    >
-                        <TrashIcon className="size-[16px] text-[#C60000]" />
-                    </button>
-                }
-            />
-        </div>
-    );
+      <ConfirmDeleteDialog
+        title="حذف المستند"
+        description={`هل أنت متأكد من حذف المستند (${documentName})؟`}
+        onConfirm={handleDelete}
+        trigger={<ButtonDeleteTable />}
+      />
+    </div>
+  );
 };
