@@ -1,24 +1,45 @@
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import LoadingPage from "@/shared/components/LoadingPage";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 import React from "react";
 import { useGetAllUsers } from "./api/hooks/useGetAllUsers";
 import { UserManagementHeader } from "./components/UserManagementHeader";
 import { UsersAction } from "./components/UsersAction";
 import type { UserT } from "./types/userT";
 import { Error } from "@/shared/components/Error";
+import { useGetAllUsersSearched } from "./api/hooks/useGetAllUsersSearched";
 
 export const UserManagementFeature: React.FC = () => {
+  const [searchTerm, setSearchTerm] = React.useState("");
   const { data: allUsers = [], isLoading, isError, error } = useGetAllUsers();
+  const debouncedSearchTerm = useDebounce(searchTerm.trim(), 400);
+
+  const isSearching = debouncedSearchTerm.length > 0;
+  const {
+    data: allUsersSearched = [],
+    isFetching: isSearchingUsers,
+    isError: isSearchError,
+    error: searchError,
+  } = useGetAllUsersSearched(debouncedSearchTerm);
+
+  const displayedUsers = isSearching ? allUsersSearched : allUsers;
 
   if (isLoading) return <LoadingPage />;
   if (isError)
     return <Error message="حدث خطأ أثناء جلب المستخدمين." error={error} />;
+  if (isSearchError)
+    return (
+      <Error
+        message="حدث خطأ أثناء البحث عن المستخدمين."
+        error={searchError}
+      />
+    );
 
   const columns: Column<UserT>[] = [
     {
       header: "#",
       accessor: (item: UserT) => {
-        const index = allUsers.findIndex((u) => u.id === item.id);
+        const index = displayedUsers.findIndex((u) => u.id === item.id);
         return index + 1;
       },
       headerClassName: "w-16",
@@ -65,12 +86,16 @@ export const UserManagementFeature: React.FC = () => {
   return (
     <div className="space-y-6">
       <UserManagementHeader
-        searchTerm={""}
-        onSearch={() => {}}
+        searchTerm={searchTerm}
+        onSearch={setSearchTerm}
         onUserUpdated={() => console.log("User added")}
       />
 
-      <DataTable data={allUsers} columns={columns} rowIdField="id" />
+      {isSearchingUsers ? (
+        <LoadingPage />
+      ) : (
+        <DataTable data={displayedUsers} columns={columns} rowIdField="id" />
+      )}
 
       {/* {totalPages > 1 && (
           <div className="mt-6 flex justify-center">
