@@ -2,7 +2,7 @@ import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
 import { TableEditButton } from "@/shared/components/TableEditButton";
 import React from "react";
-import type { UserT } from "../types";
+import type { UserT } from "../types/userT";
 import { UserFormDialog } from "./UserFormDialog";
 
 interface UsersActionProps {
@@ -10,7 +10,10 @@ interface UsersActionProps {
   onUserUpdated: () => void;
 }
 
-export const UsersAction: React.FC<UsersActionProps> = ({ user, onUserUpdated }) => {
+export const UsersAction: React.FC<UsersActionProps> = ({
+  user,
+  onUserUpdated,
+}) => {
   const handleDelete = () => {
     console.log("Deleting user:", user.id);
     onUserUpdated();
@@ -27,7 +30,7 @@ export const UsersAction: React.FC<UsersActionProps> = ({ user, onUserUpdated })
       <ConfirmDeleteDialog
         onConfirm={handleDelete}
         title="حذف مستخدم"
-        description={`هل أنت متأكد من حذف المستخدم ${user.name}؟`}
+        description={`هل أنت متأكد من حذف المستخدم ${user.first_name}؟`}
         trigger={<TableDeleteButton />}
       />
     </div>
