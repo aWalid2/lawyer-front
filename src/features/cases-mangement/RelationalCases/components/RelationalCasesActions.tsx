@@ -1,52 +1,33 @@
-import React from "react";
-import { ViewIcon } from "@/shared/icons/View";
-import { EditIcon } from "@/shared/icons/Edit";
-import { RelationalCaseDialog } from "./RelationalCaseDialog";
+import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
+import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
-import { TrashIcon } from "@/shared/icons/Trash";
+import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
+import React from "react";
 import type { RelatedCaseTableItem } from "../types";
+import { RelationalCaseDialog } from "./RelationalCaseDialog";
 
 interface RelationalCasesProps {
   caseId: string;
   caseItem: RelatedCaseTableItem;
-  onView: (caseItem: RelatedCaseTableItem) => void;
   onDelete: (caseItem: RelatedCaseTableItem) => Promise<void> | void;
 }
 
 export const RelationalCasesActions: React.FC<RelationalCasesProps> = ({
   caseId,
   caseItem,
-  onView,
   onDelete,
 }) => {
   return (
     <div className="flex items-center justify-center gap-2">
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          onView?.(caseItem);
-        }}
-        title="عرض تفاصيل القضية"
-        className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F0F6FF] transition-colors hover:bg-[#e0eaff]"
-      >
-        <ViewIcon className="size-4 text-[#63A4F9]" />
-      </button>
+      <ViewLinkTablePageDetails
+        to={`/dashboard/case-management/${caseItem.id}`}
+      />
 
       <RelationalCaseDialog
         title="تعديل قضية مرتبطة"
         caseId={caseId}
         caseItem={caseItem}
-        trigger={
-          <button
-            type="button"
-            onClick={(e) => e.stopPropagation()}
-            title="تعديل"
-            className="flex h-9 w-9 items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-          >
-            <EditIcon className="size-[14px] text-[#3D3C48]" />
-          </button>
-        }
+        trigger={<ButtonUpdateTable />}
       />
 
       <ConfirmDeleteDialog
@@ -55,16 +36,7 @@ export const RelationalCasesActions: React.FC<RelationalCasesProps> = ({
         onConfirm={() => {
           onDelete?.(caseItem);
         }}
-        trigger={
-          <button
-            type="button"
-            onClick={(e) => e.stopPropagation()}
-            title="حذف"
-            className="flex h-9 w-9 items-center justify-center rounded-[8px] bg-[#C60000]/8 transition-colors hover:bg-[#ffe4e4]"
-          >
-            <TrashIcon className="size-[16px] text-[#C60000]" />
-          </button>
-        }
+        trigger={<ButtonDeleteTable />}
       />
     </div>
   );

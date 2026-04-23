@@ -1,4 +1,3 @@
-import { InputForm } from "@/shared/components/InputForm";
 import {
   Dialog,
   DialogClose,
@@ -7,9 +6,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { SelectForm } from "@/shared/components/SelectForm";
 import { Form, Formik } from "formik";
 import { XIcon } from "lucide-react";
 import React from "react";
+import { useGetCases } from "../../MainCases/api/hooks/useGetCases";
 import { useCreateRelatedCase } from "../api/hooks/useCreateRelatedCase";
 import { useUpdateRelatedCase } from "../api/hooks/useUpdateRelatedCase";
 import type { RelatedCaseTableItem } from "../types";
@@ -28,6 +29,14 @@ export const RelationalCaseDialog: React.FC<RelationalCaseDialogProps> = ({
   caseItem,
 }) => {
   const [open, setOpen] = React.useState(false);
+  const { data: cases = [] } = useGetCases();
+  const casesOptions = cases?.data?.map(
+    (caseData: { id: number; case_sequence: string }) => ({
+      label: `${caseData.case_sequence}`,
+      value: String(caseData.id),
+    }),
+  );
+
   const { mutateAsync: createRelatedCase } = useCreateRelatedCase();
   const { mutateAsync: updateRelatedCase } = useUpdateRelatedCase();
   const isEditing = Boolean(caseItem);
@@ -83,10 +92,11 @@ export const RelationalCaseDialog: React.FC<RelationalCaseDialogProps> = ({
         >
           {({ isSubmitting }) => (
             <Form className="space-y-4">
-              <InputForm
+              <SelectForm
                 name="relatedCaseId"
-                label="معرف القضية المرتبطة"
-                type="text"
+                label="اختر القضية المرتبطة"
+                options={casesOptions}
+                showSearch
               />
 
               <button

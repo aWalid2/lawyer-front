@@ -1,18 +1,17 @@
+import { DataTable, type Column } from "@/shared/components/DataTable";
 import React from "react";
 import { HeaderRelationalCases } from "./components/HeaderRelationalCases";
-import { DataTable, type Column } from "@/shared/components/DataTable";
 import { RelationalCasesActions } from "./components/RelationalCasesActions";
 // import { Pagination } from "@/shared/components/Pagination";
-import { useNavigate, useParams } from "react-router-dom";
-import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
-import { useGetRelatedCases } from "./api/hooks/useGetRelatedCases";
-import { useDeleteRelatedCase } from "./api/hooks/useDeleteRelatedCase";
-import type { RelatedCaseTableItem } from "./types";
+import LoadingPage from "@/shared/components/LoadingPage";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { useParams } from "react-router-dom";
+import { useDeleteRelatedCase } from "./api/hooks/useDeleteRelatedCase";
+import { useGetRelatedCases } from "./api/hooks/useGetRelatedCases";
+import type { RelatedCaseTableItem } from "./types";
 
 export const RelationalCases: React.FC = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
   const caseId = id ?? "";
   const {
@@ -66,9 +65,6 @@ export const RelationalCases: React.FC = () => {
         <RelationalCasesActions
           caseId={caseId}
           caseItem={item}
-          onView={(caseItem) =>
-            navigate(`/dashboard/case-management/${caseItem.id}`)
-          }
           onDelete={(caseItem) => deleteRelatedCase(caseItem.related_case_id)}
         />
       ),
