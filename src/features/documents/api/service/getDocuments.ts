@@ -1,4 +1,4 @@
-// documents/api/service/getDocuments.ts
+
 import api from "@/lib/api";
 
 export const getDocuments = async (page: number, limit: number, status?: string, search?: string) => {
@@ -12,7 +12,6 @@ export const getDocuments = async (page: number, limit: number, status?: string,
       params.search = search;
     }
 
-    console.log("Request params:", params); 
 
     const response = await api.get("/documnet", { params });
     return response.data;

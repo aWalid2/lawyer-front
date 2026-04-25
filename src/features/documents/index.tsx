@@ -1,5 +1,4 @@
-// documents/DocumentsFeature.tsx
-import React, { useState, useMemo, useEffect } from 'react'  // ✅ أضف useEffect
+import React, { useState, useMemo, useEffect } from 'react'
 import { HeaderPageDocuments } from "./components/HeaderPageDocuments";
 import type { Document } from "./types/types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
@@ -12,19 +11,17 @@ import { useIndexedData } from '@/shared/utils/useIndexedData';
 import { PaginationApi } from '@/shared/components/PaginationApi';
 
 export const DocumentsFeature: React.FC = () => {
-    const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState<string>("all");
     const [page, setPage] = useState(1);
     const limit = 15;
 
-    // ✅ إعادة تعيين الصفحة إلى 1 عند تغيير الفلتر أو البحث
     useEffect(() => {
         setPage(1);
-    }, [statusFilter, searchTerm]);
+    }, [statusFilter]);
 
-    const { data: documentsResponse, isPending, isError, refetch } = useFetchDocuments(page, limit, statusFilter, searchTerm);
+    const { data: documentsResponse, isPending, isError, refetch } = useFetchDocuments(page, limit, statusFilter,);
     const { data: cases } = useFetchCases();
-    
+
     const documents = useMemo(() => {
         if (!documentsResponse) return [];
         if (Array.isArray(documentsResponse.data)) return documentsResponse.data;
@@ -99,7 +96,6 @@ export const DocumentsFeature: React.FC = () => {
     if (isPending) return <LoadingPage />
     if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
 
-    // ✅ رسالة مخصصة حسب الفلتر
     const getEmptyMessage = () => {
         if (statusFilter === "CASE_RELATED") return "لا توجد مستندات تابعة للقضايا";
         if (statusFilter === "NON_CASE_RELATED") return "لا توجد مستندات غير تابعة للقضايا";
@@ -111,8 +107,6 @@ export const DocumentsFeature: React.FC = () => {
             <div className="w-full pt-6 space-y-6">
                 <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
                     <HeaderPageDocuments
-                        searchTerm={searchTerm}
-                        onSearch={setSearchTerm}
                         onFilterChange={setStatusFilter}
                         filter={statusFilter}
                         onDocumentAdded={() => {
@@ -131,8 +125,6 @@ export const DocumentsFeature: React.FC = () => {
         <div className="w-full pt-6 space-y-6">
             <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
                 <HeaderPageDocuments
-                    searchTerm={searchTerm}
-                    onSearch={setSearchTerm}
                     onFilterChange={setStatusFilter}
                     filter={statusFilter}
                     onDocumentAdded={() => {

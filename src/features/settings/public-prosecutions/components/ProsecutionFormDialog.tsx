@@ -10,7 +10,7 @@ import type { ProsecutionT } from "../types/prosecutionsTypes";
 
 interface ProsecutionFormDialogProps {
   prosecution?: ProsecutionT;
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   onSave?: () => void;

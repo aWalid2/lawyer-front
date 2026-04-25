@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import edit from '@/public/images/edit.svg';
-import deleteIcon from '@/public/images/delete.svg';
+import { ButtonDeleteTable } from '@/shared/components/ButtonDeleteTable';
+import { ButtonUpdateTable } from '@/shared/components/ButtonUpdateTable';
 import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
-import { ProsecutionFormDialog } from './ProsecutionFormDialog';
+import React, { useState } from 'react';
 import { useDeleteProsecution } from '../api/hooks/useDeleteProsecution';
+import { ProsecutionFormDialog } from './ProsecutionFormDialog';
 
 interface ProsecutionsActionProps {
     prosecution: any;
@@ -12,7 +12,7 @@ interface ProsecutionsActionProps {
 
 export const ProsecutionsAction: React.FC<ProsecutionsActionProps> = ({ prosecution, onProsecutionUpdated }) => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const { mutateAsync: deleteProsecution, isPending: isDeleting } = useDeleteProsecution();
+    const { mutateAsync: deleteProsecution } = useDeleteProsecution();
 
     const handleEditClick = () => {
         setIsEditModalOpen(true);
@@ -29,7 +29,7 @@ export const ProsecutionsAction: React.FC<ProsecutionsActionProps> = ({ prosecut
         }
         handleCloseModal();
     };
-    
+
     const handleDelete = async () => {
         try {
             await deleteProsecution(prosecution.id.toString());
@@ -44,28 +44,15 @@ export const ProsecutionsAction: React.FC<ProsecutionsActionProps> = ({ prosecut
     return (
         <>
             <div className="flex items-center justify-center gap-2">
-                <button
-                    onClick={handleEditClick}
-                    title="تعديل"
-                    className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-                >
-                    <img src={edit} alt="edit" />
-                </button>
+
+                <ButtonUpdateTable onClick={handleEditClick} />
 
                 <ConfirmDeleteDialog
                     title="حذف النيابة"
                     description={`هل أنت متأكد من حذف النيابة (${prosecution.name})`}
                     onConfirm={handleDelete}
                     trigger={
-                        <button
-                            type="button"
-                            onClick={(e) => e.stopPropagation()}
-                            title="حذف"
-                            disabled={isDeleting}
-                            className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7] disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <img src={deleteIcon} alt="delete" />
-                        </button>
+                        <ButtonDeleteTable />
                     }
                 />
             </div>
@@ -75,7 +62,6 @@ export const ProsecutionsAction: React.FC<ProsecutionsActionProps> = ({ prosecut
                     open={isEditModalOpen}
                     onOpenChange={setIsEditModalOpen}
                     prosecution={prosecution}
-                    trigger={<></>}
                     onSave={handleSaveProsecution}
                 />
             )}

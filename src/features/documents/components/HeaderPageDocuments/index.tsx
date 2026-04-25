@@ -4,9 +4,9 @@ import { HeaderFilter } from "@/shared/components/HeaderFilter";
 import { AddDocumentDialog } from "../AddDocumentDialog";
 
 interface HeaderPageDocumentsProps {
-    onSearch: (term: string) => void;
+    onSearch?: (term: string) => void;
     onFilterChange: (status: string) => void;
-    searchTerm: string;
+    searchTerm?: string;
     filter: string;
     onDocumentAdded?: () => void;
 }
