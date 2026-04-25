@@ -5,7 +5,7 @@ interface RelatedCasePayload {
 }
 
 export const updateRelatedCase = async (
-  caseId: string,
+  caseId: number,
   relatedCaseId: number,
   payload: RelatedCasePayload
 ) => {

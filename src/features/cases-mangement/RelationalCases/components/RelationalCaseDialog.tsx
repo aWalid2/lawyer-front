@@ -45,6 +45,8 @@ export const RelationalCaseDialog: React.FC<RelationalCaseDialogProps> = ({
     relatedCaseId: caseItem ? String(caseItem.id) : "",
   };
 
+  console.log(caseItem)
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -64,6 +66,7 @@ export const RelationalCaseDialog: React.FC<RelationalCaseDialogProps> = ({
           </DialogTitle>
         </DialogHeader>
 
+
         <Formik
           initialValues={initialValues}
           enableReinitialize
@@ -74,8 +77,8 @@ export const RelationalCaseDialog: React.FC<RelationalCaseDialogProps> = ({
               if (isEditing && caseItem) {
                 await updateRelatedCase({
                   caseId,
-                  relatedCaseId: caseItem.related_case_id,
-                  related_case_id: relatedCaseId,
+                  relatedCaseId: String(caseItem?.id),
+                  related_case_id: String(relatedCaseId),
                 });
               } else {
                 await createRelatedCase({

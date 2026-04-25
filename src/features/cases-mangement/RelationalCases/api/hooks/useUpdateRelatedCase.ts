@@ -4,8 +4,8 @@ import { updateRelatedCase } from "../services/updateRelatedCase";
 
 interface UpdateRelatedCaseValues {
   caseId: string;
-  relatedCaseId: number;
-  related_case_id: number;
+  relatedCaseId: string;
+  related_case_id: string;
 }
 
 export const useUpdateRelatedCase = () => {
@@ -13,7 +13,7 @@ export const useUpdateRelatedCase = () => {
 
   return useMutation({
     mutationFn: ({ caseId, relatedCaseId, related_case_id }: UpdateRelatedCaseValues) =>
-      updateRelatedCase(caseId, relatedCaseId, { related_case_id }),
+      updateRelatedCase(Number(caseId), Number(relatedCaseId), { related_case_id: Number(related_case_id) }),
     onSuccess: (_, variables) => {
       toast.success("تم تعديل القضية المرتبطة بنجاح");
       queryClient.invalidateQueries({
