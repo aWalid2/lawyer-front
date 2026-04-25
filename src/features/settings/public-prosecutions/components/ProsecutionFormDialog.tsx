@@ -1,13 +1,12 @@
-import React from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { Error } from "@/shared/components/Error";
 import { InputForm } from "@/shared/components/InputForm";
-import type { ProsecutionT } from "../types/prosecutionsTypes";
+import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { Form, Formik } from "formik";
+import React from "react";
+import * as Yup from "yup";
 import { useAddProsecution } from "../api/hooks/useAddProsecution";
 import { useUpdateProsecution } from "../api/hooks/useUpdateProsecution";
-import { Error } from "@/shared/components/Error";
-import LoadingPage from "@/shared/components/LoadingPage";
+import type { ProsecutionT } from "../types/prosecutionsTypes";
 
 interface ProsecutionFormDialogProps {
   prosecution?: ProsecutionT;

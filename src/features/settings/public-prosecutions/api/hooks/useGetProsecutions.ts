@@ -4,10 +4,10 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 import { fetchProsecutions } from "../service/getProsecutions";
 
-export const useFetchProsecutions = (page?: number, limit?: number, search?: string) => {
+export const useFetchProsecutions = (page?: number, limit?: number) => {
   const query = useQuery({
-    queryKey: ["prosecutions", page, limit, search],
-    queryFn: () => fetchProsecutions(page, limit, search),
+    queryKey: ["prosecutions", page, limit],
+    queryFn: () => fetchProsecutions(page, limit),
     staleTime: 1000 * 60 * 2,
     retry: 2,
   });

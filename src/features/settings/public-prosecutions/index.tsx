@@ -15,7 +15,7 @@ export const PublicProsecutionsFeature: React.FC = () => {
     const [page, setPage] = useState(1);
     const limit = 15;
 
-    const { data: prosecutionsResponse, isPending, isError, refetch } = useFetchProsecutions(page, limit, searchTerm);
+    const { data: prosecutionsResponse, isPending, isError, refetch } = useFetchProsecutions(page, limit);
 
     const prosecutions = prosecutionsResponse?.data || [];
     const totalPages = prosecutionsResponse?.meta?.total_pages ?? 1;

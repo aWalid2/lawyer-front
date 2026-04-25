@@ -13,7 +13,7 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
-import type { UserT } from "../userT";
+import type { UserT } from "../types/userT";
 
 interface UserFormDialogProps {
   user?: UserT;
