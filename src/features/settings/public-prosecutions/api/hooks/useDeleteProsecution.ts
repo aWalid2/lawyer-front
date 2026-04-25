@@ -1,4 +1,3 @@
-// prosecution/api/hooks/useDeleteProsecution.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { deleteProsecution } from "../service/deleteProsecution";

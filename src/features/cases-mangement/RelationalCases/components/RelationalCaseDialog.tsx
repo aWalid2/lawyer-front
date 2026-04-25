@@ -45,7 +45,6 @@ export const RelationalCaseDialog: React.FC<RelationalCaseDialogProps> = ({
     relatedCaseId: caseItem ? String(caseItem.id) : "",
   };
 
-  console.log(caseItem)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -105,7 +104,7 @@ export const RelationalCaseDialog: React.FC<RelationalCaseDialogProps> = ({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-primary-gradient mt-4 w-full rounded-[12px] px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:opacity-70"
+                className="bg-primary-gradient mt-4 w-full rounded-main px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:opacity-70"
               >
                 {isEditing ? "تعديل" : "إضافة"}
               </button>

@@ -1,4 +1,3 @@
-// prosecution/api/service/deleteProsecution.ts
 import api from "@/lib/api";
 
 export const deleteProsecution = async (id: string) => {

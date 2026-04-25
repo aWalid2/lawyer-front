@@ -22,7 +22,7 @@ export const RelationalCases: React.FC = () => {
     error,
   } = useGetRelatedCases(caseId);
   const { mutateAsync: deleteRelatedCase } = useDeleteRelatedCase(caseId);
-  console.log(relatedCases)
+
 
   const relatedCasesTableData = React.useMemo(
     () =>
