@@ -1,4 +1,3 @@
-// documents/api/hooks/useUpdateDocument.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { updateDocument } from "../service/updateDocument";

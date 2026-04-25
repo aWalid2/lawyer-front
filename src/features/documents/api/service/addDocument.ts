@@ -1,4 +1,3 @@
-// documents/api/service/addDocument.ts
 import api from "@/lib/api";
 
 export const addDocument = async ({ clientId, data }: { clientId: string; data: FormData }) => {

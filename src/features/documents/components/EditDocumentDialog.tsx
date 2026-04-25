@@ -1,4 +1,4 @@
-// documents/components/EditDocumentDialog.tsx
+
 import React, { useMemo } from "react";
 import { Formik, Form } from "formik";
 import {
@@ -24,9 +24,9 @@ interface EditDocumentDialogProps {
     onDocumentUpdated?: () => void;
 }
 
-export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({ 
-    document, 
-    trigger, 
+export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
+    document,
+    trigger,
     onDocumentUpdated,
 }) => {
     const { data: cases, isPending: isCasesLoading } = useFetchCases();
@@ -76,14 +76,14 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
 
     const handleSubmit = (values: any) => {
         const formData = new FormData();
-        
+
         formData.append("document_type", values.document_type);
         formData.append("document_details", values.document_details);
-        
+
         if (values.document_name) {
             formData.append("document_name", values.document_name);
         }
-        
+
         if (values.document_type === "CASE_RELATED") {
             const caseNumber = Number(values.case);
             if (isNaN(caseNumber)) {
@@ -95,16 +95,16 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
         } else {
             formData.append("document_category", values.document_category);
         }
-        
+
         if (values.file && values.file instanceof FileList && values.file.length > 0) {
             formData.append("file", values.file[0]);
         }
 
         updateDocument(
-            { 
-                id: document.id, 
+            {
+                id: document.id,
                 clientId: clientId,
-                data: formData 
+                data: formData
             },
             {
                 onSuccess: () => {

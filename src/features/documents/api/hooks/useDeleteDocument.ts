@@ -1,4 +1,3 @@
-// documents/api/hooks/useDeleteDocument.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { deleteDocument } from "../service/deleteDocument";

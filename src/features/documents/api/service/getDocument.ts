@@ -1,4 +1,4 @@
-// documents/api/service/getDocumentById.ts
+
 import api from "@/lib/api";
 
 export const getDocumentById = async (id: string) => {

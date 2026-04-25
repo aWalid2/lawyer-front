@@ -1,4 +1,3 @@
-// documents/api/service/deleteDocument.ts
 import api from "@/lib/api";
 
 export const deleteDocument = async (id: number) => {

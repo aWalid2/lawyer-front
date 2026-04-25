@@ -1,4 +1,3 @@
-// documents/api/hooks/useGetDocumentById.ts
 import { useQuery } from "@tanstack/react-query";
 import { getDocumentById } from "../service/getDocument";
 

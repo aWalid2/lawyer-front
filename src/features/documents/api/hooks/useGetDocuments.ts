@@ -1,4 +1,3 @@
-// documents/api/hooks/useGetDocuments.ts
 import { useQuery } from "@tanstack/react-query";
 import { getDocuments } from "../service/getDocuments";
 
@@ -7,7 +6,6 @@ export const useFetchDocuments = (page: number, limit: number, documentType?: st
         queryKey: ["documents", page, limit, documentType, search],
         queryFn: async () => {
             const response = await getDocuments(page, limit, documentType, search);
-            console.log("API Response:", response);
             return response;
         },
     });

@@ -1,4 +1,3 @@
-// documents/api/service/updateDocument.ts
 import api from "@/lib/api";
 
 export const updateDocument = async ({ id, clientId, data }: { id: number; clientId: string; data: FormData }) => {
