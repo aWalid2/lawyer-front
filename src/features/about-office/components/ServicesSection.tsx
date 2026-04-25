@@ -1,6 +1,7 @@
+import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { useState } from "react";
 import { CLASSES } from "../index";
-import del from '@/public/images/delete.svg';
 
 interface Props {
     services: string[];
@@ -31,9 +32,14 @@ const ServicesSection = ({ services, setServices }: Props) => {
                     {services.map((service, index) => (
                         <div key={index} className="bg-[#FBFBFB] p-3 rounded-lg border border-gray-200 w-full sm:w-[308px] h-[50px] flex items-center gap-2">
                             <span className="text-sm font-medium text-gray-700 truncate flex-1">{service}</span>
-                            <button type="button" onClick={() => handleDeleteService(index)}>
-                                <img src={del} alt="حذف" />
-                            </button>
+                            <ConfirmDeleteDialog
+                                title="حذف الخدمة"
+                                description={`هل أنت متأكد من حذف الخدمة ${service} ؟`}
+                                onConfirm={() => handleDeleteService(index)}
+                                trigger={
+                                    <ButtonDeleteTable />
+                                }
+                            />
                         </div>
                     ))}
                     <button
@@ -46,7 +52,7 @@ const ServicesSection = ({ services, setServices }: Props) => {
                 </div>
             </div>
 
-            {/* مودال إضافة خدمة جديدة */}
+
             {isServiceModalOpen && (
                 <div className={CLASSES.modalOverlay} onClick={() => setIsServiceModalOpen(false)}>
                     <div className={CLASSES.modalContent} onClick={(e) => e.stopPropagation()}>

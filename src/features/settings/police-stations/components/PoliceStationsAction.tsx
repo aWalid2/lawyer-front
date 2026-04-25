@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import edit from '@/public/images/edit.svg';
-import deleteIcon from '@/public/images/delete.svg';
+import { ButtonDeleteTable } from '@/shared/components/ButtonDeleteTable';
+import { ButtonUpdateTable } from '@/shared/components/ButtonUpdateTable';
 import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
-import { PoliceStationFormDialog } from './PoliceStationFormDialog';
+import React, { useState } from 'react';
 import { useDeletePoliceStation } from '../api/hooks/useDeletePoliceStation';
+import { PoliceStationFormDialog } from './PoliceStationFormDialog';
 
 interface PoliceStationsActionProps {
     station: any;
@@ -29,7 +29,7 @@ export const PoliceStationsAction: React.FC<PoliceStationsActionProps> = ({ stat
         }
         handleCloseModal();
     };
-    
+
     const handleDelete = async () => {
         try {
             await deletePoliceStation(station.id.toString());
@@ -44,28 +44,14 @@ export const PoliceStationsAction: React.FC<PoliceStationsActionProps> = ({ stat
     return (
         <>
             <div className="flex items-center justify-center gap-2">
-                <button
-                    onClick={handleEditClick}
-                    title="تعديل"
-                    className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-                >
-                    <img src={edit} alt="edit" />
-                </button>
+                <ButtonUpdateTable onClick={handleEditClick} />
 
                 <ConfirmDeleteDialog
                     title="حذف المخفر"
                     description={`هل أنت متأكد من حذف المخفر (${station.name})`}
                     onConfirm={handleDelete}
                     trigger={
-                        <button
-                            type="button"
-                            onClick={(e) => e.stopPropagation()}
-                            title="حذف"
-                            disabled={isDeleting}
-                            className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7] disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <img src={deleteIcon} alt="delete" />
-                        </button>
+                        <ButtonDeleteTable disabled={isDeleting} />
                     }
                 />
             </div>

@@ -1,8 +1,8 @@
+import { ButtonDeleteTable } from '@/shared/components/ButtonDeleteTable';
+import { ButtonUpdateTable } from '@/shared/components/ButtonUpdateTable';
+import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
+import { ViewLinkTablePageDetails } from '@/shared/components/ViewLinkTablePageDetails';
 import React from 'react';
-import view from '@/public/images/view.svg';
-import edit from '@/public/images/edit.svg';
-import deleteIcon from '@/public/images/delete.svg';
-import { Link } from 'react-router-dom';
 
 interface LegislationActionsProps {
     legislationItem: any;
@@ -10,37 +10,25 @@ interface LegislationActionsProps {
     onDelete?: () => void;
 }
 
-export const LegislationActions: React.FC<LegislationActionsProps> = ({ 
-    legislationItem, 
-    onEdit, 
-    onDelete 
+export const LegislationActions: React.FC<LegislationActionsProps> = ({
+    legislationItem,
+    onEdit,
+    onDelete
 }) => {
     return (
         <div className="flex items-center justify-center gap-2">
-            <Link
-                to={`/dashboard/legislations/${legislationItem.id}`}
-                title="عرض"
-                className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F0F6FF] transition-colors hover:bg-[#e0eaff]"
-            >
-                <img src={view} alt="view" />
-            </Link>
+            <ViewLinkTablePageDetails to={`/dashboard/legislations/${legislationItem.id}`} />
 
-            <button
-                onClick={onEdit}
-                title="تعديل"
-                className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-            >
-                <img src={edit} alt="edit" />
-            </button>
+            {onEdit && <ButtonUpdateTable onClick={onEdit} />}
 
-            <button
-                onClick={onDelete}
-                type="button"
-                title="حذف"
-                className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-            >
-                <img src={deleteIcon} alt="delete" />
-            </button>
+            {onDelete && (
+                <ConfirmDeleteDialog
+                    trigger={<ButtonDeleteTable />}
+                    title='حذف تشريع'
+                    description='هل انت متاكد من حذف التشريع'
+                    onConfirm={onDelete}
+                />
+            )}
         </div>
     );
 };

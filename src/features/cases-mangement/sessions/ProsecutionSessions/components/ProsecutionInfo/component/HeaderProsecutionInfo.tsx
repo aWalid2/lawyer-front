@@ -1,5 +1,5 @@
 
-import Frame from "@/public/images/Frame.svg";
+import { EditIcon } from "lucide-react";
 
 export const HeaderProsecutionInfo = ({ handleAddClick, handleEditClick, hasData }: { handleAddClick: () => void, handleEditClick: () => void, hasData: boolean }) => {
     return (
@@ -24,7 +24,7 @@ export const HeaderProsecutionInfo = ({ handleAddClick, handleEditClick, hasData
                         onClick={handleEditClick}
                         className="flex shrink-0 items-center justify-center gap-2 bg-[#F1F1F3] rounded-md w-[114px] h-[50px] hover:bg-[#E1E1E6] transition-colors duration-200 px-2 sm:w-auto sm:px-4"
                     >
-                        <img src={Frame} alt="" className="w-5 h-5 sm:w-4 sm:h-4" />
+                        <EditIcon className="size-3" />
                         <span className="text-[16px] font-medium whitespace-nowrap">
                             تعديل
                         </span>

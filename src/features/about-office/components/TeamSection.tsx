@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
+import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { Field, FieldArray } from "formik";
+import { useState } from "react";
 import { CLASSES } from "../index";
 import type { TeamMember } from "../types";
-import del from '@/public/images/delete.svg';
 
 const TeamSection = () => {
     const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
@@ -33,14 +34,17 @@ const TeamSection = () => {
                                         <div key={index} className="w-full p-4 rounded-lg border border-gray-200">
                                             <div className="flex justify-between p-4">
                                                 <h1 className="text-sm md:text-base font-medium">بيانات العضو: {member.name}</h1>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => remove(index)}
-                                                >
-                                                    <img src={del} alt="حذف" />
-                                                </button>
+
+                                                <ConfirmDeleteDialog
+                                                    title="حذف العضو"
+                                                    description={`هل أنت متأكد من حذف العضو ${member.name} ؟`}
+                                                    onConfirm={() => remove(index)}
+                                                    trigger={
+                                                        <ButtonDeleteTable />
+                                                    }
+                                                />
                                             </div>
-                                            {/* صف الاسم والوظيفة */}
+
                                             <div className="flex flex-col md:flex-row gap-3 mb-4">
                                                 <div className="w-full md:w-[464px]">
                                                     <label className={CLASSES.fieldLabel}>
@@ -66,7 +70,6 @@ const TeamSection = () => {
                                                 </div>
                                             </div>
 
-                                            {/* صف الوصف */}
                                             <div className="w-full">
                                                 <label className={CLASSES.fieldLabel}>
                                                     الوصف
@@ -91,13 +94,13 @@ const TeamSection = () => {
                                 + عضو جديد
                             </button>
 
-                            {/* مودال إضافة عضو جديد */}
+
                             {isTeamModalOpen && (
                                 <div className={CLASSES.modalOverlay} onClick={() => setIsTeamModalOpen(false)}>
                                     <div className={CLASSES.modalContent} onClick={(e) => e.stopPropagation()}>
                                         <h3 className={CLASSES.modalTitle}>إضافة عضو جديد</h3>
 
-                                        {/* حقل الاسم */}
+
                                         <div>
                                             <label className="block text-sm text-gray-600 mb-1 text-right">الاسم</label>
                                             <input
@@ -110,7 +113,7 @@ const TeamSection = () => {
                                             />
                                         </div>
 
-                                        {/* حقل الوظيفة */}
+
                                         <div>
                                             <label className="block text-sm text-gray-600 mb-1 text-right">الوظيفة</label>
                                             <input
@@ -122,7 +125,7 @@ const TeamSection = () => {
                                             />
                                         </div>
 
-                                        {/* حقل الوصف */}
+
                                         <div>
                                             <label className="block text-sm text-gray-600 mb-1 text-right">الوصف</label>
                                             <textarea

@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
-import view from '@/public/images/view.svg';
-import edit from '@/public/images/edit.svg';
-import deleteIcon from '@/public/images/delete.svg';
-import { Link } from 'react-router-dom';
-import { Editlawyers } from './Editlawyers';
-import { useDeleteLawyer } from '../api/hooks/useDeletLawyers';
+import { ButtonDeleteTable } from '@/shared/components/ButtonDeleteTable';
+import { ButtonUpdateTable } from '@/shared/components/ButtonUpdateTable';
 import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
+import { ViewLinkTablePageDetails } from '@/shared/components/ViewLinkTablePageDetails';
+import React, { useState } from 'react';
+import { useDeleteLawyer } from '../api/hooks/useDeletLawyers';
 import type { Lawyer } from '../lawyers/types';
+import { Editlawyers } from './Editlawyers';
 
 interface LawyersActionProps {
     lawyer?: Lawyer;
     onLawyerUpdated?: () => void;
 }
 
-export const LawyersAction: React.FC<LawyersActionProps> = ({ lawyer , onLawyerUpdated }) => {
+export const LawyersAction: React.FC<LawyersActionProps> = ({ lawyer, onLawyerUpdated }) => {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const { mutateAsync: deleteLawyer } = useDeleteLawyer();
-    
+
     const handleDelete = async () => {
         try {
             if (lawyer) {
@@ -29,39 +28,18 @@ export const LawyersAction: React.FC<LawyersActionProps> = ({ lawyer , onLawyerU
             console.error('Error deleting lawyer:', error);
         }
     };
-    
+
     return (
         <>
             <div className="flex items-center justify-center gap-2">
-                <Link
-                    to={`/dashboard/users/lawyers/${lawyer?.user_id}`}
-                    title="عرض التفاصيل"
-                    className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F0F6FF] transition-colors hover:bg-[#e0eaff]"
-                >
-                    <img src={view} alt="view" />
-                </Link>
-
-                <button
-                    onClick={() => setIsEditDialogOpen(true)}
-                    title="تعديل"
-                    className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-                >
-                    <img src={edit} alt="edit" />
-                </button>
-
+                <ViewLinkTablePageDetails to={`/dashboard/users/lawyers/${lawyer?.user_id}`} />
+                <ButtonUpdateTable onClick={() => setIsEditDialogOpen(true)} />
                 <ConfirmDeleteDialog
                     title="حذف المحامي"
                     description={`هل أنت متأكد من حذف المحامي ${lawyer?.user.first_name} ؟`}
                     onConfirm={handleDelete}
                     trigger={
-                        <button
-                            type="button"
-                            onClick={(e) => e.stopPropagation()}
-                            title="حذف"
-                            className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-                        >
-                            <img src={deleteIcon} alt="delete" />
-                        </button>
+                        <ButtonDeleteTable />
                     }
                 />
             </div>

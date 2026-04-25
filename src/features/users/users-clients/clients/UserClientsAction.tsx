@@ -1,12 +1,11 @@
-import React from 'react';
-import view from '@/public/images/view.svg';
-import edit from '@/public/images/edit.svg';
-import deleteIcon from '@/public/images/delete.svg';
-import { Link } from 'react-router-dom';
-import { EditClientDialog } from './EditClientDialog';
-import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
 import { useDeleteClient } from '@/features/clients/api/hooks/useDeleteClient';
+import { ButtonDeleteTable } from '@/shared/components/ButtonDeleteTable';
+import { ButtonUpdateTable } from '@/shared/components/ButtonUpdateTable';
+import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
+import { ViewLinkTablePageDetails } from '@/shared/components/ViewLinkTablePageDetails';
+import React from 'react';
 import type { ClientRelatedT } from '../types/types';
+import { EditClientDialog } from './EditClientDialog';
 
 
 interface UserClientsActionProps {
@@ -22,29 +21,14 @@ export const UserClientsAction: React.FC<UserClientsActionProps> = ({ client, on
 
     return (
         <div className="flex items-center justify-center gap-2" onClick={(e) => e.stopPropagation()}>
-            <Link
-                to={`/dashboard/clients/${client.user_id}`}
-                onClick={(e) => e.stopPropagation()}
-                title="عرض التفاصيل"
-                className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F0F6FF] transition-colors hover:bg-[#e0eaff]"
-            >
-                <img src={view} alt="view" />
-            </Link>
+
+            <ViewLinkTablePageDetails to={`/dashboard/clients/${client.user_id}`} />
 
             <EditClientDialog
                 client={client}
                 onSave={(values) => onClientUpdated?.(values)}
                 trigger={
-                    <button
-                        type="button"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                        }}
-                        title="تعديل"
-                        className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-                    >
-                        <img src={edit} alt="edit" />
-                    </button>
+                    <ButtonUpdateTable />
                 }
             />
 
@@ -55,14 +39,7 @@ export const UserClientsAction: React.FC<UserClientsActionProps> = ({ client, on
                     deleteClient({ id: client.user_id });
                 }}
                 trigger={
-                    <button
-                        type="button"
-                        onClick={(e) => e.stopPropagation()}
-                        title="حذف"
-                        className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-                    >
-                        <img src={deleteIcon} alt="delete" />
-                    </button>
+                    <ButtonDeleteTable />
                 }
             />
         </div>

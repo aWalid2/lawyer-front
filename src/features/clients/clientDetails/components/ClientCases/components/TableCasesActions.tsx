@@ -1,21 +1,16 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import view from '@/public/images/view.svg'
-import edit from '@/public/images/edit.svg';
+import { ButtonUpdateTable } from '@/shared/components/ButtonUpdateTable';
+import { ViewLinkTablePageDetails } from '@/shared/components/ViewLinkTablePageDetails';
+import { SearchIcon } from '@/shared/icons/Search';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import type { ClientCase } from '../../../types/typesClientDetails';
 import { EditClientCaseDialog } from './EditClientCaseDialog';
-import { SearchIcon } from '@/shared/icons/Search';
 
 export const TableCasesActions: React.FC<{ client: ClientCase, onEdit?: (client: ClientCase) => void }> = ({ client, onEdit }) => {
   return (
     <div className="flex items-center justify-center gap-3">
-      <Link
-        to={`/dashboard/case-management/${client.id}`}
-        title="عرض التفاصيل"
-      >
-        <img src={view} alt="view" />
-      </Link>
-      <EditClientCaseDialog caseItem={client} onSave={onEdit} trigger={<button><img src={edit} /></button>} />
+      <ViewLinkTablePageDetails to={`/dashboard/case-management/${client.id}`} />
+      <EditClientCaseDialog caseItem={client} onSave={onEdit} trigger={<ButtonUpdateTable />} />
       <Link
         to={`#`}
         onClick={(e) => e.stopPropagation()}
@@ -24,6 +19,7 @@ export const TableCasesActions: React.FC<{ client: ClientCase, onEdit?: (client:
       >
         <SearchIcon className="size-[14px] text-[#F38630]" />
       </Link>
+
     </div>
   )
 }

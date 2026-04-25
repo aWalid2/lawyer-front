@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import edit from '@/public/images/edit.svg';
-import deleteIcon from '@/public/images/delete.svg';
+import { ButtonDeleteTable } from '@/shared/components/ButtonDeleteTable';
+import { ButtonUpdateTable } from '@/shared/components/ButtonUpdateTable';
 import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
-import { CaseStatusFormDialog } from './CaseStatusFormDialog';
+import React, { useState } from 'react';
 import { useDeleteCaseStatus } from '../api/hooks/useDeleteCaseStatus';
+import { CaseStatusFormDialog } from './CaseStatusFormDialog';
 
 interface CaseStatusesActionProps {
     status: any;
 }
 
-export const CaseStatusesAction: React.FC<CaseStatusesActionProps> = ({ status}) => {
+export const CaseStatusesAction: React.FC<CaseStatusesActionProps> = ({ status }) => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const { mutateAsync: deleteCaseStatus, isPending: isDeleting } = useDeleteCaseStatus();
+    const { mutateAsync: deleteCaseStatus } = useDeleteCaseStatus();
 
     const handleEditClick = () => {
         setIsEditModalOpen(true);
@@ -25,7 +25,7 @@ export const CaseStatusesAction: React.FC<CaseStatusesActionProps> = ({ status})
 
         handleCloseModal();
     };
-    
+
     const handleDelete = async () => {
         try {
             await deleteCaseStatus(status.id.toString());
@@ -37,29 +37,14 @@ export const CaseStatusesAction: React.FC<CaseStatusesActionProps> = ({ status})
     return (
         <>
             <div className="flex items-center justify-center gap-2">
-                <button
-                    onClick={handleEditClick}
-                    title="تعديل"
-                    className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-                >
-                    <img src={edit} alt="edit" />
-                </button>
+
+                <ButtonUpdateTable onClick={handleEditClick} />
 
                 <ConfirmDeleteDialog
                     title="حذف الحالة"
                     description={`هل أنت متأكد من حذف الحالة (${status.name})`}
                     onConfirm={handleDelete}
-                    trigger={
-                        <button
-                            type="button"
-                            onClick={(e) => e.stopPropagation()}
-                            title="حذف"
-                            disabled={isDeleting}
-                            className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7] disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <img src={deleteIcon} alt="delete" />
-                        </button>
-                    }
+                    trigger={<ButtonDeleteTable />}
                 />
             </div>
 
