@@ -15,7 +15,7 @@ export const useDeleteRelatedCase = (caseId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (relatedCaseId: number) => deleteRelatedCase(relatedCaseId),
+    mutationFn: (relatedCaseId: string) => deleteRelatedCase(relatedCaseId),
     onSuccess: () => {
       toast.success("تم حذف القضية المرتبطة بنجاح");
       queryClient.invalidateQueries({ queryKey: ["relatedCases", caseId] });

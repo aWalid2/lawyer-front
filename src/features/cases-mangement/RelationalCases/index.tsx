@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { useDeleteRelatedCase } from "./api/hooks/useDeleteRelatedCase";
 import { useGetRelatedCases } from "./api/hooks/useGetRelatedCases";
 import type { RelatedCaseTableItem } from "./types";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 export const RelationalCases: React.FC = () => {
   const { id } = useParams();
@@ -21,10 +22,11 @@ export const RelationalCases: React.FC = () => {
     error,
   } = useGetRelatedCases(caseId);
   const { mutateAsync: deleteRelatedCase } = useDeleteRelatedCase(caseId);
+  console.log(relatedCases)
 
   const relatedCasesTableData = React.useMemo(
     () =>
-      relatedCases.map((item) => ({
+      relatedCases?.map((item) => ({
         id: item.related_case.id,
         related_case_id: item.related_case_id,
         case_sequence: item.related_case.case_sequence,
@@ -65,7 +67,7 @@ export const RelationalCases: React.FC = () => {
         <RelationalCasesActions
           caseId={caseId}
           caseItem={item}
-          onDelete={(caseItem) => deleteRelatedCase(caseItem.related_case_id)}
+          onDelete={(caseItem) => deleteRelatedCase(String(caseItem?.id))}
         />
       ),
       headerClassName: "w-35",
@@ -75,7 +77,7 @@ export const RelationalCases: React.FC = () => {
   return (
     <div>
       <HeaderRelationalCases title="القضايا ذات الصلة" caseId={caseId} />
-      <DataTable data={currentData} columns={columns} rowIdField="id" />
+      {relatedCases.length > 0 ? <DataTable data={currentData} columns={columns} rowIdField="id" /> : <EmptyTable message="لا يوجد قضايا مرتبطه" />}
       {/* {totalPages > 1 && (
                 <Pagination
                     currentPage={currentPage}
