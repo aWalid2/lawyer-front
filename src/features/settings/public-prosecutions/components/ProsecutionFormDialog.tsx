@@ -1,13 +1,12 @@
-import React from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { Error } from "@/shared/components/Error";
 import { InputForm } from "@/shared/components/InputForm";
-import type { ProsecutionT } from "../types/prosecutionsTypes";
+import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { Form, Formik } from "formik";
+import React from "react";
+import * as Yup from "yup";
 import { useAddProsecution } from "../api/hooks/useAddProsecution";
 import { useUpdateProsecution } from "../api/hooks/useUpdateProsecution";
-import { Error } from "@/shared/components/Error";
-import Loading from "@/shared/Loading";
+import type { ProsecutionT } from "../types/prosecutionsTypes";
 
 interface ProsecutionFormDialogProps {
   prosecution?: ProsecutionT;
@@ -30,15 +29,15 @@ export const ProsecutionFormDialog: React.FC<ProsecutionFormDialogProps> = ({
   onSave,
 }) => {
   const isEditMode = !!prosecution;
-  
+
   const initialValues = {
     name: prosecution?.name || "",
     address: prosecution?.address || "",
   };
-  
+
   const { mutate: addProsecution, isPending: isAdding, isError: isAddError } = useAddProsecution();
   const { mutate: updateProsecution, isPending: isUpdating, isError: isUpdateError } = useUpdateProsecution();
-  
+
   const isPending = isEditMode ? isUpdating : isAdding;
   const isError = isEditMode ? isUpdateError : isAddError;
 
@@ -61,7 +60,7 @@ export const ProsecutionFormDialog: React.FC<ProsecutionFormDialogProps> = ({
     }
   };
 
-  if (isPending) return <Loading />;
+
   if (isError) return <Error message="فشل في حفظ النيابة يرجى المحاولة لاحقاً" />;
 
   return (

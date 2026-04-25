@@ -1,43 +1,45 @@
-import React, { useState, useMemo } from "react";
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { Pagination } from "@/shared/components/Pagination";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { useDebounce } from "@/shared/hooks/useDebounce";
+import React from "react";
+import { useGetAllUsers } from "./api/hooks/useGetAllUsers";
 import { UserManagementHeader } from "./components/UserManagementHeader";
 import { UsersAction } from "./components/UsersAction";
-import type { UserT } from "./types";
-
-const mockUsers: UserT[] = [
-  { id: "1", name: "محمد علي", email: "mohalia4@gmail.com", userType: "محامي", role: "-", status: "نشط" },
-  { id: "2", name: "محمد علي", email: "mohalia4@gmail.com", userType: "موظف", role: "محاسب", status: "نشط" },
-  { id: "3", name: "محمد علي", email: "mohalia4@gmail.com", userType: "موكل", role: "-", status: "نشط" },
-  { id: "4", name: "محمد علي", email: "mohalia4@gmail.com", userType: "محامي", role: "-", status: "نشط" },
-  { id: "5", name: "محمد علي", email: "mohalia4@gmail.com", userType: "موظف", role: "سكرتير", status: "نشط" },
-  { id: "6", name: "محمد علي", email: "mohalia4@gmail.com", userType: "محامي", role: "-", status: "نشط" },
-  { id: "7", name: "محمد علي", email: "mohalia4@gmail.com", userType: "محامي", role: "-", status: "نشط" },
-  { id: "8", name: "محمد علي", email: "mohalia4@gmail.com", userType: "محامي", role: "-", status: "نشط" },
-  { id: "9", name: "محمد علي", email: "mohalia4@gmail.com", userType: "محامي", role: "-", status: "نشط" },
-  { id: "10", name: "محمد علي", email: "mohalia4@gmail.com", userType: "محامي", role: "-", status: "نشط" },
-];
+import type { UserT } from "./types/userT";
+import { Error } from "@/shared/components/Error";
+import { useGetAllUsersSearched } from "./api/hooks/useGetAllUsersSearched";
 
 export const UserManagementFeature: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const { data: allUsers = [], isLoading, isError, error } = useGetAllUsers();
+  const debouncedSearchTerm = useDebounce(searchTerm.trim(), 400);
 
-  const filteredUsers = useMemo(() => {
-    return mockUsers.filter(
-      (user) =>
-        user.name.includes(searchTerm) || user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  const isSearching = debouncedSearchTerm.length > 0;
+  const {
+    data: allUsersSearched = [],
+    isFetching: isSearchingUsers,
+    isError: isSearchError,
+    error: searchError,
+  } = useGetAllUsersSearched(debouncedSearchTerm);
+
+  const displayedUsers = isSearching ? allUsersSearched : allUsers;
+
+  if (isLoading) return <LoadingPage />;
+  if (isError)
+    return <Error message="حدث خطأ أثناء جلب المستخدمين." error={error} />;
+  if (isSearchError)
+    return (
+      <Error
+        message="حدث خطأ أثناء البحث عن المستخدمين."
+        error={searchError}
+      />
     );
-  }, [searchTerm]);
-
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
-  const currentUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const columns: Column<UserT>[] = [
     {
       header: "#",
       accessor: (item: UserT) => {
-        const index = filteredUsers.findIndex((u) => u.id === item.id);
+        const index = displayedUsers.findIndex((u) => u.id === item.id);
         return index + 1;
       },
       headerClassName: "w-16",
@@ -45,7 +47,7 @@ export const UserManagementFeature: React.FC = () => {
     },
     {
       header: "اسم المستخدم",
-      accessor: "name",
+      accessor: "first_name",
       className: "font-medium",
     },
     {
@@ -53,21 +55,17 @@ export const UserManagementFeature: React.FC = () => {
       accessor: "email",
       className: "text-gray-600",
     },
-    {
-      header: "نوع المستخدم",
-      accessor: "userType",
-      className: "text-center",
-    },
+
     {
       header: "الدور",
-      accessor: "role",
+      accessor: (user) => user.role.role_name || "-",
       className: "text-center",
     },
     {
       header: "الحالة",
       accessor: (user) => (
-        <span className="inline-flex items-center px-4 py-2 rounded-main text-xs font-medium bg-success/20 text-success">
-          {user.status}
+        <span className="rounded-main bg-success/20 text-success inline-flex items-center px-4 py-2 text-xs font-medium">
+          {user.user_status}
         </span>
       ),
       className: "text-center",
@@ -75,7 +73,10 @@ export const UserManagementFeature: React.FC = () => {
     {
       header: "إجراء",
       accessor: (user) => (
-        <UsersAction user={user} onUserUpdated={() => console.log("User updated")} />
+        <UsersAction
+          user={user}
+          onUserUpdated={() => console.log("User updated")}
+        />
       ),
       headerClassName: "w-24 text-center",
       className: "w-24 text-center",
@@ -90,17 +91,21 @@ export const UserManagementFeature: React.FC = () => {
         onUserUpdated={() => console.log("User added")}
       />
 
-      <DataTable data={currentUsers} columns={columns} rowIdField="id" />
-
-      {totalPages > 1 && (
-        <div className="flex justify-center mt-6">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </div>
+      {isSearchingUsers ? (
+        <LoadingPage />
+      ) : (
+        <DataTable data={displayedUsers} columns={columns} rowIdField="id" />
       )}
+
+      {/* {totalPages > 1 && (
+          <div className="mt-6 flex justify-center">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        )} */}
     </div>
   );
 };

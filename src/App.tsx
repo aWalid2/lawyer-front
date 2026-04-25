@@ -13,7 +13,7 @@ const AuthRoutes = lazy(() => import("./routes/Auth.tsx"));
 const CaseRoutes = lazy(() => import("./routes/CaseRoutes"));
 const SettingRoutes = lazy(() => import("./routes/SettingRoutes"));
 const ReportRoutes = lazy(() => import("./routes/ReportRoutes"));
-const UserRoutes = lazy(() => import("./routes/UserRoutes"));
+// const UserRoutes = lazy(() => import("./routes/UserRoutes"));
 const FinanceRoutes = lazy(() => import("./routes/FinanceRoutes"));
 
 const Notifications = lazy(() => import("./pages/dashboard/Notifications"));
@@ -74,10 +74,7 @@ function App() {
             <Route path="case-management/*" element={<CaseRoutes />} />
 
             <Route path="legislation-rulings" element={<Legislation />} />
-            <Route
-              path="legislations/:id"
-              element={<LegislationDetails />}
-            />
+            <Route path="legislations/:id" element={<LegislationDetails />} />
             <Route path="calendar" element={<Calendar />} />
             <Route path="daily-schedule" element={<DailySchedule />} />
             <Route path="roll" element={<Roll />} />
@@ -95,7 +92,7 @@ function App() {
 
             <Route path="reports/*" element={<ReportRoutes />} />
 
-            <Route path="users/*" element={<UserRoutes />} />
+            {/* <Route path="users/*" element={<UserRoutes />} /> */}
 
             <Route path="finance/*" element={<FinanceRoutes />} />
           </Route>

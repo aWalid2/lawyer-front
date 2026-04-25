@@ -1,18 +1,28 @@
-import { HeaderTitle } from '@/shared/components/HeaderTitle'
-import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
-import { RelationalCaseDialog } from './RelationalCaseDialog'
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { RelationalCaseDialog } from "./RelationalCaseDialog";
 
-export const HeaderRelationalCases = ({ title }: { title: string }) => {
-    return (
-        <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-            <HeaderTitle title={title} />
-            <RelationalCaseDialog title='إضافة قضية مرتبطة' trigger={<Button
-                className="rounded-[12px] h-12.5 px-6 bg-primary-gradient font-semibold text-white flex items-center gap-2"
-            >
-                <Plus />
-                إضافة قضية مرتبطة
-            </Button>} />
-        </div>
-    )
-}
+export const HeaderRelationalCases = ({
+  title,
+  caseId,
+}: {
+  title: string;
+  caseId: string;
+}) => {
+  return (
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+      <HeaderTitle title={title} />
+      <RelationalCaseDialog
+        caseId={caseId}
+        title="إضافة قضية مرتبطة"
+        trigger={
+          <Button className="bg-primary-gradient flex h-12.5 items-center gap-2 rounded-main px-6 font-semibold text-white">
+            <Plus />
+            إضافة قضية مرتبطة
+          </Button>
+        }
+      />
+    </div>
+  );
+};

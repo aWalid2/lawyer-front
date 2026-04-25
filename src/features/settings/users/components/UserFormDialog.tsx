@@ -13,7 +13,7 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
-import type { UserT } from "../types";
+import type { UserT } from "../types/userT";
 
 interface UserFormDialogProps {
   user?: UserT;
@@ -28,7 +28,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
   open,
   onOpenChange,
   onUserUpdated,
-  trigger
+  trigger,
 }) => {
   const isEditMode = !!user;
 
@@ -42,7 +42,9 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("اسم المستخدم مطلوب"),
-    email: Yup.string().email("البريد الإلكتروني غير صالح").required("البريد الإلكتروني مطلوب"),
+    email: Yup.string()
+      .email("البريد الإلكتروني غير صالح")
+      .required("البريد الإلكتروني مطلوب"),
     userType: Yup.string().required("نوع المستخدم مطلوب"),
     role: Yup.string().required("الدور مطلوب"),
   });
@@ -57,18 +59,18 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
-        className="sm:max-w-[600px] max-h-[90vh] flex flex-col overflow-hidden sm:px-16 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
+        className="rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-[600px] sm:rounded-[24px] sm:px-16 sm:py-10"
         dir="rtl"
         showCloseButton={false}
       >
         <DialogClose asChild>
-          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all">
+          <button className="rounded-main absolute inset-e-6 top-8 flex h-12.5 items-center gap-2 px-6 py-2.5 font-semibold text-gray-500 transition-all sm:inset-e-15">
             <XIcon size={23} className="text-gray-500" />
           </button>
         </DialogClose>
 
-        <DialogHeader className="mb-2 mt-15">
-          <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
+        <DialogHeader className="mt-15 mb-2">
+          <DialogTitle className="text-center text-2xl font-bold text-[#153A4D]">
             {isEditMode ? "تعديل بيانات المستخدم" : "اضافة مستخدم جديد"}
           </DialogTitle>
         </DialogHeader>
@@ -80,7 +82,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
           onSubmit={handleSubmit}
         >
           {() => (
-            <Form className="space-y-6 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
+            <Form className="custom-scrollbar flex-1 space-y-6 overflow-y-auto pb-2 pl-2">
               <InputForm
                 name="name"
                 label="اسم المستخدم"
@@ -115,15 +117,11 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                 />
               </div>
 
-              <TextAreaForm
-                name="notes"
-                label="ملاحظات"
-                placeholder="..."
-              />
+              <TextAreaForm name="notes" label="ملاحظات" placeholder="..." />
 
               <button
                 type="submit"
-                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity"
+                className="bg-primary-gradient rounded-main mt-4 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90"
               >
                 {isEditMode ? "حفظ التغييرات" : "إضافة مستخدم"}
               </button>

@@ -1,4 +1,3 @@
-// prosecution/api/hooks/useAddProsecution.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { addProsecution } from "../service/addProsecution";
@@ -10,6 +9,7 @@ export const useAddProsecution = () => {
     mutationFn: (data: any) => addProsecution(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["prosecutions"] });
+      queryClient.invalidateQueries({ queryKey: ["public-prosecutions-names"] });
       toast.success("تم إضافة النيابة بنجاح");
     },
     onError: (error: any) => {
