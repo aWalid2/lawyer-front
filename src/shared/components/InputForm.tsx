@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useField, useFormikContext } from "formik";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, Eye, EyeOff } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -33,6 +33,7 @@ export const InputForm: React.FC<InputFormProps> = ({
 }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
+  const [showPassword, setShowPassword] = useState(false);
 
   if (type === "date") {
     return (
@@ -89,18 +90,34 @@ export const InputForm: React.FC<InputFormProps> = ({
       <label className={`block mb-4 text-sm font-normal ${labelColor}`}>
         {label}
       </label>
-      <Input
-        {...field}
-        type={type}
-        placeholder={placeholder}
-        disabled={disabled}
-        dir={dir}
-        readOnly={readonly}
-        className={cn(
-          "text-right h-[50px] bg-[#FBFBFB]",
-          meta.touched && meta.error && "border-red-500"
+      <div className="relative">
+        <Input
+          {...field}
+          type={type === "password" ? (showPassword ? "text" : "password") : type}
+          placeholder={placeholder}
+          disabled={disabled}
+          dir={dir}
+          readOnly={readonly}
+          className={cn(
+            "text-right h-[50px] bg-[#FBFBFB] w-full",
+            type === "password" && "pl-10",
+            meta.touched && meta.error && "border-red-500"
+          )}
+        />
+        {type === "password" && (
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+          >
+            {showPassword ? (
+              <EyeOff className="h-5 w-5" />
+            ) : (
+              <Eye className="h-5 w-5" />
+            )}
+          </button>
         )}
-      />
+      </div>
       {meta.touched && meta.error && (
         <span className="text-xs text-red-500 mt-1">{meta.error}</span>
       )}
