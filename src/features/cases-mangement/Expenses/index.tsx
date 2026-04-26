@@ -1,7 +1,7 @@
 import { EditIcon } from "@/shared/icons/Edit";
 import { useState } from "react";
 import { EditModelExpenses } from "./components/EditModelExpenses";
-import { InputBox } from "./components/InputBox";
+import { InputBox } from "@/shared/components/InputBox";
 
 const CLASSES = {
   formSection: "border border-gray-300 p-4 rounded-xl mb-6",
