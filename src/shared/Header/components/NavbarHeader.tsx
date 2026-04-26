@@ -88,16 +88,16 @@ export default function NavbarHeader() {
   }, [pathname]);
 
   return (
-    <header className="w-full bg-white rounded-0  md:rounded-main px-6 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] py-2   ">
+    <header className="w-full bg-white dark:bg-backgroundDark rounded-0  md:rounded-main px-6 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] py-2   ">
       <div className="h-20 flex justify-between   ">
         <div className="flex flex-wrap items-center justify-between w-full  ">
-          <h1 className="text-lg lg:text-lg xl:text-xl font-semibold text-secondary mb-2 md:mb-0">
+          <h1 className="text-lg lg:text-lg xl:text-xl font-semibold text-secondary dark:text-white mb-2 md:mb-0">
             {currentTitle}
           </h1>
           <div className=" flex gap-2 md:gap-3 ">
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary hover:text-white transition`}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center rounded-full hover:bg-secondary dark:hover:bg-white/20 hover:text-white transition`}
             >
               {theme === "dark" ? (
                 <Sun className={ICON_CLASSES} />
@@ -108,40 +108,40 @@ export default function NavbarHeader() {
             </button>
             <Link
               to={"notifications"}
-              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center rounded-full hover:bg-secondary dark:hover:bg-white/20 hover:text-white transition`}
             >
               <AlertIcon className={ICON_CLASSES} />
             </Link>
             <Link
               to={"chat-bot"}
-              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center rounded-full hover:bg-secondary dark:hover:bg-white/20 hover:text-white transition`}
             >
               <ChatBotIcon className={ICON_CLASSES} />
             </Link>
 
             <Link
               to={"messages"}
-              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center rounded-full hover:bg-secondary dark:hover:bg-white/20 hover:text-white transition`}
             >
               <MessagesIcon className={ICON_CLASSES} />
             </Link>
             <Link
               to={"settings"}
-              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center rounded-full hover:bg-secondary dark:hover:bg-white/20 hover:text-white transition`}
             >
               <SettingsIcon className={ICON_CLASSES} />
             </Link>
             <Link
               to={"global-search"}
-              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center rounded-full hover:bg-secondary dark:hover:bg-white/20 hover:text-white transition`}
             >
               <SearchIcon className={ICON_CLASSES} />
             </Link>
 
-            <Link to={"profile"} className="flex items-center gap-2 ">
+            <Link to={"profile"} className="flex items-center gap-2 dark:text-white">
               <div
-                className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center 
-                rounded-full overflow-hidden border border-secondary`}
+                className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center 
+                rounded-full overflow-hidden border border-secondary dark:border-white/20`}
               >
                 <img
                   src="/images/user-placeholder.jpg"

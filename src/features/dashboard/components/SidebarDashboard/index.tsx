@@ -17,8 +17,8 @@ const SidebarDashboard = () => {
 
   return (
     <>
-      <aside className=" bg-white ">
-        <div className="hidden lg:block bg-white h-fit min:h-fit w-70 md:bg-white md:min-h-screen p-4 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] rounded-main   ">
+      <aside >
+        <div className="hidden lg:block  h-fit min:h-fit w-70  dark:bg-backgroundDark bg-white md:bg-white md:min-h-screen p-4 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] rounded-main   ">
           <LogoSidebar />
           <NavDashboard />
         </div>
@@ -35,8 +35,8 @@ const SidebarDashboard = () => {
             قائمة التنقل الخاصة بالموقع
           </SheetDescription>
 
-          <SheetContent side="left" className="w-83 bg-white pt-3 px-4 ">
-            <div className="h-fit min:h-fit w-80 md:bg-gray-50  p-4   overflow-y-scroll  ">
+          <SheetContent side="left" className="w-83 bg-white dark:bg-backgroundDark pt-3 px-4 border-l-0">
+            <div className="h-fit min:h-fit w-80 md:bg-gray-50 dark:md:bg-backgroundDark p-4   overflow-y-scroll  ">
               <LogoSidebar />
               <NavDashboard onLinkClick={() => setOpen(false)} />
             </div>
