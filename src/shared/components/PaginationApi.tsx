@@ -58,12 +58,12 @@ export const PaginationApi: React.FC<PaginationApiProps> = ({
                     }}
                     disabled={currentPage === 1}
                     className={`p-2 rounded-xl border transition-colors ${currentPage === 1
-                        ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-100"
-                        : "bg-gray-200 text-black hover:bg-gray-300 border-gray-200"
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-100 dark:bg-muted dark:text-muted-foreground dark:border-transparent dark:opacity-50"
+                        : "bg-gray-200 text-black hover:bg-gray-300 border-gray-200 dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary/80 dark:border-transparent"
                         }`}
                     title="السابق"
                 >
-                    <ChevronRight size={18} className="text-black" />
+                    <ChevronRight size={18} className="text-black dark:text-white" />
                 </button>
 
                 <div className="flex items-center gap-1" dir="ltr">
@@ -79,8 +79,8 @@ export const PaginationApi: React.FC<PaginationApiProps> = ({
                             className={`min-w-[36px] h-9 px-2 rounded-xl text-sm font-medium transition-colors ${page === currentPage
                                 ? "bg-primary text-white"
                                 : page === "..."
-                                    ? "cursor-default bg-transparent"
-                                    : "bg-gray-200 text-black hover:bg-gray-300"
+                                    ? "cursor-default bg-transparent dark:text-foreground"
+                                    : "bg-gray-200 text-black hover:bg-gray-300 dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary/80"
                                 }`}
                         >
                             {page}
@@ -96,12 +96,12 @@ export const PaginationApi: React.FC<PaginationApiProps> = ({
                     }}
                     disabled={currentPage === totalPages}
                     className={`p-2 rounded-xl border transition-colors ${currentPage === totalPages
-                        ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-100"
-                        : "bg-gray-200 text-black hover:bg-gray-300 border-gray-200"
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-100 dark:bg-muted dark:text-muted-foreground dark:border-transparent dark:opacity-50"
+                        : "bg-gray-200 text-black hover:bg-gray-300 border-gray-200 dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary/80 dark:border-transparent"
                         }`}
                     title="التالي"
                 >
-                    <ChevronLeft size={18} className="text-black" />
+                    <ChevronLeft size={18} className="text-black dark:text-white" />
                 </button>
             </div>
         </div>

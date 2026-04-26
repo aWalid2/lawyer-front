@@ -11,7 +11,7 @@ const PageLayout = ({
 }) => {
   return (
     <div
-      className={`bg-white rounded-main ${innerPage ? "mt-0" : "mt-6"}  p-6 shadow-primary min-h-[600px] ${className}`}
+      className={`bg-white rounded-main dark:bg-[#484848] ${innerPage ? "mt-0" : "mt-6"}  p-6 shadow-primary min-h-[600px]  ${className}`}
     >
       {children}
     </div>

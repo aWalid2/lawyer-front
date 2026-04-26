@@ -28,7 +28,7 @@ export const InputForm: React.FC<InputFormProps> = ({
   type,
   dir,
   readonly,
-  labelColor = "text-[#1A1A1A]",
+  labelColor = "text-[#1A1A1A] dark:text-foreground",
   className
 }) => {
   const [field, meta] = useField(name);
@@ -46,15 +46,15 @@ export const InputForm: React.FC<InputFormProps> = ({
             <Button
               variant={"outline"}
               className={cn(
-                "w-full justify-between gap-2 items-center text-left font-normal h-[50px] border-[#E8E8E8] rounded-[10px] bg-[#FBFBFB] px-4 hover:bg-white hover:text-primary hover:border-primary transition-all",
+                "w-full justify-between gap-2 items-center text-left font-normal h-[50px] border-[#E8E8E8] dark:border-border rounded-[10px] bg-[#FBFBFB] dark:bg-card px-4 hover:bg-white dark:hover:bg-accent hover:text-primary dark:hover:text-accent-foreground hover:border-primary dark:hover:border-accent transition-all",
                 !field.value && "text-muted-foreground",
                 meta.touched && meta.error && "border-red-500",
-                readonly && "bg-gray-100",
+                readonly && "bg-gray-100 dark:bg-muted",
                 disabled && "opacity-70 cursor-not-allowed"
               )}
               disabled={disabled}
             >
-              <CalendarIcon className="h-4 w-4 opacity-50 text-gray-500" />
+              <CalendarIcon className="h-4 w-4 opacity-50 text-gray-500 dark:text-gray-400" />
               <span>
                 {field.value ? (
                   format(new Date(field.value), "yyyy-MM-dd")
@@ -64,7 +64,7 @@ export const InputForm: React.FC<InputFormProps> = ({
               </span>
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-auto p-0 dark:bg-card dark:border-border" align="start">
             <Calendar
 
               mode="single"
@@ -99,7 +99,7 @@ export const InputForm: React.FC<InputFormProps> = ({
           dir={dir}
           readOnly={readonly}
           className={cn(
-            "text-right h-[50px] bg-[#FBFBFB] w-full",
+            "text-right h-[50px] bg-[#FBFBFB] dark:bg-card dark:border-border dark:text-foreground w-full",
             type === "password" && "pl-10",
             meta.touched && meta.error && "border-red-500"
           )}
@@ -108,7 +108,7 @@ export const InputForm: React.FC<InputFormProps> = ({
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
             {showPassword ? (
               <EyeOff className="h-5 w-5" />

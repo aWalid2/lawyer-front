@@ -20,7 +20,6 @@ import { PieChartTrendingUpIcon } from "./components/PieChartTrendingUpIcon"
 import { CustomArcPie } from "./components/CustomArcPie"
 
 const chartData = [
-  // Order matters for overlap! Light gray -> Gold -> Blue
   { name: "late", value: 35, fill: "var(--color-late)" },
   { name: "upcoming", value: 20, fill: "var(--color-upcoming)" },
   { name: "received", value: 45, fill: "var(--color-received)" },
@@ -29,24 +28,33 @@ const chartData = [
 const chartConfig = {
   received: {
     label: "المستلمة",
-    color: '#4B5675', // Dark slate/blue
+    theme: {
+      light: '#4B5675',
+      dark: '#6c7a9c',
+    }
   },
   late: {
     label: "متأخرة",
-    color: "#F1F1F4",
+    theme: {
+      light: "#F1F1F4",
+      dark: "#374151",
+    }
   },
   upcoming: {
     label: "قادمة",
-    color: 'var(--color-primary)', // Gold
+    theme: {
+      light: 'var(--color-primary)',
+      dark: 'var(--color-primary)',
+    }
   },
 } satisfies ChartConfig
 
 
 export default function DashboardPaymentsChart() {
   return (
-    <Card className="shadow-primary border-0 gap-0">
+    <Card className="shadow-primary border-0 gap-0 dark:bg-[#484848]">
       <CardHeader >
-        <CardTitle className="text-xl text-[#2F3240] font-semibold">ملخص المدفوعات</CardTitle>
+        <CardTitle className="text-xl text-[#2F3240] dark:text-foreground font-semibold">ملخص المدفوعات</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-2 relative">
         <ChartContainer

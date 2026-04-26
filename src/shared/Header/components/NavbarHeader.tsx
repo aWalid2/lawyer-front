@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, Sun, Moon } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useTheme } from "next-themes";
 import { AlertIcon } from "../../icons/Alert";
 import { ChatBotIcon } from "../../icons/ChatBot";
 import { CheveronDownIcon } from "../../icons/CheveronDown";
-import { LangIcon } from "../../icons/Lang";
 import { MessagesIcon } from "../../icons/Messages";
 import { SettingsIcon } from "../../icons/Settings";
 
@@ -67,6 +67,7 @@ const ICON_CLASSES = "h-4 w-4 md:h-5 md:w-5 xl:h-6 xl:w-6";
 
 export default function NavbarHeader() {
   const { pathname } = useLocation();
+  const { theme, setTheme } = useTheme();
 
   const currentTitle = useMemo(() => {
     if (ROUTE_TITLES[pathname]) return ROUTE_TITLES[pathname];
@@ -94,6 +95,17 @@ export default function NavbarHeader() {
             {currentTitle}
           </h1>
           <div className=" flex gap-2 md:gap-3 ">
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary hover:text-white transition`}
+            >
+              {theme === "dark" ? (
+                <Sun className={ICON_CLASSES} />
+              ) : (
+                <Moon className={ICON_CLASSES} />
+              )}
+              <span className="sr-only">Toggle theme</span>
+            </button>
             <Link
               to={"notifications"}
               className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
@@ -106,12 +118,7 @@ export default function NavbarHeader() {
             >
               <ChatBotIcon className={ICON_CLASSES} />
             </Link>
-            <Link
-              to={"#"}
-              className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
-            >
-              <LangIcon className={ICON_CLASSES} />
-            </Link>
+
             <Link
               to={"messages"}
               className={`text-secondary ${LINK_SIZE} bg-secondary/8 flex justify-center items-center rounded-full hover:bg-secondary  hover:text-white transition`}
