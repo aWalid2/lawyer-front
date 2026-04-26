@@ -6,13 +6,16 @@ import { useParams } from "react-router-dom";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
 
-
-
 export const CaseSidebar: React.FC = () => {
   const { id } = useParams();
-  const { data: caseInfo, isPending, isError, isSuccess } = useGetCaseInfo(id!) || {};
+  const {
+    data: caseInfo,
+    isPending,
+    isError,
+    isSuccess,
+  } = useGetCaseInfo(id!) || {};
   return (
-    <aside className="w-full xl:w-[273px] bg-white rounded-main shadow-primary py-6 px-4 flex flex-col gap-6 h-fit">
+    <aside className="rounded-main shadow-primary dark:bg-backgroundDark flex h-fit w-full flex-col gap-6 bg-white px-4 py-6 xl:w-68.25">
       {isPending && <LoadingPage />}
       {isError && <Error />}
       {isSuccess && <CaseSummaryCard caseData={caseInfo} />}

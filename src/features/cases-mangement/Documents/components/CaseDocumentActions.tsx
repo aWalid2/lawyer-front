@@ -4,7 +4,7 @@ import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageD
 import { DownloadIcon } from "lucide-react";
 import React from "react";
 import { useParams } from "react-router-dom";
-import type { CaseDocument } from "../types";
+import type { CaseDocument } from "../types/CaseDocumentT";
 
 interface CaseDocumentActionsProps {
   document: CaseDocument;

@@ -3,14 +3,44 @@ import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
 import { HeaderCaseDocuments } from "./components/HeaderCaseDocuments";
 import { CaseDocumentActions } from "./components/CaseDocumentActions";
-import type { CaseDocument } from "./types";
+import type { CaseDocument } from "./types/CaseDocumentT";
 
 const mockDocuments: CaseDocument[] = [
-  { id: "1", name: "عقد تأسيس.pdf", type: "PDF", date: "2024-01-10", size: "1.2 MB" },
-  { id: "2", name: "هوية الموكل.jpg", type: "Image", date: "2024-01-15", size: "2.5 MB" },
-  { id: "3", name: "مذكرة دفاع.docx", type: "Word", date: "2024-02-01", size: "500 KB" },
-  { id: "4", name: "حكم ابتدائي.pdf", type: "PDF", date: "2024-02-10", size: "3.1 MB" },
-  { id: "5", name: "صور أدلة.zip", type: "Archive", date: "2024-02-20", size: "15.7 MB" },
+  {
+    id: "1",
+    name: "عقد تأسيس.pdf",
+    type: "PDF",
+    date: "2024-01-10",
+    size: "1.2 MB",
+  },
+  {
+    id: "2",
+    name: "هوية الموكل.jpg",
+    type: "Image",
+    date: "2024-01-15",
+    size: "2.5 MB",
+  },
+  {
+    id: "3",
+    name: "مذكرة دفاع.docx",
+    type: "Word",
+    date: "2024-02-01",
+    size: "500 KB",
+  },
+  {
+    id: "4",
+    name: "حكم ابتدائي.pdf",
+    type: "PDF",
+    date: "2024-02-10",
+    size: "3.1 MB",
+  },
+  {
+    id: "5",
+    name: "صور أدلة.zip",
+    type: "Archive",
+    date: "2024-02-20",
+    size: "15.7 MB",
+  },
 ];
 
 export const CaseDocuments: React.FC = () => {
@@ -62,9 +92,14 @@ export const CaseDocuments: React.FC = () => {
     <>
       <HeaderCaseDocuments title="المستندات" buttonText="إضافة مستند" />
 
-      <DataTable rowKey={'id'} data={currentData} columns={columns} rowIdField="id" />
+      <DataTable
+        rowKey={"id"}
+        data={currentData}
+        columns={columns}
+        rowIdField="id"
+      />
       {totalPages > 1 && (
-        <div className="p-4 border-t">
+        <div className="border-t p-4">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -72,7 +107,6 @@ export const CaseDocuments: React.FC = () => {
           />
         </div>
       )}
-
     </>
   );
 };
