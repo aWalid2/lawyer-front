@@ -3,9 +3,9 @@ import { DateIcon } from "@/shared/icons/Date";
 import type { AxiosError } from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useGetLastOtherSession } from "../../api/hooks/useGetLastOtherSession";
-import { OtherBox } from "./components/OtherBox";
-import { getOtherSessionLawyerName } from "../../types/typesOther";
+import { useGetLastOtherSession } from "../api/hooks/useGetLastOtherSession";
+import { InputBox } from "@/shared/components/InputBox";
+import { getOtherSessionLawyerName } from "../types/typesOther";
 
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
@@ -37,25 +37,25 @@ export const OtherSessionsDataSection: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-        <OtherBox label="نوع الإجراء" text={latestSession?.actionType || "-"} />
-        <OtherBox
+        <InputBox label="نوع الإجراء" text={latestSession?.actionType || "-"} />
+        <InputBox
           label="تاريخ الإحالة"
           text={formatDateToYYYYMMDD(latestSession?.referral_date) || "-"}
           icon={<DateIcon />}
         />
 
         <div className="col-span-1 flex flex-col gap-4 md:col-span-2 md:flex-row">
-          <OtherBox
+          <InputBox
             label="الجهة الإدارية"
             text={latestSession?.admin_authority || "-"}
           />
-          <OtherBox
+          <InputBox
             label="المحامي المسؤول"
             text={getOtherSessionLawyerName(latestSession)}
           />
         </div>
 
-        <OtherBox
+        <InputBox
           label="موعد الجلسة"
           text={
             latestSession?.session_date
@@ -65,13 +65,13 @@ export const OtherSessionsDataSection: React.FC = () => {
               : "-"
           }
         />
-        <OtherBox
+        <InputBox
           label="قرار الجلسة"
           text={latestSession?.session_decision || "-"}
         />
 
         <div className="col-span-1 md:col-span-2">
-          <OtherBox label="ملاحظات" text={latestSession?.notes || "-"} />
+          <InputBox label="ملاحظات" text={latestSession?.notes || "-"} />
         </div>
       </div>
     </div>
