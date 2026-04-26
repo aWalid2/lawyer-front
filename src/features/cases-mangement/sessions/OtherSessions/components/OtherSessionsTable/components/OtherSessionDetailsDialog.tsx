@@ -17,7 +17,7 @@ import { XIcon } from "lucide-react";
 import React from "react";
 import { useGetOtherSession } from "../../../api/hooks/useGetOtherSession";
 import { getOtherSessionLawyerName } from "../../../types/typesOther";
-import { OtherBox } from "../../OtherSessionsDataSection/components/OtherBox";
+import { InputBox } from "@/shared/components/InputBox";
 import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
 
 interface OtherSessionDetailsDialogProps {
@@ -78,17 +78,17 @@ export const OtherSessionDetailsDialog: React.FC<
         ) : (
           <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pb-2 pl-2">
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-              <OtherBox label="نوع الإجراء" text={session.actionType || "-"} />
-              <OtherBox
+              <InputBox label="نوع الإجراء" text={session.actionType || "-"} />
+              <InputBox
                 label="تاريخ الإحالة"
                 text={formatDateToYYYYMMDD(session.referral_date) || "-"}
                 icon={<DateIcon />}
               />
-              <OtherBox
+              <InputBox
                 label="الجهة الإدارية"
                 text={session.admin_authority || "-"}
               />
-              <OtherBox
+              <InputBox
                 label="موعد الجلسة"
                 text={
                   [
@@ -99,16 +99,16 @@ export const OtherSessionDetailsDialog: React.FC<
                     .join(" - ") || "-"
                 }
               />
-              <OtherBox
+              <InputBox
                 label="المحامي المسؤول"
                 text={getOtherSessionLawyerName(session)}
               />
-              <OtherBox
+              <InputBox
                 label="قرار الجلسة"
                 text={session.session_decision || "-"}
               />
               <div className="col-span-1 md:col-span-2">
-                <OtherBox label="ملاحظات" text={session.notes || "-"} />
+                <InputBox label="ملاحظات" text={session.notes || "-"} />
               </div>
             </div>
           </div>

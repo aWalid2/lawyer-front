@@ -8,6 +8,7 @@ import { InputBox } from "@/shared/components/InputBox";
 import { getOtherSessionLawyerName } from "../types/typesOther";
 
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 
 export const OtherSessionsDataSection: React.FC = () => {
   const { id: caseId } = useParams<{ id: string }>();
@@ -29,7 +30,7 @@ export const OtherSessionsDataSection: React.FC = () => {
   }
 
   return (
-    <div className="rounded-2xl border border-[#eeeeee] bg-white p-4 md:p-6">
+    <CustomLayoutBorder>
       <div className="flex items-center justify-between pb-8">
         <h1 className="text-secondary font-cairo w-full text-right text-[18px] font-semibold">
           آخر جلسة إدارية
@@ -74,6 +75,6 @@ export const OtherSessionsDataSection: React.FC = () => {
           <InputBox label="ملاحظات" text={latestSession?.notes || "-"} />
         </div>
       </div>
-    </div>
+    </CustomLayoutBorder>
   );
 };
