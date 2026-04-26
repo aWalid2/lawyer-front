@@ -1,14 +1,17 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect } from "react";
 import { HeaderPageDocuments } from "./components/HeaderPageDocuments";
 import type { Document } from "./types/types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { TableDocumentsActions } from "./components/TableDocumentsActions";
 import { useFetchDocuments } from "./api/hooks/useGetDocuments";
-import { useFetchCases } from "@/features/UserTasks/api/hooks/useGetCase";
-import { Error } from '@/shared/components/Error';
-import LoadingPage from '@/shared/components/LoadingPage';
-import { useIndexedData } from '@/shared/utils/useIndexedData';
-import { PaginationApi } from '@/shared/components/PaginationApi';
+import {
+    extractCasesList,
+    useFetchCases,
+} from "@/features/UserTasks/api/hooks/useGetCase";
+import { Error } from "@/shared/components/Error";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { PaginationApi } from "@/shared/components/PaginationApi";
 
 export const DocumentsFeature: React.FC = () => {
     const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -19,7 +22,12 @@ export const DocumentsFeature: React.FC = () => {
         setPage(1);
     }, [statusFilter]);
 
-    const { data: documentsResponse, isPending, isError, refetch } = useFetchDocuments(page, limit, statusFilter,);
+    const {
+        data: documentsResponse,
+        isPending,
+        isError,
+        refetch,
+    } = useFetchDocuments(page, limit, statusFilter);
     const { data: cases } = useFetchCases();
 
     const documents = useMemo(() => {
@@ -33,11 +41,16 @@ export const DocumentsFeature: React.FC = () => {
     const indexedData = useIndexedData(documents, page, limit);
 
     const casesMap = useMemo(() => {
-        if (!cases?.data) return new Map();
-        return new Map(cases.data.map((caseItem: any) => [
-            String(caseItem.id || caseItem.case_id),
-            caseItem.case_title
-        ]));
+        const casesList = extractCasesList(cases);
+
+        if (casesList.length === 0) return new Map();
+
+        return new Map(
+            casesList.map((caseItem: any) => [
+                String(caseItem.id || caseItem.case_id),
+                caseItem.case_title,
+            ]),
+        );
     }, [cases]);
 
     const getCaseTitle = (caseId: string | number): string => {
@@ -55,7 +68,8 @@ export const DocumentsFeature: React.FC = () => {
         },
         {
             header: "نوع المستند",
-            accessor: (item) => item.document_type === "CASE_RELATED" ? "تابع لقضية" : "غير تابع لقضية",
+            accessor: (item) =>
+                item.document_type === "CASE_RELATED" ? "تابع لقضية" : "غير تابع لقضية",
             headerClassName: "w-35",
             className: "w-35",
         },
@@ -83,9 +97,6 @@ export const DocumentsFeature: React.FC = () => {
             accessor: (item) => (
                 <TableDocumentsActions
                     document={item}
-                    onDocumentUpdated={() => {
-                        refetch();
-                    }}
                 />
             ),
             headerClassName: "w-35",
@@ -93,19 +104,20 @@ export const DocumentsFeature: React.FC = () => {
         },
     ];
 
-    if (isPending) return <LoadingPage />
+    if (isPending) return <LoadingPage />;
     if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
 
     const getEmptyMessage = () => {
         if (statusFilter === "CASE_RELATED") return "لا توجد مستندات تابعة للقضايا";
-        if (statusFilter === "NON_CASE_RELATED") return "لا توجد مستندات غير تابعة للقضايا";
+        if (statusFilter === "NON_CASE_RELATED")
+            return "لا توجد مستندات غير تابعة للقضايا";
         return "لا توجد مستندات";
     };
 
     if (documents.length === 0) {
         return (
-            <div className="w-full pt-6 space-y-6">
-                <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
+            <div className="w-full space-y-6 pt-6">
+                <div className="shadow-primary rounded-2xl bg-white p-4 md:p-6">
                     <HeaderPageDocuments
                         onFilterChange={setStatusFilter}
                         filter={statusFilter}
@@ -113,7 +125,7 @@ export const DocumentsFeature: React.FC = () => {
                             refetch();
                         }}
                     />
-                    <div className="text-center py-10 text-gray-500">
+                    <div className="py-10 text-center text-gray-500">
                         {getEmptyMessage()}
                     </div>
                 </div>
@@ -122,8 +134,8 @@ export const DocumentsFeature: React.FC = () => {
     }
 
     return (
-        <div className="w-full pt-6 space-y-6">
-            <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
+        <div className="w-full space-y-6 pt-6">
+            <div className="shadow-primary rounded-2xl bg-white p-4 md:p-6">
                 <HeaderPageDocuments
                     onFilterChange={setStatusFilter}
                     filter={statusFilter}

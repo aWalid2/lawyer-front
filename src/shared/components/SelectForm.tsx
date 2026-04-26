@@ -1,4 +1,4 @@
-// SelectForm.tsx
+
 import React from "react";
 import { useField, useFormikContext } from "formik";
 import {
@@ -20,7 +20,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Option = {
@@ -38,6 +38,9 @@ type SelectFormProps = {
   showSearch?: boolean;
   onSearchChange?: (value: string) => void;
   onChange?: (value: string | number) => void;
+  hasMoreOptions?: boolean;
+  isFetchingMore?: boolean;
+  onReachEnd?: () => void;
 };
 
 export const SelectForm: React.FC<SelectFormProps> = ({
@@ -50,10 +53,29 @@ export const SelectForm: React.FC<SelectFormProps> = ({
   showSearch = false,
   onSearchChange,
   onChange,
+  hasMoreOptions,
+  isFetchingMore,
+  onReachEnd,
 }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
   const [open, setOpen] = React.useState(false);
+
+  const sentinelRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!sentinelRef.current || !onReachEnd || isFetchingMore || !hasMoreOptions) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          onReachEnd();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [onReachEnd, isFetchingMore, hasMoreOptions]);
 
   const handleValueChange = (value: string | number) => {
     const finalValue = typeof field.value === "number" ? Number(value) : value;
@@ -106,11 +128,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                   {options.map((option) => (
                     <CommandItem
                       key={String(option.value)}
-                      value={
-                        typeof option.label === "string"
-                          ? option.label
-                          : String(option.value)
-                      }
+                      value={`${typeof option.label === "string" ? option.label : String(option.value)}_${String(option.value)}`}
                       onSelect={() => {
                         handleValueChange(option.value);
                         setOpen(false);
@@ -118,7 +136,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                       className={cn(
                         "data-[selected=true]:bg-primary/90 data-[selected=true]:text-primary-foreground flex cursor-pointer items-center justify-between",
                         String(field.value) === String(option.value) &&
-                          "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground data-[selected=true]:bg-primary! data-[selected=true]:text-primary-foreground!",
+                        "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground data-[selected=true]:bg-primary! data-[selected=true]:text-primary-foreground!",
                       )}
                     >
                       <div className="flex items-center gap-2">
@@ -134,6 +152,14 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                       />
                     </CommandItem>
                   ))}
+                  
+                  {hasMoreOptions && (
+                    <div ref={sentinelRef} className="flex justify-center py-2">
+                      {isFetchingMore ? (
+                        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                      ) : null}
+                    </div>
+                  )}
                 </CommandGroup>
               </CommandList>
             </Command>
