@@ -24,11 +24,22 @@ import { Other } from "./components/Other";
 import { CASE_SITUATION_OPTIONS } from "@/shared/constants/caseOptions";
 
 const FormCase = () => {
-  const { mutateAsync: addUnderAppealCase, isPending: isPendingUnderAppealCase } = useAddUnderAppealCase()
-  const { mutateAsync: addPublicProsecutionCase, isPending: isPendingPublicProsecutionCase } = useAddPublicProsecutionCase()
-  const { mutateAsync: addPublicProsecutionOfficeCase, isPending: isPendingPublicProsecutionOfficeCase } = useAddPublicProsecutionOfficeCase()
-  const { mutateAsync: addActiveCase, isPending: isPendingActiveCase } = useAddActiveCase()
-  const { mutateAsync: addOtherCase, isPending: isPendingOtherCase } = useAddOtherCase()
+  const {
+    mutateAsync: addUnderAppealCase,
+    isPending: isPendingUnderAppealCase,
+  } = useAddUnderAppealCase();
+  const {
+    mutateAsync: addPublicProsecutionCase,
+    isPending: isPendingPublicProsecutionCase,
+  } = useAddPublicProsecutionCase();
+  const {
+    mutateAsync: addPublicProsecutionOfficeCase,
+    isPending: isPendingPublicProsecutionOfficeCase,
+  } = useAddPublicProsecutionOfficeCase();
+  const { mutateAsync: addActiveCase, isPending: isPendingActiveCase } =
+    useAddActiveCase();
+  const { mutateAsync: addOtherCase, isPending: isPendingOtherCase } =
+    useAddOtherCase();
 
   return (
     <Formik
@@ -60,15 +71,14 @@ const FormCase = () => {
         }, [submitCount]);
 
         return (
-          <div className="w-full pt-6">
+          <div>
             <HeaderTitle title="إضافة قضية جديدة" />
-            <div className="border border-gray-300 p-4 rounded-xl mt-6">
+            <div className="mt-6 rounded-xl border border-gray-300 p-4">
               <Form>
                 <div className="mb-4">
                   <SelectForm
                     label="وضع القضية عند الاستلام"
                     name="case_situation"
-
                     options={CASE_SITUATION_OPTIONS}
                     placeholder="اختر وضع القضية"
                     onChange={(value) => {
@@ -77,27 +87,35 @@ const FormCase = () => {
                   />
                 </div>
 
-                <div className={" grid grid-cols-1 md:grid-cols-2 gap-4"}>
-
-                  {values.case_situation === "UNDER_APPEAL" && <SharedFormField />}
-                  {values.case_situation === "PUBLIC_PROSECUTION" && <PublicProsecution />}
-                  {values.case_situation === "AT_PROSECUTOR_OFFICE" && values.case_status_id && <InProsecution />}
+                <div className={"grid grid-cols-1 gap-4 md:grid-cols-2"}>
+                  {values.case_situation === "UNDER_APPEAL" && (
+                    <SharedFormField />
+                  )}
+                  {values.case_situation === "PUBLIC_PROSECUTION" && (
+                    <PublicProsecution />
+                  )}
+                  {values.case_situation === "AT_PROSECUTOR_OFFICE" &&
+                    values.case_status_id && <InProsecution />}
                   {values.case_situation === "ACTIVE" && <Active />}
                   {values.case_situation === "OTHER" && <Other />}
 
-                  <InputForm label="تاريخ ورود القضية داخل المكتب" name="case_entry_date" type="date" />
+                  <InputForm
+                    label="تاريخ ورود القضية داخل المكتب"
+                    name="case_entry_date"
+                    type="date"
+                  />
                 </div>
 
-                <TextAreaForm label="ملاحظات" name="notes" placeholder="أضف ملاحظات..." className="mt-4" />
-                <div className="mt-8 pt-8 border-t border-gray-100">
-                  <SwitchForm
-                    name="has_opponent"
-                    label="إضافة خصم للدعوى"
-                  />
+                <TextAreaForm
+                  label="ملاحظات"
+                  name="notes"
+                  placeholder="أضف ملاحظات..."
+                  className="mt-4"
+                />
+                <div className="mt-8 border-t border-gray-100 pt-8">
+                  <SwitchForm name="has_opponent" label="إضافة خصم للدعوى" />
 
-                  {values.has_opponent && (
-                    <OpponentForm />
-                  )}
+                  {values.has_opponent && <OpponentForm />}
                 </div>
                 <FeesForm />
                 <SubmitButton
@@ -113,7 +131,6 @@ const FormCase = () => {
                 >
                   إضافة قضية
                 </SubmitButton>
-
               </Form>
             </div>
           </div>

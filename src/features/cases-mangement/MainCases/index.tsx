@@ -8,7 +8,7 @@ import { useIndexedData } from "@/shared/utils/useIndexedData";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 import { PaginationApi } from "@/shared/components/PaginationApi";
-
+import PageLayout from "@/shared/components/PageLayout";
 
 const getStatusStyles = (status: string) => {
   switch (status) {
@@ -23,7 +23,6 @@ const getStatusStyles = (status: string) => {
   }
 };
 
-
 const MainCases = () => {
   const columns: Column<Case>[] = [
     {
@@ -33,8 +32,7 @@ const MainCases = () => {
     },
     {
       header: "كود القضية",
-      accessor: (item) => item.case_sequence
-      ,
+      accessor: (item) => item.case_sequence,
       className: "font-medium text-black",
     },
     {
@@ -54,7 +52,7 @@ const MainCases = () => {
       header: "الحالة",
       accessor: (item) => (
         <span
-          className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(item?.caseStatus?.name || "")} `}
+          className={`rounded-main px-3 py-1 text-xs font-medium whitespace-nowrap ${getStatusStyles(item?.caseStatus?.name || "")} `}
         >
           {item?.caseStatus?.name}
         </span>
@@ -62,11 +60,7 @@ const MainCases = () => {
     },
     {
       header: "إجراء",
-      accessor: (item) => (
-        <TableCasesActions
-          caseItem={item}
-        />
-      ),
+      accessor: (item) => <TableCasesActions caseItem={item} />,
     },
   ];
   const [searchTerm, setSearchTerm] = useState("");
@@ -77,35 +71,29 @@ const MainCases = () => {
   const limit = cases?.meta?.limit || 15;
   const indexedData = useIndexedData(cases?.data || [], page, limit);
 
-
-  if (isPending) return <LoadingPage />
-  if (isError) return <EmptyTable message="حدث خطأ في تحميل البيانات" />
+  if (isPending) return <LoadingPage />;
+  if (isError) return <EmptyTable message="حدث خطأ في تحميل البيانات" />;
   return (
-    <div className="w-full pt-6 space-y-6">
-      <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
-        <HeaderPageCase
-          searchTerm={searchTerm}
-          onSearch={setSearchTerm}
-          onFilterChange={(value) => console.log(value)}
+    <PageLayout>
+      <HeaderPageCase
+        searchTerm={searchTerm}
+        onSearch={setSearchTerm}
+        onFilterChange={(value) => console.log(value)}
+      />
+
+      {indexedData?.length === 0 ? (
+        <EmptyTable message="لا توجد بيانات حالية لادارة القضايا" />
+      ) : (
+        <DataTable rowKey="id" data={indexedData} columns={columns} />
+      )}
+      {totalPages > 1 && (
+        <PaginationApi
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
         />
-
-        {indexedData?.length === 0 ? <EmptyTable message="لا توجد بيانات حالية لادارة القضايا" /> : (
-          <DataTable
-            rowKey="id"
-            data={indexedData}
-            columns={columns}
-          />
-        )}
-        {totalPages > 1 && (
-          <PaginationApi
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={setPage}
-          />
-        )}
-
-      </div>
-    </div>
+      )}
+    </PageLayout>
   );
 };
 

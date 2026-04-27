@@ -4,22 +4,32 @@ import type { Contract } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
 import { TableContractsActions } from "./componnents/TableContractsActions";
+import PageLayout from "@/shared/components/PageLayout";
 
 // بيانات تجريبية للعقود
 const MOCK_CONTRACTS: Contract[] = Array.from({ length: 45 }, (_, i) => ({
   id: `${i + 1}`,
-  contractNumber: `CONT-${String(i + 1).padStart(3, '0')}`,
-  clientName: ["أحمد محمد", "فاطمة علي", "محمد إبراهيم", "سارة خالد", "عمر حسن"][i % 5],
+  contractNumber: `CONT-${String(i + 1).padStart(3, "0")}`,
+  clientName: [
+    "أحمد محمد",
+    "فاطمة علي",
+    "محمد إبراهيم",
+    "سارة خالد",
+    "عمر حسن",
+  ][i % 5],
   contractType: ["بيع", "إيجار", "صيانة", "استشارات", "خدمات"][i % 5],
   status: ["نشط", "منتهي", "ملغي", "معلق"][i % 4],
-  startDate: `2024-${String((i % 12) + 1).padStart(2, '0')}-01`,
-  endDate: `2025-${String((i % 12) + 1).padStart(2, '0')}-01`,
+  startDate: `2024-${String((i % 12) + 1).padStart(2, "0")}-01`,
+  endDate: `2025-${String((i % 12) + 1).padStart(2, "0")}-01`,
 }));
 
 const ContractsFeature = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState<{ contractType: string; status: string }>({
+  const [filters, setFilters] = useState<{
+    contractType: string;
+    status: string;
+  }>({
     contractType: "all",
     status: "all",
   });
@@ -36,8 +46,11 @@ const ContractsFeature = () => {
         contract.contractNumber.toLowerCase().includes(searchStr) ||
         contract.clientName.includes(searchStr);
 
-      const matchesContractType = filters.contractType === "all" || contract.contractType === filters.contractType;
-      const matchesStatus = filters.status === "all" || contract.status === filters.status;
+      const matchesContractType =
+        filters.contractType === "all" ||
+        contract.contractType === filters.contractType;
+      const matchesStatus =
+        filters.status === "all" || contract.status === filters.status;
 
       return matchesSearch && matchesContractType && matchesStatus;
     });
@@ -72,7 +85,8 @@ const ContractsFeature = () => {
   const columns: Column<Contract>[] = [
     {
       header: "#",
-      accessor: (item) => filteredContracts.findIndex((d) => d.id === item.id) + 1,
+      accessor: (item) =>
+        filteredContracts.findIndex((d) => d.id === item.id) + 1,
       headerClassName: "w-15",
     },
     {
@@ -90,7 +104,9 @@ const ContractsFeature = () => {
     {
       header: "الحالة",
       accessor: (item) => (
-        <span className={`inline-block px-3 py-1.5 rounded-full text-sm font-medium ${getStatusStyle(item.status)}`}>
+        <span
+          className={`inline-block rounded-full px-3 py-1.5 text-sm font-medium ${getStatusStyle(item.status)}`}
+        >
           {item.status}
         </span>
       ),
@@ -116,30 +132,24 @@ const ContractsFeature = () => {
   ];
 
   return (
-    <div className="w-full pt-6 space-y-6">
-      <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
-        <HeaderPageContracts
-          searchTerm={searchTerm}
-          onSearch={setSearchTerm}
-          onFilterChange={handleFilterChange}
-          filters={filters}
-        />
+    <PageLayout>
+      <HeaderPageContracts
+        searchTerm={searchTerm}
+        onSearch={setSearchTerm}
+        onFilterChange={handleFilterChange}
+        filters={filters}
+      />
 
-        <DataTable
-          columns={columns}
-          data={paginatedContracts}
-          rowIdField="id"
-        />
+      <DataTable columns={columns} data={paginatedContracts} rowIdField="id" />
 
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        )}
-      </div>
-    </div>
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
+    </PageLayout>
   );
 };
 
