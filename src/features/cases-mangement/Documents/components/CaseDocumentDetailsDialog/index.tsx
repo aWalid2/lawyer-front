@@ -10,6 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Error } from "@/shared/components/Error";
 import { ViewIcon } from "@/shared/icons/View";
 import {
+  formatDocumentDate,
+  getDocumentFileType,
+  isImageDocument,
+  isPdfDocument,
+} from "@/shared/utils/document";
+import {
   Download,
   Eye,
   File,
@@ -17,15 +23,8 @@ import {
   FileText,
   Image,
 } from "lucide-react";
-import { useGetCaseDocument } from "../api/hooks/useGetCaseDocument";
-import {
-  extractCaseDocument,
-  formatCaseDocumentDate,
-  getCaseDocumentFileType,
-  getCaseDocumentName,
-  isImageCaseDocument,
-  isPdfCaseDocument,
-} from "../utils";
+import { useGetCaseDocument } from "../../api/hooks/useGetCaseDocument";
+import { extractCaseDocument, getCaseDocumentName } from "../../utils";
 
 interface CaseDocumentDetailsDialogProps {
   documentId: number;
@@ -36,11 +35,11 @@ const getFileIcon = (fileUrl?: string) => {
     return <File className="h-5 w-5" />;
   }
 
-  if (isImageCaseDocument(fileUrl)) {
+  if (isImageDocument(fileUrl)) {
     return <Image className="h-5 w-5" />;
   }
 
-  if (isPdfCaseDocument(fileUrl)) {
+  if (isPdfDocument(fileUrl)) {
     return <FileText className="h-5 w-5" />;
   }
 
@@ -116,7 +115,7 @@ export const CaseDocumentDetailsDialog: React.FC<
                       {getCaseDocumentName(document)}
                     </h2>
                     <p className="mt-1 text-sm text-[#808080]">
-                      {getCaseDocumentFileType(document.document_file)}
+                      {getDocumentFileType(document.document_file)}
                     </p>
                   </div>
                 </div>
@@ -157,7 +156,7 @@ export const CaseDocumentDetailsDialog: React.FC<
                     النوع
                   </span>
                   <span className="pr-3 text-lg font-bold text-[#153A4D]">
-                    {getCaseDocumentFileType(document.document_file)}
+                    {getDocumentFileType(document.document_file)}
                   </span>
                 </div>
 
@@ -166,7 +165,7 @@ export const CaseDocumentDetailsDialog: React.FC<
                     تاريخ الرفع
                   </span>
                   <span className="pr-3 text-lg font-bold text-[#153A4D]">
-                    {formatCaseDocumentDate(document.created_at)}
+                    {formatDocumentDate(document.created_at)}
                   </span>
                 </div>
 
@@ -181,7 +180,7 @@ export const CaseDocumentDetailsDialog: React.FC<
               </div>
 
               {document.document_file &&
-                isImageCaseDocument(document.document_file) && (
+                isImageDocument(document.document_file) && (
                   <div className="rounded-3xl border border-[#E8E8E8] bg-[#FBFBFB] p-4">
                     <img
                       src={document.document_file}
@@ -192,7 +191,7 @@ export const CaseDocumentDetailsDialog: React.FC<
                 )}
 
               {document.document_file &&
-                isPdfCaseDocument(document.document_file) && (
+                isPdfDocument(document.document_file) && (
                   <div className="rounded-3xl border border-[#E8E8E8] bg-[#FBFBFB] p-4">
                     <iframe
                       src={`${document.document_file}#toolbar=0`}

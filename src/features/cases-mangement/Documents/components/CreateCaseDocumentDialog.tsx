@@ -17,7 +17,7 @@ import { useCreateCaseDocument } from "../api/hooks/useCreateCaseDocument";
 import type { CaseDocumentFormValues } from "../types/CaseDocumentT";
 
 const validationSchema = Yup.object({
-  case_title: Yup.string().required("اسم المستند مطلوب"),
+  document_name: Yup.string().required("اسم المستند مطلوب"),
   phone: Yup.string().required("رقم الهاتف مطلوب"),
   document_details: Yup.string().required("تفاصيل المستند مطلوبة"),
   file: Yup.mixed<FileList>()
@@ -39,7 +39,7 @@ export const CreateCaseDocumentDialog: React.FC<
   const { mutate: createDocument, isPending } = useCreateCaseDocument();
 
   const initialValues: CaseDocumentFormValues = {
-    case_title: "",
+    document_name: "",
     phone: "",
     document_details: "",
     file: null,
@@ -49,7 +49,7 @@ export const CreateCaseDocumentDialog: React.FC<
     const formData = new FormData();
 
     formData.append("document_type", "CASE_RELATED");
-    formData.append("case_title", values.case_title);
+    formData.append("document_name", values.document_name);
     formData.append("phone", values.phone);
     formData.append("caseId", caseId);
     formData.append("document_details", values.document_details);
@@ -100,7 +100,7 @@ export const CreateCaseDocumentDialog: React.FC<
         >
           <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
             <InputForm
-              name="case_title"
+              name="document_name"
               label="اسم المستند"
               type="text"
               placeholder="أدخل اسم المستند"

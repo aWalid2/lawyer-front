@@ -19,7 +19,7 @@ import type {
 } from "../types/CaseDocumentT";
 
 const validationSchema = Yup.object({
-  case_title: Yup.string().required("اسم المستند مطلوب"),
+  document_name: Yup.string().required("اسم المستند مطلوب"),
   phone: Yup.string().required("رقم الهاتف مطلوب"),
   document_details: Yup.string().required("تفاصيل المستند مطلوبة"),
 });
@@ -41,7 +41,7 @@ export const EditCaseDocumentDialog: React.FC<EditCaseDocumentDialogProps> = ({
   const { mutate: updateDocument, isPending } = useUpdateCaseDocument();
 
   const initialValues: CaseDocumentFormValues = {
-    case_title: document.document_name || "",
+    document_name: document.document_name || "",
     phone: document.phone || "",
     document_details: document.document_details || "",
     file: null,
@@ -51,9 +51,9 @@ export const EditCaseDocumentDialog: React.FC<EditCaseDocumentDialogProps> = ({
     const formData = new FormData();
 
     formData.append("document_type", "CASE_RELATED");
-    formData.append("case_title", values.case_title);
+    formData.append("document_name", values.document_name);
     formData.append("phone", values.phone);
-    formData.append("caseId", caseId);
+    formData.append("case", caseId);
     formData.append("document_details", values.document_details);
 
     if (values.file?.[0]) {
@@ -101,7 +101,7 @@ export const EditCaseDocumentDialog: React.FC<EditCaseDocumentDialogProps> = ({
         >
           <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
             <InputForm
-              name="case_title"
+              name="document_name"
               label="اسم المستند"
               type="text"
               placeholder="أدخل اسم المستند"

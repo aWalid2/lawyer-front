@@ -9,12 +9,9 @@ import type { CaseDocument } from "./types/CaseDocumentT";
 import { useParams } from "react-router-dom";
 import { CreateCaseDocumentDialog } from "./components/CreateCaseDocumentDialog";
 import { useGetCaseDocuments } from "./api/hooks/useGetCaseDocuments";
-import {
-  extractCaseDocuments,
-  formatCaseDocumentDate,
-  getCaseDocumentFileType,
-  getCaseDocumentName,
-} from "./utils";
+import { getDocumentFileType } from "@/shared/utils/document";
+import { extractCaseDocuments, getCaseDocumentName } from "./utils";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
 export const CaseDocuments: React.FC = () => {
   const { id: caseId } = useParams<{ id: string }>();
@@ -75,11 +72,11 @@ export const CaseDocuments: React.FC = () => {
     },
     {
       header: "النوع",
-      accessor: (item) => getCaseDocumentFileType(item.document_file),
+      accessor: (item) => getDocumentFileType(item.document_file),
     },
     {
       header: "تاريخ الرفع",
-      accessor: (item) => formatCaseDocumentDate(item.created_at),
+      accessor: (item) => formatDateToYYYYMMDD(item.created_at),
     },
     {
       header: "إجراء",

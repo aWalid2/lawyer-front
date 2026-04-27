@@ -4,7 +4,7 @@ import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import React from "react";
 import { useDeleteCaseDocument } from "../api/hooks/useDeleteCaseDocument";
 import type { CaseDocument } from "../types/CaseDocumentT";
-import { CaseDocumentDetailsDialog } from "./CaseDocumentDetailsDialog";
+import { CaseDocumentDetailsDialog } from "./CaseDocumentDetailsDialog/CaseDocumentDetailsDialog";
 import { EditCaseDocumentDialog } from "./EditCaseDocumentDialog";
 
 interface CaseDocumentActionsProps {

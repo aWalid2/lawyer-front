@@ -12,7 +12,7 @@ export interface CaseDocument {
 }
 
 export interface CaseDocumentFormValues {
-  case_title: string;
+  document_name: string;
   phone: string;
   document_details: string;
   file: FileList | null;
