@@ -9,7 +9,7 @@ interface DocumentImageProps {
 
 export const DocumentImage: React.FC<DocumentImageProps> = ({ document }) => {
   return (
-    <div className="w-fit rounded-3xl border border-[#E8E8E8] bg-[#FBFBFB] p-4">
+    <div className="mt-6 w-fit rounded-3xl border border-[#E8E8E8] bg-[#FBFBFB] p-4">
       <img
         src={document.document_file}
         alt={document.document_name || "صورة المستند"}

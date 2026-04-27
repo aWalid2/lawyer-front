@@ -1,12 +1,6 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { ButtonViewTable } from "@/shared/components/ButtonViewTable";
 import { Error } from "@/shared/components/Error";
+import { LayoutDialog } from "@/shared/components/LayoutDialog";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { isImageDocument, isPdfDocument } from "@/shared/utils/document";
 import React from "react";
@@ -39,57 +33,48 @@ export const CaseDocumentDetailsDialog: React.FC<
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <ButtonViewTable />
-      </DialogTrigger>
+    <LayoutDialog
+      title="تفاصيل المستند"
+      trigger={<ButtonViewTable />}
+      open={open}
+      onOpenChange={setOpen}
+      className="text-start sm:max-w-225"
+    >
+      {isPending && <LoadingPage />}
 
-      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-[24px] border-none p-0 text-start sm:max-w-225">
-        <div className="p-6 md:p-8">
-          <DialogHeader>
-            <DialogTitle className="text-start text-2xl font-bold text-[#153A4D]">
-              تفاصيل المستند
-            </DialogTitle>
-          </DialogHeader>
+      {isError && !isPending && (
+        <Error message="تعذر تحميل بيانات المستند" error={error} />
+      )}
 
-          {isPending && <LoadingPage />}
+      {!isPending && !isError && document && (
+        <div className="space-y-8">
+          <div className="flex flex-col justify-between gap-4 pb-6 md:flex-row md:items-center">
+            <FileIconDocument document={document} />
+            {document.document_file && (
+              <FilesButton handleOpenFile={handleOpenFile} />
+            )}
+          </div>
 
-          {isError && !isPending && (
-            <Error message="تعذر تحميل بيانات المستند" error={error} />
-          )}
+          <DocumentInfo document={document} />
 
-          {!isPending && !isError && document && (
-            <div className="space-y-8 pt-6">
-              <div className="flex flex-col justify-between gap-4 pb-6 md:flex-row md:items-center">
-                <FileIconDocument document={document} />
-                {document.document_file && (
-                  <FilesButton handleOpenFile={handleOpenFile} />
-                )}
-              </div>
+          {document.document_file &&
+            isImageDocument(document.document_file) && (
+              <DocumentImage document={document} />
+            )}
 
-              <DocumentInfo document={document} />
-
-              {document.document_file &&
-                isImageDocument(document.document_file) && (
-                  <DocumentImage document={document} />
-                )}
-
-              {document.document_file &&
-                isPdfDocument(document.document_file) && (
-                  <div className="rounded-3xl border border-[#E8E8E8] bg-[#FBFBFB] p-4">
-                    <iframe
-                      src={`${document.document_file}#toolbar=0`}
-                      title={document.document_name || "مستند PDF"}
-                      className="h-125 w-full rounded-lg"
-                    />
-                  </div>
-                )}
-
-              <DocumentDetails document={document} />
+          {document.document_file && isPdfDocument(document.document_file) && (
+            <div className="rounded-3xl border border-[#E8E8E8] bg-[#FBFBFB] p-4">
+              <iframe
+                src={`${document.document_file}#toolbar=0`}
+                title={document.document_name || "مستند PDF"}
+                className="h-125 w-full rounded-lg"
+              />
             </div>
           )}
+
+          <DocumentDetails document={document} />
         </div>
-      </DialogContent>
-    </Dialog>
+      )}
+    </LayoutDialog>
   );
 };

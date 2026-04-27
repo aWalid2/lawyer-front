@@ -10,7 +10,7 @@ export const DocumentDetails: React.FC<DocumentDetailsProps> = ({
   document,
 }) => {
   return (
-    <div className="border-t border-gray-100 pt-6">
+    <div className="pt-6">
       <span className="border-r-2 border-[#CBA462] pr-3 text-sm font-medium text-[#808080]">
         تفاصيل المستند
       </span>
