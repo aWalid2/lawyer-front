@@ -72,6 +72,7 @@ export const EditCaseDocumentDialog: React.FC<EditCaseDocumentDialogProps> = ({
       trigger={trigger}
       open={open}
       onOpenChange={setOpen}
+      size="lg"
     >
       <Formik
         initialValues={initialValues}

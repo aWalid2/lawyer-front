@@ -54,7 +54,7 @@ export const AddExpertModalForm: React.FC<AddExpertModalFormProps> = ({
       }}
     >
       {() => (
-        <Form className="custom-scrollbar min-h-0 flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
+        <Form className="space-y-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <InputForm
               name="expert_report_number"

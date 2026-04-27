@@ -38,7 +38,8 @@ export const CaseDocumentDetailsDialog: React.FC<
       trigger={<ButtonViewTable />}
       open={open}
       onOpenChange={setOpen}
-      className="text-start sm:max-w-225"
+      size="details"
+      align="start"
     >
       {isPending && <LoadingPage />}
 

@@ -24,7 +24,7 @@ export const HiringEmployeeDialog: React.FC<HiringEmployeeDialogProps> = ({
   });
 
   return (
-    <LayoutDialog title="تعيين موظف" trigger={trigger}>
+    <LayoutDialog title="تعيين موظف" trigger={trigger} size="sm">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

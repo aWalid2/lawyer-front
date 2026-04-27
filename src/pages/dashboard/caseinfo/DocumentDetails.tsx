@@ -1,9 +1,9 @@
-import CaseDocumentDetails from '@/features/cases-mangement/Documents/components/CaseDocumentDetails'
+import { Navigate, useParams } from "react-router-dom";
 
 const DocumentDetails = () => {
-    return (
-        <CaseDocumentDetails />
-    )
-}
+  const { id } = useParams<{ id: string }>();
 
-export default DocumentDetails
+  return <Navigate to={`/dashboard/case-management/${id}/documents`} replace />;
+};
+
+export default DocumentDetails;

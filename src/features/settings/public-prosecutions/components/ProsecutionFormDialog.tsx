@@ -35,8 +35,16 @@ export const ProsecutionFormDialog: React.FC<ProsecutionFormDialogProps> = ({
     address: prosecution?.address || "",
   };
 
-  const { mutate: addProsecution, isPending: isAdding, isError: isAddError } = useAddProsecution();
-  const { mutate: updateProsecution, isPending: isUpdating, isError: isUpdateError } = useUpdateProsecution();
+  const {
+    mutate: addProsecution,
+    isPending: isAdding,
+    isError: isAddError,
+  } = useAddProsecution();
+  const {
+    mutate: updateProsecution,
+    isPending: isUpdating,
+    isError: isUpdateError,
+  } = useUpdateProsecution();
 
   const isPending = isEditMode ? isUpdating : isAdding;
   const isError = isEditMode ? isUpdateError : isAddError;
@@ -49,7 +57,7 @@ export const ProsecutionFormDialog: React.FC<ProsecutionFormDialogProps> = ({
           onSuccess: () => {
             if (onSave) onSave();
           },
-        }
+        },
       );
     } else {
       addProsecution(values, {
@@ -60,8 +68,8 @@ export const ProsecutionFormDialog: React.FC<ProsecutionFormDialogProps> = ({
     }
   };
 
-
-  if (isError) return <Error message="فشل في حفظ النيابة يرجى المحاولة لاحقاً" />;
+  if (isError)
+    return <Error message="فشل في حفظ النيابة يرجى المحاولة لاحقاً" />;
 
   return (
     <LayoutDialog
@@ -69,7 +77,7 @@ export const ProsecutionFormDialog: React.FC<ProsecutionFormDialogProps> = ({
       trigger={trigger}
       open={open}
       onOpenChange={onOpenChange}
-      className="sm:max-w-[650px]"
+      size="md"
     >
       <Formik
         initialValues={initialValues}
@@ -94,9 +102,13 @@ export const ProsecutionFormDialog: React.FC<ProsecutionFormDialogProps> = ({
             <button
               type="submit"
               disabled={isPending}
-              className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity h-12.5 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-primary-gradient rounded-main mt-4 h-12.5 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isPending ? "جاري الحفظ..." : (isEditMode ? "تعديل نيابة" : "إضافة نيابة جديدة")}
+              {isPending
+                ? "جاري الحفظ..."
+                : isEditMode
+                  ? "تعديل نيابة"
+                  : "إضافة نيابة جديدة"}
             </button>
           </Form>
         )}

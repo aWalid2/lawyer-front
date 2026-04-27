@@ -15,11 +15,9 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required("نوع درجة التقاضي مطلوب"),
 });
 
-export const LitigationDegreeFormDialog: React.FC<LitigationDegreeFormDialogProps> = ({
-  degree,
-  onSave,
-  trigger,
-}) => {
+export const LitigationDegreeFormDialog: React.FC<
+  LitigationDegreeFormDialogProps
+> = ({ degree, onSave, trigger }) => {
   const initialValues = {
     name: degree?.name || "",
   };
@@ -28,7 +26,7 @@ export const LitigationDegreeFormDialog: React.FC<LitigationDegreeFormDialogProp
     <LayoutDialog
       title={degree ? "تعديل نوع درجة تقاضي" : "اضافة نوع درجة تقاضي جديد"}
       trigger={trigger}
-      className="sm:max-w-[650px]"
+      size="md"
     >
       <Formik
         initialValues={initialValues}
@@ -46,7 +44,7 @@ export const LitigationDegreeFormDialog: React.FC<LitigationDegreeFormDialogProp
             />
             <button
               type="submit"
-              className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity h-12.5"
+              className="bg-primary-gradient rounded-main mt-4 h-12.5 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90"
             >
               {degree ? "تعديل نوع" : "إضافة نوع جديد"}
             </button>

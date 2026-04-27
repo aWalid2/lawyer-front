@@ -81,6 +81,7 @@ export const FormCaseDialog: React.FC = () => {
       }
       open={open}
       onOpenChange={setOpen}
+      size="xl"
     >
       <Formik
         initialValues={initialValues}

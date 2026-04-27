@@ -33,7 +33,7 @@ export const EditEmployeeDialog: React.FC<EditEmployeeDialogProps> = ({
   });
 
   return (
-    <LayoutDialog title="تعديل بيانات الموظف" trigger={trigger}>
+    <LayoutDialog title="تعديل بيانات الموظف" trigger={trigger} size="sm">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

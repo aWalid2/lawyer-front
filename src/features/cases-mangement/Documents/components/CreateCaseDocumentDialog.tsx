@@ -72,6 +72,7 @@ export const CreateCaseDocumentDialog: React.FC<
       }
       open={open}
       onOpenChange={setOpen}
+      size="lg"
     >
       <Formik
         initialValues={initialValues}

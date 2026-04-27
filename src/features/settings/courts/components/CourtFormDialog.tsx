@@ -10,9 +10,8 @@ import { useUpdateCourt } from "../api/hooks/useUpdateCourt";
 
 interface CourtFormDialogProps {
   court?: CourtT;
-  onSave: (values: { name: string, address: string }) => void;
+  onSave: (values: { name: string; address: string }) => void;
   trigger: React.ReactNode;
-
 }
 
 const validationSchema = Yup.object().shape({
@@ -36,7 +35,7 @@ export const CourtFormDialog: React.FC<CourtFormDialogProps> = ({
     <LayoutDialog
       title={court ? "تعديل محكمة" : "اضافة محكمة جديدة"}
       trigger={trigger}
-      className="sm:max-w-[715px]"
+      size="lg"
       onOpenChange={setOpen}
       open={open}
     >
@@ -45,11 +44,11 @@ export const CourtFormDialog: React.FC<CourtFormDialogProps> = ({
         validationSchema={validationSchema}
         onSubmit={async (values) => {
           if (court) {
-            await updateCourt({ id: Number(court.id), data: values })
+            await updateCourt({ id: Number(court.id), data: values });
           } else {
-            await createCourt(values)
+            await createCourt(values);
           }
-          setOpen(false)
+          setOpen(false);
         }}
         enableReinitialize
       >
@@ -67,9 +66,7 @@ export const CourtFormDialog: React.FC<CourtFormDialogProps> = ({
               type="text"
               placeholder="شارع فؤاد"
             />
-            <SubmitButton
-              isPending={isPending || isUpdating}
-            >
+            <SubmitButton isPending={isPending || isUpdating}>
               {court ? "تعديل محكمة" : "إضافة محكمة"}
             </SubmitButton>
           </Form>
