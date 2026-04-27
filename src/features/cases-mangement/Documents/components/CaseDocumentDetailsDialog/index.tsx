@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,53 +5,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Error } from "@/shared/components/Error";
 import { ViewIcon } from "@/shared/icons/View";
-import {
-  formatDocumentDate,
-  getDocumentFileType,
-  isImageDocument,
-  isPdfDocument,
-} from "@/shared/utils/document";
-import {
-  Download,
-  Eye,
-  File,
-  FileArchive,
-  FileText,
-  Image,
-} from "lucide-react";
+import { isImageDocument, isPdfDocument } from "@/shared/utils/document";
+import React from "react";
 import { useGetCaseDocument } from "../../api/hooks/useGetCaseDocument";
-import { extractCaseDocument, getCaseDocumentName } from "../../utils";
+import { extractCaseDocument } from "../../utils";
+import { DocumentDetails } from "./components/DocumentDetails";
+import { DocumentImage } from "./components/DocumentImage";
+import { DocumentInfo } from "./components/DocumentInfo";
+import { FileIconDocument } from "./components/FileIconDocument";
+import FilesButton from "./components/FilesButton";
+import LoadingPage from "@/shared/components/LoadingPage";
 
 interface CaseDocumentDetailsDialogProps {
   documentId: number;
 }
-
-const getFileIcon = (fileUrl?: string) => {
-  if (!fileUrl) {
-    return <File className="h-5 w-5" />;
-  }
-
-  if (isImageDocument(fileUrl)) {
-    return <Image className="h-5 w-5" />;
-  }
-
-  if (isPdfDocument(fileUrl)) {
-    return <FileText className="h-5 w-5" />;
-  }
-
-  if (
-    ["zip", "rar", "7z", "tar", "gz"].some((extension) =>
-      fileUrl.toLowerCase().endsWith(extension),
-    )
-  ) {
-    return <FileArchive className="h-5 w-5" />;
-  }
-
-  return <File className="h-5 w-5" />;
-};
 
 export const CaseDocumentDetailsDialog: React.FC<
   CaseDocumentDetailsDialogProps
@@ -82,10 +50,7 @@ export const CaseDocumentDetailsDialog: React.FC<
         </button>
       </DialogTrigger>
 
-      <DialogContent
-        className="max-h-[90vh] overflow-y-auto rounded-[24px] border-none p-0 text-right sm:max-w-225"
-        dir="rtl"
-      >
+      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-[24px] border-none p-0 text-right sm:max-w-225">
         <div className="p-6 md:p-8">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-[#153A4D]">
@@ -93,11 +58,7 @@ export const CaseDocumentDetailsDialog: React.FC<
             </DialogTitle>
           </DialogHeader>
 
-          {isPending && (
-            <div className="py-12 text-center text-[#808080]">
-              جاري تحميل التفاصيل...
-            </div>
-          )}
+          {isPending && <LoadingPage />}
 
           {isError && !isPending && (
             <Error message="تعذر تحميل بيانات المستند" error={error} />
@@ -105,89 +66,18 @@ export const CaseDocumentDetailsDialog: React.FC<
 
           {!isPending && !isError && document && (
             <div className="space-y-8 pt-6">
-              <div className="flex flex-col justify-between gap-4 border-b border-gray-100 pb-6 md:flex-row md:items-center">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-[#F4EADA]">
-                    {getFileIcon(document.document_file)}
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-[#153A4D]">
-                      {getCaseDocumentName(document)}
-                    </h2>
-                    <p className="mt-1 text-sm text-[#808080]">
-                      {getDocumentFileType(document.document_file)}
-                    </p>
-                  </div>
-                </div>
-
+              <div className="flex flex-col justify-between gap-4 pb-6 md:flex-row md:items-center">
+                <FileIconDocument document={document} />
                 {document.document_file && (
-                  <div className="flex gap-3">
-                    <Button
-                      onClick={handleOpenFile}
-                      className="bg-[#CBA462] text-white hover:bg-[#b8924e]"
-                    >
-                      <Eye className="ml-2 h-4 w-4" />
-                      فتح الملف
-                    </Button>
-                    <Button
-                      onClick={handleOpenFile}
-                      variant="outline"
-                      className="border-[#CBA462] text-[#CBA462] hover:bg-[#F4EADA]"
-                    >
-                      <Download className="ml-2 h-4 w-4" />
-                      تحميل الملف
-                    </Button>
-                  </div>
+                  <FilesButton handleOpenFile={handleOpenFile} />
                 )}
               </div>
 
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-                <div className="flex flex-col space-y-2">
-                  <span className="border-r-2 border-[#CBA462] pr-3 text-sm font-medium text-[#808080]">
-                    اسم المستند
-                  </span>
-                  <span className="pr-3 text-lg font-bold text-[#153A4D]">
-                    {getCaseDocumentName(document)}
-                  </span>
-                </div>
-
-                <div className="flex flex-col space-y-2">
-                  <span className="border-r-2 border-[#CBA462] pr-3 text-sm font-medium text-[#808080]">
-                    النوع
-                  </span>
-                  <span className="pr-3 text-lg font-bold text-[#153A4D]">
-                    {getDocumentFileType(document.document_file)}
-                  </span>
-                </div>
-
-                <div className="flex flex-col space-y-2">
-                  <span className="border-r-2 border-[#CBA462] pr-3 text-sm font-medium text-[#808080]">
-                    تاريخ الرفع
-                  </span>
-                  <span className="pr-3 text-lg font-bold text-[#153A4D]">
-                    {formatDocumentDate(document.created_at)}
-                  </span>
-                </div>
-
-                <div className="flex flex-col space-y-2">
-                  <span className="border-r-2 border-[#CBA462] pr-3 text-sm font-medium text-[#808080]">
-                    رقم الهاتف
-                  </span>
-                  <span className="pr-3 text-lg font-bold text-[#153A4D]">
-                    {document.phone || "-"}
-                  </span>
-                </div>
-              </div>
+              <DocumentInfo document={document} />
 
               {document.document_file &&
                 isImageDocument(document.document_file) && (
-                  <div className="rounded-3xl border border-[#E8E8E8] bg-[#FBFBFB] p-4">
-                    <img
-                      src={document.document_file}
-                      alt={getCaseDocumentName(document)}
-                      className="mx-auto max-h-100 max-w-full rounded-lg object-contain"
-                    />
-                  </div>
+                  <DocumentImage document={document} />
                 )}
 
               {document.document_file &&
@@ -195,23 +85,13 @@ export const CaseDocumentDetailsDialog: React.FC<
                   <div className="rounded-3xl border border-[#E8E8E8] bg-[#FBFBFB] p-4">
                     <iframe
                       src={`${document.document_file}#toolbar=0`}
-                      title={getCaseDocumentName(document)}
+                      title={document.document_name || "مستند PDF"}
                       className="h-125 w-full rounded-lg"
-                      frameBorder="0"
                     />
                   </div>
                 )}
 
-              <div className="border-t border-gray-100 pt-6">
-                <span className="border-r-2 border-[#CBA462] pr-3 text-sm font-medium text-[#808080]">
-                  تفاصيل المستند
-                </span>
-                <div className="mt-3 min-h-30 rounded-3xl border border-[#E8E8E8] bg-[#FBFBFB] p-5">
-                  <p className="leading-relaxed text-[#1A1A1A]">
-                    {document.document_details || "لا توجد تفاصيل إضافية"}
-                  </p>
-                </div>
-              </div>
+              <DocumentDetails document={document} />
             </div>
           )}
         </div>

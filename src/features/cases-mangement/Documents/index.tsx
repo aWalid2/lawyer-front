@@ -1,17 +1,17 @@
-import React from "react";
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { Pagination } from "@/shared/components/Pagination";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { HeaderCaseDocuments } from "./components/HeaderCaseDocuments";
-import { CaseDocumentActions } from "./components/CaseDocumentActions";
-import type { CaseDocument } from "./types/CaseDocumentT";
-import { useParams } from "react-router-dom";
-import { CreateCaseDocumentDialog } from "./components/CreateCaseDocumentDialog";
-import { useGetCaseDocuments } from "./api/hooks/useGetCaseDocuments";
-import { getDocumentFileType } from "@/shared/utils/document";
-import { extractCaseDocuments, getCaseDocumentName } from "./utils";
+import { Pagination } from "@/shared/components/Pagination";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { getDocumentFileType } from "@/shared/utils/document";
+import React from "react";
+import { useParams } from "react-router-dom";
+import { useGetCaseDocuments } from "./api/hooks/useGetCaseDocuments";
+import { CaseDocumentActions } from "./components/CaseDocumentActions";
+import { CreateCaseDocumentDialog } from "./components/CreateCaseDocumentDialog";
+import { HeaderCaseDocuments } from "./components/HeaderCaseDocuments";
+import type { CaseDocument } from "./types/CaseDocumentT";
+import { extractCaseDocuments } from "./utils";
 
 export const CaseDocuments: React.FC = () => {
   const { id: caseId } = useParams<{ id: string }>();
@@ -67,7 +67,7 @@ export const CaseDocuments: React.FC = () => {
     },
     {
       header: "اسم المستند",
-      accessor: (item) => getCaseDocumentName(item),
+      accessor: (item) => item.document_name || "-",
       className: "text-right",
     },
     {

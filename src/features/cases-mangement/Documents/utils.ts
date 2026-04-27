@@ -29,6 +29,7 @@ export const extractCaseDocument = (response: unknown): CaseDocument | null => {
   return response as CaseDocument;
 };
 
-export const getCaseDocumentName = (document: CaseDocument): string => {
-  return document.document_name || "-";
-};
+
+
+
+
