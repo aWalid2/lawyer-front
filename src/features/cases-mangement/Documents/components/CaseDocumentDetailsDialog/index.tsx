@@ -5,8 +5,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { ButtonViewTable } from "@/shared/components/ButtonViewTable";
 import { Error } from "@/shared/components/Error";
-import { ViewIcon } from "@/shared/icons/View";
+import LoadingPage from "@/shared/components/LoadingPage";
 import { isImageDocument, isPdfDocument } from "@/shared/utils/document";
 import React from "react";
 import { useGetCaseDocument } from "../../api/hooks/useGetCaseDocument";
@@ -16,7 +17,6 @@ import { DocumentImage } from "./components/DocumentImage";
 import { DocumentInfo } from "./components/DocumentInfo";
 import { FileIconDocument } from "./components/FileIconDocument";
 import FilesButton from "./components/FilesButton";
-import LoadingPage from "@/shared/components/LoadingPage";
 
 interface CaseDocumentDetailsDialogProps {
   documentId: number;
@@ -41,19 +41,13 @@ export const CaseDocumentDetailsDialog: React.FC<
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button
-          type="button"
-          title="عرض التفاصيل"
-          className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F0F6FF]"
-        >
-          <ViewIcon className="size-4 text-[#63A4F9]" />
-        </button>
+        <ButtonViewTable />
       </DialogTrigger>
 
-      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-[24px] border-none p-0 text-right sm:max-w-225">
+      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-[24px] border-none p-0 text-start sm:max-w-225">
         <div className="p-6 md:p-8">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-[#153A4D]">
+            <DialogTitle className="text-start text-2xl font-bold text-[#153A4D]">
               تفاصيل المستند
             </DialogTitle>
           </DialogHeader>

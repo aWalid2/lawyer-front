@@ -1,5 +1,4 @@
 import React from "react";
-import { getCaseDocumentName } from "../../../utils";
 
 interface DocumentImageProps {
   document: {

@@ -16,7 +16,7 @@ import { extractCaseDocuments } from "./utils";
 export const CaseDocuments: React.FC = () => {
   const { id: caseId } = useParams<{ id: string }>();
   const [currentPage, setCurrentPage] = React.useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 15;
 
   const {
     data: documentsResponse,
