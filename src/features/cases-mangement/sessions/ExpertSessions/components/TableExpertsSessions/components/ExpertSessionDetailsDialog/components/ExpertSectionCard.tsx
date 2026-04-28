@@ -1,3 +1,4 @@
+import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 import React from "react";
 
 interface ExpertSectionCardProps {
@@ -12,7 +13,7 @@ export const ExpertSectionCard: React.FC<ExpertSectionCardProps> = ({
   action,
 }) => {
   return (
-    <div className="rounded-xl border border-gray-300 p-6">
+    <CustomLayoutBorder>
       <div className="flex items-center justify-between pb-6">
         <h2 className="font-cairo text-secondary text-xl font-semibold">
           {title}
@@ -20,6 +21,6 @@ export const ExpertSectionCard: React.FC<ExpertSectionCardProps> = ({
         {action}
       </div>
       {children}
-    </div>
+    </CustomLayoutBorder>
   );
 };

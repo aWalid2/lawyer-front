@@ -1,8 +1,9 @@
 import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
 import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
+import { ButtonViewTable } from "@/shared/components/ButtonViewTable";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
-import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
 import React from "react";
+import { ExpertSessionDetailsDialog } from "./ExpertSessionDetailsDialog";
 
 interface ExpertItem {
   id: string | number;
@@ -19,17 +20,31 @@ export const ExpertsActions: React.FC<ExpertsActionsProps> = ({
   onEdit,
   onDelete,
 }) => {
-  return (
-    <div className="flex items-center justify-center gap-2">
-      <ViewLinkTablePageDetails
-        to={`/dashboard/case-management/sessions/expert-sessions/${expertItem?.id}`}
-      />
-      <ButtonUpdateTable onClick={onEdit} />
+  const [isViewOpen, setIsViewOpen] = React.useState(false);
 
-      <ConfirmDeleteDialog
-        trigger={<ButtonDeleteTable />}
-        onConfirm={onDelete!}
+  return (
+    <>
+      <div className="flex items-center justify-center gap-2">
+        <ButtonViewTable
+          onClick={(event) => {
+            event.stopPropagation();
+            setIsViewOpen(true);
+          }}
+        />
+        <ButtonUpdateTable onClick={onEdit} />
+
+        <ConfirmDeleteDialog
+          trigger={<ButtonDeleteTable />}
+          onConfirm={onDelete!}
+        />
+      </div>
+
+      <ExpertSessionDetailsDialog
+        sessionId={expertItem.id}
+        open={isViewOpen}
+        onOpenChange={setIsViewOpen}
+        onEdit={onEdit}
       />
-    </div>
+    </>
   );
 };

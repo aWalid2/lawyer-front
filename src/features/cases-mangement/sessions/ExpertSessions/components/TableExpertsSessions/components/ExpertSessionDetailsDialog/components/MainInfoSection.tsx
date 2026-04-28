@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { ExpertSessionResponse } from "../../../types/ExpertSessionApiTypes";
+import type { ExpertSessionResponse } from "@/features/cases-mangement/sessions/ExpertSessions/types/ExpertSessionApiTypes";
 import { ExpertSectionCard } from "./ExpertSectionCard";
 import { ExpertStatusBadge } from "./ExpertStatusBadge";
 import { InputBox } from "@/shared/components/InputBox";

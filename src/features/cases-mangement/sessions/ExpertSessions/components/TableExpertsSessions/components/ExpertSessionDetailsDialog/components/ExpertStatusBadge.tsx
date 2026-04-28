@@ -1,6 +1,6 @@
 import React from "react";
-import type { ExpertSessionStatus } from "../../../types/ExpertSessionApiTypes";
-import { STATUS_LABEL } from "../../../types/ExpertSessionApiTypes";
+import type { ExpertSessionStatus } from "../../../../../types/ExpertSessionApiTypes";
+import { STATUS_LABEL } from "../../../../../types/ExpertSessionApiTypes";
 
 const getStatusStyle = (status: ExpertSessionStatus): string => {
   switch (status) {

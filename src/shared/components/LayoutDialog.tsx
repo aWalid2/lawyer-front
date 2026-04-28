@@ -18,7 +18,7 @@ interface LayoutDialogProps {
   onOpenChange?: (open: boolean) => void;
   showCloseButton?: boolean;
   size?: "sm" | "md" | "lg" | "xl" | "2xl" | "details";
-  padding?: "default" | "wide";
+  padding?: "default" | "sm" | "wide";
   align?: "right" | "start";
 }
 
@@ -44,6 +44,7 @@ export const LayoutDialog: React.FC<LayoutDialogProps> = ({
 
   const paddingClasses = {
     default: "px-6 py-6 sm:px-12 sm:py-10",
+    sm: "px-6 py-6 sm:px-8 sm:py-6",
     wide: "px-6 py-6 sm:px-20 sm:py-10",
   };
 
