@@ -12,6 +12,7 @@ import { CreateCaseDocumentDialog } from "./components/CreateCaseDocumentDialog"
 import { HeaderCaseDocuments } from "./components/HeaderCaseDocuments";
 import type { CaseDocument } from "./types/CaseDocumentT";
 import { extractCaseDocuments } from "./utils";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 export const CaseDocuments: React.FC = () => {
   const { id: caseId } = useParams<{ id: string }>();
@@ -106,18 +107,15 @@ export const CaseDocuments: React.FC = () => {
           />
         }
       />
-
-      <DataTable
-        rowKey={"id"}
-        data={currentData}
-        columns={columns}
-        rowIdField="id"
-      />
-
-      {documents.length === 0 && (
-        <div className="rounded-xl border border-dashed border-[#E5E7EB] p-10 text-center text-[#808080]">
-          لا توجد مستندات مضافة لهذه القضية
-        </div>
+      {documents.length === 0 ? (
+        <EmptyTable message="لا توجد مستندات مضافة لهذه القضية بعد." />
+      ) : (
+        <DataTable
+          rowKey={"id"}
+          data={currentData}
+          columns={columns}
+          rowIdField="id"
+        />
       )}
 
       {totalPages > 1 && (
