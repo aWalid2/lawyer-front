@@ -1,5 +1,4 @@
 import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
-import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
 import { ButtonViewTable } from "@/shared/components/ButtonViewTable";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import React from "react";
@@ -31,7 +30,6 @@ export const ExpertsActions: React.FC<ExpertsActionsProps> = ({
             setIsViewOpen(true);
           }}
         />
-        <ButtonUpdateTable onClick={onEdit} />
 
         <ConfirmDeleteDialog
           trigger={<ButtonDeleteTable />}
