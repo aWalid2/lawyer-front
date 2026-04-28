@@ -1,11 +1,8 @@
-import { EditIcon } from "@/shared/icons/Edit";
+import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
+import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
+import { InputBox } from "@/shared/components/InputBox";
 import { useState } from "react";
 import { EditModelExpenses } from "./components/EditModelExpenses";
-import { InputBox } from "@/shared/components/InputBox";
-
-const CLASSES = {
-  formSection: "border border-gray-300 p-4 rounded-xl mb-6",
-};
 
 export const ExpensesCaseFeature = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,20 +43,11 @@ export const ExpensesCaseFeature = () => {
   };
 
   return (
-    <div className={CLASSES.formSection}>
+    <CustomLayoutBorder>
       <div className="flex items-center justify-between pb-8">
         <h1 className="font-cairo text-xl">بيانات المصاريف</h1>
 
-        <button
-          type="button"
-          onClick={handleEditClick}
-          className="flex h-[50px] w-[114px] shrink-0 items-center justify-center gap-2 rounded-md bg-[#F1F1F3] px-2 transition-colors duration-200 hover:bg-[#E1E1E6] sm:w-auto sm:px-4"
-        >
-          <EditIcon className="size-3" />
-          <span className="text-[16px] font-medium whitespace-nowrap">
-            تعديل
-          </span>
-        </button>
+        <ButtonUpdateInfo onEdit={handleEditClick} />
       </div>
 
       <div>
@@ -89,6 +77,6 @@ export const ExpensesCaseFeature = () => {
           onSave={handleSaveChanges}
         />
       </div>
-    </div>
+    </CustomLayoutBorder>
   );
 };

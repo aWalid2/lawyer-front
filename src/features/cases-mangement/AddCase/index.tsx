@@ -22,6 +22,7 @@ import { initialValues } from "./hooks/initialValues";
 import { Active } from "./components/Active";
 import { Other } from "./components/Other";
 import { CASE_SITUATION_OPTIONS } from "@/shared/constants/caseOptions";
+import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 
 const FormCase = () => {
   const {
@@ -71,9 +72,9 @@ const FormCase = () => {
         }, [submitCount]);
 
         return (
-          <div>
+          <div className="space-y-6">
             <HeaderTitle title="إضافة قضية جديدة" />
-            <div className="mt-6 rounded-xl border border-gray-300 p-4">
+            <CustomLayoutBorder>
               <Form>
                 <div className="mb-4">
                   <SelectForm
@@ -132,7 +133,7 @@ const FormCase = () => {
                   إضافة قضية
                 </SubmitButton>
               </Form>
-            </div>
+            </CustomLayoutBorder>
           </div>
         );
       }}
