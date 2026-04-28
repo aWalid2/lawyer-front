@@ -2,7 +2,7 @@ import React from "react";
 
 interface InputBoxProps {
   label: string;
-  text: string;
+  text: string | number;
   className?: string;
   icon?: React.ReactNode;
 }

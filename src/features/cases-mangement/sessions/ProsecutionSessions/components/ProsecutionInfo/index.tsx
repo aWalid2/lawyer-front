@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import type { FormValues } from "../../types/typseProsecution";
 import ProsecutionInfoModel from "./component/ProsecutionInfoModel";
@@ -7,6 +6,7 @@ import { BodyProsecutionInf } from "./component/BodyProsecutionInf";
 import { useGetProsecutionSessionInfo } from "../../api/hooks/useGetProsecutionSessionInfo";
 import { useParams } from "react-router-dom";
 import { EmptyTable } from "@/shared/components/EmptyTable";
+import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 
 const ProsecutionInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,9 +18,9 @@ const ProsecutionInfo = () => {
   const initialValues: FormValues = {
     case_number_at_Presecution: data?.case_number_at_Presecution,
     prosecution_id: data?.prosecution_id,
-    case_regestration_date_at_presecution: data?.case_regestration_date_at_presecution,
+    case_regestration_date_at_presecution:
+      data?.case_regestration_date_at_presecution,
     Prosecutor_Name: data?.Prosecutor_Name,
-
   };
 
   const handleAddClick = () => {
@@ -51,26 +51,31 @@ const ProsecutionInfo = () => {
     prosecution_id: 0,
     case_regestration_date_at_presecution: "",
     Prosecutor_Name: "",
-
   };
 
   return (
-    <>
-      <div className="border border-gray-300 p-6 rounded-xl mb-6">
-        <HeaderProsecutionInfo handleAddClick={handleAddClick} handleEditClick={handleEditClick} hasData={!!data} />
+    <CustomLayoutBorder>
+      <HeaderProsecutionInfo
+        handleAddClick={handleAddClick}
+        handleEditClick={handleEditClick}
+        hasData={!!data}
+      />
 
-        {data ? <BodyProsecutionInf data={data} /> : <EmptyTable message="لا توجد بيانات" />}
+      {data ? (
+        <BodyProsecutionInf data={data} />
+      ) : (
+        <EmptyTable message="لا توجد بيانات" />
+      )}
 
-        {isModalOpen && (
-          <ProsecutionInfoModel
-            mode={modalMode}
-            initialValues={modalMode === "add" ? emptyValues : initialValues}
-            onClose={handleCloseModal}
-            onSave={handleSaveChanges}
-          />
-        )}
-      </div>
-    </>
+      {isModalOpen && (
+        <ProsecutionInfoModel
+          mode={modalMode}
+          initialValues={modalMode === "add" ? emptyValues : initialValues}
+          onClose={handleCloseModal}
+          onSave={handleSaveChanges}
+        />
+      )}
+    </CustomLayoutBorder>
   );
 };
 

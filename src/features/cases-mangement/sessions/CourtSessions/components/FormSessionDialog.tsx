@@ -10,15 +10,14 @@ import {
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
 import { EditIcon } from "@/shared/icons/Edit";
-import { InputForm } from "./components/InputForm";
-import type { FirstDegreeFormValues } from "./components/typesCaseInfo";
+
+import type { FirstDegreeFormValues } from "./typesCaseInfo";
 import { Button } from "@/components/ui/button";
 import { useGetCourts } from "@/shared/api/hooks/useGetCourts";
 import { SelectForm } from "@/shared/components/SelectForm";
 
-
 import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
-
+import { InputForm } from "@/shared/components/InputForm";
 
 export const FormSessionDialog: React.FC<{
   title: string;
@@ -30,37 +29,41 @@ export const FormSessionDialog: React.FC<{
   const { data: courts } = useGetCourts(undefined, undefined, undefined, open);
   const { data: lawyersResponse } = useFetchLawyers(open);
 
-  const courtsOptions = courts?.data?.map((court: any) => ({
-    value: String(court.id),
-    label: court.name,
-  })) || [];
+  const courtsOptions =
+    courts?.data?.map((court: any) => ({
+      value: String(court.id),
+      label: court.name,
+    })) || [];
 
-  const lawyers = Array.isArray(lawyersResponse) ? lawyersResponse : (lawyersResponse as any)?.data || [];
-  const lawyersOptions = lawyers.map((lawyer: any) => ({
-    value: String(lawyer?.user_id),
-    label: lawyer?.user?.first_name + " " + (lawyer?.user?.last_name || ""),
-  })) || [];
-
+  const lawyers = Array.isArray(lawyersResponse)
+    ? lawyersResponse
+    : (lawyersResponse as any)?.data || [];
+  const lawyersOptions =
+    lawyers.map((lawyer: any) => ({
+      value: String(lawyer?.user_id),
+      label: lawyer?.user?.first_name + " " + (lawyer?.user?.last_name || ""),
+    })) || [];
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className='bg-[#f1f1f3] text-[#3D3C48] text-base h-12.5 font-semibold hover:text-white'>
-          {buttonTitle === "إضافة" ? null : <EditIcon className="w-4 h-4" />} {buttonTitle}
+        <Button className="h-12.5 bg-[#f1f1f3] text-base font-semibold text-[#3D3C48] hover:text-white">
+          {buttonTitle === "إضافة" ? null : <EditIcon className="h-4 w-4" />}{" "}
+          {buttonTitle}
         </Button>
       </DialogTrigger>
       <DialogContent
-        className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-main rounded-main border-none"
+        className="sm:rounded-main rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-[772px] sm:px-20 sm:py-10"
         dir="rtl"
         showCloseButton={false}
       >
         <DialogClose asChild>
-          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all">
-            <XIcon size={23} className="text-gray-500 " />
+          <button className="rounded-main absolute inset-e-6 top-8 flex h-12.5 items-center gap-2 px-6 py-2.5 font-semibold text-gray-500 transition-all sm:inset-e-15">
+            <XIcon size={23} className="text-gray-500" />
           </button>
         </DialogClose>
-        <DialogHeader className="mb-2 mt-15">
-          <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
+        <DialogHeader className="mt-15 mb-2">
+          <DialogTitle className="text-center text-2xl font-bold text-[#153A4D]">
             {title}
           </DialogTitle>
         </DialogHeader>
@@ -71,12 +74,10 @@ export const FormSessionDialog: React.FC<{
             onSubmit(values);
             setOpen(false);
           }}
-
         >
-
-          <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2" >
+          <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
             <div
-              className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4"
+              className="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2"
               dir="rtl"
             >
               <SelectForm
@@ -107,11 +108,7 @@ export const FormSessionDialog: React.FC<{
                 type="text"
               />
 
-              <InputForm
-                name="district_type"
-                label="نوع الدائرة"
-                type="text"
-              />
+              <InputForm name="district_type" label="نوع الدائرة" type="text" />
               <InputForm
                 name="judge_name"
                 label="اسم قاضي الدائرة"
@@ -146,7 +143,6 @@ export const FormSessionDialog: React.FC<{
                 type="time"
               />
 
-
               <InputForm
                 name="next_session_date"
                 label="تاريخ ووقت الجلسة القادمة"
@@ -157,16 +153,14 @@ export const FormSessionDialog: React.FC<{
                 label="وقت الجلسة القادمة"
                 type="time"
               />
-
             </div>
             <button
               type="submit"
-              className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity"
+              className="bg-primary-gradient rounded-main mt-4 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90"
             >
               حفظ التغييرات
             </button>
           </Form>
-
         </Formik>
       </DialogContent>
     </Dialog>
