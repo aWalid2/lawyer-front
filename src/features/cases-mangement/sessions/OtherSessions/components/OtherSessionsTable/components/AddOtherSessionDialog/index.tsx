@@ -1,12 +1,6 @@
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
+import { LayoutDialog } from "@/shared/components/LayoutDialog";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { XIcon } from "lucide-react";
 import React from "react";
 import { useGetOtherSession } from "../../../../api/hooks/useGetOtherSession";
 import {
@@ -16,7 +10,6 @@ import {
   toOtherSessionFormValues,
 } from "../../../../types/typesOther";
 import { AddOtherSessionDialogForm } from "./components/AddOtherSessionDialogForm";
-import { AddOtherSessionDialogHeader } from "./components/AddOtherSessionDialogHeader";
 
 interface LawyerOptionSource {
   user_id?: number | string;
@@ -82,37 +75,28 @@ export const AddOtherSessionDialog: React.FC<AddOtherSessionDialogProps> = ({
   const isEditMode = !!(sessionId || initialValues?.id);
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={handleOpenChange}>
-      {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
-      <DialogContent
-        className="flex max-h-[90vh] flex-col overflow-hidden rounded-xl border-none px-6 py-6 sm:max-w-193 sm:rounded-[24px] sm:px-20 sm:py-10"
-        dir="rtl"
-        showCloseButton={false}
-      >
-        <DialogClose asChild>
-          <button className="absolute inset-e-6 top-8 flex h-12.5 items-center gap-2 rounded-xl px-6 py-2.5 font-semibold text-gray-500 transition-all sm:inset-e-15">
-            <XIcon size={23} className="text-gray-500" />
-          </button>
-        </DialogClose>
-        <AddOtherSessionDialogHeader isEditMode={isEditMode} />
-
-        {showLoadingState ? (
-          <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pb-2 pl-2">
-            <LoadingPage />
-          </div>
-        ) : (
-          <AddOtherSessionDialogForm
-            defaultValues={defaultValues}
-            isEditMode={isEditMode}
-            isPending={isPending}
-            lawyersOptions={lawyersOptions}
-            onSubmit={async (values) => {
-              await onSave(values, resolvedSession?.id);
-              handleOpenChange(false);
-            }}
-          />
-        )}
-      </DialogContent>
-    </Dialog>
+    <LayoutDialog
+      title={isEditMode ? "تعديل الجلسة الإدارية" : "إضافة جلسة إدارية"}
+      trigger={trigger}
+      open={dialogOpen}
+      onOpenChange={handleOpenChange}
+      size="xl"
+      padding="sm"
+    >
+      {showLoadingState ? (
+        <LoadingPage />
+      ) : (
+        <AddOtherSessionDialogForm
+          defaultValues={defaultValues}
+          isEditMode={isEditMode}
+          isPending={isPending}
+          lawyersOptions={lawyersOptions}
+          onSubmit={async (values) => {
+            await onSave(values, resolvedSession?.id);
+            handleOpenChange(false);
+          }}
+        />
+      )}
+    </LayoutDialog>
   );
 };
