@@ -15,6 +15,7 @@ import { Pagination } from "@/shared/components/Pagination";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { truncateWords } from "@/shared/utils/truncate";
 import { useExpertSessionsTable } from "./hooks/useExpertSessionsTable";
+import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 
 const StatusCell: React.FC<{ status: ExpertSessionStatus }> = ({ status }) => {
   const getStatusStyle = (s: ExpertSessionStatus): string => {
@@ -112,7 +113,7 @@ export const TableExpertsSessions: React.FC = () => {
   }
   if (isPending) return <LoadingPage />;
   return (
-    <div className="mt-6 rounded-2xl border border-[#eeeeee] bg-white p-4 md:p-6">
+    <CustomLayoutBorder>
       <HeaderExpertsSessions handleOpenModal={handleOpenModal} />
 
       {indexedExpertsData?.length === 0 ? (
@@ -135,6 +136,6 @@ export const TableExpertsSessions: React.FC = () => {
           initialValues={editingExpert ?? undefined}
         />
       )}
-    </div>
+    </CustomLayoutBorder>
   );
 };

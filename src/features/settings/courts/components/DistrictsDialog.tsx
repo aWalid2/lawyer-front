@@ -26,7 +26,6 @@ interface DistrictFormDialogProps {
   onSave: (values: { name: string }) => void;
   trigger: React.ReactNode;
   isPending?: boolean;
-
 }
 
 const DistrictFormDialog: React.FC<DistrictFormDialogProps> = ({
@@ -38,11 +37,11 @@ const DistrictFormDialog: React.FC<DistrictFormDialogProps> = ({
   const [open, setOpen] = useState(false);
   return (
     <LayoutDialog
-
-      open={open} onOpenChange={setOpen}
+      open={open}
+      onOpenChange={setOpen}
       title={district ? "تعديل دائرة" : "أضافة دائرة جديدة"}
       trigger={trigger}
-      className="sm:max-w-[500px]"
+      size="sm"
     >
       <Formik
         initialValues={{ name: district?.name || "" }}
@@ -50,8 +49,8 @@ const DistrictFormDialog: React.FC<DistrictFormDialogProps> = ({
           name: Yup.string().required("اسم الدائرة مطلوب"),
         })}
         onSubmit={(values) => {
-          onSave(values)
-          setOpen(false)
+          onSave(values);
+          setOpen(false);
         }}
         enableReinitialize
       >
@@ -66,9 +65,13 @@ const DistrictFormDialog: React.FC<DistrictFormDialogProps> = ({
             <button
               type="submit"
               disabled={isPending}
-              className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity h-12.5 disabled:opacity-60"
+              className="bg-primary-gradient rounded-main mt-4 h-12.5 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:opacity-60"
             >
-              {isPending ? "جاري الحفظ..." : district ? "تعديل دائرة" : "إضافة دائرة"}
+              {isPending
+                ? "جاري الحفظ..."
+                : district
+                  ? "تعديل دائرة"
+                  : "إضافة دائرة"}
             </button>
           </Form>
         )}
@@ -90,13 +93,13 @@ export const DistrictsDialog: React.FC<DistrictsDialogProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
 
-
   // Only fetch when the dialog is actually open
-  const { data: districts, isPending, isError } = useGetCircles(
-    Number(court.id),
-    isOpen
-  );
-  console.log(districts)
+  const {
+    data: districts,
+    isPending,
+    isError,
+  } = useGetCircles(Number(court.id), isOpen);
+  console.log(districts);
   const { mutate: createCircle, isPending: isCreating } = useCreateCircle();
   const { mutate: updateCircle, isPending: isUpdating } = useUpdateCircle();
   const { mutate: deleteCircle, isPending: isDeleting } = useDeleteCircle();
@@ -117,12 +120,15 @@ export const DistrictsDialog: React.FC<DistrictsDialogProps> = ({
     {
       header: "الإجراءات",
       accessor: (district: court_circle) => (
-        <div className="flex items-center gap-2 justify-center">
+        <div className="flex items-center justify-center gap-2">
           <DistrictFormDialog
             district={district}
             isPending={isUpdating}
             onSave={(val) =>
-              updateCircle({ id: Number(district.id), data: { name: val.name } })
+              updateCircle({
+                id: Number(district.id),
+                data: { name: val.name },
+              })
             }
             trigger={<TableEditButton />}
           />
@@ -143,10 +149,10 @@ export const DistrictsDialog: React.FC<DistrictsDialogProps> = ({
       trigger={trigger}
       open={isOpen}
       onOpenChange={setIsOpen}
-      className="sm:max-w-[950px]"
+      size="2xl"
     >
       <div className="flex flex-col gap-6">
-        <div className="flex justify-end h-10 px-6 rounded-lg text-sm">
+        <div className="flex h-10 justify-end rounded-lg px-6 text-sm">
           <DistrictFormDialog
             isPending={isCreating}
             onSave={(val) =>
@@ -157,7 +163,7 @@ export const DistrictsDialog: React.FC<DistrictsDialogProps> = ({
                 label="دائرة جديدة"
                 icon={<Plus size={16} />}
                 variant="gradient"
-                className="h-10 px-8 rounded-lg text-sm"
+                className="h-10 rounded-lg px-8 text-sm"
               />
             }
           />

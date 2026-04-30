@@ -22,23 +22,27 @@ const validationSchema = Yup.object().shape({
   address: Yup.string().required("العنوان مطلوب"),
 });
 
-export const PoliceStationFormDialog: React.FC<PoliceStationFormDialogProps> = ({
-  station,
-  trigger,
-  open,
-  onOpenChange,
-  onSave,
-}) => {
+export const PoliceStationFormDialog: React.FC<
+  PoliceStationFormDialogProps
+> = ({ station, trigger, open, onOpenChange, onSave }) => {
   const isEditMode = !!station;
-  
+
   const initialValues = {
     name: station?.name || "",
     address: station?.address || "",
   };
-  
-  const { mutate: addPoliceStation, isPending: isAdding, isError: isAddError } = useAddPoliceStation();
-  const { mutate: updatePoliceStation, isPending: isUpdating, isError: isUpdateError } = useUpdatePoliceStation();
-  
+
+  const {
+    mutate: addPoliceStation,
+    isPending: isAdding,
+    isError: isAddError,
+  } = useAddPoliceStation();
+  const {
+    mutate: updatePoliceStation,
+    isPending: isUpdating,
+    isError: isUpdateError,
+  } = useUpdatePoliceStation();
+
   const isPending = isEditMode ? isUpdating : isAdding;
   const isError = isEditMode ? isUpdateError : isAddError;
 
@@ -50,7 +54,7 @@ export const PoliceStationFormDialog: React.FC<PoliceStationFormDialogProps> = (
           onSuccess: () => {
             if (onSave) onSave();
           },
-        }
+        },
       );
     } else {
       addPoliceStation(values, {
@@ -62,7 +66,8 @@ export const PoliceStationFormDialog: React.FC<PoliceStationFormDialogProps> = (
   };
 
   if (isPending) return <Loading />;
-  if (isError) return <Error message="فشل في حفظ المخفر يرجى المحاولة لاحقاً" />;
+  if (isError)
+    return <Error message="فشل في حفظ المخفر يرجى المحاولة لاحقاً" />;
 
   return (
     <LayoutDialog
@@ -70,7 +75,7 @@ export const PoliceStationFormDialog: React.FC<PoliceStationFormDialogProps> = (
       trigger={trigger}
       open={open}
       onOpenChange={onOpenChange}
-      className="sm:max-w-[650px]"
+      size="md"
     >
       <Formik
         initialValues={initialValues}
@@ -95,9 +100,13 @@ export const PoliceStationFormDialog: React.FC<PoliceStationFormDialogProps> = (
             <button
               type="submit"
               disabled={isPending}
-              className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity h-12.5 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-primary-gradient rounded-main mt-4 h-12.5 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isPending ? "جاري الحفظ..." : (isEditMode ? "تعديل مخفر" : "إضافة مخفر جديد")}
+              {isPending
+                ? "جاري الحفظ..."
+                : isEditMode
+                  ? "تعديل مخفر"
+                  : "إضافة مخفر جديد"}
             </button>
           </Form>
         )}

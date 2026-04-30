@@ -1,11 +1,13 @@
 import React from "react";
-import { InputBox } from "./components/InputBox";
+import { InputBox } from "@/shared/components/InputBox";
 import type { FormCaseDetailsProps } from "./components/typesCaseInfo";
 
-export const CaseDetailsInfo: React.FC<FormCaseDetailsProps> = ({ caseData }) => {
+export const CaseDetailsInfo: React.FC<FormCaseDetailsProps> = ({
+  caseData,
+}) => {
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+      <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
         <InputBox label="الرقم الآلي للقضية" text={caseData?.autoNumber} />
         <InputBox label="رقم الشكوى" text={caseData?.complaintNumber} />
 
@@ -33,11 +35,11 @@ export const CaseDetailsInfo: React.FC<FormCaseDetailsProps> = ({ caseData }) =>
           text={caseData?.receiptDate}
         />
 
-        <div className="md:col-span-2 mt-2 flex flex-col w-full">
-          <label className="block mb-2 text-sm font-medium text-secondary text-right pr-2">
+        <div className="mt-2 flex w-full flex-col md:col-span-2">
+          <label className="text-secondary mb-2 block pr-2 text-right text-sm font-medium">
             ملاحظات
           </label>
-          <div className="w-full border border-[#E8E8E8] rounded-xl p-4 bg-[#FBFBFB] min-h-[50px] text-secondary text-sm text-right pr-6 disabled:opacity-70">
+          <div className="text-secondary min-h-[50px] w-full rounded-xl border border-[#E8E8E8] bg-[#FBFBFB] p-4 pr-6 text-right text-sm disabled:opacity-70">
             {caseData?.notes}
           </div>
         </div>

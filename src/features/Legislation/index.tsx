@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react'
 import { DataTable, type Column } from '@/shared/components/DataTable'
 import { LegislationActions } from './components/LegislationActions';
 import AddLegislationModal from './components/AddLegislationModal';
-import { HeaderLegislations } from './components/HeaderLegislations'; // استيراد الهيدر الجديد
+import { HeaderLegislations } from './components/HeaderLegislations';
 import { Pagination } from '@/shared/components/Pagination';
 
 interface LegislationTableProps {
@@ -227,11 +227,7 @@ export const LegislationTable: React.FC<LegislationTableProps> = () => {
     };
 
     const handleDelete = (item: LegislationRelatedT) => {
-        if (window.confirm("هل أنت متأكد من حذف هذا التشريع؟")) {
-            const filtered = legislationsData.filter(leg => leg.id !== item.id);
-            setLegislationsData(filtered);
-            console.log("تم حذف التشريع:", item);
-        }
+        console.log("delete", item)
     };
 
     const columns: Column<any>[] = [

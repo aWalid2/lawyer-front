@@ -35,17 +35,17 @@ export const DataTable = <T,>({
     rowIdField,
 }: DataTableProps<T>) => {
     return (
-        <div className="bg-white overflow-hidden   border-b border-[#F1F1F4] relative">
+        <div className="bg-table-bg overflow-hidden border-b border-border relative">
             <Table className="border-collapse ring-0 outline-none">
-                <TableHeader className="bg-[#FCFCFC] sticky top-0 z-20">
-                    <TableRow className="border-b border-[#F1F1F4] hover:bg-transparent">
+                <TableHeader className="bg-[#FCFCFC] dark:bg-primary/23 sticky top-0 z-20">
+                    <TableRow className="border-b border-border hover:bg-transparent">
                         {columns.map((column, index) => {
                             if (column.hideHeader) return null;
                             return (
                                 <TableHead
                                     key={index}
                                     colSpan={column.colSpan}
-                                    className={`p-2 text-center text-sm font-semibold text-[#4B5675]  border-r border-[#F1F1F4] h-[37px] ${column.headerClassName || ""}`}
+                                    className={`p-2 text-center text-sm font-semibold text-muted-foreground border-r border-border h-[37px] ${column.headerClassName || ""}`}
                                 >
                                     {column.header}
                                 </TableHead>
@@ -62,14 +62,14 @@ export const DataTable = <T,>({
                         return (
                             <TableRow
                                 key={key}
-                                className={`cursor-pointer border-b border-[#F1F1F4] transition-colors last:border-b-0 ${isSelected ? "bg-blue-50" : "hover:bg-gray-50 bg-white"
+                                className={`cursor-pointer border-b border-border transition-colors last:border-b-0 ${isSelected ? "bg-primary/10" : "hover:bg-table-hover bg-table-bg"
                                     }`}
                                 onClick={() => onRowClick?.(item)}
                             >
                                 {columns.map((column, colIndex) => (
                                     <TableCell
                                         key={colIndex}
-                                        className={`p-3 h-[60px] text-center text-sm text-gray-600 border-r border-[#F1F1F4] ${column.className || ""}`}
+                                        className={`p-3 h-[60px] text-center text-sm text-card-foreground/80 border-r border-border ${column.className || ""}`}
                                     >
                                         {typeof column.accessor === "function"
                                             ? column.accessor(item, index)

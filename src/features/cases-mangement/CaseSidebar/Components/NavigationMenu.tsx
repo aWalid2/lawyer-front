@@ -19,38 +19,38 @@ export const NavigationMenu = () => {
   const navItems: NavItem[] = [
     {
       label: "معلومات القضية",
-      icon: <CaseMangementIcon className="w-5 h-5" />,
+      icon: <CaseMangementIcon className="h-5 w-5" />,
       to: `/dashboard/case-management/${id}`,
       end: true,
     },
     {
       label: "إدارة الجلسات",
-      icon: <ManagmentsIcon className="w-5 h-5" />,
+      icon: <ManagmentsIcon className="h-5 w-5" />,
       to: `/dashboard/case-management/${id}/sessions`,
     },
     {
       label: "القضايا المرتبطة",
-      icon: <ManagmentsIcon className="w-5 h-5" />,
+      icon: <ManagmentsIcon className="h-5 w-5" />,
       to: `/dashboard/case-management/${id}/related`,
     },
     {
       label: "المستندات",
-      icon: <ManagmentsIcon className="w-5 h-5" />,
+      icon: <ManagmentsIcon className="h-5 w-5" />,
       to: `/dashboard/case-management/${id}/documents`,
     },
     {
       label: "المصاريف",
-      icon: <ManagmentsIcon className="w-5 h-5" />,
+      icon: <ManagmentsIcon className="h-5 w-5" />,
       to: `/dashboard/case-management/${id}/expenses`,
     },
     {
       label: "إجراءات",
-      icon: <BarChartIcon className="w-5 h-5" />,
+      icon: <BarChartIcon className="h-5 w-5" />,
       to: `/dashboard/case-management/${id}/procedures`,
     },
     {
       label: "الموظفين",
-      icon: <ManagmentsIcon className="w-5 h-5" />,
+      icon: <ManagmentsIcon className="h-5 w-5" />,
       to: `/dashboard/case-management/${id}/employees`,
     },
   ];
@@ -63,31 +63,36 @@ export const NavigationMenu = () => {
           to={item.to}
           end={item.end}
           className={({ isActive }) =>
-            `flex items-center justify-between p-3.5 rounded-[12px] transition-all duration-300 w-full group h-13.5 ${isActive
-              ? "bg-primary-gradient text-white shadow-[0_8px_16px_rgba(203,164,98,0.25)]"
-              : "text-[#727272] hover:bg-gray-50 hover:text-secondary"
+            `group before:bg-primary-gradient relative isolate flex h-13.5 w-full items-center justify-between overflow-hidden rounded-[12px] p-3.5 transition-colors duration-300 before:absolute before:inset-0 before:-z-10 before:opacity-0 before:transition-opacity before:duration-300 ${
+              isActive
+                ? "text-white before:opacity-100"
+                : "text-[#727272] hover:text-white hover:before:opacity-100"
             }`
           }
         >
           {({ isActive }) => (
             <>
-              <div className="flex items-center gap-3.5">
+              <div className="relative z-10 flex items-center gap-3.5">
                 <span
-                  className={`transition-colors duration-300 ${isActive
-                    ? "text-white"
-                    : "text-[#727272] group-hover:text-primary"
-                    }`}
+                  className={`transition-colors duration-300 ${
+                    isActive
+                      ? "text-white"
+                      : "text-[#727272] group-hover:text-white"
+                  }`}
                 >
                   {item.icon}
                 </span>
-                <span className="text-[15px] font-medium font-cairo">
+                <span className="font-cairo text-[15px] font-medium">
                   {item.label}
                 </span>
               </div>
               {item.hasDropdown && (
                 <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-300 ${isActive ? "text-white" : "text-[#727272]"
-                    }`}
+                  className={`relative z-10 h-4 w-4 transition-transform duration-300 ${
+                    isActive
+                      ? "text-white"
+                      : "text-[#727272] group-hover:text-white"
+                  }`}
                 />
               )}
             </>

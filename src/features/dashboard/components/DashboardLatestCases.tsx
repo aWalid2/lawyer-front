@@ -121,7 +121,7 @@ const columns: Column<CaseData>[] = [
 
 const DashboardLatestCases = () => {
   return (
-    <Card className="flex flex-col border-0 shadow-sm h-full w-full col-span-1 lg:col-span-2">
+    <Card className="flex flex-col border-0 shadow-sm h-full w-full col-span-1 lg:col-span-2 dark:bg-backgroundDark">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl">أحدث القضايا</CardTitle>
         <NewCaseLink />

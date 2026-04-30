@@ -1,4 +1,3 @@
-// SelectForm.tsx
 import React from "react";
 import { useField, useFormikContext } from "formik";
 import {
@@ -20,7 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Option = {
@@ -38,6 +37,9 @@ type SelectFormProps = {
   showSearch?: boolean;
   onSearchChange?: (value: string) => void;
   onChange?: (value: string | number) => void;
+  hasMoreOptions?: boolean;
+  isFetchingMore?: boolean;
+  onReachEnd?: () => void;
 };
 
 export const SelectForm: React.FC<SelectFormProps> = ({
@@ -50,10 +52,35 @@ export const SelectForm: React.FC<SelectFormProps> = ({
   showSearch = false,
   onSearchChange,
   onChange,
+  hasMoreOptions,
+  isFetchingMore,
+  onReachEnd,
 }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
   const [open, setOpen] = React.useState(false);
+
+  const sentinelRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (
+      !sentinelRef.current ||
+      !onReachEnd ||
+      isFetchingMore ||
+      !hasMoreOptions
+    )
+      return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          onReachEnd();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [onReachEnd, isFetchingMore, hasMoreOptions]);
 
   const handleValueChange = (value: string | number) => {
     const finalValue = typeof field.value === "number" ? Number(value) : value;
@@ -77,7 +104,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
             <button
               type="button"
               className={cn(
-                "flex h-12.5 w-full items-center justify-between rounded-[10px] border border-[#E8E8E8] bg-[#FBFBFB] px-3 py-2 text-base font-normal text-[#464646] outline-none disabled:opacity-70",
+                "dark:text-foreground flex h-12.5 w-full items-center justify-between rounded-[10px] border border-[#E8E8E8] bg-[#FBFBFB] px-3 py-2 text-base font-normal text-[#464646] outline-none disabled:opacity-70 dark:border-white/40 dark:bg-transparent",
                 meta.touched && meta.error && "border-red-500",
                 !field.value && "text-muted-foreground",
               )}
@@ -91,34 +118,35 @@ export const SelectForm: React.FC<SelectFormProps> = ({
             </button>
           </PopoverTrigger>
           <PopoverContent
-            className="w-(--radix-popover-trigger-width) p-0"
+            className="w-(--radix-popover-trigger-width) border-[#E8E8E8] bg-white p-0 dark:border-white/20 dark:bg-[#1B1B1B]/95"
             align="start"
           >
-            <Command className="w-full" dir="rtl">
+            <Command
+              className="text-foreground w-full bg-transparent"
+              dir="rtl"
+            >
               <CommandInput
                 placeholder="بحث..."
-                className="h-10"
+                className="dark:text-foreground h-10 dark:border-white/15 dark:bg-transparent dark:placeholder:text-white/45"
                 onValueChange={onSearchChange}
               />
-              <CommandList>
-                <CommandEmpty>لا توجد نتائج</CommandEmpty>
-                <CommandGroup>
+              <CommandList className="dark:bg-transparent">
+                <CommandEmpty className="dark:text-white/60">
+                  لا توجد نتائج
+                </CommandEmpty>
+                <CommandGroup className="dark:bg-transparent">
                   {options.map((option) => (
                     <CommandItem
                       key={String(option.value)}
-                      value={
-                        typeof option.label === "string"
-                          ? option.label
-                          : String(option.value)
-                      }
+                      value={`${typeof option.label === "string" ? option.label : String(option.value)}_${String(option.value)}`}
                       onSelect={() => {
                         handleValueChange(option.value);
                         setOpen(false);
                       }}
                       className={cn(
-                        "data-[selected=true]:bg-primary/90 data-[selected=true]:text-primary-foreground flex cursor-pointer items-center justify-between",
+                        "data-[selected=true]:bg-primary/90 data-[selected=true]:text-primary-foreground dark:text-foreground dark:data-[selected=true]:bg-primary dark:data-[selected=true]:text-primary-foreground dark:hover:text-foreground flex cursor-pointer items-center justify-between dark:hover:bg-white/10",
                         String(field.value) === String(option.value) &&
-                          "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground data-[selected=true]:bg-primary! data-[selected=true]:text-primary-foreground!",
+                          "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground data-[selected=true]:bg-primary! data-[selected=true]:text-primary-foreground! dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 dark:hover:text-primary-foreground",
                       )}
                     >
                       <div className="flex items-center gap-2">
@@ -134,6 +162,14 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                       />
                     </CommandItem>
                   ))}
+
+                  {hasMoreOptions && (
+                    <div ref={sentinelRef} className="flex justify-center py-2">
+                      {isFetchingMore ? (
+                        <Loader2 className="text-muted-foreground h-4 w-4 animate-spin" />
+                      ) : null}
+                    </div>
+                  )}
                 </CommandGroup>
               </CommandList>
             </Command>
@@ -147,7 +183,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
         >
           <SelectTrigger
             className={cn(
-              "h-12.5 w-full rounded-[10px] border border-[#E8E8E8] bg-[#FBFBFB] p-3 text-base font-normal text-[#464646] disabled:opacity-70",
+              "dark:text-foreground h-12.5 w-full rounded-[10px] border border-[#E8E8E8] bg-[#FBFBFB] p-3 text-base font-normal text-[#464646] disabled:opacity-70 dark:border-white/40 dark:bg-transparent",
               meta.touched && meta.error && "border-red-500",
             )}
           >
@@ -155,12 +191,12 @@ export const SelectForm: React.FC<SelectFormProps> = ({
               {selectedOption ? selectedOption.label : placeholder || "اختر..."}
             </div>
           </SelectTrigger>
-          <SelectContent className="w-(--radix-select-trigger-width)">
+          <SelectContent className="w-(--radix-select-trigger-width) border-[#E8E8E8] bg-white dark:border-white/20 dark:bg-[#1B1B1B]/95">
             {options.map((option) => (
               <SelectItem
                 key={String(option.value)}
                 value={String(option.value)}
-                className="data-[state=checked]:bg-primary! data-[state=checked]:text-primary-foreground! data-highlighted:bg-primary/90! data-highlighted:text-primary-foreground!"
+                className="data-[state=checked]:bg-primary! data-[state=checked]:text-primary-foreground! data-highlighted:bg-primary/90! data-highlighted:text-primary-foreground! dark:text-foreground dark:data-highlighted:text-foreground! dark:data-[state=checked]:bg-primary! dark:data-[state=checked]:text-primary-foreground! dark:hover:bg-white/10 dark:data-highlighted:bg-white/10!"
               >
                 {option.label}
               </SelectItem>

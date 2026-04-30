@@ -1,58 +1,93 @@
-import React from "react";
 import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Error } from "@/shared/components/Error";
+import LoadingPage from "@/shared/components/LoadingPage";
 import { Pagination } from "@/shared/components/Pagination";
-import { HeaderCaseDocuments } from "./components/HeaderCaseDocuments";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { getDocumentFileType } from "@/shared/utils/document";
+import React from "react";
+import { useParams } from "react-router-dom";
+import { useGetCaseDocuments } from "./api/hooks/useGetCaseDocuments";
 import { CaseDocumentActions } from "./components/CaseDocumentActions";
-import type { CaseDocument } from "./types";
-
-const mockDocuments: CaseDocument[] = [
-  { id: "1", name: "عقد تأسيس.pdf", type: "PDF", date: "2024-01-10", size: "1.2 MB" },
-  { id: "2", name: "هوية الموكل.jpg", type: "Image", date: "2024-01-15", size: "2.5 MB" },
-  { id: "3", name: "مذكرة دفاع.docx", type: "Word", date: "2024-02-01", size: "500 KB" },
-  { id: "4", name: "حكم ابتدائي.pdf", type: "PDF", date: "2024-02-10", size: "3.1 MB" },
-  { id: "5", name: "صور أدلة.zip", type: "Archive", date: "2024-02-20", size: "15.7 MB" },
-];
+import { CreateCaseDocumentDialog } from "./components/CreateCaseDocumentDialog";
+import { HeaderCaseDocuments } from "./components/HeaderCaseDocuments";
+import type { CaseDocument } from "./types/CaseDocumentT";
+import { extractCaseDocuments } from "./utils";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 export const CaseDocuments: React.FC = () => {
+  const { id: caseId } = useParams<{ id: string }>();
   const [currentPage, setCurrentPage] = React.useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 15;
 
-  const totalPages = Math.ceil(mockDocuments.length / itemsPerPage);
+  const {
+    data: documentsResponse,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useGetCaseDocuments(caseId || "");
+
+  const documents = React.useMemo(
+    () => extractCaseDocuments(documentsResponse),
+    [documentsResponse],
+  );
+
+  const totalPages = Math.max(1, Math.ceil(documents.length / itemsPerPage));
 
   const currentData = React.useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
-    return mockDocuments.slice(startIndex, startIndex + itemsPerPage);
-  }, [currentPage]);
+    return documents
+      .slice(startIndex, startIndex + itemsPerPage)
+      .map((item, index) => ({
+        ...item,
+        rowNumber: startIndex + index + 1,
+      }));
+  }, [currentPage, documents]);
 
-  const columns: Column<CaseDocument>[] = [
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [documents.length]);
+
+  if (!caseId) {
+    return <Error message="معرف القضية غير متوفر" />;
+  }
+
+  if (isPending) {
+    return <LoadingPage />;
+  }
+
+  if (isError) {
+    return <Error message="حدث خطأ في تحميل المستندات" error={error} />;
+  }
+
+  const columns: Column<CaseDocument & { rowNumber: number }>[] = [
     {
       header: "#",
-      accessor: (item) => mockDocuments.findIndex((p) => p.id === item.id) + 1,
+      accessor: (item) => item.rowNumber,
       headerClassName: "w-16",
     },
     {
       header: "اسم المستند",
-      accessor: "name",
+      accessor: (item) => item.document_name || "-",
       className: "text-right",
     },
     {
       header: "النوع",
-      accessor: "type",
+      accessor: (item) => getDocumentFileType(item.document_file),
     },
     {
       header: "تاريخ الرفع",
-      accessor: "date",
-    },
-    {
-      header: "الحجم",
-      accessor: "size",
+      accessor: (item) => formatDateToYYYYMMDD(item.created_at),
     },
     {
       header: "إجراء",
       accessor: (item) => (
         <CaseDocumentActions
           document={item}
-          onDelete={(id) => console.log("Delete document", id)}
+          caseId={caseId}
+          onDocumentUpdated={() => {
+            void refetch();
+          }}
         />
       ),
     },
@@ -60,11 +95,31 @@ export const CaseDocuments: React.FC = () => {
 
   return (
     <>
-      <HeaderCaseDocuments title="المستندات" buttonText="إضافة مستند" />
+      <HeaderCaseDocuments
+        title="المستندات"
+        buttonText="إضافة مستند"
+        action={
+          <CreateCaseDocumentDialog
+            caseId={caseId}
+            onDocumentAdded={() => {
+              void refetch();
+            }}
+          />
+        }
+      />
+      {documents.length === 0 ? (
+        <EmptyTable message="لا توجد مستندات مضافة لهذه القضية بعد." />
+      ) : (
+        <DataTable
+          rowKey={"id"}
+          data={currentData}
+          columns={columns}
+          rowIdField="id"
+        />
+      )}
 
-      <DataTable rowKey={'id'} data={currentData} columns={columns} rowIdField="id" />
       {totalPages > 1 && (
-        <div className="p-4 border-t">
+        <div className="border-t p-4">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -72,7 +127,8 @@ export const CaseDocuments: React.FC = () => {
           />
         </div>
       )}
-
     </>
   );
 };
+
+export default CaseDocuments;

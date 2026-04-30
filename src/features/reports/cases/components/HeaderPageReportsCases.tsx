@@ -1,4 +1,3 @@
-// HeaderPageReportsCases.tsx
 import React, { useState } from "react";
 import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
@@ -30,7 +29,9 @@ export const HeaderPageReportsCases: React.FC<HeaderPageReportsCasesProps> = ({
     try {
       setIsExporting(true);
       const filterText = filter !== "all" ? ` (${filter})` : "";
-      loadingToastId = toast.loading(`جاري تحميل ملف تقارير القضايا${filterText}...`);
+      loadingToastId = toast.loading(
+        `جاري تحميل ملف تقارير القضايا${filterText}...`,
+      );
       const blob = await exportAllCases(searchTerm, filter);
 
       if (!(blob instanceof Blob)) {
@@ -74,7 +75,7 @@ export const HeaderPageReportsCases: React.FC<HeaderPageReportsCasesProps> = ({
       if (loadingToastId) {
         toast.dismiss(loadingToastId);
       }
-      
+
       let errorMessage = "فشل التصدير. يرجى المحاولة مرة أخرى.";
       if (error instanceof AxiosError) {
         console.error("Error response:", error.response);
@@ -116,7 +117,7 @@ export const HeaderPageReportsCases: React.FC<HeaderPageReportsCasesProps> = ({
         className="lg:ms-0"
       />
 
-      <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+      <div className="flex w-full items-center justify-end gap-3 md:w-auto">
         <HeaderFilter
           placeholder="الحالة"
           value={filter}

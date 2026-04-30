@@ -37,7 +37,7 @@ const CalendarPicker = ({ selectedDate, onDateSelect }: CalendarPickerProps) => 
 
   return (
     <PageLayout className="flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center overflow-x-auto w-full">
+      <div className="flex-1 flex flex-col items-center justify-center overflow-x-auto w-full ">
         <Calendar
           mode="single"
           selected={selectedDate}
@@ -49,7 +49,7 @@ const CalendarPicker = ({ selectedDate, onDateSelect }: CalendarPickerProps) => 
           modifiersClassNames={{
             appointment: "!bg-secondary !text-white !rounded-[12px]",
           }}
-          className="w-full p-0"
+          className="w-full p-0 dark:bg-transparent"
           classNames={{
             root: "w-full flex flex-col items-center justify-center relative",
             months: "w-full flex flex-col items-center justify-center",

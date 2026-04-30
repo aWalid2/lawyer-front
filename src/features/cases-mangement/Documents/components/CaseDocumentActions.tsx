@@ -1,38 +1,48 @@
 import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
+import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
-import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
-import { DownloadIcon } from "lucide-react";
 import React from "react";
-import { useParams } from "react-router-dom";
-import type { CaseDocument } from "../types";
+import { useDeleteCaseDocument } from "../api/hooks/useDeleteCaseDocument";
+import type { CaseDocument } from "../types/CaseDocumentT";
+import { CaseDocumentDetailsDialog } from "./CaseDocumentDetailsDialog";
+import { EditCaseDocumentDialog } from "./EditCaseDocumentDialog";
 
 interface CaseDocumentActionsProps {
   document: CaseDocument;
-  onDelete?: (id: string) => void;
+  caseId: string;
+  onDocumentUpdated?: () => void;
 }
 
 export const CaseDocumentActions: React.FC<CaseDocumentActionsProps> = ({
   document,
-  onDelete,
+  caseId,
+  onDocumentUpdated,
 }) => {
-  const { id } = useParams<{ id: string }>();
+  const { mutateAsync: deleteDocument } = useDeleteCaseDocument();
+
+  const handleDelete = async () => {
+    await deleteDocument(document.id);
+    onDocumentUpdated?.();
+  };
+
+  const documentName =
+    document.document_name || "هذا المستند";
 
   return (
     <div className="flex items-center justify-center gap-2">
-      <button
-        title="تحميل"
-        className="flex h-9 w-9 items-center justify-center rounded-[12px] bg-[#F1F1F3]"
-      >
-        <DownloadIcon size={16} className="text-[#3D3C48]" />
-      </button>
+      <CaseDocumentDetailsDialog documentId={document.id} />
 
-      <ViewLinkTablePageDetails
-        to={`/dashboard/case-management/${id}/documents/${document.id}`}
+      <EditCaseDocumentDialog
+        document={document}
+        caseId={caseId}
+        trigger={<ButtonUpdateTable />}
+        onDocumentUpdated={onDocumentUpdated}
       />
+
       <ConfirmDeleteDialog
         title="حذف المستند"
-        description={`هل أنت متأكد من حذف المستند ${document.name}؟`}
-        onConfirm={() => onDelete?.(document.id)}
+        description={`هل أنت متأكد من حذف المستند ${documentName}؟`}
+        onConfirm={handleDelete}
         trigger={<ButtonDeleteTable />}
       />
     </div>

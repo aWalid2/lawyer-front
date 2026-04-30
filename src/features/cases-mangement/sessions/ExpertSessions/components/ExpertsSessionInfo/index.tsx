@@ -1,10 +1,12 @@
 import { useParams } from "react-router-dom";
-import { ExpertsSessionBox } from "./components/ExpertsSessionBox";
+
 import { HeaderExpertsSessionInfo } from "./components/HeaderExpertsSessionInfo";
 import { useGetLastExpertSession } from "../../api/hooks/useGetLastExpertSession";
 import { STATUS_LABEL } from "../../types/ExpertSessionApiTypes";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
+import { InputBox } from "@/shared/components/InputBox";
 
 export const ExpertsSessionInfo = () => {
   const { id: caseId } = useParams<{ id: string }>();
@@ -14,29 +16,21 @@ export const ExpertsSessionInfo = () => {
   if (isError || !data) return null;
 
   return (
-    <>
-      <div className="mb-6 rounded-xl border border-gray-300 p-6">
-        <HeaderExpertsSessionInfo />
-        <div className="grid gap-6 md:grid-cols-2">
-          <ExpertsSessionBox
-            label="مكتب الخبراء / الخبير"
-            text={data.expert_office_name}
-          />
-          <ExpertsSessionBox
-            label="موضوع الخبرة"
-            text={data.subject_of_expertise}
-          />
-          <ExpertsSessionBox
-            label="الرأي النهائي للخبير"
-            text={data.final_opinion}
-          />
-          <ExpertsSessionBox
-            label="تاريخ إيداع التقرير"
-            text={formatDateToYYYYMMDD(data.submission_date)}
-          />
-          <ExpertsSessionBox label="الحالة" text={STATUS_LABEL[data.status]} />
-        </div>
+    <CustomLayoutBorder>
+      <HeaderExpertsSessionInfo />
+      <div className="grid gap-6 md:grid-cols-2">
+        <InputBox
+          label="مكتب الخبراء / الخبير"
+          text={data.expert_office_name}
+        />
+        <InputBox label="موضوع الخبرة" text={data.subject_of_expertise} />
+        <InputBox label="الرأي النهائي للخبير" text={data.final_opinion} />
+        <InputBox
+          label="تاريخ إيداع التقرير"
+          text={formatDateToYYYYMMDD(data.submission_date)}
+        />
+        <InputBox label="الحالة" text={STATUS_LABEL[data.status]} />
       </div>
-    </>
+    </CustomLayoutBorder>
   );
 };

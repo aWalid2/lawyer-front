@@ -22,8 +22,10 @@ export const CaseTypeFormDialog: React.FC<CaseTypeFormDialogProps> = ({
   trigger,
 }) => {
   const [open, setOpen] = React.useState(false);
-  const { mutateAsync: createCaseType, isPending: isCreating } = useCreateCaseType();
-  const { mutateAsync: updateCaseType, isPending: isUpdating } = useUpdateCaseType();
+  const { mutateAsync: createCaseType, isPending: isCreating } =
+    useCreateCaseType();
+  const { mutateAsync: updateCaseType, isPending: isUpdating } =
+    useUpdateCaseType();
 
   const isPending = isCreating || isUpdating;
 
@@ -33,6 +35,7 @@ export const CaseTypeFormDialog: React.FC<CaseTypeFormDialogProps> = ({
       onOpenChange={setOpen}
       title={caseType ? "تعديل نوع قضية" : "اضافة نوع قضية جديد"}
       trigger={trigger}
+      size="md"
     >
       <Formik
         initialValues={{

@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import view from '@/public/images/view.svg';
-import edit from '@/public/images/edit.svg';
-import deleteIcon from '@/public/images/delete.svg';
-import AddTaskModal from './AddTaskModal';
-import { Link } from 'react-router-dom';
-import { useDeleteTask } from '../api/hooks/useDelateTask';
+import { ButtonDeleteTable } from '@/shared/components/ButtonDeleteTable';
+import { ButtonUpdateTable } from '@/shared/components/ButtonUpdateTable';
 import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
+import { ViewLinkTablePageDetails } from '@/shared/components/ViewLinkTablePageDetails';
+import React, { useState } from 'react';
+import { useDeleteTask } from '../api/hooks/useDelateTask';
+import AddTaskModal from './AddTaskModal';
 
 interface UsersTaskActionsProps {
     caseItem: any;
@@ -31,7 +30,7 @@ export const UsersTaskActions: React.FC<UsersTaskActionsProps> = ({ caseItem, on
         }
         handleCloseModal();
     };
-    
+
     const handleDelete = async () => {
         try {
             await deleteTask({ id: caseItem.id.toString() });
@@ -72,35 +71,18 @@ export const UsersTaskActions: React.FC<UsersTaskActionsProps> = ({ caseItem, on
     return (
         <>
             <div className="flex items-center justify-center gap-2">
-                <Link
-                    to={`/dashboard/user-tasks/${caseItem.id}`}
-                    title="عرض"
-                    className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F0F6FF] transition-colors hover:bg-[#e0eaff]"
-                >
-                    <img src={view} alt="view" />
-                </Link>
 
-                <button
-                    onClick={handleEditClick}
-                    title="تعديل"
-                    className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-                >
-                    <img src={edit} alt="edit" />
-                </button>
+                <ViewLinkTablePageDetails to={`/dashboard/user-tasks/${caseItem.id}`} />
+
+
+                <ButtonUpdateTable onClick={handleEditClick} />
 
                 <ConfirmDeleteDialog
                     title="حذف المهمة"
                     description={`هل أنت متأكد من حذف المهمة (${caseItem.task_title})`}
                     onConfirm={handleDelete}
                     trigger={
-                        <button
-                            type="button"
-                            onClick={(e) => e.stopPropagation()}
-                            title="حذف"
-                            className="h-9 w-9 flex items-center justify-center rounded-[8px] bg-[#F1F1F3] transition-colors hover:bg-[#e4e4e7]"
-                        >
-                            <img src={deleteIcon} alt="delete" />
-                        </button>
+                        <ButtonDeleteTable />
                     }
                 />
             </div>

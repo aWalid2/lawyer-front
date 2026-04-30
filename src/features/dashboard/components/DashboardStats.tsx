@@ -35,7 +35,7 @@ const DashboardStats = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
       {stats.map((stat, index) => (
-        <Card key={index} className="flex flex-row items-center justify-between p-6 w-full shadow-primary border-0">
+        <Card key={index} className="flex flex-row items-center justify-between p-6 w-full shadow-primary border-0 dark:bg-backgroundDark">
           <div className="flex flex-col text-left rtl:text-right">
             <span className="text-xl sm:text-2xl font-semibold">{stat.title}</span>
             <span className="text-sm sm:text-base text-[#4C4F52] font-normal mt-1">{stat.label}</span>

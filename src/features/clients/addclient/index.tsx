@@ -61,18 +61,18 @@ const FormDetails = () => {
   const handleSubmit = (values: FormValues) => {
     let formattedPhone = values.phone || "";
     let countryCode = values.countryCode || "+966";
-    
+
     if (values.phone) {
-      // البحث عن خيار الدولة للحصول على الـ iso
-      const countryOption = COUNTRY_OPTIONS.find(opt => opt.value === values.countryCode);
+      const countryOption = COUNTRY_OPTIONS.find(
+        (opt) => opt.value === values.countryCode,
+      );
       const iso = (countryOption as any)?.iso;
-      
+
       if (iso) {
         const phoneNumber = parsePhoneNumberFromString(values.phone, iso);
         if (phoneNumber && phoneNumber.isValid()) {
           formattedPhone = phoneNumber.format("E.164");
         } else {
-          // محاولة بدون iso
           const phoneNumberSimple = parsePhoneNumberFromString(values.phone);
           if (phoneNumberSimple && phoneNumberSimple.isValid()) {
             formattedPhone = phoneNumberSimple.format("E.164");
@@ -85,7 +85,7 @@ const FormDetails = () => {
         }
       }
     }
-    
+
     const dataToSend = {
       first_name: values.first_name,
       email: values.email,
@@ -108,14 +108,12 @@ const FormDetails = () => {
       client_type: values.client_type,
       user_status: values.user_status,
     };
-    
+
     mutate(dataToSend);
   };
 
   if (isPending) return <LoadingPage />;
   if (isError) return <Error message="حدث خطأ في تحميل البيانات" />;
-
-
 
   return (
     <Formik<FormValues>
@@ -225,7 +223,7 @@ const FormDetails = () => {
               </div>
               <div className={`${CLASSES.flexRow} ${CLASSES.sectionPadding}`}>
                 <div className="flex-1">
-                  <SelectForm 
+                  <SelectForm
                     name="user_status"
                     label="حالة المستخدم"
                     options={[
@@ -238,7 +236,7 @@ const FormDetails = () => {
               <div
                 className={`${CLASSES.flexBetween} ${CLASSES.extraLargeSectionPadding}`}
               >
-                <h1 className="text-sm font-medium p-6">هل لديك عقد</h1>
+                <h1 className="p-6 text-sm font-medium">هل لديك عقد</h1>
                 <Switch
                   checked={values.has_contract}
                   onCheckedChange={(checked) => {
@@ -282,7 +280,7 @@ const FormDetails = () => {
                     </div>
                     <h1 className="pb-7">صورة العقد</h1>
                     <div className="flex">
-                      <div className="h-[99px] w-[121px] mb-8">
+                      <div className="mb-8 h-[99px] w-[121px]">
                         <FileUpload
                           name="contract_photo"
                           label=""
@@ -315,8 +313,8 @@ const FormDetails = () => {
 
               <div className={`${CLASSES.flexBetween} pt-12`}>
                 <h1 className="text-sm font-medium">إنشاء حساب للموكل؟</h1>
-                <Switch 
-                  checked={values.add_clients} 
+                <Switch
+                  checked={values.add_clients}
                   onCheckedChange={(checked) => {
                     setFieldValue("add_clients", checked);
                     if (!checked) {
@@ -324,15 +322,15 @@ const FormDetails = () => {
                       setFieldValue("confirmation_password", "");
                     }
                     setTimeout(() => validateForm(), 100);
-                  }} 
+                  }}
                 />
               </div>
 
               {values.add_clients && (
                 <div className={CLASSES.largeSectionPadding}>
-                  <div className="flex flex-col gap-4 md:gap-7 border border-gray-300 rounded-2xl p-3 md:p-5">
+                  <div className="flex flex-col gap-4 rounded-2xl border border-gray-300 p-3 md:gap-7 md:p-5">
                     <div className={`${CLASSES.flexRow}`}>
-                      <div className="flex-1 relative">
+                      <div className="relative flex-1">
                         <div className="relative">
                           <InputForm
                             type={showPassword ? "text" : "password"}
@@ -342,7 +340,7 @@ const FormDetails = () => {
                           />
                           <button
                             type="button"
-                            className="absolute left-3 top-[60px] -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                            className="absolute top-[60px] left-3 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                             onClick={() => setShowPassword(!showPassword)}
                           >
                             {showPassword ? (
@@ -353,7 +351,7 @@ const FormDetails = () => {
                           </button>
                         </div>
                       </div>
-                      <div className="flex-1 relative">
+                      <div className="relative flex-1">
                         <InputForm
                           type={showConfirmPassword ? "text" : "password"}
                           name="confirmation_password"
@@ -362,7 +360,7 @@ const FormDetails = () => {
                         />
                         <button
                           type="button"
-                          className="absolute left-3 top-[60px] -translate-y-1/2 flex text-gray-500 hover:text-gray-700"
+                          className="absolute top-[60px] left-3 flex -translate-y-1/2 text-gray-500 hover:text-gray-700"
                           onClick={() =>
                             setShowConfirmPassword(!showConfirmPassword)
                           }
@@ -384,11 +382,12 @@ const FormDetails = () => {
                   type="submit"
                   className={CLASSES.submitButton}
                   style={{
-                    background: "linear-gradient(135deg, #E3C086 0%, #CBA462 100%)",
+                    background:
+                      "linear-gradient(135deg, #E3C086 0%, #CBA462 100%)",
                   }}
                 >
                   <span className="relative z-10">إضافة الموكل</span>
-                  <div className="absolute inset-0 opacity-0 hover:opacity-20 transition-opacity bg-black"></div>
+                  <div className="absolute inset-0 bg-black opacity-0 transition-opacity hover:opacity-20"></div>
                 </button>
               </div>
             </Form>

@@ -5,13 +5,13 @@ import { DistinctionSessions } from "./components/DistinctionSessions";
 import { FirstDegreeSessions } from "./components/FirstDegreeSessions";
 import { SesstionsFooter } from "./components/SesstionsFooter";
 import { HeaderSessions } from "./HeaderSessions";
-
+import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 
 const CourtSessions: React.FC = () => {
   const [tab, setTab] = useState("first_instance");
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-2xl p-4 md:p-6 border border-[#eeeeee]">
+      <CustomLayoutBorder>
         <Tabs
           defaultValue="first_instance"
           dir="rtl"
@@ -52,7 +52,7 @@ const CourtSessions: React.FC = () => {
             </TabsContent>
           </>
         </Tabs>
-      </div>
+      </CustomLayoutBorder>
 
       <SesstionsFooter tab={tab} />
     </div>

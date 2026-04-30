@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import type { FormValues } from "../../types/typsePolice";
 import EditModel from "./component/PoliceStationInfoModel";
@@ -7,6 +6,8 @@ import { BodyInfo } from "./component/BodyInfo";
 import { useGetPoliceSessionInfo } from "../../api/hooks/useGetPoliceSessionInfo";
 import { useParams } from "react-router-dom";
 import { EmptyTable } from "@/shared/components/EmptyTable";
+import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
+
 const PoliceStationInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit">("add");
@@ -16,7 +17,8 @@ const PoliceStationInfo = () => {
   const initialValues: FormValues = {
     case_number: data?.case_number,
     judge_name: data?.judge_name,
-    investigation_authirity_transferd_from: data?.investigation_authirity_transferd_from,
+    investigation_authirity_transferd_from:
+      data?.investigation_authirity_transferd_from,
     case_entry: data?.case_entry,
     station_id: data?.station_id,
   };
@@ -53,24 +55,28 @@ const PoliceStationInfo = () => {
   };
 
   return (
-    <>
-      <div className="border border-gray-300 p-4 rounded-xl mb-6">
-        <HeaderPoliceSessionsInfo handleAddClick={handleAddClick} handleEditClick={handleEditClick} hasData={!!data} />
+    <CustomLayoutBorder>
+      <HeaderPoliceSessionsInfo
+        handleAddClick={handleAddClick}
+        handleEditClick={handleEditClick}
+        hasData={!!data}
+      />
 
+      {data ? (
+        <BodyInfo items={data} />
+      ) : (
+        <EmptyTable message="لا توجد بيانات" />
+      )}
 
-        {data ? <BodyInfo items={data} /> : <EmptyTable message="لا توجد بيانات" />}
-
-        {isModalOpen && (
-          <EditModel
-            mode={modalMode}
-            initialValues={modalMode === "add" ? emptyValues : initialValues}
-            onClose={handleCloseModal}
-            onSave={handleSaveChanges}
-          />
-        )}
-      </div>
-
-    </>
+      {isModalOpen && (
+        <EditModel
+          mode={modalMode}
+          initialValues={modalMode === "add" ? emptyValues : initialValues}
+          onClose={handleCloseModal}
+          onSave={handleSaveChanges}
+        />
+      )}
+    </CustomLayoutBorder>
   );
 };
 
