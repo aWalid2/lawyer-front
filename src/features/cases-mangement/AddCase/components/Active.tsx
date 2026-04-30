@@ -12,7 +12,12 @@ export function Active() {
 
   const { data: courts } = useGetCourts(undefined, undefined, debouncedCourtSearch);
 
-  const courtOptions = courts?.data?.map((court: any) => ({
+  interface Court {
+    id: string | number;
+    name: string;
+  }
+
+  const courtOptions = courts?.data?.map((court: Court) => ({
     label: court.name,
     value: String(court.id)
   })) || [];

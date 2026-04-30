@@ -8,39 +8,26 @@ export interface FormValues {
   case_title: string;
   client_name: string;
   case_type_id: string;
-
   case_police_station: string;
   case_number_at_police_station: string;
-
   client_type: string;
-
   name: string;
- 
-
   country_code: string;
   phone: string;
-
   civil_id: string;
   ssn: string;
-
   legal_status?: string;
-
   nationality: string;
   country: string;
-
   email: string;
-
   case_arrival_date_at_police_station: string;
   case_entry_date: string;
   case_receipt_date?: string;
-
   detective_name: string;
   investigation_name: string;
-
   contract_start_date: string;
   contract_value: string;
   contract_duration: string;
-
   contract_image: File | null;
   power_of_attorney_image: File | null;
 

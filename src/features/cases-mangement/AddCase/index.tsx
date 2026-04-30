@@ -4,7 +4,7 @@ import { SelectForm } from "@/shared/components/SelectForm";
 import { SubmitButton } from "@/shared/components/SubmitButton";
 import { SwitchForm } from "@/shared/components/SwitchForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
-import { Form, Formik } from "formik";
+import { Form, Formik, useFormikContext, type FormikErrors } from "formik";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useAddPublicProsecutionCase } from "./api/hooks/useAddPublicProsecutionCase";
@@ -23,6 +23,43 @@ import { Active } from "./components/Active";
 import { Other } from "./components/Other";
 import { CASE_SITUATION_OPTIONS } from "@/shared/constants/caseOptions";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
+
+const collectErrorMessages = (errors: FormikErrors<typeof initialValues>) => {
+  const messages: string[] = [];
+
+  const visit = (value: unknown) => {
+    if (typeof value === "string") {
+      messages.push(value);
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach(visit);
+      return;
+    }
+
+    if (value && typeof value === "object") {
+      Object.values(value).forEach(visit);
+    }
+  };
+
+  visit(errors);
+  return messages;
+};
+
+const FormValidationToasts = () => {
+  const { errors, submitCount } = useFormikContext<typeof initialValues>();
+
+  useEffect(() => {
+    if (submitCount < 1 || Object.keys(errors).length === 0) return;
+
+    collectErrorMessages(errors).forEach((message) => {
+      toast.error(message);
+    });
+  }, [errors, submitCount]);
+
+  return null;
+};
 
 const FormCase = () => {
   const {
@@ -60,22 +97,13 @@ const FormCase = () => {
         }
       }}
     >
-      {({ values, setFieldValue, errors, submitCount }) => {
-        useEffect(() => {
-          if (submitCount > 0 && Object.keys(errors).length > 0) {
-            Object.values(errors).forEach((err) => {
-              if (typeof err === "string") {
-                toast.error(err);
-              }
-            });
-          }
-        }, [submitCount]);
-
+      {({ values, setFieldValue }) => {
         return (
           <div className="space-y-6">
             <HeaderTitle title="إضافة قضية جديدة" />
             <CustomLayoutBorder>
               <Form>
+                <FormValidationToasts />
                 <div className="mb-4">
                   <SelectForm
                     label="وضع القضية عند الاستلام"
