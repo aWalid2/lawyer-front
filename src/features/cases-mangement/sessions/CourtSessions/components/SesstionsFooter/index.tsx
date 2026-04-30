@@ -166,6 +166,7 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
           item={item}
           onEdit={handleUpdate}
           onDelete={() => handleDelete(item)}
+          tab={tab}
         />
       ),
     },
