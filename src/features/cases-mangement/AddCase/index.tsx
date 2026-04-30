@@ -15,7 +15,7 @@ import { useAddOtherCase } from "./api/hooks/useAddOtherCase";
 import { FeesForm } from "./components/FeesForm";
 import { InProsecution } from "./components/InProsecution";
 import { OpponentForm } from "./components/Opponent";
-import { PublicProsecution } from "./components/PublicProsecution";
+import { PoliceStation } from "./components/PoliceStation";
 import { SharedFormField } from "./components/SharedFormField";
 import { validationSchema } from "./components/ValidationSchema";
 import { initialValues } from "./hooks/initialValues";
@@ -93,7 +93,7 @@ const FormCase = () => {
                     <SharedFormField />
                   )}
                   {values.case_situation === "PUBLIC_PROSECUTION" && (
-                    <PublicProsecution />
+                    <PoliceStation />
                   )}
                   {values.case_situation === "AT_PROSECUTOR_OFFICE" &&
                     values.case_status_id && <InProsecution />}
