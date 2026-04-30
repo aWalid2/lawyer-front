@@ -4,15 +4,19 @@ import type { RollSession } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
 import { TableRollActions } from "./components/TableRollActions";
+import PageLayout from "@/shared/components/PageLayout";
 
-const MOCK_ROLL_SESSIONS: RollSession[] = Array.from({ length: 45 }, (_, i) => ({
-  id: `${i + 1}`,
-  sessionDateTime: "#6345",
-  hallNumber: "5",
-  hallFloor: "6",
-  rollNumber: "23",
-  decision: "قرار",
-}));
+const MOCK_ROLL_SESSIONS: RollSession[] = Array.from(
+  { length: 45 },
+  (_, i) => ({
+    id: `${i + 1}`,
+    sessionDateTime: "#6345",
+    hallNumber: "5",
+    hallFloor: "6",
+    rollNumber: "23",
+    decision: "قرار",
+  }),
+);
 
 const RollFeature = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,7 +58,8 @@ const RollFeature = () => {
   const columns: Column<RollSession>[] = [
     {
       header: "#",
-      accessor: (item) => filteredSessions.findIndex((d) => d.id === item.id) + 1,
+      accessor: (item) =>
+        filteredSessions.findIndex((d) => d.id === item.id) + 1,
       headerClassName: "w-15",
     },
     {
@@ -64,7 +69,6 @@ const RollFeature = () => {
     {
       header: "رقم القاعة",
       accessor: "hallNumber",
-
     },
 
     {
@@ -92,30 +96,24 @@ const RollFeature = () => {
   ];
 
   return (
-    <div className="w-full pt-6 space-y-6">
-      <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
-        <HeaderPageRoll
-          searchTerm={searchTerm}
-          onSearch={setSearchTerm}
-          onFilterChange={handleFilterChange}
-          filters={filters}
-        />
+    <PageLayout>
+      <HeaderPageRoll
+        searchTerm={searchTerm}
+        onSearch={setSearchTerm}
+        onFilterChange={handleFilterChange}
+        filters={filters}
+      />
 
-        <DataTable
-          columns={columns}
-          data={paginatedSessions}
-          rowIdField="id"
-        />
+      <DataTable columns={columns} data={paginatedSessions} rowIdField="id" />
 
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        )}
-      </div>
-    </div>
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
+    </PageLayout>
   );
 };
 

@@ -8,19 +8,27 @@ interface HeaderTitleProps {
   innerPage?: boolean;
 }
 
-export const HeaderTitle: React.FC<HeaderTitleProps> = ({ title, to, innerPage }) => {
+export const HeaderTitle: React.FC<HeaderTitleProps> = ({
+  title,
+  to,
+  innerPage,
+}) => {
   const navigate = useNavigate();
   return (
     <>
-      {!innerPage ? <div
-        onClick={() => (to ? navigate(to) : navigate(-1))}
-        className="flex flex-nowrap items-center gap-2 text-secondary cursor-pointer"
-      >
-        <ArrowRightIcon className="text-secondary" />
-        <h2 className="text-[20px] font-semibold">{title}</h2>
-      </div> : <h1 className="text-[18px] font-semibold text-secondary font-cairo whitespace-nowrap self-start md:self-center">
-        {title}
-      </h1>}
+      {!innerPage ? (
+        <div
+          onClick={() => (to ? navigate(to) : navigate(-1))}
+          className="text-secondary flex cursor-pointer flex-nowrap items-center gap-2"
+        >
+          <ArrowRightIcon className="text-secondary" />
+          <h2 className="text-[20px] font-semibold">{title}</h2>
+        </div>
+      ) : (
+        <h1 className="text-secondary font-cairo self-start text-[18px] font-semibold whitespace-nowrap md:self-center dark:text-white/70">
+          {title}
+        </h1>
+      )}
     </>
   );
 };

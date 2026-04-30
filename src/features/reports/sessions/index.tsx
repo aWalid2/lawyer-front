@@ -3,18 +3,22 @@ import { HeaderPageReportsSessions } from "./components/HeaderPageReportsSession
 import type { ReportSession } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
+import PageLayout from "@/shared/components/PageLayout";
 
-const MOCK_REPORT_SESSIONS: ReportSession[] = Array.from({ length: 45 }, (_, i) => ({
-  id: `${i + 1}`,
-  sessionType: i % 3 === 0 ? "محكمة" : i % 3 === 1 ? "نيابة" : "مخفر",
-  judicialGrade: i % 3 === 0 ? "أول درجة" : i % 3 === 1 ? "استئناف" : "تمييز",
-  caseAutoNumber: "001",
-  clientName: "علي محمد",
-  lawyerName: "أحمد العتيبي",
-  entity: "محكمة العراق",
-  sessionDate: "14/10/2025",
-  status: i % 2 === 0 ? "attended" : "postponed",
-}));
+const MOCK_REPORT_SESSIONS: ReportSession[] = Array.from(
+  { length: 45 },
+  (_, i) => ({
+    id: `${i + 1}`,
+    sessionType: i % 3 === 0 ? "محكمة" : i % 3 === 1 ? "نيابة" : "مخفر",
+    judicialGrade: i % 3 === 0 ? "أول درجة" : i % 3 === 1 ? "استئناف" : "تمييز",
+    caseAutoNumber: "001",
+    clientName: "علي محمد",
+    lawyerName: "أحمد العتيبي",
+    entity: "محكمة العراق",
+    sessionDate: "14/10/2025",
+    status: i % 2 === 0 ? "attended" : "postponed",
+  }),
+);
 
 const ReportsSessionsFeature = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,8 +38,12 @@ const ReportsSessionsFeature = () => {
         s.lawyerName.toLowerCase().includes(searchStr) ||
         s.caseAutoNumber.includes(searchStr);
 
-      const matchesType = filters.type === "all" || (filters.type === "court" && s.sessionType === "محكمة") || (filters.type === "niyaba" && s.sessionType === "نيابة");
-      const matchesStatus = filters.status === "all" || s.status === filters.status;
+      const matchesType =
+        filters.type === "all" ||
+        (filters.type === "court" && s.sessionType === "محكمة") ||
+        (filters.type === "niyaba" && s.sessionType === "نيابة");
+      const matchesStatus =
+        filters.status === "all" || s.status === filters.status;
 
       return matchesSearch && matchesType && matchesStatus;
     });
@@ -55,7 +63,8 @@ const ReportsSessionsFeature = () => {
   const columns: Column<ReportSession>[] = [
     {
       header: "#",
-      accessor: (item) => filteredSessions.findIndex((d) => d.id === item.id) + 1,
+      accessor: (item) =>
+        filteredSessions.findIndex((d) => d.id === item.id) + 1,
       headerClassName: "w-15",
     },
     {
@@ -95,7 +104,9 @@ const ReportsSessionsFeature = () => {
         };
         const config = statusMap[item.status];
         return (
-          <span className={`px-3 py-1 rounded-full text-xs font-regular ${config.color}`}>
+          <span
+            className={`font-regular rounded-full px-3 py-1 text-xs ${config.color}`}
+          >
             {config.label}
           </span>
         );
@@ -104,30 +115,24 @@ const ReportsSessionsFeature = () => {
   ];
 
   return (
-    <div className="w-full pt-6 space-y-6">
-      <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
-        <HeaderPageReportsSessions
-          searchTerm={searchTerm}
-          onSearch={setSearchTerm}
-          onFilterChange={handleFilterChange}
-          filters={filters}
-        />
+    <PageLayout>
+      <HeaderPageReportsSessions
+        searchTerm={searchTerm}
+        onSearch={setSearchTerm}
+        onFilterChange={handleFilterChange}
+        filters={filters}
+      />
 
-        <DataTable
-          columns={columns}
-          data={paginatedSessions}
-          rowIdField="id"
-        />
+      <DataTable columns={columns} data={paginatedSessions} rowIdField="id" />
 
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        )}
-      </div>
-    </div>
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
+    </PageLayout>
   );
 };
 

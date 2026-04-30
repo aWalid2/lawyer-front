@@ -8,17 +8,18 @@ import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import { PaginationApi } from "@/shared/components/PaginationApi";
+import PageLayout from "@/shared/components/PageLayout";
 
 const formatDateToArabic = (dateString: string): string => {
   if (!dateString) return "-";
-  
+
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return "-";
-  
-  return new Intl.DateTimeFormat('ar-EG', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+
+  return new Intl.DateTimeFormat("ar-EG", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   }).format(date);
 };
 
@@ -32,14 +33,14 @@ const ConsultationsFeature = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const limit = 15;
-  
-  const { data: consultationsData, isPending, isError, error } = useFetchConsultations(
-    page, 
-    limit, 
-    statusFilter, 
-    searchTerm
-  );
-  
+
+  const {
+    data: consultationsData,
+    isPending,
+    isError,
+    error,
+  } = useFetchConsultations(page, limit, statusFilter, searchTerm);
+
   const consultations = consultationsData?.data ?? [];
   const totalPages = consultationsData?.meta?.total_pages ?? 1;
   const indexedData = useIndexedData(consultations, page, limit);
@@ -64,7 +65,9 @@ const ConsultationsFeature = () => {
     {
       header: "الحالة",
       accessor: (item) => (
-        <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusLabels[item.status]?.className || "bg-gray-100 text-gray-800"}`}>
+        <span
+          className={`rounded-full px-3 py-1 text-xs font-medium ${statusLabels[item.status]?.className || "bg-gray-100 text-gray-800"}`}
+        >
           {statusLabels[item.status]?.text || item.status}
         </span>
       ),
@@ -87,36 +90,30 @@ const ConsultationsFeature = () => {
   if (isPending) {
     return <LoadingPage />;
   }
-  
+
   if (isError) {
     return <Error message={error?.message || "حدث خطأ أثناء جلب البيانات"} />;
   }
 
   return (
-    <div className="w-full pt-6 space-y-6">
-      <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
-        <HeaderPageConsultations
-          searchTerm={searchTerm}
-          onSearch={setSearchTerm}
-          onFilterChange={setStatusFilter} // Pass setStatusFilter directly
-          filters={{ status: statusFilter }}
-        />
+    <PageLayout>
+      <HeaderPageConsultations
+        searchTerm={searchTerm}
+        onSearch={setSearchTerm}
+        onFilterChange={setStatusFilter} // Pass setStatusFilter directly
+        filters={{ status: statusFilter }}
+      />
 
-        <DataTable
-          columns={columns}
-          data={indexedData}
-          rowIdField="id"
-        />
+      <DataTable columns={columns} data={indexedData} rowIdField="id" />
 
-        {totalPages > 1 && (
-          <PaginationApi
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={setPage}
-          />
-        )}
-      </div>
-    </div>
+      {totalPages > 1 && (
+        <PaginationApi
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      )}
+    </PageLayout>
   );
 };
 

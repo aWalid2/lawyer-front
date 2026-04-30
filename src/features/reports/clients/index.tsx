@@ -7,14 +7,20 @@ import { PaginationApi } from "@/shared/components/PaginationApi";
 import { useGetClients } from "./api/hooks/useGetClients";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
+import PageLayout from "@/shared/components/PageLayout";
 
 const ReportsClientsFeature = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const limit = 15;
-  
-  const { data: clientsData, isPending, isError, error } = useGetClients(page, limit, statusFilter, searchTerm);
+
+  const {
+    data: clientsData,
+    isPending,
+    isError,
+    error,
+  } = useGetClients(page, limit, statusFilter, searchTerm);
   const totalPages = clientsData?.meta?.total_pages ?? 1;
   const indexedData = useIndexedData(clientsData?.data, page, limit);
 
@@ -30,7 +36,8 @@ const ReportsClientsFeature = () => {
   };
 
   if (isPending) return <LoadingPage />;
-  if (isError) return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
+  if (isError)
+    return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
 
   const columns: Column<ReportClient>[] = [
     {
@@ -45,7 +52,7 @@ const ReportsClientsFeature = () => {
     {
       header: "عدد القضايا",
       accessor: (item) => (
-        <span className="bg-[#A6A6A6] text-white px-3 py-1 rounded-[8px] text-xs font-semibold">
+        <span className="rounded-xl bg-[#A6A6A6] px-3 py-1 text-xs font-semibold text-white">
           {item.case_count}
         </span>
       ),
@@ -54,7 +61,7 @@ const ReportsClientsFeature = () => {
       header: "الحالة",
       accessor: (item) => (
         <span
-          className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(item.user.user_status)}`}
+          className={`rounded-main px-3 py-1 text-xs font-medium whitespace-nowrap ${getStatusStyles(item.user.user_status)}`}
         >
           {item.user.user_status === "active" ? "نشط" : "غير نشط"}
         </span>
@@ -63,31 +70,24 @@ const ReportsClientsFeature = () => {
   ];
 
   return (
-    <div className="w-full pt-6 space-y-6">
-      <div className="bg-white rounded-2xl shadow-primary p-4 md:p-6">
-        <HeaderPageReportsClients
-          searchTerm={searchTerm}
-          onSearch={setSearchTerm}
-          onFilterChange={setStatusFilter}
-          filter={statusFilter}
-        />
+    <PageLayout>
+      <HeaderPageReportsClients
+        searchTerm={searchTerm}
+        onSearch={setSearchTerm}
+        onFilterChange={setStatusFilter}
+        filter={statusFilter}
+      />
 
-        <DataTable
-          columns={columns}
-          data={indexedData}
-          rowKey="user_id"
-          
-        />
+      <DataTable columns={columns} data={indexedData} rowKey="user_id" />
 
-        {totalPages > 1 && (
-          <PaginationApi
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={setPage}
-          />
-        )}
-      </div>
-    </div>
+      {totalPages > 1 && (
+        <PaginationApi
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      )}
+    </PageLayout>
   );
 };
 
