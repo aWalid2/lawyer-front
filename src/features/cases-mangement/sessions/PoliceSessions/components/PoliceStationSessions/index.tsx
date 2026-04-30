@@ -67,7 +67,6 @@ const PoliceStationsession = () => {
     {
       header: "المحامي المتابع",
       accessor: (item) => item?.lawyer?.first_name,
-      className: "font-medium text-gray-800",
     },
     {
       header: "قرار الجلسة",

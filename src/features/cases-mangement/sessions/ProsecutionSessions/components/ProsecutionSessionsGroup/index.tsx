@@ -64,7 +64,6 @@ const ProsecutionSessionsGroup = () => {
     {
       header: "المحامي المتابع",
       accessor: (item) => item?.lawyer?.user?.first_name || "لا يوجد",
-      className: "font-medium text-gray-800",
     },
     {
       header: "قرار الجلسة",

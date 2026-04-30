@@ -7,5 +7,6 @@ export const getCassaionSessionTable = async (caseId: string | number, page?: nu
             limit,
         },
     });
+    console.log("Cassation Session Table Response:", response.data);
     return response.data;
 };

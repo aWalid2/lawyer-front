@@ -64,7 +64,6 @@ export const ProceduresTable: React.FC = () => {
     {
       header: "المحامي المسؤول",
       accessor: (item) => getProcedureLawyerName(item),
-      className: "font-medium text-gray-800",
     },
     {
       header: "قرار الإجراء",

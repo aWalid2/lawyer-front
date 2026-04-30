@@ -42,7 +42,6 @@ const MainCases = () => {
     {
       header: "اسم الموكل",
       accessor: (item: any) => item.client?.first_name,
-      className: "font-medium text-black",
     },
     {
       header: "عنوان القضية",

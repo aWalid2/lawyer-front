@@ -3,6 +3,7 @@ import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { ViewIcon } from "@/shared/icons/View";
 import { useState } from "react";
+import { AppealSessionDetailsDialog } from "./AppealSessionDetailsDialog";
 import { CassationSessionDetailsDialog } from "./CassationSessionDetailsDialog";
 import { FirstInstanceSessionDetailsDialog } from "./FirstInstanceSessionDetailsDialog";
 import { SessionDialog } from "./SessionDialog";
@@ -34,7 +35,8 @@ export const TableSessionsActions = ({
   const [open, setOpen] = useState(false);
   const [isViewOpen, setIsViewOpen] = useState(false);
   const canViewDetails =
-    (tab === "cassation" || tab === "first_instance") && item.id;
+    (tab === "cassation" || tab === "first_instance" || tab === "appeal") &&
+    item.id;
 
   return (
     <>
@@ -93,6 +95,18 @@ export const TableSessionsActions = ({
 
       {tab === "first_instance" && item.id ? (
         <FirstInstanceSessionDetailsDialog
+          sessionId={item.id}
+          open={isViewOpen}
+          onOpenChange={setIsViewOpen}
+          onEdit={() => {
+            setIsViewOpen(false);
+            setOpen(true);
+          }}
+        />
+      ) : null}
+
+      {tab === "appeal" && item.id ? (
+        <AppealSessionDetailsDialog
           sessionId={item.id}
           open={isViewOpen}
           onOpenChange={setIsViewOpen}

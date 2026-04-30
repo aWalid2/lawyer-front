@@ -16,7 +16,7 @@ import {
 import { useGetFirstInstanceSessionTable } from "./api/hooks/useGetFirstInstanceSessionTable";
 import { useGetAppealSessionTable } from "./api/hooks/useGetAppealSessionTable";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useCreateFirstInstanceSessionTable } from "./api/hooks/useCreateFirstInstanceSessionTable";
 import { useCreateAppealSessionTable } from "./api/hooks/useCreateAppealSessionTable";
 import { useUpdateFirstInstanceSessionTable } from "./api/hooks/useUpdateFirstInstanceSessionTable";
@@ -26,25 +26,52 @@ import { useRemoveAppealSessionTable } from "./api/hooks/useRemoveAppealSessionT
 import { Pagination } from "@/shared/components/Pagination";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 
+interface SessionRow {
+  id?: number;
+  rowNumber?: number;
+  session_date: string;
+  court_id: number;
+  hall_floor: number;
+  hall_number: number;
+  court?: {
+    name?: string;
+  };
+}
+
 export const SesstionsFooter = ({ tab }: { tab: string }) => {
   const { id } = useParams<{ id: string }>();
-  const [page, setPage] = useState<number>(1);
+  const [pageByTab, setPageByTab] = useState<Record<string, number>>({
+    cassation: 1,
+    first_instance: 1,
+    appeal: 1,
+  });
+  const isCassationTab = tab === "cassation";
+  const isFirstInstanceTab = tab === "first_instance";
+  const isAppealTab = tab === "appeal";
+  const page = pageByTab[tab] ?? 1;
+  const setPage = (nextPage: number) => {
+    setPageByTab((previous) => ({
+      ...previous,
+      [tab]: nextPage,
+    }));
+  };
 
-  useEffect(() => {
-    setPage(1);
-  }, [tab]);
   const { data: cassationData, isPending } = useGetCassaionSessionTable(
     Number(id),
     page,
     3,
+    isCassationTab,
   );
   const { data: firstInstanceData, isPending: isPendingFirstInstance } =
-    useGetFirstInstanceSessionTable(Number(id), page, 3);
+    useGetFirstInstanceSessionTable(Number(id), page, 3, isFirstInstanceTab);
   const { data: appealData, isPending: isPendingAppeal } =
-    useGetAppealSessionTable(Number(id), page, 3);
+    useGetAppealSessionTable(Number(id), page, 3, isAppealTab);
 
   const totalPages =
-    cassationData?.meta?.lastPage ?? cassationData?.meta?.last_page ?? 1;
+    cassationData?.meta?.lastpage ??
+    cassationData?.meta?.lastPage ??
+    cassationData?.meta?.last_page ??
+    1;
   const totalPagesFirstInstance =
     firstInstanceData?.meta?.lastPage ??
     firstInstanceData?.meta?.last_page ??
@@ -52,12 +79,11 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
   const totalPagesAppeal =
     appealData?.meta?.lastPage ?? appealData?.meta?.last_page ?? 1;
 
-  const currentTotalPages =
-    tab === "cassation"
-      ? totalPages
-      : tab === "first_instance"
-        ? totalPagesFirstInstance
-        : totalPagesAppeal;
+  const currentTotalPages = isCassationTab
+    ? totalPages
+    : isFirstInstanceTab
+      ? totalPagesFirstInstance
+      : totalPagesAppeal;
 
   const indexdCassationData = useIndexedData(cassationData?.data, page, 3);
   const indexdFirstInstanceData = useIndexedData(
@@ -66,6 +92,18 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
     3,
   );
   const indexdAppealData = useIndexedData(appealData?.data, page, 3);
+
+  const currentData = isCassationTab
+    ? indexdCassationData
+    : isFirstInstanceTab
+      ? indexdFirstInstanceData
+      : indexdAppealData;
+
+  const isCurrentTabPending = isCassationTab
+    ? isPending
+    : isFirstInstanceTab
+      ? isPendingFirstInstance
+      : isPendingAppeal;
 
   const { mutateAsync: createMutationCassation } =
     useCreateCassaionSessionTable();
@@ -85,7 +123,7 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
     useRemoveFirstInstanceSessionTable();
   const { mutateAsync: deleteMutationAppeal } = useRemoveAppealSessionTable();
 
-  const handleAdd = (values: any) => {
+  const handleAdd = (values: SessionRow) => {
     if (tab === "cassation") {
       createMutationCassation({
         caseId: Number(id),
@@ -104,7 +142,9 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
     }
   };
 
-  const handleUpdate = (values: any) => {
+  const handleUpdate = (values: SessionRow) => {
+    if (!values.id) return;
+
     if (tab === "cassation") {
       updateMutationCassation({
         sessionId: values.id,
@@ -123,7 +163,9 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
     }
   };
 
-  const handleDelete = (session: any) => {
+  const handleDelete = (session: SessionRow) => {
+    if (!session.id) return;
+
     if (tab === "cassation") {
       deleteMutationCassation(session.id);
     } else if (tab === "first_instance") {
@@ -133,7 +175,7 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
     }
   };
 
-  const columns: Column<any>[] = [
+  const columns: Column<SessionRow>[] = [
     {
       header: "#",
       accessor: (item) => item.rowNumber,
@@ -149,7 +191,7 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
     },
     {
       header: "المحكمة",
-      accessor: (item) => item.court.name,
+      accessor: (item) => item.court?.name || "-",
     },
     {
       header: "دور القاعة",
@@ -172,8 +214,7 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
     },
   ];
 
-  if (isPending || isPendingFirstInstance || isPendingAppeal)
-    return <LoadingPage />;
+  if (isCurrentTabPending) return <LoadingPage />;
 
   return (
     <CustomLayoutBorder>
@@ -187,26 +228,10 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
         }
         onAdd={handleAdd}
       />
-      {(indexdCassationData &&
-        tab === "cassation" &&
-        indexdCassationData.length > 0) ||
-      (indexdFirstInstanceData &&
-        tab === "first_instance" &&
-        indexdFirstInstanceData.length > 0) ||
-      (indexdAppealData && tab === "appeal" && indexdAppealData.length > 0) ? (
+      {currentData && currentData.length > 0 ? (
         <>
           <div className="max-w-full overflow-x-auto">
-            <DataTable
-              data={
-                tab === "cassation"
-                  ? indexdCassationData
-                  : tab === "first_instance"
-                    ? indexdFirstInstanceData
-                    : indexdAppealData
-              }
-              columns={columns}
-              rowKey="id"
-            />
+            <DataTable data={currentData} columns={columns} rowKey="id" />
           </div>
           {currentTotalPages > 1 && (
             <Pagination
