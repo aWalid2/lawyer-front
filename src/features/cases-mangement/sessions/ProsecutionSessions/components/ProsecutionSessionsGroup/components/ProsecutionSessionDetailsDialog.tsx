@@ -29,12 +29,7 @@ export const ProsecutionSessionDetailsDialog: React.FC<
     error,
   } = useGetProsecutionSession(sessionId, open);
 
-  const lawyerName = [
-    session?.lawyer?.user?.first_name,
-    session?.lawyer?.user?.last_name,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const lawyerName = session?.lawyer?.name;
 
   return (
     <LayoutDialog

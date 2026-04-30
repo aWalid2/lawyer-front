@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { FormValues } from "./types";
 import { validationSchema } from "./ValidationSchema";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { PageLayout } from "@/shared/components/PageLayout";
+import PageLayout from "@/shared/components/PageLayout";
 
 // استيراد المكونات
 import OfficeInfo from "./components/OfficeInfo";

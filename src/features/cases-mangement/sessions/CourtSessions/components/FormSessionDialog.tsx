@@ -53,7 +53,7 @@ export const FormSessionDialog: React.FC<{
         </Button>
       </DialogTrigger>
       <DialogContent
-        className="sm:rounded-main rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-[772px] sm:px-20 sm:py-10"
+        className="sm:rounded-main rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-193 sm:px-20 sm:py-10"
         dir="rtl"
         showCloseButton={false}
       >

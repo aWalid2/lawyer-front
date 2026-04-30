@@ -25,12 +25,12 @@ const ProsecutionSessionsGroup = () => {
   const { data: sessionsResponse, isPending } = useGetProsecutionSessions(
     Number(id),
     page,
-    2,
+    5,
   );
   const sessions = sessionsResponse?.data || [];
   const totalPages = sessionsResponse?.meta?.lastPage || 1;
 
-  const indexedData = useIndexedData(sessions, page, 2);
+  const indexedData = useIndexedData(sessions, page, 5);
 
   const handleAdd = () => {
     setEditingSession(null);

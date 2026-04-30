@@ -59,13 +59,13 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
   const { data: cassationData, isPending } = useGetCassaionSessionTable(
     Number(id),
     page,
-    3,
+    5,
     isCassationTab,
   );
   const { data: firstInstanceData, isPending: isPendingFirstInstance } =
-    useGetFirstInstanceSessionTable(Number(id), page, 3, isFirstInstanceTab);
+    useGetFirstInstanceSessionTable(Number(id), page, 5, isFirstInstanceTab);
   const { data: appealData, isPending: isPendingAppeal } =
-    useGetAppealSessionTable(Number(id), page, 3, isAppealTab);
+    useGetAppealSessionTable(Number(id), page, 5, isAppealTab);
 
   const totalPages =
     cassationData?.meta?.lastpage ??
@@ -85,13 +85,13 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
       ? totalPagesFirstInstance
       : totalPagesAppeal;
 
-  const indexdCassationData = useIndexedData(cassationData?.data, page, 3);
+  const indexdCassationData = useIndexedData(cassationData?.data, page, 5);
   const indexdFirstInstanceData = useIndexedData(
     firstInstanceData?.data,
     page,
-    3,
+    5,
   );
-  const indexdAppealData = useIndexedData(appealData?.data, page, 3);
+  const indexdAppealData = useIndexedData(appealData?.data, page, 5);
 
   const currentData = isCassationTab
     ? indexdCassationData

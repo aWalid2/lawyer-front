@@ -1,5 +1,4 @@
 import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
-import { EditIcon } from "lucide-react";
 
 export const HeaderProsecutionInfo = ({
   handleAddClick,
