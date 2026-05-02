@@ -1,12 +1,11 @@
 import { useParams } from "react-router-dom";
-
-import { HeaderExpertsSessionInfo } from "./components/HeaderExpertsSessionInfo";
-import { useGetLastExpertSession } from "../../api/hooks/useGetLastExpertSession";
-import { STATUS_LABEL } from "../../types/ExpertSessionApiTypes";
+import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { InputBox } from "@/shared/components/InputBox";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
-import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
-import { InputBox } from "@/shared/components/InputBox";
+import { useGetLastExpertSession } from "../../api/hooks/useGetLastExpertSession";
+import { STATUS_LABEL } from "../../types/ExpertSessionApiTypes";
 
 export const ExpertsSessionInfo = () => {
   const { id: caseId } = useParams<{ id: string }>();
@@ -17,8 +16,8 @@ export const ExpertsSessionInfo = () => {
 
   return (
     <CustomLayoutBorder>
-      <HeaderExpertsSessionInfo />
-      <div className="grid gap-6 md:grid-cols-2">
+      <HeaderTitle innerPage title="بيانات اخر تقرير" />
+      <div className="mt-6 grid gap-6 md:grid-cols-2">
         <InputBox
           label="مكتب الخبراء / الخبير"
           text={data.expert_office_name}

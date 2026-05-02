@@ -17,6 +17,7 @@ import {
 import { OtherSessionDetailsDialog } from "./components/OtherSessionDetailsDialog";
 import { useOtherSessionsTable } from "./hooks/useOtherSessionsTable";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 
 export const OtherSessionsTable: React.FC = () => {
   const {
@@ -90,9 +91,7 @@ export const OtherSessionsTable: React.FC = () => {
   return (
     <CustomLayoutBorder>
       <div className="flex flex-col items-start justify-between gap-4 pb-6 sm:flex-row sm:items-center">
-        <h1 className="text-secondary font-cairo w-full text-right text-[18px] font-semibold sm:w-auto">
-          الجلسات الإدارية
-        </h1>
+        <HeaderTitle innerPage title="الجلسات الإدارية" />
         <AddOtherSessionDialog
           onSave={handleSave}
           isPending={isCreatePending}

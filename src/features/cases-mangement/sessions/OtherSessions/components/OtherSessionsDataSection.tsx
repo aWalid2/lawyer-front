@@ -1,14 +1,15 @@
 import { Error } from "@/shared/components/Error";
+import { InputBox } from "@/shared/components/InputBox";
 import { DateIcon } from "@/shared/icons/Date";
 import type { AxiosError } from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useGetLastOtherSession } from "../api/hooks/useGetLastOtherSession";
-import { InputBox } from "@/shared/components/InputBox";
 import { getOtherSessionLawyerName } from "../types/typesOther";
 
-import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
 export const OtherSessionsDataSection: React.FC = () => {
   const { id: caseId } = useParams<{ id: string }>();
@@ -32,9 +33,7 @@ export const OtherSessionsDataSection: React.FC = () => {
   return (
     <CustomLayoutBorder>
       <div className="flex items-center justify-between pb-8">
-        <h1 className="text-secondary font-cairo w-full text-right text-[18px] font-semibold">
-          آخر جلسة إدارية
-        </h1>
+        <HeaderTitle innerPage title="   بيانات آخر جلسة إدارية  " />
       </div>
 
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">

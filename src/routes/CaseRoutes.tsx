@@ -18,9 +18,7 @@ const CaseDocuments = lazy(
 const Expenses = lazy(() => import("../pages/dashboard/caseinfo/Expenses"));
 const Procedures = lazy(() => import("../pages/dashboard/caseinfo/Procedures"));
 const Employees = lazy(() => import("../pages/dashboard/caseinfo/Employees"));
-const EmployeeDetails = lazy(
-  () => import("../pages/dashboard/caseinfo/EmployeeDetails"),
-);
+
 const CaseDocumentDetails = lazy(
   () => import("../pages/dashboard/caseinfo/DocumentDetails"),
 );
@@ -39,7 +37,6 @@ const CaseRoutes = () => {
         <Route path="expenses" element={<Expenses />} />
         <Route path="procedures" element={<Procedures />} />
         <Route path="employees" element={<Employees />} />
-        <Route path="employees/:employeeId" element={<EmployeeDetails />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

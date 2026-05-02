@@ -8,6 +8,7 @@ import {
   formatDateToTime,
   formatDateToYYYYMMDD,
 } from "@/shared/utils/convertDate";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 
 export const HeaderSessions = ({ tab }: { tab: string }) => {
   const { id } = useParams<{ id: string }>();
@@ -97,9 +98,7 @@ export const HeaderSessions = ({ tab }: { tab: string }) => {
 
   return (
     <div className="flex w-full flex-wrap items-center justify-between gap-2 pb-6">
-      <h2 className="text-secondary font-cairo self-start text-xl font-semibold whitespace-nowrap md:self-center">
-        {currentTab.title}
-      </h2>
+      <HeaderTitle innerPage title={currentTab.title} />
       <FormSessionDialog
         title={
           hasData

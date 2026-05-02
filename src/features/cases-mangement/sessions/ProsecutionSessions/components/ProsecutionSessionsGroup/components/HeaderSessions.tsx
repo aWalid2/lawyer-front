@@ -1,16 +1,18 @@
-
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 
 export const HeaderSessions = ({ handleAdd }: { handleAdd: () => void }) => {
-    return (
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4">
-            <h1 className="text-xl font-cairo">جلسات النيابة</h1>
-            <button
-                type="button"
-                onClick={handleAdd}
-                className="flex shrink-0 items-center justify-center gap-2 bg-[#CBA46226] rounded-md w-full sm:w-[180px] md:w-[200px] h-[50px] transition-colors duration-200 px-2 hover:bg-[#CBA46240]"
-            >
-                <span className="text-[14px] sm:text-[16px] font-medium whitespace-nowrap text-[#CBA462]">+ إضافة جلسة نيابة</span>
-            </button>
-        </div>
-    )
-}
+  return (
+    <div className="flex flex-col items-start justify-between gap-4 pb-4 sm:flex-row sm:items-center">
+      <HeaderTitle innerPage title="جلسات النيابة العامة" />
+      <button
+        type="button"
+        onClick={handleAdd}
+        className="flex h-[50px] w-full shrink-0 items-center justify-center gap-2 rounded-md bg-[#CBA46226] px-2 transition-colors duration-200 hover:bg-[#CBA46240] sm:w-[180px] md:w-[200px]"
+      >
+        <span className="text-[14px] font-medium whitespace-nowrap text-[#CBA462] sm:text-[16px]">
+          + إضافة جلسة نيابة
+        </span>
+      </button>
+    </div>
+  );
+};
