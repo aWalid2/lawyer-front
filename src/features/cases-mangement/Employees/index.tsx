@@ -1,85 +1,136 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
+import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { EmployeesActions } from "./components/EmployeesActions";
+import { EmptyTable } from "@/shared/components/EmptyTable";
+import { Error } from "@/shared/components/Error";
 import { Pagination } from "@/shared/components/Pagination";
-import { HeaderEmployee } from "./components/HeaderEmployee";
-
-interface Employee {
-    id: string;
-    name: string;
-    phone: string;
-    job: string;
-}
-
-const mockData: Employee[] = [
-    { id: "1", name: "محمد علي", phone: "073972983", job: "سكرتير" },
-    { id: "2", name: "محمد علي", phone: "073972983", job: "محاسب" },
-    { id: "3", name: "محمد علي", phone: "073972983", job: "محاسب" },
-    { id: "4", name: "محمد علي", phone: "073972983", job: "محاسب" },
-    { id: "5", name: "محمد علي", phone: "073972983", job: "محاسب" },
-    { id: "6", name: "محمد علي", phone: "073972983", job: "محاسب" },
-    { id: "7", name: "محمد علي", phone: "073972983", job: "محاسب" },
-];
+import LoadingPage from "@/shared/components/LoadingPage";
+import { CaseEmployeeDetailsDialog } from "./components/CaseEmployeeDetailsDialog";
+import { CaseEmployeeDialog } from "./components/CaseEmployeeDialog";
+import { EmployeesActions } from "./components/EmployeesActions";
+import { useEmployeesTable } from "./hooks/useEmployeesTable";
+import type { CaseEmployee } from "./types";
+import { getCaseEmployeeName } from "./types";
 
 export const Employees: React.FC = () => {
-    const navigate = useNavigate();
-    const { id: caseId } = useParams<{ id: string }>();
-    const [currentPage, setCurrentPage] = React.useState(1);
-    const itemsPerPage = 15;
+  const {
+    page,
+    setPage,
+    selectedEmployee,
+    isFormOpen,
+    isViewOpen,
+    isPending,
+    isError,
+    error,
+    indexedEmployeesData,
+    totalPages,
+    employeeOptions,
+    handleSave,
+    handleDelete,
+    handleOpenEdit,
+    handleOpenView,
+    handleFormOpenChange,
+    handleViewOpenChange,
+    handleEditFromView,
+    isOptionsPending,
+    isCreatePending,
+    isSubmitting,
+  } = useEmployeesTable();
 
-    const totalPages = Math.ceil(mockData.length / itemsPerPage);
+  if (isPending) return <LoadingPage />;
+  if (isError) {
+    return <Error message="حدث خطأ أثناء جلب موظفي القضية." error={error} />;
+  }
 
-    const currentData = React.useMemo(() => {
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        return mockData.slice(startIndex, startIndex + itemsPerPage);
-    }, [currentPage]);
+  const columns: Column<CaseEmployee>[] = [
+    {
+      header: "#",
+      accessor: (item) => item.rowNumber,
+      headerClassName: "w-[60px]",
+    },
+    {
+      header: "اسم الموظف",
+      accessor: (item) => getCaseEmployeeName(item),
+    },
+    {
+      header: "رقم الهاتف",
+      accessor: "phone",
+    },
+    {
+      header: "الوظيفة",
+      accessor: "job",
+    },
+    {
+      header: "إجراء",
+      accessor: (item) => (
+        <EmployeesActions
+          employee={item}
+          onView={() => handleOpenView(item.id)}
+          onEdit={() => handleOpenEdit(item.id)}
+          onDelete={() => handleDelete(item.id)}
+        />
+      ),
+    },
+  ];
 
-    const columns: Column<Employee>[] = [
-        {
-            header: "#",
-            accessor: (item) => mockData.findIndex((e) => e.id === item.id) + 1,
-            headerClassName: "w-16",
-        },
-        {
-            header: "اسم الموظف",
-            accessor: "name",
-        },
-        {
-            header: "رقم الهاتف",
-            accessor: "phone",
-        },
-        {
-            header: "الوظيفة",
-            accessor: "job",
-        },
-        {
-            header: "إجراء",
-            accessor: (item) => (
-                <EmployeesActions
-                    employee={item}
-                    onEdit={(emp) => console.log("Edit", emp)}
-                    onDelete={(emp) => console.log("Delete", emp)}
-                    onView={(emp) => navigate(`/dashboard/case-management/${caseId}/employees/${emp.id}`)}
-                />
-            ),
-        },
-    ];
+  return (
+    <CustomLayoutBorder>
+      <div className="flex flex-col items-start justify-between gap-4 pb-6 sm:flex-row sm:items-center">
+        <h1 className="text-secondary font-cairo w-full text-right text-[18px] font-semibold sm:w-auto">
+          الموظفين
+        </h1>
 
-    return (
+        <CaseEmployeeDialog
+          onSave={handleSave}
+          employeeOptions={employeeOptions}
+          isOptionsPending={isOptionsPending}
+          isPending={isCreatePending}
+          trigger={<ButtonUpdateInfo type="add" text="تعيين موظف" />}
+        />
+      </div>
 
-        <>
-            <HeaderEmployee title="الموظفين" buttonText="تعيين موظف" />
-            <div className="mt-4 bg-white">
-                <DataTable rowKey={'id'} data={currentData} columns={columns} rowIdField="id" />
-                {totalPages > 1 && (
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={setCurrentPage}
-                    />
-                )}
-            </div>
-        </>
-    );
+      <div className="overflow-hidden">
+        {indexedEmployeesData.length === 0 ? (
+          <EmptyTable message="لا يوجد موظفين مرتبطين بهذه القضية" />
+        ) : (
+          <>
+            <DataTable
+              data={indexedEmployeesData}
+              columns={columns}
+              rowIdField="id"
+            />
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+              />
+            )}
+          </>
+        )}
+      </div>
+
+      {isFormOpen && (
+        <CaseEmployeeDialog
+          open={isFormOpen}
+          onOpenChange={handleFormOpenChange}
+          employee={selectedEmployee}
+          employeeOptions={employeeOptions}
+          isOptionsPending={isOptionsPending}
+          onSave={handleSave}
+          isPending={isSubmitting}
+        />
+      )}
+
+      {selectedEmployee && (
+        <CaseEmployeeDetailsDialog
+          open={isViewOpen}
+          onOpenChange={handleViewOpenChange}
+          employee={selectedEmployee}
+          onEdit={handleEditFromView}
+        />
+      )}
+    </CustomLayoutBorder>
+  );
 };

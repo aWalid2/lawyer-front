@@ -1,8 +1,8 @@
-// service/addLawyers.ts
+
 import api from "@/lib/api";
 
 export const addEmployee = async (data: any) => {
-  try {
+
     const { data: response } = await api.post("/users", {
       first_name: data.first_name,
       email: data.email,
@@ -15,7 +15,6 @@ export const addEmployee = async (data: any) => {
       }
     });
     return response;
-  } catch (error: any) {
-    throw error;
-  }
+
+
 };
