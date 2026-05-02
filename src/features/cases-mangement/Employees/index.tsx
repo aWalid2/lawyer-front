@@ -1,5 +1,4 @@
 import React from "react";
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { EmptyTable } from "@/shared/components/EmptyTable";
@@ -9,6 +8,7 @@ import LoadingPage from "@/shared/components/LoadingPage";
 import { CaseEmployeeDetailsDialog } from "./components/CaseEmployeeDetailsDialog";
 import { CaseEmployeeDialog } from "./components/CaseEmployeeDialog";
 import { EmployeesActions } from "./components/EmployeesActions";
+import { HeaderEmployee } from "./components/HeaderEmployee";
 import { useEmployeesTable } from "./hooks/useEmployeesTable";
 import type { CaseEmployee } from "./types";
 import { getCaseEmployeeName } from "./types";
@@ -76,19 +76,14 @@ export const Employees: React.FC = () => {
 
   return (
     <CustomLayoutBorder>
-      <div className="flex flex-col items-start justify-between gap-4 pb-6 sm:flex-row sm:items-center">
-        <h1 className="text-secondary font-cairo w-full text-right text-[18px] font-semibold sm:w-auto">
-          الموظفين
-        </h1>
-
-        <CaseEmployeeDialog
-          onSave={handleSave}
-          employeeOptions={employeeOptions}
-          isOptionsPending={isOptionsPending}
-          isPending={isCreatePending}
-          trigger={<ButtonUpdateInfo type="add" text="تعيين موظف" />}
-        />
-      </div>
+      <HeaderEmployee
+        title="الموظفين"
+        buttonText="تعيين موظف"
+        employeeOptions={employeeOptions}
+        onSave={handleSave}
+        isOptionsPending={isOptionsPending}
+        isPending={isCreatePending}
+      />
 
       <div className="overflow-hidden">
         {indexedEmployeesData.length === 0 ? (

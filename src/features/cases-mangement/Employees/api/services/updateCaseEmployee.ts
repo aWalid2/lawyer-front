@@ -10,6 +10,6 @@ export const updateCaseEmployee = async ({
   id,
   data,
 }: UpdateCaseEmployeePayload) => {
-  const response = await api.put(`/case-employee/${id}`, data);
+  const response = await api.patch(`/case-employee/${id}`, data);
   return response.data;
 };

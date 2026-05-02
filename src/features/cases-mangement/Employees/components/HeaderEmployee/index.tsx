@@ -1,20 +1,36 @@
-import { HeaderTitle } from '@/shared/components/HeaderTitle'
-import { Button } from '@/components/ui/button'
-import { HiringEmployeeDialog } from '../HiringEmployeeDialog'
+import React from "react";
+import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { CaseEmployeeDialog } from "../CaseEmployeeDialog";
+import type { CaseEmployeeFormValues } from "../../types";
 
-export const HeaderEmployee = ({ title, buttonText }: { title: string, buttonText: string }) => {
-    return (
-        <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-            <HeaderTitle title={title} />
-            <HiringEmployeeDialog
-                trigger={
-                    <Button
-                        className="rounded-[12px] h-12.5 px-6 bg-primary-gradient font-semibold text-white "
-                    >
-                        {buttonText}
-                    </Button>
-                }
-            />
-        </div>
-    )
+interface HeaderEmployeeProps {
+  title: string;
+  buttonText: string;
+  employeeOptions: Array<{ label: React.ReactNode; value: string | number }>;
+  onSave: (values: CaseEmployeeFormValues, id?: number) => Promise<void> | void;
+  isPending?: boolean;
+  isOptionsPending?: boolean;
 }
+
+export const HeaderEmployee: React.FC<HeaderEmployeeProps> = ({
+  title,
+  buttonText,
+  employeeOptions,
+  onSave,
+  isPending = false,
+  isOptionsPending = false,
+}) => {
+  return (
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+      <HeaderTitle title={title} />
+      <CaseEmployeeDialog
+        onSave={onSave}
+        employeeOptions={employeeOptions}
+        isOptionsPending={isOptionsPending}
+        isPending={isPending}
+        trigger={<ButtonUpdateInfo type="add" text={buttonText} />}
+      />
+    </div>
+  );
+};
