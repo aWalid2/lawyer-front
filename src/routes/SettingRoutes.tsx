@@ -16,9 +16,7 @@ const Courts = lazy(() => import("../pages/dashboard/settings/Courts"));
 const CaseManagementSettings = lazy(
   () => import("../pages/dashboard/settings/CaseManagementSettings"),
 );
-const SessionManagement = lazy(
-  () => import("../pages/dashboard/settings/SessionManagement"),
-);
+
 const CaseStatuses = lazy(
   () => import("../pages/dashboard/settings/CaseStatuses"),
 );
@@ -27,6 +25,9 @@ const PoliceStations = lazy(
 );
 const PublicProsecutions = lazy(
   () => import("../pages/dashboard/settings/PublicProsecutions"),
+);
+const ClientStatuses = lazy(
+  () => import("../pages/dashboard/settings/ClientStatuses"),
 );
 
 const SettingRoutes = () => {
@@ -40,10 +41,11 @@ const SettingRoutes = () => {
       <Route path="permissions/:id" element={<AddRole />} />
       <Route path="courts" element={<Courts />} />
       <Route path="cases" element={<CaseManagementSettings />} />
-      <Route path="sessions" element={<SessionManagement />} />
+
       <Route path="case-statuses" element={<CaseStatuses />} />
       <Route path="police-stations" element={<PoliceStations />} />
       <Route path="prosecutions" element={<PublicProsecutions />} />
+      <Route path="client-statuses" element={<ClientStatuses />} />
     </Routes>
   );
 };

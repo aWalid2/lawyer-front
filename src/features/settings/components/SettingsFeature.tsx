@@ -26,11 +26,7 @@ const settingsItems = [
     description: "إدارة وتعديل أنواع القضايا في النظام.",
     href: "/dashboard/settings/cases",
   },
-  {
-    title: "إدارة الجلسات",
-    description: "إدارة وتعديل أنواع الجلسات وخصائصها.",
-    href: "/dashboard/settings/sessions",
-  },
+
   {
     title: "حالات القضايا",
     description: "إدارة وتعديل حالات القضايا في النظام.",
@@ -45,6 +41,11 @@ const settingsItems = [
     title: "النيابات",
     description: "إضافة وتعديل وحذف النيابات.",
     href: "/dashboard/settings/prosecutions",
+  },
+  {
+    title: "صفات الموكل",
+    description: "إدارة وتعديل صفات الموكل في النظام.",
+    href: "/dashboard/settings/client-statuses",
   },
 ];
 
