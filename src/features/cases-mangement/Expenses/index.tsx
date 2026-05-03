@@ -2,46 +2,55 @@ import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { EmptyTable } from "@/shared/components/EmptyTable";
+import { Error } from "@/shared/components/Error";
 import { Pagination } from "@/shared/components/Pagination";
+import LoadingPage from "@/shared/components/LoadingPage";
 import { InputBox } from "@/shared/components/InputBox";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import React, { useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
 import { ExpenseDetailsDialog } from "./components/ExpenseDetailsDialog";
 import { EditModelExpenses } from "./components/EditModelExpenses";
 import { ExpensesActions } from "./components/ExpensesActions";
 import type { ExpenseFormValues, ExpenseItem } from "./types";
+import { buildExpenseFormData } from "./api/services/buildExpenseFormData";
+import { useCreateCaseExpense } from "./api/hooks/useCreateCaseExpense";
+import { useDeleteCaseExpense } from "./api/hooks/useDeleteCaseExpense";
+import { useGetCaseExpense } from "./api/hooks/useGetCaseExpense";
+import { useGetCaseExpenses } from "./api/hooks/useGetCaseExpenses";
+import { useUpdateCaseExpense } from "./api/hooks/useUpdateCaseExpense";
 
 const ITEMS_PER_PAGE = 10;
-
-const INITIAL_EXPENSES: ExpenseItem[] = [
-  {
-    id: "expense-1",
-    expenseType: "رسوم محكمة",
-    description: "رسوم قيد الدعوى",
-    amount: 1200,
-    expenseDate: "2026-04-15",
-    notes: "تم دفع الرسوم عند تسجيل الدعوى.",
-    attachments: ["court-fees.pdf"],
-  },
-  {
-    id: "expense-2",
-    expenseType: "انتقالات",
-    description: "انتقال لحضور الجلسة",
-    amount: 350,
-    expenseDate: "2026-04-28",
-    notes: "انتقال فريق العمل إلى المحكمة.",
-    attachments: [],
-  },
-];
+const EMPTY_EXPENSES: ExpenseItem[] = [];
 
 export const ExpensesCaseFeature = () => {
-  const [expenses, setExpenses] = useState<ExpenseItem[]>(INITIAL_EXPENSES);
+  const { id } = useParams();
+  const caseId = id ?? "";
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewOpen, setIsViewOpen] = useState(false);
   const [selectedExpenseId, setSelectedExpenseId] = useState<string | null>(
     null,
+  );
+
+  const {
+    data: expensesResponse,
+    isPending,
+    isError,
+    error,
+  } = useGetCaseExpenses(caseId);
+  const createExpenseMutation = useCreateCaseExpense(caseId);
+  const updateExpenseMutation = useUpdateCaseExpense(caseId);
+  const deleteExpenseMutation = useDeleteCaseExpense(caseId);
+  const { data: selectedExpenseDetails } = useGetCaseExpense(
+    selectedExpenseId,
+    Boolean(selectedExpenseId && (isModalOpen || isViewOpen)),
+  );
+
+  const expenses = useMemo(
+    () => expensesResponse?.data ?? EMPTY_EXPENSES,
+    [expensesResponse?.data],
   );
 
   const totalExpensesValue = useMemo(
@@ -61,12 +70,16 @@ export const ExpensesCaseFeature = () => {
     return formatDateToYYYYMMDD(latest.expenseDate) || "-";
   }, [expenses]);
 
-  const selectedExpense = useMemo(
-    () => expenses.find((expense) => expense.id === selectedExpenseId) ?? null,
-    [expenses, selectedExpenseId],
-  );
+  const selectedExpense = useMemo(() => {
+    const expenseFromList =
+      expenses.find((expense) => expense.id === selectedExpenseId) ?? null;
 
-  const totalPages = Math.max(1, Math.ceil(expenses.length / ITEMS_PER_PAGE));
+    return selectedExpenseDetails ?? expenseFromList;
+  }, [expenses, selectedExpenseDetails, selectedExpenseId]);
+
+  const totalPages =
+    expensesResponse?.meta?.totalPages ??
+    Math.max(1, Math.ceil(expenses.length / ITEMS_PER_PAGE));
 
   const paginatedExpenses = useMemo(() => {
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
@@ -82,6 +95,13 @@ export const ExpensesCaseFeature = () => {
   React.useEffect(() => {
     setPage(1);
   }, [expenses.length]);
+
+  const handleModalOpenChange = (open: boolean) => {
+    setIsModalOpen(open);
+    if (!open && !isViewOpen) {
+      setSelectedExpenseId(null);
+    }
+  };
 
   const handleOpenCreate = () => {
     setSelectedExpenseId(null);
@@ -111,9 +131,7 @@ export const ExpensesCaseFeature = () => {
   };
 
   const handleDelete = (expenseId: string) => {
-    setExpenses((current) =>
-      current.filter((expense) => expense.id !== expenseId),
-    );
+    deleteExpenseMutation.mutate(expenseId);
     if (selectedExpenseId === expenseId) {
       setSelectedExpenseId(null);
       setIsModalOpen(false);
@@ -121,33 +139,37 @@ export const ExpensesCaseFeature = () => {
     }
   };
 
-  const handleSaveChanges = (values: ExpenseFormValues, expenseId?: string) => {
-    const attachments = values.attachments
-      ? Array.isArray(values.attachments)
-        ? values.attachments
-        : Array.from(values.attachments).map((file) => file.name)
-      : [];
+  const handleSaveChanges = async (
+    values: ExpenseFormValues,
+    expenseId?: string,
+  ) => {
+    const formData = buildExpenseFormData(values);
 
-    const payload: ExpenseItem = {
-      id: expenseId || crypto.randomUUID(),
-      expenseType: values.expenseType,
-      description: values.description,
-      amount: Number(values.amount),
-      expenseDate: values.expenseDate,
-      notes: values.notes || "",
-      attachments,
-    };
+    if (expenseId) {
+      await updateExpenseMutation.mutateAsync({
+        expenseId,
+        data: formData,
+      });
+      return;
+    }
 
-    setExpenses((current) => {
-      if (!expenseId) {
-        return [payload, ...current];
-      }
-
-      return current.map((expense) =>
-        expense.id === expenseId ? payload : expense,
-      );
+    await createExpenseMutation.mutateAsync({
+      caseId,
+      data: formData,
     });
   };
+
+  if (!caseId) {
+    return <Error message="معرف القضية غير موجود في الرابط" />;
+  }
+
+  if (isPending) {
+    return <LoadingPage />;
+  }
+
+  if (isError) {
+    return <Error message="حدث خطأ أثناء جلب مصروفات القضية." error={error} />;
+  }
 
   const columns: Column<ExpenseItem>[] = [
     {
@@ -249,8 +271,11 @@ export const ExpensesCaseFeature = () => {
       <EditModelExpenses
         expense={selectedExpense}
         open={isModalOpen}
-        onOpenChange={setIsModalOpen}
+        onOpenChange={handleModalOpenChange}
         onSave={handleSaveChanges}
+        isPending={
+          createExpenseMutation.isPending || updateExpenseMutation.isPending
+        }
       />
 
       {selectedExpense && (

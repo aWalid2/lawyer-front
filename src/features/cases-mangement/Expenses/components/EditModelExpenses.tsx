@@ -18,7 +18,8 @@ interface EditModelExpensesProps {
   expense?: ExpenseItem | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave: (values: ExpenseFormValues, id?: string) => void;
+  onSave: (values: ExpenseFormValues, id?: string) => Promise<void> | void;
+  isPending?: boolean;
 }
 
 export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
@@ -26,6 +27,7 @@ export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
   open,
   onOpenChange,
   onSave,
+  isPending = false,
 }) => {
   const initialValues = expense
     ? toExpenseFormValues(expense)
@@ -56,12 +58,12 @@ export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
         initialValues={initialValues}
         validationSchema={validationSchema}
         enableReinitialize
-        onSubmit={(values) => {
-          onSave(values, expense?.id);
+        onSubmit={async (values) => {
+          await onSave(values, expense?.id);
           onOpenChange(false);
         }}
       >
-        {() => (
+        {({ isSubmitting }) => (
           <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <SelectForm
@@ -99,9 +101,14 @@ export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
 
             <button
               type="submit"
+              disabled={isSubmitting || isPending}
               className="bg-primary-gradient mt-4 w-full rounded-[12px] px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90"
             >
-              {isEditMode ? "حفظ التغييرات" : "إضافة المصروف"}
+              {isSubmitting || isPending
+                ? "جارٍ الحفظ..."
+                : isEditMode
+                  ? "حفظ التغييرات"
+                  : "إضافة المصروف"}
             </button>
           </Form>
         )}

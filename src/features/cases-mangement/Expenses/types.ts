@@ -1,3 +1,5 @@
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+
 export interface ExpenseItem {
   id: string;
   expenseType: string;
@@ -41,7 +43,7 @@ export const toExpenseFormValues = (
   expenseType: expense?.expenseType ?? "",
   description: expense?.description ?? "",
   amount: expense?.amount ?? "",
-  expenseDate: expense?.expenseDate ?? "",
+  expenseDate: formatDateToYYYYMMDD(expense?.expenseDate) || "",
   notes: expense?.notes ?? "",
   attachments: expense?.attachments ?? null,
 });
