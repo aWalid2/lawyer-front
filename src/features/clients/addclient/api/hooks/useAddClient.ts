@@ -15,7 +15,6 @@ export const useAddClient = () => {
             navigate("/dashboard/clients");
         },
         onError: (error: any) => {
-            console.error("Error details:", error);
             toast.error(error?.response?.data?.message || "حدث خطأ أثناء إضافة الموكل");
         },
     });

@@ -1,6 +1,4 @@
-/**
- * Converts a File or FileList first element to a Base64 Data URL string.
- */
+
 export const fileToBase64 = (file: File | FileList | null | undefined): Promise<string | undefined> => {
     return new Promise((resolve, reject) => {
         if (!file) {
