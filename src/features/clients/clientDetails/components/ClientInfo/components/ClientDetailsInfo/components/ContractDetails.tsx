@@ -1,5 +1,6 @@
 import { InputBox } from "@/shared/components/InputBox";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 import type { ClientContract } from "./types";
 
 interface ContractDetailsProps {
@@ -14,7 +15,7 @@ export const ContractDetails: React.FC<ContractDetailsProps> = ({
   }
 
   return (
-    <div className="rounded-xl border border-[#E8E8E8] p-4">
+    <CustomLayoutBorder>
       <div className="mb-5 flex items-center justify-between gap-3 max-md:flex-col max-md:items-start">
         <h3 className="text-lg font-semibold text-[#153A4D]">بيانات العقد</h3>
         {contract.document_file && (
@@ -29,43 +30,27 @@ export const ContractDetails: React.FC<ContractDetailsProps> = ({
         )}
       </div>
 
-      <div className="flex gap-3 max-md:flex-col">
-        <div className="flex-1">
-          <InputBox
-            label="تاريخ بداية العقد"
-            text={formatDateToYYYYMMDD(contract.start_date) || "-"}
-          />
-        </div>
-        <div className="flex-1">
-          <InputBox
-            label="تاريخ نهاية العقد"
-            text={formatDateToYYYYMMDD(contract.end_date) || "-"}
-          />
-        </div>
-      </div>
+      <div className="grid grid-cols-2 gap-3 max-md:grid-cols-1">
+        <InputBox label="رقم العقد" text={contract.id ?? "-"} />
 
-      <div className="flex gap-3 pt-5 max-md:flex-col">
-        <div className="flex-1">
-          <InputBox label="قيمة العقد" text={contract.contract_value ?? "-"} />
-        </div>
-        <div className="flex-1">
-          <InputBox
-            label="مدة العقد"
-            text={contract.contract_duration ?? "-"}
-          />
-        </div>
-      </div>
+        <InputBox label="قيمة العقد" text={contract.contract_value ?? "-"} />
 
-      <div className="flex gap-3 pt-5 max-md:flex-col">
-        <div className="flex-1">
-          <InputBox
-            label="تاريخ إنشاء العقد"
-            text={formatDateToYYYYMMDD(contract.created_at) || "-"}
-          />
-        </div>
-        <div className="flex-1">
-          <InputBox label="رقم العقد" text={contract.id ?? "-"} />
-        </div>
+        <InputBox label="مدة العقد" text={contract.contract_duration ?? "-"} />
+
+        <InputBox
+          label="تاريخ بداية العقد"
+          text={formatDateToYYYYMMDD(contract.start_date) || "-"}
+        />
+
+        <InputBox
+          label="تاريخ نهاية العقد"
+          text={formatDateToYYYYMMDD(contract.end_date) || "-"}
+        />
+
+        <InputBox
+          label="تاريخ إنشاء العقد"
+          text={formatDateToYYYYMMDD(contract.created_at) || "-"}
+        />
       </div>
 
       {contract.document_file && (
@@ -80,6 +65,6 @@ export const ContractDetails: React.FC<ContractDetailsProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </CustomLayoutBorder>
   );
 };
