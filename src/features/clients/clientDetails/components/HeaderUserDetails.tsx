@@ -21,7 +21,6 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
   const { mutate: deleteClient } = useDeleteClient();
   const navigate = useNavigate();
   const hasContractInfo = Boolean(client?.contract);
-  console.log("Client in HeaderUserDetails:", client);
 
   return (
     <div className="mb-6 flex flex-wrap items-center justify-between gap-y-3">
@@ -56,7 +55,7 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
         </div>
       ) : (
         <Link
-          to="/dashboard/case-management/add-case"
+          to={`/dashboard/case-management/add-case?clientId=${client?.user_id ?? ""}`}
           className="bg-primary-gradient rounded-mainfont-semibold rounded-main flex h-12.5 items-center gap-2 px-6 py-2.5 text-white shadow-lg transition-all hover:shadow-xl"
         >
           <Plus size={20} />

@@ -6,6 +6,7 @@ import { SwitchForm } from "@/shared/components/SwitchForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { Form, Formik, useFormikContext, type FormikErrors } from "formik";
 import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useAddPublicProsecutionCase } from "./api/hooks/useAddPublicProsecutionCase";
 import { useAddPublicProsecutionOfficeCase } from "./api/hooks/useAddPublicProsecutionOfficeCase";
@@ -62,6 +63,8 @@ const FormValidationToasts = () => {
 };
 
 const FormCase = () => {
+  const [searchParams] = useSearchParams();
+  const clientIdFromUrl = searchParams.get("clientId");
   const {
     mutateAsync: addUnderAppealCase,
     isPending: isPendingUnderAppealCase,
@@ -78,10 +81,15 @@ const FormCase = () => {
     useAddActiveCase();
   const { mutateAsync: addOtherCase, isPending: isPendingOtherCase } =
     useAddOtherCase();
+  const formInitialValues = {
+    ...initialValues,
+    client_id: clientIdFromUrl || initialValues.client_id,
+  };
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={formInitialValues}
+      enableReinitialize
       validationSchema={validationSchema}
       onSubmit={async (values) => {
         if (values.case_situation === "UNDER_APPEAL") {
