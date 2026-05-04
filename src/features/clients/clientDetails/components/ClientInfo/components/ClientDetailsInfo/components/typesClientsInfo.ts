@@ -1,4 +1,4 @@
-// src/components/clients/types.ts
+
 export interface Client {
   id: number;
   name: string;
@@ -17,7 +17,7 @@ export interface ClientsTableProps {
   onClientClick?: (client: Client) => void;
   onEdit?: (client: Client) => void;
   onDelete?: (id: number) => void;
-  onViewDetails?: (client: Client) => void;  // ✅ أضفناها هنا
+  onViewDetails?: (client: Client) => void;  
 }
 
 export interface ClientsStatsProps {

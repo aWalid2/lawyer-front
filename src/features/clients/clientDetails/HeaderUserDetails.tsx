@@ -20,8 +20,11 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
 }) => {
   const { mutate: deleteClient } = useDeleteClient();
   const navigate = useNavigate();
+  const hasContractInfo = Boolean(client?.contract);
+  console.log("Client in HeaderUserDetails:", client);
+
   return (
-    <div className="flex items-center  flex-wrap gap-y-3 justify-between mb-6">
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-y-3">
       <HeaderTitle title="تفاصيل الموكل" />
 
       {activeTab === "info" ? (
@@ -29,7 +32,8 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
           <EditClientDialog
             client={client}
             trigger={
-              <button className={`bg-[#F1F1F3] text-[#3D3C48] hover:opacity-90 p-3 rounded-[8px] shadow-sm transition-all h-12.5 w-12.5 flex items-center justify-center`}
+              <button
+                className={`flex h-12.5 w-12.5 items-center justify-center rounded-[8px] bg-[#F1F1F3] p-3 text-[#3D3C48] shadow-sm transition-all hover:opacity-90`}
               >
                 <EditIcon />
               </button>
@@ -38,22 +42,22 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
 
           <ConfirmDeleteDialog
             trigger={
-              <button className="bg-[#C60000]/8 hover:bg-red-100 text-[#C60000] p-3 rounded-[8px] shadow-sm transition-all h-12.5 w-12.5 flex items-center justify-center">
+              <button className="flex h-12.5 w-12.5 items-center justify-center rounded-[8px] bg-[#C60000]/8 p-3 text-[#C60000] shadow-sm transition-all hover:bg-red-100">
                 <TrashIcon />
               </button>
             }
             onConfirm={async () => {
-              await deleteClient({ id: client.user_id })
-              navigate("/dashboard/clients")
+              await deleteClient({ id: client.user_id });
+              navigate("/dashboard/clients");
             }}
           />
 
-          <AddContractDialog clientId={client.user_id} />
+          {!hasContractInfo && <AddContractDialog clientId={client.user_id} />}
         </div>
       ) : (
         <Link
           to="/dashboard/case-management/add-case"
-          className="bg-primary-gradient text-white px-6 py-2.5 rounded-mainfont-semibold flex items-center gap-2 shadow-lg h-12.5 hover:shadow-xl transition-all rounded-main"
+          className="bg-primary-gradient rounded-mainfont-semibold rounded-main flex h-12.5 items-center gap-2 px-6 py-2.5 text-white shadow-lg transition-all hover:shadow-xl"
         >
           <Plus size={20} />
           قضية جديدة
