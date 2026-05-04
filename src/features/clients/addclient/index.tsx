@@ -3,8 +3,6 @@ import type { FormValues } from "../addclient/types/addClientT";
 import { validationSchema } from "../addclient/components/ValidationSchema";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import PageLayout from "@/shared/components/PageLayout";
-import LoadingPage from "@/shared/components/LoadingPage";
-import { Error } from "@/shared/components/Error";
 import { useAddClient } from "./api/hooks/useAddClient";
 import { BasicClientInfo } from "./components/BasicClientInfo";
 import { ContractDetails } from "./components/ContractDetails";

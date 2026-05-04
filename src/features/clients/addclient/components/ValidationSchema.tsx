@@ -1,12 +1,17 @@
 import * as Yup from "yup";
+import type { FormValues } from "../types/addClientT";
 import {
   civilIdValidationSchema,
   isValidCivilId,
   isValidPhoneNumber,
   phoneValidationSchema,
 } from "@/shared/utils/validators";
+import {
+  CLIENT_STATUS_OPTIONS,
+  CLIENT_TYPES_OPTIONS,
+} from "@/shared/constants/clientOptions";
 
-export const validationSchema = Yup.object({
+const validationFields = {
   first_name: Yup.string().required("اسم الموكل مطلوب"),
   email: Yup.string()
     .required("البريد الإلكتروني مطلوب")
@@ -29,7 +34,7 @@ export const validationSchema = Yup.object({
   ),
   client_type: Yup.string()
     .oneOf(
-      ["individual", "company", "government"] as const,
+      CLIENT_TYPES_OPTIONS.map((option) => option.value),
       "نوع الموكل غير صالح",
     )
     .required("نوع الموكل مطلوب"),
@@ -70,4 +75,12 @@ export const validationSchema = Yup.object({
   }),
   contract_photo: Yup.mixed().nullable(),
   authorization_photo: Yup.mixed().nullable(),
-});
+  user_status: Yup.string()
+    .oneOf(
+      CLIENT_STATUS_OPTIONS.map((option) => option.value),
+      "حالة المستخدم غير صالحة",
+    )
+    .required("حالة المستخدم مطلوبة"),
+} satisfies Record<keyof FormValues, Yup.AnySchema>;
+
+export const validationSchema = Yup.object(validationFields);
