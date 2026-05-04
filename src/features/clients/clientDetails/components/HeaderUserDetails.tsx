@@ -5,9 +5,9 @@ import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { EditIcon } from "@/shared/icons/Edit";
 import { TrashIcon } from "@/shared/icons/Trash";
 import { AddContractDialog } from "./AddContractDialog";
-import { EditClientDialog } from "../clients/components/EditClientDialog";
+import { EditClientDialog } from "../../clients/components/EditClientDialog";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
-import { useDeleteClient } from "../api/hooks/useDeleteClient";
+import { useDeleteClient } from "../../api/hooks/useDeleteClient";
 
 interface HeaderUserDetailsProps {
   activeTab?: string;

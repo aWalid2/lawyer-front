@@ -2,6 +2,7 @@ import { InputBox } from "@/shared/components/InputBox";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import type { ClientDetailsData } from "../../../types/client";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
+import { ImagePreviewCard } from "./ImagePreviewCard";
 
 interface BasicClientDetailsProps {
   client?: ClientDetailsData;
@@ -38,20 +39,12 @@ export const BasicClientDetails: React.FC<BasicClientDetailsProps> = ({
       </div>
 
       <div className="mt-6">
-        <h4>صورة التوكيل</h4>
-        <div className="rounded-main mt-4 h-28 w-28 overflow-hidden bg-gray-200">
-          {client?.authorization_photo ? (
-            <img
-              src={client.authorization_photo}
-              alt="صورة التوكيل"
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-sm text-gray-500">
-              لا توجد صورة
-            </div>
-          )}
-        </div>
+        <ImagePreviewCard
+          src={client?.authorization_photo}
+          alt="صورة التوكيل"
+          label="صورة التوكيل"
+          title="معاينة صورة التوكيل"
+        />
       </div>
     </CustomLayoutBorder>
   );

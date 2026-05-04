@@ -13,7 +13,7 @@ import { Plus, XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SubmitButton } from "@/shared/components/SubmitButton";
 import { FileUpload } from "@/shared/components/FileUpload";
-import { useAddContract } from "./api/hooks/useAddContract";
+import { useAddContract } from "../api/hooks/useAddContract";
 
 interface AddContractFormValues {
   start_date: string;
@@ -26,7 +26,9 @@ interface AddContractDialogProps {
   clientId: string;
 }
 
-export const AddContractDialog: React.FC<AddContractDialogProps> = ({ clientId }) => {
+export const AddContractDialog: React.FC<AddContractDialogProps> = ({
+  clientId,
+}) => {
   const [open, setOpen] = React.useState(false);
   const { mutateAsync: addContract, isPending } = useAddContract();
 
@@ -47,23 +49,23 @@ export const AddContractDialog: React.FC<AddContractDialogProps> = ({ clientId }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="bg-primary-gradient text-white px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 shadow-lg h-12.5 hover:shadow-xl transition-all font-outfit">
+        <button className="bg-primary-gradient rounded-main font-outfit flex h-12.5 items-center gap-2 px-6 py-2.5 font-semibold text-white shadow-lg transition-all hover:shadow-xl">
           <Plus size={20} />
           اضافة عقد
         </button>
       </DialogTrigger>
       <DialogContent
-        className="sm:max-w-[540px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
+        className="rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-[540px] sm:rounded-[24px] sm:px-20 sm:py-10"
         dir="rtl"
         showCloseButton={false}
       >
         <DialogClose asChild>
-          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all outline-none">
-            <XIcon size={23} className="text-gray-500 " />
+          <button className="rounded-main absolute inset-e-6 top-8 flex h-12.5 items-center gap-2 px-6 py-2.5 font-semibold text-gray-500 transition-all outline-none sm:inset-e-15">
+            <XIcon size={23} className="text-gray-500" />
           </button>
         </DialogClose>
-        <DialogHeader className="mb-2 mt-15">
-          <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
+        <DialogHeader className="mt-15 mb-2">
+          <DialogTitle className="text-center text-2xl font-bold text-[#153A4D]">
             إضافة عقد جديد
           </DialogTitle>
         </DialogHeader>
@@ -84,7 +86,7 @@ export const AddContractDialog: React.FC<AddContractDialogProps> = ({ clientId }
           }}
         >
           {() => (
-            <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
+            <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
               <div className="space-y-3">
                 <InputForm
                   name="start_date"

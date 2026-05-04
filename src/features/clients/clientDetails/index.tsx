@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { ClientCases } from "./components/ClientCases";
 import ClientDetailsInfo from "./components/ClientDetailsInfo";
-import { HeaderUserDetails } from "./HeaderUserDetails";
+import { HeaderUserDetails } from "./components/HeaderUserDetails";
 import { useGetClient } from "./api/hooks/useGetClient";
 import { useParams } from "react-router-dom";
 import LoadingPage from "@/shared/components/LoadingPage";
