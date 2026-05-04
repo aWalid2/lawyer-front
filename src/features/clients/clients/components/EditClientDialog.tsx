@@ -17,6 +17,7 @@ import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { COUNTRY_OPTIONS } from "@/shared/constants/countryOptions";
 import { SubmitButton } from "@/shared/components/SubmitButton";
 import { useUpdateClient } from "@/features/users/users-clients/api/hooks/useUpdateClients";
+import { phoneValidationSchema } from "@/shared/utils/validators";
 
 interface EditClientDialogProps {
     client: any
@@ -41,7 +42,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
         last_name: client?.user?.last_name || "",
         ssn: client?.user?.ssn || "",
         phone: phoneData ? phoneData.nationalNumber : (client?.user?.phone || ""),
-        country_code: phoneData ? `+${phoneData.countryCallingCode}` : "+966",
+        country_code: phoneData ? `+${phoneData.countryCallingCode}` : "+956",
         email: client?.user?.email || "",
         nationality: client?.user?.nationality || "",
         country: client?.user?.country || "",
@@ -59,23 +60,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
         ssn: Yup.string()
             .matches(/^[0-9]+$/, "الرقم المدني يجب أن يكون أرقام")
             .length(10, "الرقم المدني يجب أن يكون 10 أرقام"),
-        phone: Yup.string()
-            .required("رقم الهاتف مطلوب")
-            .test("is-valid-phone", "رقم الهاتف غير صحيح", function (value) {
-                const { country_code } = this.parent;
-                if (!value) return false;
-
-
-                const country = COUNTRY_OPTIONS.find(opt => opt.value === country_code);
-                const iso = (country as any)?.iso;
-
-                try {
-                    const phoneNumber = parsePhoneNumberFromString(value, iso);
-                    return phoneNumber?.isValid() || false;
-                } catch {
-                    return false;
-                }
-            }),
+        phone: phoneValidationSchema("country_code"),
         country_code: Yup.string().required("كود الدولة مطلوب"),
         email: Yup.string().email("البريد الإلكتروني غير صالح"),
         nationality: Yup.string().nullable(),
@@ -168,7 +153,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                 />
 
                                 <div className="grid grid-cols-12 gap-2 ">
-                                    <div className="col-span-8">
+                                    <div className="col-span-7">
                                         <InputForm
                                             name="phone"
                                             label="رقم الهاتف"
@@ -176,7 +161,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                                             placeholder="أدخل رقم الهاتف"
                                         />
                                     </div>
-                                    <div className="col-span-4">
+                                    <div className="col-span-5">
                                         <SelectForm
                                             name="country_code"
                                             label="كود الدولة"

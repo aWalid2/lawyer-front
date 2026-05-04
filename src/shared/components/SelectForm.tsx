@@ -99,7 +99,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
       </label>
 
       {showSearch ? (
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover open={open} onOpenChange={setOpen} modal={true}>
           <PopoverTrigger asChild disabled={disabled}>
             <button
               type="button"
@@ -130,7 +130,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                 className="dark:text-foreground h-10 dark:border-white/15 dark:bg-transparent dark:placeholder:text-white/45"
                 onValueChange={onSearchChange}
               />
-              <CommandList className="dark:bg-transparent">
+              <CommandList className="dark:bg-transparent custom-scrollbar">
                 <CommandEmpty className="dark:text-white/60">
                   لا توجد نتائج
                 </CommandEmpty>
@@ -146,7 +146,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                       className={cn(
                         "data-[selected=true]:bg-primary/90 data-[selected=true]:text-primary-foreground dark:text-foreground dark:data-[selected=true]:bg-primary dark:data-[selected=true]:text-primary-foreground dark:hover:text-foreground flex cursor-pointer items-center justify-between dark:hover:bg-white/10",
                         String(field.value) === String(option.value) &&
-                          "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground data-[selected=true]:bg-primary! data-[selected=true]:text-primary-foreground! dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 dark:hover:text-primary-foreground",
+                        "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground data-[selected=true]:bg-primary! data-[selected=true]:text-primary-foreground! dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 dark:hover:text-primary-foreground",
                       )}
                     >
                       <div className="flex items-center gap-2">
