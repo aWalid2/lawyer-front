@@ -1,7 +1,8 @@
 import { InputBox } from "@/shared/components/InputBox";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
-import type { ClientContract } from "./types";
+import { ImagePreviewDialog } from "../../../../../../shared/components/ImagePreviewDialog";
+import type { ClientContract } from "../../../types/client";
 
 interface ContractDetailsProps {
   contract?: ClientContract | null;
@@ -56,13 +57,23 @@ export const ContractDetails: React.FC<ContractDetailsProps> = ({
       {contract.document_file && (
         <div className="mt-6">
           <h4>ملف العقد</h4>
-          <div className="rounded-main mt-4 h-40 w-40 overflow-hidden bg-gray-200 max-md:w-full">
-            <img
-              src={contract.document_file}
-              alt="ملف العقد"
-              className="h-full w-full object-cover"
-            />
-          </div>
+          <ImagePreviewDialog
+            src={contract.document_file}
+            alt="معاينة ملف العقد"
+            title="معاينة ملف العقد"
+            trigger={
+              <button
+                type="button"
+                className="rounded-main mt-4 h-40 w-40 overflow-hidden bg-gray-200 text-right transition-opacity hover:opacity-90 max-md:w-full"
+              >
+                <img
+                  src={contract.document_file}
+                  alt="ملف العقد"
+                  className="h-full w-full object-cover"
+                />
+              </button>
+            }
+          />
         </div>
       )}
     </CustomLayoutBorder>
