@@ -20,3 +20,9 @@ export const phoneValidationSchema = (countryCodeFieldName: string = "country_co
             }
         });
 };
+
+export const civilIdValidationSchema = () => {
+    return Yup.string()
+        .required("الرقم المدني مطلوب")
+        .matches(/^\d{12,14}$/, "الرقم المدني يجب أن يكون من 12 إلى 14 رقماً");
+};

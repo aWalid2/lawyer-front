@@ -17,7 +17,7 @@ import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { COUNTRY_OPTIONS } from "@/shared/constants/countryOptions";
 import { SubmitButton } from "@/shared/components/SubmitButton";
 import { useUpdateClient } from "@/features/users/users-clients/api/hooks/useUpdateClients";
-import { phoneValidationSchema } from "@/shared/utils/validators";
+import { phoneValidationSchema, civilIdValidationSchema } from "@/shared/utils/validators";
 
 interface EditClientDialogProps {
     client: any
@@ -57,9 +57,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
         client_type: Yup.string().required("نوع الموكل مطلوب"),
         first_name: Yup.string(),
         last_name: Yup.string(),
-        ssn: Yup.string()
-            .matches(/^[0-9]+$/, "الرقم المدني يجب أن يكون أرقام")
-            .length(10, "الرقم المدني يجب أن يكون 10 أرقام"),
+        ssn: civilIdValidationSchema(),
         phone: phoneValidationSchema("country_code"),
         country_code: Yup.string().required("كود الدولة مطلوب"),
         email: Yup.string().email("البريد الإلكتروني غير صالح"),
