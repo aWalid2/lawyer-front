@@ -1,6 +1,6 @@
 import api from "@/lib/api";
 import { mapToApiPayload } from "../../clients/types/mapPayloadAddClient";
-import { fileToBase64 } from "@/shared/utils/fileToBase64";
+
 import { isAxiosError } from "axios";
 
 type FileInput = File | FileList | string | null | undefined;
@@ -28,14 +28,7 @@ export const updateClient = async ({ id, data }: { id: string; data: UpdateClien
     const authorizationPhotoFile = getFileFromInput(data.authorization_photo);
 
     try {
-        if (data.contract_photo instanceof FileList || data.contract_photo instanceof File) {
-            payload.profile.contract_photo = await fileToBase64(data.contract_photo);
-        }
-
-        if (data.profile_photo instanceof FileList || data.profile_photo instanceof File) {
-            payload.profile_photo = await fileToBase64(data.profile_photo);
-        }
-
+  
         const response = await api.patch(`/users/${id}`, payload);
 
         if (authorizationPhotoFile) {

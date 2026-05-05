@@ -5,11 +5,14 @@ import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageD
 import React from "react";
 import { useDeleteClient } from "../../api/hooks/useDeleteClient";
 import type { ClientRelatedT } from "../types/clientT";
-import { EditClientDialog } from "./EditClientDialog";
+import {
+  EditClientDialog,
+  type EditClientFormValues,
+} from "./EditClientDialog";
 
 interface UserClientsActionProps {
   client: ClientRelatedT;
-  onClientUpdated?: (client: ClientRelatedT) => void;
+  onClientUpdated?: (client: EditClientFormValues) => void;
 }
 
 export const UserClientsAction: React.FC<UserClientsActionProps> = ({

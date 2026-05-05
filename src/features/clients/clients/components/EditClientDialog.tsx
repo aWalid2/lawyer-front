@@ -15,6 +15,10 @@ import {
   phoneValidationSchema,
   civilIdValidationSchema,
 } from "@/shared/utils/validators";
+import {
+  CLIENT_STATUS_OPTIONS,
+  CLIENT_TYPES_OPTIONS,
+} from "@/shared/constants/clientOptions";
 
 type ClientType = "individual" | "company" | "government";
 
@@ -37,7 +41,7 @@ interface EditableClient {
   };
 }
 
-interface EditClientFormValues {
+export interface EditClientFormValues {
   client_type: ClientType;
   first_name: string;
   ssn: string;
@@ -143,11 +147,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
               <SelectForm
                 name="client_type"
                 label="نوع الموكل"
-                options={[
-                  { value: "individual", label: "فرد" },
-                  { value: "company", label: "شركة" },
-                  { value: "government", label: "جهة حكومية" },
-                ]}
+                options={CLIENT_TYPES_OPTIONS}
                 showSearch={true}
               />
 
@@ -223,10 +223,7 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
                 name="user_status"
                 label="حالة المستخدم"
                 placeholder="أدخل حالة المستخدم"
-                options={[
-                  { value: "active", label: "نشط" },
-                  { value: "inactive", label: "غير نشط" },
-                ]}
+                options={CLIENT_STATUS_OPTIONS}
               />
             </div>
 
