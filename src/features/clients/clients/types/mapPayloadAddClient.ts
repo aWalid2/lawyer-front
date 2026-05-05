@@ -1,6 +1,25 @@
-export const mapToApiPayload = (data: any) => ({
+type PayloadFileValue = File | FileList | string | null | undefined;
+
+type ClientPayloadInput = {
+    first_name?: string;
+    phone?: string;
+    email?: string;
+    nationality?: string;
+    country?: string;
+    ssn?: string;
+    address?: string;
+    user_status?: string;
+    authorization_photo?: PayloadFileValue;
+    profile_photo?: PayloadFileValue;
+    client_type?: string;
+    notes?: string;
+    contract_photo?: PayloadFileValue;
+};
+
+const isStringValue = (value: PayloadFileValue): value is string => typeof value === "string";
+
+export const mapToApiPayload = (data: ClientPayloadInput) => ({
     first_name: data.first_name,
-    last_name: data.last_name,
     phone: data.phone,
     email: data.email,
     nationality: data.nationality,
@@ -8,12 +27,13 @@ export const mapToApiPayload = (data: any) => ({
     ssn: data.ssn,
     address: data.address,
     user_status: data.user_status,
-    // Only send photo fields if they are strings (URLs). 
-    // File objects/FileLists cannot be sent via JSON and cause Prisma errors.
-    ...(typeof data.profile_photo === 'string' ? { profile_photo: data.profile_photo } : {}),
+    ...(isStringValue(data.authorization_photo)
+        ? { authorization_photo: data.authorization_photo }
+        : {}),
+    ...(isStringValue(data.profile_photo) ? { profile_photo: data.profile_photo } : {}),
     profile: {
         client_type: data.client_type,
         notes: data.notes,
-        ...(typeof data.contract_photo === 'string' ? { contract_photo: data.contract_photo } : {}),
-    }
+        ...(isStringValue(data.contract_photo) ? { contract_photo: data.contract_photo } : {}),
+    },
 });

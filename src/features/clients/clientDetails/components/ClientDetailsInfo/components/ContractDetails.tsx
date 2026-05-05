@@ -14,21 +14,12 @@ export const ContractDetails: React.FC<ContractDetailsProps> = ({
   if (!contract) {
     return null;
   }
+  console.log("ContractDetails rendered with contract:", contract);
 
   return (
     <CustomLayoutBorder>
       <div className="mb-5 flex items-center justify-between gap-3 max-md:flex-col max-md:items-start">
         <h3 className="text-lg font-semibold text-[#153A4D]">بيانات العقد</h3>
-        {contract.document_file && (
-          <a
-            href={contract.document_file}
-            target="_blank"
-            rel="noreferrer"
-            className="text-primary text-sm font-medium underline-offset-4 hover:underline"
-          >
-            عرض ملف العقد
-          </a>
-        )}
       </div>
 
       <div className="grid grid-cols-2 gap-3 max-md:grid-cols-1">

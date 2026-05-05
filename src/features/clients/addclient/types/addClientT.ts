@@ -3,7 +3,7 @@ export interface FormValues {
   first_name: string;
   email: string;
   password: string;
-  contract_photo: File | null;
+  contract_file: File | null;
   authorization_photo: File | null;
   nationality: string;
   country: string;

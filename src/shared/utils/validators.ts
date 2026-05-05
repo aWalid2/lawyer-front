@@ -70,3 +70,7 @@ export const civilIdValidationSchema = () => {
             (value) => isValidCivilId(value),
         );
 };
+
+export const countryValidationSchema = () => {
+    return Yup.string().required("الدولة مطلوبة");
+};

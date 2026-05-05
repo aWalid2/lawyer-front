@@ -9,7 +9,7 @@ import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
 
 export const ClientDetails = () => {
-  const [activeTab, setActiveTab] = useState("cases");
+  const [activeTab, setActiveTab] = useState("info");
   const { id } = useParams();
   const { data: client, isPending, isError, error } = useGetClient(id!);
 

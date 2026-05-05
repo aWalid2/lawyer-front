@@ -53,7 +53,7 @@ export const ContractDetails = () => {
               />
 
               <FileUpload
-                name="contract_photo"
+                name="contract_file"
                 label="صورة العقد"
                 placeholder="انقر هنا لتحميل الصورة او سحبها وإفلاتها"
                 className="col-span-2 w-30"
