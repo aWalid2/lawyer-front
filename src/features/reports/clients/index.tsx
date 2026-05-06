@@ -50,6 +50,10 @@ const ReportsClientsFeature = () => {
       accessor: (item: ReportClient) => item.user.first_name,
     },
     {
+      header: "رقم الهاتف",
+      accessor: (item: ReportClient) => item.user.phone,
+    },
+    {
       header: "عدد القضايا",
       accessor: (item) => (
         <span className="rounded-xl bg-[#A6A6A6] px-3 py-1 text-xs font-semibold text-white">

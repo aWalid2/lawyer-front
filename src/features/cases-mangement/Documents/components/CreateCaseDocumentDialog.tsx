@@ -10,13 +10,8 @@ import type { CaseDocumentFormValues } from "../types/CaseDocumentT";
 
 const validationSchema = Yup.object({
   document_name: Yup.string().required("اسم المستند مطلوب"),
-  phone: Yup.string().required("رقم الهاتف مطلوب"),
   document_details: Yup.string().required("تفاصيل المستند مطلوبة"),
-  file: Yup.mixed<FileList>()
-    .required("الملف مطلوب")
-    .test("file-required", "الملف مطلوب", (value) =>
-      Boolean(value && value.length > 0),
-    ),
+  file: Yup.mixed<File>().required("الملف مطلوب"),
 });
 
 interface CreateCaseDocumentDialogProps {
@@ -46,8 +41,8 @@ export const CreateCaseDocumentDialog: React.FC<
     formData.append("caseId", caseId);
     formData.append("document_details", values.document_details);
 
-    if (values.file?.[0]) {
-      formData.append("file", values.file[0]);
+    if (values.file) {
+      formData.append("file", values.file);
     }
 
     createDocument(formData, {
@@ -85,13 +80,6 @@ export const CreateCaseDocumentDialog: React.FC<
             label="اسم المستند"
             type="text"
             placeholder="أدخل اسم المستند"
-          />
-
-          <InputForm
-            name="phone"
-            label="رقم الهاتف"
-            type="text"
-            placeholder="أدخل رقم الهاتف"
           />
 
           <InputForm

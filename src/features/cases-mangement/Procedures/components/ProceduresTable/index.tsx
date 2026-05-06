@@ -54,19 +54,19 @@ export const ProceduresTable: React.FC = () => {
       accessor: "actionType",
     },
     {
-      header: "تاريخ الإجراء",
+      header: "تاريخ الاحالة",
       accessor: (item) => formatDateToYYYYMMDD(item.session_date),
     },
     {
-      header: "وقت الإجراء",
+      header: "وقت الاحالة",
       accessor: (item) => formatDateToTime(item.session_date),
     },
     {
-      header: "المحامي المسؤول",
+      header: "الموظف المسؤول",
       accessor: (item) => getProcedureLawyerName(item),
     },
     {
-      header: "قرار الإجراء",
+      header: "حالة الإجراء",
       accessor: "session_decision",
     },
     {

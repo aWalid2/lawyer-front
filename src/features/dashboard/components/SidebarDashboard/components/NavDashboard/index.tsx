@@ -4,7 +4,7 @@ import { CaseMangementIcon } from "@/shared/icons/CaseManagement";
 import { ConsultationsIcon } from "@/shared/icons/Consultations";
 import { ContractsIcon } from "@/shared/icons/Contracts";
 import { DocumentsIcon } from "@/shared/icons/Documents";
-import { FinanceIcon } from "@/shared/icons/Finance";
+// import { FinanceIcon } from "@/shared/icons/Finance";
 import { MainIcon } from "@/shared/icons/Main";
 import { ReportsIcon } from "@/shared/icons/Reports";
 import { RollIcon } from "@/shared/icons/Roll";
@@ -37,10 +37,10 @@ const reportsLinks = [
     label: "تقارير المصروفات",
     to: "/dashboard/reports/expenses",
   },
-  {
-    label: "تقارير المدفوعات",
-    to: "/dashboard/reports/payments",
-  },
+  // {
+  //   label: "تقارير المدفوعات",
+  //   to: "/dashboard/reports/payments",
+  // },
 ];
 // const usersLinks = [
 //   {
@@ -56,16 +56,16 @@ const reportsLinks = [
 //     to: "/dashboard/users/employees",
 //   },
 // ];
-const financeLinks = [
-  {
-    label: "المصروفات ",
-    to: "/dashboard/finance/expences",
-  },
-  {
-    label: "المدفوعات",
-    to: "/dashboard/finance/payments",
-  },
-];
+// const financeLinks = [
+//   {
+//     label: "المصروفات ",
+//     to: "/dashboard/finance/expences",
+//   },
+//   {
+//     label: "المدفوعات",
+//     to: "/dashboard/finance/payments",
+//   },
+// ];
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center justify-between p-4 h-15  rounded-lg transition
@@ -185,12 +185,12 @@ const NavDashboard = ({ onLinkClick }: { onLinkClick?: () => void }) => {
           <p className="text-base font-normal">العقود</p>
         </div>
       </NavLink>
-      <CollapsibleNavDashboard
+      {/* <CollapsibleNavDashboard
         data={financeLinks}
         title={"المالية"}
         icon={<FinanceIcon />}
         onLinkClick={onLinkClick}
-      />
+      /> */}
       <NavLink
         to="/dashboard/about-office"
         className={linkClass}

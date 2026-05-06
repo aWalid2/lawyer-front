@@ -41,15 +41,6 @@ export const DocumentInfo = ({ document }: DocumentInfoProps) => {
           {formatDocumentDate(document.created_at)}
         </span>
       </div>
-
-      <div className="flex flex-col space-y-2">
-        <span className="border-r-2 border-[#CBA462] pr-3 text-sm font-medium text-[#808080]">
-          رقم الهاتف
-        </span>
-        <span className="pr-3 text-lg font-bold text-[#153A4D]">
-          {document.phone || "-"}
-        </span>
-      </div>
     </div>
   );
 };

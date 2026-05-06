@@ -1,6 +1,8 @@
+import { CASE_SITUATION_OPTIONS } from "@/shared/constants/caseOptions";
 import React from "react";
-import { CaseDetailsSection } from "./components/CaseDetailsSection";
+import { getOptionLabel } from "../../../../../shared/utils/getOptionLabel";
 import { CaseDetailsCollapsibleSection } from "./components/CaseDetailsCollapsibleSection";
+import { CaseDetailsSection } from "./components/CaseDetailsSection";
 import type {
   DetailField,
   FormCaseDetailsProps,
@@ -14,8 +16,14 @@ export const CaseDetailsInfo: React.FC<FormCaseDetailsProps> = ({
     { label: "عنوان القضية", text: caseData?.caseTitle },
     { label: "حالة القضية", text: caseData?.status },
     { label: "نوع القضية", text: caseData?.caseType },
-    { label: "صفة الموكل", text: caseData?.clientRelation },
-    { label: "وضع القضية عند الاستلام", text: caseData?.statusOnReceipt },
+    {
+      label: "صفة الموكل",
+      text: "-",
+    },
+    {
+      label: "وضع القضية عند الاستلام",
+      text: getOptionLabel(caseData?.statusOnReceipt, CASE_SITUATION_OPTIONS),
+    },
   ];
 
   const policeFields: DetailField[] = [

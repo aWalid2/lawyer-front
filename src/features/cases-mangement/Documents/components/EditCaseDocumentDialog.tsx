@@ -12,7 +12,6 @@ import type {
 
 const validationSchema = Yup.object({
   document_name: Yup.string().required("اسم المستند مطلوب"),
-  phone: Yup.string().required("رقم الهاتف مطلوب"),
   document_details: Yup.string().required("تفاصيل المستند مطلوبة"),
 });
 
@@ -48,8 +47,8 @@ export const EditCaseDocumentDialog: React.FC<EditCaseDocumentDialogProps> = ({
     formData.append("case", caseId);
     formData.append("document_details", values.document_details);
 
-    if (values.file?.[0]) {
-      formData.append("file", values.file[0]);
+    if (values.file) {
+      formData.append("file", values.file);
     }
 
     updateDocument(
@@ -86,13 +85,6 @@ export const EditCaseDocumentDialog: React.FC<EditCaseDocumentDialogProps> = ({
             label="اسم المستند"
             type="text"
             placeholder="أدخل اسم المستند"
-          />
-
-          <InputForm
-            name="phone"
-            label="رقم الهاتف"
-            type="text"
-            placeholder="أدخل رقم الهاتف"
           />
 
           <InputForm

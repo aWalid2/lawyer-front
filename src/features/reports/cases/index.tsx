@@ -20,6 +20,7 @@ const ReportsCasesFeature = () => {
     isError,
     error,
   } = useReportCase(page, limit, statusFilter, searchTerm);
+
   const totalPages = cases?.meta?.total_pages ?? 1;
   const indexedData = useIndexedData(cases?.data, page, limit);
 
@@ -43,6 +44,10 @@ const ReportsCasesFeature = () => {
     {
       header: "الرقم الآلي للقضية",
       accessor: "case_sequence",
+    },
+    {
+      header: "نوع القضية",
+      accessor: (item: ReportCase) => item.case_type?.name || "-",
     },
     {
       header: "اسم الموكل",

@@ -45,7 +45,7 @@ export const ProceduresDataSection: React.FC = () => {
           text={latestProcedure.actionType || "-"}
         />
         <InputBox
-          label="تاريخ الإحالة"
+          label="تاريخ الاحالة"
           text={formatDateToYYYYMMDD(latestProcedure.referral_date) || "-"}
           icon={<DateIcon />}
         />
@@ -56,13 +56,13 @@ export const ProceduresDataSection: React.FC = () => {
             text={latestProcedure.admin_authority || "-"}
           />
           <InputBox
-            label="المحامي المسؤول"
+            label="الموظف المسؤول"
             text={getProcedureLawyerName(latestProcedure)}
           />
         </div>
 
         <InputBox
-          label="موعد الإجراء"
+          label="موعد التنفيذ"
           text={
             latestProcedure.session_date
               ? [
@@ -75,7 +75,7 @@ export const ProceduresDataSection: React.FC = () => {
           }
         />
         <InputBox
-          label="قرار الإجراء"
+          label="حالة الاجراء"
           text={latestProcedure.session_decision || "-"}
         />
 

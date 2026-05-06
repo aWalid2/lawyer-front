@@ -4,6 +4,7 @@ export interface ReportClient {
     user: {
         first_name: string;
 
+        phone: string;
         user_status: string;
     };
     case_count: number;

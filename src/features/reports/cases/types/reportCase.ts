@@ -8,6 +8,10 @@ export interface ReportCase {
     name: string;
     id: number;
   };
+  case_type?: {
+    name: string;
+    id: number;
+  };
   client: {
     first_name: string;
   };

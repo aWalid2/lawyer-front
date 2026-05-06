@@ -11,6 +11,7 @@ export interface CaseFormValues {
   created_at: string;
   case_entry_date: string;
   notes: string;
+
 }
 
 export interface FormCaseDetailsProps {

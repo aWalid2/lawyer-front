@@ -15,5 +15,5 @@ export interface CaseDocumentFormValues {
   document_name: string;
   phone: string;
   document_details: string;
-  file: FileList | null;
+  file: File | null;
 }
