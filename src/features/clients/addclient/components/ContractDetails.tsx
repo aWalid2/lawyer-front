@@ -52,12 +52,9 @@ export const ContractDetails = () => {
                 placeholder="12"
               />
 
-              <FileUpload
-                name="contract_file"
-                label="صورة العقد"
-                placeholder="انقر هنا لتحميل الصورة او سحبها وإفلاتها"
-                className="col-span-2 w-30"
-              />
+              <div className="col-span-2">
+                <FileUpload name="contract_file" label="صورة العقد" />
+              </div>
             </div>
           </CustomLayoutBorder>
         </div>

@@ -1,5 +1,21 @@
 import * as Yup from "yup";
 
+const opponentSchema = Yup.object({
+  name: Yup.string().required("اسم الخصم مطلوب"),
+  legal_status: Yup.string().required("صفة الخصم مطلوبة"),
+  country_code: Yup.string().required("كود الدولة مطلوب"),
+  phone: Yup.string()
+    .required("رقم الهاتف مطلوب")
+    .matches(/^[0-9]+$/, "رقم الهاتف يجب أن يحتوي على أرقام فقط")
+    .min(9, "رقم الهاتف يجب أن يكون 9 أرقام على الأقل")
+    .max(14, "رقم الهاتف طويل جداً"),
+  ssn: Yup.string()
+    .required("الرقم القومي مطلوب")
+    .matches(/^[0-9]+$/, "الرقم القومي يجب أن يحتوي على أرقام فقط")
+    .min(14, "الرقم القومي يجب أن يكون 14 رقم")
+    .max(14, "الرقم القومي يجب أن يكون 14 رقم"),
+});
+
 export const validationSchema = Yup.object({
   case_status_received: Yup.string(),
   case_title: Yup.string().required("عنوان القضية مطلوب"),
@@ -53,37 +69,12 @@ export const validationSchema = Yup.object({
       then: (schema: any) => schema.required("تاريخ ورود القضية مطلوب"),
       otherwise: (schema: any) => schema.notRequired(),
     }),
-
-  name: Yup.string().when("has_opponent", {
+  opponents: Yup.array().when("has_opponent", {
     is: true,
-    then: (schema) => schema.required("اسم الخصم مطلوب"),
+    then: (schema) =>
+      schema.of(opponentSchema).min(1, "يجب إضافة خصم واحد على الأقل"),
     otherwise: (schema) => schema.notRequired(),
   }),
-  legal_status: Yup.string().when("has_opponent", {
-    is: true,
-    then: (schema) => schema.required("صفة الخصم مطلوبة"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-
-  phone: Yup.string()
-    .when("has_opponent", {
-      is: true,
-      then: (schema) => schema.required("رقم الهاتف مطلوب"),
-      otherwise: (schema) => schema.notRequired(),
-    })
-    .matches(/^[0-9]+$/, "رقم الهاتف يجب أن يحتوي على أرقام فقط")
-    .min(9, "رقم الهاتف يجب أن يكون 9 أرقام على الأقل")
-    .max(14, "رقم الهاتف طويل جداً"),
-
-  ssn: Yup.string()
-    .when("has_opponent", {
-      is: true,
-      then: (schema) => schema.required("الرقم القومي مطلوب"),
-      otherwise: (schema) => schema.notRequired(),
-    })
-    .matches(/^[0-9]+$/, "الرقم القومي يجب أن يحتوي على أرقام فقط")
-    .min(14, "الرقم القومي يجب أن يكون 14 رقم")
-    .max(14, "الرقم القومي يجب أن يكون 14 رقم"),
 
   fixed_profits: Yup.number()
     .nullable()

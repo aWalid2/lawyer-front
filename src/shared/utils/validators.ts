@@ -21,7 +21,7 @@ export const formatPhoneNumber = (
     }
 
     const country = COUNTRY_OPTIONS.find((option) => option.value === countryCode);
-    const iso = (country as { iso?: string } | undefined)?.iso;
+    const iso = (country as { iso?: string } | undefined)?.iso as any;
 
     try {
         const phoneNumber = iso

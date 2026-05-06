@@ -16,6 +16,25 @@ export interface ClientCase {
   created_at: string;
 }
 
+export interface EditableClientCase extends ClientCase {
+  case_number_at_prosecution?: string;
+  client_id?: number | string;
+  client?: {
+    id?: number | string;
+  };
+  ClientStatus_id?: number | string;
+  case_entry_date?: string;
+  case_type_id?: number | string;
+  case_type?: {
+    id?: number | string;
+  };
+  case_situation?: string;
+  caseStatus?: {
+    id?: number | string;
+    name: string;
+  };
+}
+
 
 export interface ClientsPageProps {
   initialClients?: ClientCase[];

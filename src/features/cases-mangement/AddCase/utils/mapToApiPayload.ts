@@ -2,6 +2,13 @@ import type { ActivePayload, CaseFees, CasePayload, OtherPayload } from "../type
 import { formatDate } from "@/shared/utils/formDate";
 
 export interface FormValues {
+  opponents: {
+    name: string;
+    legal_status?: string;
+    country_code: string;
+    phone: string;
+    ssn: string;
+  }[];
   client_id?: string;
   case_status_id: string;
   case_situation: CaseSituation;
@@ -104,15 +111,24 @@ const case_fees: CaseFees = {
       contract_based: Number(values.contract_based),
     }),
 };
+
+  const normalizedOpponents = values.opponents
+    .filter((opponent) => opponent.name.trim())
+    .map((opponent) => ({
+      name: opponent.name,
+      ssn: opponent.ssn,
+      phone_number: `${opponent.country_code}${opponent.phone}`,
+    }));
+
   // ================= UNDER APPEAL =================
   if (values.case_situation === "UNDER_APPEAL") {
     return {
       ...base,
       case_situation: "UNDER_APPEAL",
       case_fees,
-      opponents: values.name
-        ? [{ name: values.name}]
-        : [],
+      opponents: normalizedOpponents.map((opponent) => ({
+        name: opponent.name,
+      })),
     };
   }
 
@@ -126,15 +142,7 @@ const case_fees: CaseFees = {
       court_id: Number(values.court_id),
       Current_court_degree: values.Current_court_degree,
       case_fees,
-      opponents: values.name
-        ? [
-            {
-              name: values.name,
-              ssn: values.ssn,
-              phone_number: `${values.country_code}${values.phone}`,
-            },
-          ]
-        : [],
+      opponents: normalizedOpponents,
     } as ActivePayload;
   }
 
@@ -148,15 +156,7 @@ const case_fees: CaseFees = {
       investigation_name: values.investigation_name,
       Case_Arrival_Date_at_the_Authority: formatDate(values.Case_Arrival_Date_at_the_Authority),
       case_fees,
-      opponents: values.name
-        ? [
-            {
-              name: values.name,
-              ssn: values.ssn,
-              phone_number: `${values.country_code}${values.phone}`,
-            },
-          ]
-        : [],
+      opponents: normalizedOpponents,
     } as OtherPayload;
   }
 
@@ -186,14 +186,6 @@ const case_fees: CaseFees = {
 
     case_fees,
 
-    opponents: values.name
-      ? [
-          {
-            name: values.name,
-            ssn: values.ssn,
-            phone_number: `${values.country_code}${values.phone}`,
-          },
-        ]
-      : [],
+    opponents: normalizedOpponents,
   };
 };

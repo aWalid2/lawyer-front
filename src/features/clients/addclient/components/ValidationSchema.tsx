@@ -73,14 +73,14 @@ const validationFields = {
         .oneOf([Yup.ref("password")], "كلمة المرور غير متطابقة"),
     otherwise: (schema) => schema.notRequired(),
   }),
-  contract_photo: Yup.mixed().nullable(),
-  authorization_photo: Yup.mixed().nullable(),
   user_status: Yup.string()
     .oneOf(
       CLIENT_STATUS_OPTIONS.map((option) => option.value),
       "حالة المستخدم غير صالحة",
     )
     .required("حالة المستخدم مطلوبة"),
+  authorization_photo: Yup.string(),
+  contract_file: Yup.string(),
 } satisfies Record<keyof FormValues, Yup.AnySchema>;
 
 export const validationSchema = Yup.object(validationFields);

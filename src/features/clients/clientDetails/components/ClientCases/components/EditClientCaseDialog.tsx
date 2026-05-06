@@ -17,18 +17,29 @@ import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { useGetCaseType } from "../../../api/hooks/useGetCaseType";
 import { useGetCaseStatus } from "../../../api/hooks/useGetCaseStatus";
+import { useGetClientStatuses } from "@/features/settings/client-statuses/api/hooks/useGetClientStatuses";
+import type { EditableClientCase } from "../../../types/typesClientDetails";
 import {
   CASE_SITUATION_OPTIONS,
-  CASE_TITLE_OPTIONS,
   LITIGATION_LEVEL_OPTIONS,
 } from "@/shared/constants/caseOptions";
 
 interface EditCaseDialogProps {
-  caseItem: any;
-  onSave?: (values: any) => void;
+  caseItem: EditableClientCase;
+  onSave?: (values: EditableClientCase) => void;
   trigger: React.ReactNode;
   isPending?: boolean;
 }
+
+type SelectOptionEntity = {
+  id: number | string;
+  name: string;
+};
+
+type ClientOptionEntity = {
+  user_id: number | string;
+  name: string;
+};
 
 export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
   caseItem,
@@ -37,9 +48,19 @@ export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const { mutateAsync: updateCase, isPending } = useUpdateCase();
-  const { data: clients } = useFetchClients();
+  const { data: clients } = useFetchClients(
+    undefined,
+    undefined,
+    undefined,
+    open,
+  );
   const { data: caseType } = useGetCaseType();
   const { data: caseStatus } = useGetCaseStatus();
+  const { data: clientStatuses } = useGetClientStatuses(
+    open ? 1 : undefined,
+    100,
+  );
+
   const initialValues = {
     ...caseItem,
     case_number: caseItem.case_number || "",
@@ -49,7 +70,10 @@ export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
       : caseItem.client?.id
         ? String(caseItem.client.id)
         : "",
-    client_type: caseItem.client_type || "",
+    ClientStatus_id:
+      caseItem.ClientStatus_id != null
+        ? String(caseItem.ClientStatus_id)
+        : caseItem.client_type || "",
     created_at: caseItem.created_at || "",
     case_entry_date: caseItem.case_entry_date || "",
     case_status_id: caseItem.case_status_id
@@ -66,25 +90,30 @@ export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
   };
 
   const options =
-    clients?.data?.map((client: any) => ({
+    clients?.data?.map((client: ClientOptionEntity) => ({
       label: client.name,
       value: String(client.user_id),
     })) || [];
   const caseTypeOptions =
-    caseType?.data?.map((caseType: any) => ({
+    caseType?.data?.map((caseType: SelectOptionEntity) => ({
       label: caseType.name,
       value: String(caseType.id),
     })) || [];
   const caseStatusOptions =
-    caseStatus?.data?.map((caseStatus: any) => ({
+    caseStatus?.data?.map((caseStatus: SelectOptionEntity) => ({
       label: caseStatus.name,
       value: String(caseStatus.id),
+    })) || [];
+  const clientStatusOptions =
+    clientStatuses?.data?.map((clientStatus: SelectOptionEntity) => ({
+      label: clientStatus.name,
+      value: String(clientStatus.id),
     })) || [];
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
-        className="rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-[772px] sm:rounded-[24px] sm:px-20 sm:py-10"
+        className="rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-193 sm:rounded-[24px] sm:px-20 sm:py-10"
         dir="rtl"
         showCloseButton={false}
         onClick={(e) => e.stopPropagation()}
@@ -108,8 +137,9 @@ export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
           enableReinitialize={true}
           onSubmit={async (values, { setSubmitting }) => {
             try {
+              const { ClientStatus_id, ...restValues } = values;
               const payload = {
-                ...values,
+                ...restValues,
                 client_id: values.client_id
                   ? Number(values.client_id)
                   : undefined,
@@ -119,8 +149,11 @@ export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
                 case_status_id: values.case_status_id
                   ? Number(values.case_status_id)
                   : undefined,
+                ...(ClientStatus_id != null && ClientStatus_id !== ""
+                  ? { ClientStatus_id: Number(ClientStatus_id) }
+                  : {}),
               };
-              await updateCase({ id: caseItem.id, data: payload as any });
+              await updateCase({ id: String(caseItem.id), data: payload });
               onSave?.(values);
               setOpen(false);
             } catch (error) {
@@ -147,9 +180,10 @@ export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
                 />
 
                 <SelectForm
-                  name="client_type"
+                  name="ClientStatus_id"
                   label="صفة المدعي"
-                  options={CASE_TITLE_OPTIONS}
+                  options={clientStatusOptions}
+                  placeholder="اختر صفة الموكل"
                 />
 
                 <SelectForm

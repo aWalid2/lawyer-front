@@ -1,6 +1,15 @@
 import type { FormValues } from "../utils/mapToApiPayload";
 
 export const initialValues = {
+  opponents: [
+    {
+      name: "",
+      legal_status: "",
+      country_code: "+20",
+      phone: "",
+      ssn: "",
+    },
+  ],
   client_id: "1",
   case_status_received: "",
   case_situation: "UNDER_APPEAL",
@@ -55,7 +64,7 @@ contract_based: undefined,
   regestration_date_of_case_at_prosecution: "",
 
   notes: "",
-  has_opponent: false,
+  has_opponent: true,
 
   // Active Fields
   case_sequence: "",
