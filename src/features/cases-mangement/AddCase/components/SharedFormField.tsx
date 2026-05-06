@@ -5,30 +5,54 @@ import { SelectForm } from "@/shared/components/SelectForm";
 import { useFetchClients } from "@/shared/api/hooks/useGetClients";
 import { useGetCaseStatus } from "../../MainCases/api/hooks/useGetCaseStatus";
 import { useGetCaseType } from "../../MainCases/api/hooks/useGetCaseType";
-import { CASE_TITLE_OPTIONS } from "@/shared/constants/caseOptions";
+import { useGetClientStatuses } from "@/features/settings/client-statuses/api/hooks/useGetClientStatuses";
+
+type SelectOptionEntity = {
+  id: number | string;
+  name: string;
+};
+
+type ClientOptionEntity = {
+  user_id: number | string;
+  name: string;
+};
 
 export function SharedFormField() {
   const [clientSearch, setClientSearch] = useState("");
   const debouncedClientSearch = useDebounce(clientSearch, 500);
 
-  const { data: clients } = useFetchClients(undefined, undefined, debouncedClientSearch);
+  const { data: clients } = useFetchClients(
+    undefined,
+    undefined,
+    debouncedClientSearch,
+  );
   const { data: caseStatus } = useGetCaseStatus();
   const { data: caseType } = useGetCaseType();
+  const { data: clientStatuses } = useGetClientStatuses(1, 100);
 
-  const options = clients?.data?.map((client: any) => ({
-    label: client.name,
-    value: String(client.user_id)
-  })) || [];
+  const options =
+    clients?.data?.map((client: ClientOptionEntity) => ({
+      label: client.name,
+      value: String(client.user_id),
+    })) || [];
 
-  const caseStatusOptions = caseStatus?.data?.map((caseStatus: any) => ({
-    label: caseStatus.name,
-    value: String(caseStatus.id)
-  })) || [];
+  const caseStatusOptions =
+    caseStatus?.data?.map((caseStatus: SelectOptionEntity) => ({
+      label: caseStatus.name,
+      value: String(caseStatus.id),
+    })) || [];
 
-  const caseTypeOptions = caseType?.data?.map((caseType: any) => ({
-    label: caseType.name,
-    value: String(caseType.id)
-  })) || [];
+  const caseTypeOptions =
+    caseType?.data?.map((caseType: SelectOptionEntity) => ({
+      label: caseType.name,
+      value: String(caseType.id),
+    })) || [];
+
+  const clientStatusOptions =
+    clientStatuses?.data?.map((clientStatus: SelectOptionEntity) => ({
+      label: clientStatus.name,
+      value: String(clientStatus.id),
+    })) || [];
 
   return (
     <>
@@ -59,7 +83,7 @@ export function SharedFormField() {
       <SelectForm
         label="صفة الموكل"
         name="ClientStatus_id"
-        options={CASE_TITLE_OPTIONS}
+        options={clientStatusOptions}
         placeholder="اختر صفة الموكل"
       />
 

@@ -19,7 +19,7 @@ export const initialValues = {
   client_name: "",
   case_type_id: "1",
 
-  case_police_station: "",
+  case_police_station_id: "",
   case_number_at_police_station: "",
 
   client_type: "",

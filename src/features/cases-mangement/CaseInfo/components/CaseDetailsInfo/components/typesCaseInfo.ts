@@ -12,6 +12,27 @@ export interface CaseFormValues {
   creationDate: string;
   receiptDate: string;
   notes: string;
+  policeStation?: string;
+  policeStationCaseNumber?: string;
+  policeStationArrivalDate?: string;
+  prosecution?: string;
+  prosecutionCaseNumber?: string;
+  prosecutionRegistrationDate?: string;
+  prosecutorName?: string;
+  detectiveName?: string;
+  investigationName?: string;
+  expertReportNumber?: string;
+  assigningAuthority?: string;
+  expertOfficeName?: string;
+  subjectOfExpertise?: string;
+  finalOpinion?: string;
+  authorityArrivalDate?: string;
+}
+
+export interface DetailField {
+  label: string;
+  text?: string;
+  className?: string;
 }
 
 export interface FormCaseDetailsProps {

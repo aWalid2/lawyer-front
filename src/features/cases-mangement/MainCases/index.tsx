@@ -44,7 +44,7 @@ const MainCases = () => {
       accessor: (item: any) => item.client?.first_name,
     },
     {
-      header: "عنوان القضية",
+      header: " نوع القضية",
       accessor: (item: any) => item.case_type.name,
     },
     {

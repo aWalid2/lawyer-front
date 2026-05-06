@@ -19,7 +19,10 @@ import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { useGetCaseType } from "../api/hooks/useGetCaseType";
 import { useGetCaseStatus } from "../api/hooks/useGetCaseStatus";
 import { useGetClientStatuses } from "@/features/settings/client-statuses/api/hooks/useGetClientStatuses";
-import { CASE_SITUATION_OPTIONS } from "@/shared/constants/caseOptions";
+import {
+  CASE_SITUATION_OPTIONS,
+  LITIGATION_LEVEL_OPTIONS,
+} from "@/shared/constants/caseOptions";
 
 interface EditCaseDialogProps {
   caseItem: Case;
@@ -152,8 +155,9 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
               <div className="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2">
                 <InputForm
                   name="case_sequence"
-                  label="رقم القضية"
+                  label="كود القضية"
                   type="text"
+                  disabled
                 />
                 <InputForm name="case_number" label="الرقم الآلي" type="text" />
                 <SelectForm
@@ -184,15 +188,12 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
                   name="case_situation"
                   label="وضع القضية عند الاستلام"
                   options={CASE_SITUATION_OPTIONS}
+                  disabled
                 />
                 <SelectForm
                   name="case_status_at_receipt"
                   label="درجة التقاضي"
-                  options={[
-                    { value: "1", label: "ابتدائي" },
-                    { value: "2", label: "استئناف" },
-                    { value: "3", label: "نقض" },
-                  ]}
+                  options={LITIGATION_LEVEL_OPTIONS}
                 />
 
                 <InputForm

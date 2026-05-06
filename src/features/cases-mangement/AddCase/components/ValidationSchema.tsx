@@ -24,7 +24,7 @@ export const validationSchema = Yup.object({
   ClientStatus_id: Yup.string().required("صفة الموكل مطلوبة"),
   case_status_id: Yup.string().required("حالة القضية مطلوبة"),
   case_entry_date: Yup.date().required("تاريخ ورود القضية في المكتب مطلوب"),
-  case_police_station: Yup.string().when("case_situation", {
+  case_police_station_id: Yup.string().when("case_situation", {
     is: "PUBLIC_PROSECUTION",
     then: (schema: any) => schema.required("المخفر مطلوب"),
     otherwise: (schema: any) => schema.notRequired(),

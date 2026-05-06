@@ -16,7 +16,7 @@ export interface FormValues {
   ClientStatus_id: string;
   client_name: string;
   case_type_id: string;
-  case_police_station: string;
+  case_police_station_id: string;
   case_number_at_police_station: string;
   client_type: string;
   name: string;
@@ -166,7 +166,7 @@ const case_fees: CaseFees = {
     ...base,
     case_situation: values.case_situation,
 
-    ...(values.case_police_station && { case_police_station: values.case_police_station }),
+    ...(values.case_police_station_id && { case_police_station_id: values.case_police_station_id }),
     ...(values.case_number_at_police_station && {
       case_number_at_police_station: Number(values.case_number_at_police_station)
     }),

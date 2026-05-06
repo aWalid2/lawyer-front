@@ -6,7 +6,6 @@ import { Pagination } from "@/shared/components/Pagination";
 import { TableContractsActions } from "./componnents/TableContractsActions";
 import PageLayout from "@/shared/components/PageLayout";
 
-// بيانات تجريبية للعقود
 const MOCK_CONTRACTS: Contract[] = Array.from({ length: 45 }, (_, i) => ({
   id: `${i + 1}`,
   contractNumber: `CONT-${String(i + 1).padStart(3, "0")}`,

@@ -28,7 +28,7 @@ export function PoliceStation() {
       <SelectForm
         showSearch={true}
         label="المخفر التابع له القضية"
-        name="case_police_station"
+        name="case_police_station_id"
         options={policeStationsOptions}
         placeholder="اختر المخفر"
       />

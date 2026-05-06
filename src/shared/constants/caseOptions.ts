@@ -8,7 +8,7 @@ export const CASE_TITLE_OPTIONS = [
 export const LITIGATION_LEVEL_OPTIONS = [
     { label: "أول درجة", value: "first_instance" },
     { label: "استئناف", value: "appeal" },
-    { label: "نقض", value: "cassation" },
+    { label: "تمييز", value: "cassation" },
 ];
 
 export const CASE_SITUATION_OPTIONS = [
