@@ -101,7 +101,7 @@ export const CreateCaseDocumentDialog: React.FC<
             placeholder="أدخل تفاصيل المستند"
           />
 
-          <FileUpload name="file" label="رفع الملف" />
+          <FileUpload name="file" label="رفع الملف" className="w-full" />
 
           <button
             type="submit"

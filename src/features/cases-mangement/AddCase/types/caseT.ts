@@ -6,6 +6,7 @@ export type BasePayload = {
   case_situation: CaseSituation;
   case_title: string;
   case_status_id: number;
+  ClientStatus_id: number;
   client_type: string;
   client_id: number;
   case_type_id: number;

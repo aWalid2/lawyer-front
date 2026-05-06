@@ -1,8 +1,8 @@
 export const CASE_TITLE_OPTIONS = [
-    { label: "مدعي", value: "plaintiff" },
-    { label: "مدعي عليه", value: "defendant" },
-    { label: "مستأنف", value: "appellant" },
-    { label: "مستأنف ضده", value: "appellee" },
+    { label: "مدعي", value: "1" },
+    { label: "مدعي عليه", value: "2" },
+    { label: "مستأنف", value: "3" },
+    { label: "مستأنف ضده", value: "4" },
 ];
 
 export const LITIGATION_LEVEL_OPTIONS = [

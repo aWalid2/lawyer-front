@@ -1,27 +1,49 @@
-import { mockClientStatuses } from "./mockData";
+import api from "@/lib/api";
+import type { ClientStatusT } from "../../types/clientStatusT";
 
-// Mock implementation
-export const getClientStatuses = async (page: number = 1, limit: number = 15) => {
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
-  const startIndex = (page - 1) * limit;
-  const endIndex = startIndex + limit;
-  const paginatedData = mockClientStatuses.slice(startIndex, endIndex);
-
-  return {
-    data: paginatedData,
-    meta: {
-      total_pages: Math.ceil(mockClientStatuses.length / limit),
-    },
+type ClientStatusesResponse = {
+  data: ClientStatusT[];
+  meta: {
+    total_pages: number;
   };
 };
 
-/* 
-// REAL API IMPLEMENTATION (Uncomment when backend is ready)
-import api from "@/lib/api";
+type ClientStatusesApiResponse =
+  | ClientStatusT[]
+  | {
+      data?: ClientStatusT[];
+      meta?: {
+        total_pages?: number;
+      };
+    };
 
 export const getClientStatuses = async (page?: number, limit?: number) => {
-    const response = await api.get<{ data: ClientStatusT[], meta: { total_pages: number } }>(`/client-status?page=${page}&limit=${limit}`);
-    return response.data;
+  const currentPage = page ?? 1;
+  const currentLimit = limit ?? 15;
+
+  const { data } = await api.get<ClientStatusesApiResponse>("/client-status", {
+    params: { page, limit },
+  });
+
+  if (Array.isArray(data)) {
+    const startIndex = (currentPage - 1) * currentLimit;
+    const endIndex = startIndex + currentLimit;
+
+    return {
+      data: data.slice(startIndex, endIndex),
+      meta: {
+        total_pages: Math.max(1, Math.ceil(data.length / currentLimit)),
+      },
+    } satisfies ClientStatusesResponse;
+  }
+
+  const statuses = data.data ?? [];
+  const totalPages = data.meta?.total_pages;
+
+  return {
+    data: totalPages ? statuses : statuses.slice((currentPage - 1) * currentLimit, currentPage * currentLimit),
+    meta: {
+      total_pages: totalPages ?? Math.max(1, Math.ceil(statuses.length / currentLimit)),
+    },
+  } satisfies ClientStatusesResponse;
 };
-*/

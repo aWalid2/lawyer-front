@@ -102,7 +102,7 @@ export const EditCaseDocumentDialog: React.FC<EditCaseDocumentDialogProps> = ({
             placeholder="أدخل تفاصيل المستند"
           />
 
-          <FileUpload name="file" label="رفع ملف جديد" />
+          <FileUpload name="file" label="رفع ملف جديد" className="w-full" />
 
           <button
             type="submit"

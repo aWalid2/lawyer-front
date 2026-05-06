@@ -1,4 +1,4 @@
-// case-status/api/service/deleteCaseStatus.ts
+
 import api from "@/lib/api";
 
 export const deleteCaseStatus = async (id: string) => {

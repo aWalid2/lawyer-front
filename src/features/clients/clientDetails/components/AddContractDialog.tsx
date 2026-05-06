@@ -114,6 +114,7 @@ export const AddContractDialog: React.FC<AddContractDialogProps> = ({
                 name="file"
                 label="صورة العقد"
                 placeholder="اختر ملف"
+                className="w-full"
               />
 
               <SubmitButton isPending={isPending} className="mt-6">

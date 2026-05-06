@@ -24,6 +24,7 @@ import { Active } from "./components/Active";
 import { Other } from "./components/Other";
 import { CASE_SITUATION_OPTIONS } from "@/shared/constants/caseOptions";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
+import type { FormValues } from "./utils/mapToApiPayload";
 
 const collectErrorMessages = (errors: FormikErrors<typeof initialValues>) => {
   const messages: string[] = [];
@@ -81,13 +82,13 @@ const FormCase = () => {
     useAddActiveCase();
   const { mutateAsync: addOtherCase, isPending: isPendingOtherCase } =
     useAddOtherCase();
-  const formInitialValues = {
+  const formInitialValues: FormValues = {
     ...initialValues,
     client_id: clientIdFromUrl || initialValues.client_id,
   };
 
   return (
-    <Formik
+    <Formik<FormValues>
       initialValues={formInitialValues}
       enableReinitialize
       validationSchema={validationSchema}

@@ -6,6 +6,7 @@ export interface FormValues {
   case_status_id: string;
   case_situation: CaseSituation;
   case_title: string;
+  ClientStatus_id: string;
   client_name: string;
   case_type_id: string;
   case_police_station: string;
@@ -76,7 +77,8 @@ export const mapToApiPayload = (
     case_situation: values.case_situation,
     case_title: values.case_title,
     case_status_id: Number(values.case_status_id),
-    client_type: values.client_type,
+    ClientStatus_id: Number(values.ClientStatus_id),
+    client_type: values.client_type ?? "",
     client_id: Number(values.client_id),
     case_type_id: Number(values.case_type_id),
     notes: values.notes || "",

@@ -28,20 +28,16 @@ export const ClientCases: React.FC = () => {
       accessor: (item) => item.case_number,
     },
     {
-      header: "موضوع القضية",
+      header: "عنوان القضية",
       accessor: (item) => item.case_title,
     },
     {
       header: "الحالة",
-      accessor: (item) => (
-        <span className="px-4 py-2 h-[30px] rounded-xl bg-[#5570F1]/20 text-[#5570F1] text-xs font-normal shadow-sm">
-          {item.case_status_id}
-        </span>
-      ),
+      accessor: (item) => item.caseStatus?.name || "غير محددة",
     },
     {
       header: "الصفة",
-      accessor: (item) => item.client_type,
+      accessor: (item) => item.ClientStatus?.name || "غير محددة",
     },
     {
       header: "تاريخ القضية",
@@ -49,37 +45,36 @@ export const ClientCases: React.FC = () => {
     },
     {
       header: "الإجراءات",
-      accessor: (item) => (
-        <TableCasesActions client={item} />
-      ),
+      accessor: (item) => <TableCasesActions client={item} />,
     },
-  ]
+  ];
 
   const { id } = useParams<{ id: string }>();
   const [page, setPage] = useState(1);
   const limit = 15;
-  const { data: clientCases, isPending: isClientCasesPending, isError: isClientCasesError, error } = useGetClientCases({ id: id!, page, limit });
-  const indexedClientData = useIndexedData(clientCases?.data || [], page, limit)
+  const {
+    data: clientCases,
+    isPending: isClientCasesPending,
+    isError: isClientCasesError,
+    error,
+  } = useGetClientCases({ id: id!, page, limit });
+  const indexedClientData = useIndexedData(
+    clientCases?.data || [],
+    page,
+    limit,
+  );
   const totalPages = clientCases?.meta?.last_page ?? 1;
 
-
-
   if (isClientCasesPending) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
   if (isClientCasesError) {
-    return <Error error={error} />
+    return <Error error={error} />;
   }
   return (
-
     <div className="container pt-6">
-
       {indexedClientData.length > 0 ? (
-        <DataTable
-          data={indexedClientData}
-          columns={columns}
-          rowKey="id"
-        />
+        <DataTable data={indexedClientData} columns={columns} rowKey="id" />
       ) : (
         <EmptyTable message="لا يوجد قضايا" />
       )}

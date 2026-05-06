@@ -227,9 +227,8 @@ export const EditClientDialog: React.FC<EditClientDialogProps> = ({
               />
             </div>
 
-            <div className="mb-16 h-24.75 w-30.25">
-              <FileUpload name="authorization_photo" label="صورة التوكيل" />
-            </div>
+            <FileUpload name="authorization_photo" label="صورة التوكيل" />
+
             <SubmitButton
               isPending={isPending}
               loadingText="جاري التعديل..."

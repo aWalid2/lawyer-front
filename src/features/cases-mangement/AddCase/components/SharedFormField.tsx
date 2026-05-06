@@ -32,7 +32,12 @@ export function SharedFormField() {
 
   return (
     <>
-      <InputForm label="عنوان القضية" name="case_title" type="text" placeholder="عنوان القضية" />
+      <InputForm
+        label="عنوان القضية"
+        name="case_title"
+        type="text"
+        placeholder="عنوان القضية"
+      />
 
       <SelectForm
         label="اسم الموكل"
@@ -53,7 +58,7 @@ export function SharedFormField() {
 
       <SelectForm
         label="صفة الموكل"
-        name="client_type"
+        name="ClientStatus_id"
         options={CASE_TITLE_OPTIONS}
         placeholder="اختر صفة الموكل"
       />

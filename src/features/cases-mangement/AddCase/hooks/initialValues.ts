@@ -1,6 +1,6 @@
 import type { FormValues } from "../utils/mapToApiPayload";
 
-export const initialValues: FormValues = {
+export const initialValues = {
   client_id: "1",
   case_status_received: "",
   case_situation: "UNDER_APPEAL",
@@ -14,6 +14,7 @@ export const initialValues: FormValues = {
   case_number_at_police_station: "",
 
   client_type: "",
+  ClientStatus_id: "1",
 
   name: "",
   legal_status: "",
@@ -64,4 +65,4 @@ contract_based: undefined,
 
   // Other Fields
   Case_Arrival_Date_at_the_Authority: "",
-};
+} satisfies FormValues;

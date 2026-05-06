@@ -1,4 +1,4 @@
-// case-status/api/hooks/useDeleteCaseStatus.ts
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { deleteCaseStatus } from "../service/deleteCaseStatus";

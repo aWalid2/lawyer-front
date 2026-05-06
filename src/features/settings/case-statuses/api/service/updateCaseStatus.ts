@@ -1,4 +1,4 @@
-// case-status/api/service/updateCaseStatus.ts
+
 import api from "@/lib/api";
 
 export const updateCaseStatus = async (id: string, data: any) => {

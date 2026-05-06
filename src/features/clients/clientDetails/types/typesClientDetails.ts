@@ -6,6 +6,12 @@ export interface ClientCase {
   case_number: string;
   case_status_id: string;
   case_title: string;
+  caseStatus?: {
+    name: string;
+  };
+  ClientStatus?: {
+    name: string;
+  };
   client_type: string;
   created_at: string;
 }

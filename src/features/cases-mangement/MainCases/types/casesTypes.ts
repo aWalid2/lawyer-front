@@ -21,7 +21,7 @@ export interface Case {
     name: string;
     id: string;
   };
-  client_type?:string;
+  ClientStatus_id?:string;
   case_situation?:string;
   detective_name?:string;
  

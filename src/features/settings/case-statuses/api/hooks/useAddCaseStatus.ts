@@ -1,4 +1,4 @@
-// case-status/api/hooks/useAddCaseStatus.ts
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { addCaseStatus } from "../service/addCaseStatus";

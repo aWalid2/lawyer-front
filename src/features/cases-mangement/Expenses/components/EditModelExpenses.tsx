@@ -91,7 +91,7 @@ export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
               />
             </div>
 
-            <FileUpload name="attachments" label="مرفقات" />
+            <FileUpload name="attachments" label="مرفقات" className="w-full" />
 
             <TextAreaForm
               name="notes"
