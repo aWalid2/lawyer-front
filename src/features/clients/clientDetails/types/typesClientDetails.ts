@@ -3,6 +3,7 @@ export interface ClientCase {
   id: number;
   rowNumber?: number;
   case_sequence: string;
+  reference_number: string;
   case_number: string;
   case_status_id: string;
   case_title: string;

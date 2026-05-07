@@ -59,7 +59,7 @@ contract_based?: undefined;
   has_opponent: boolean;
 
   // Active Fields
-  case_sequence?: string;
+  reference_number?: string;
   Complaint_Number?: string;
   court_id?: string;
   Current_court_degree?: string;
@@ -137,7 +137,7 @@ const case_fees: CaseFees = {
     return {
       ...base,
       case_situation: "ACTIVE",
-      case_sequence: Number(values.case_sequence),
+      reference_number: Number(values.reference_number),
       Complaint_Number: Number(values.Complaint_Number),
       court_id: Number(values.court_id),
       Current_court_degree: values.Current_court_degree,

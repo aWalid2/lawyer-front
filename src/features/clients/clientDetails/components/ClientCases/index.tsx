@@ -25,7 +25,7 @@ export const ClientCases: React.FC = () => {
     },
     {
       header: "الرقم الآلي للقضية",
-      accessor: (item) => item.case_number,
+      accessor: (item) => item.reference_number,
     },
     {
       header: "عنوان القضية",

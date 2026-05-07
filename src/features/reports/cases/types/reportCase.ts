@@ -15,6 +15,7 @@ export interface ReportCase {
   client: {
     first_name: string;
   };
+  reference_number: string;
 }
 
 

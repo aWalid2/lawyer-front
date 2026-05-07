@@ -42,8 +42,12 @@ const ReportsCasesFeature = () => {
       headerClassName: "w-16",
     },
     {
-      header: "الرقم الآلي للقضية",
+      header: "كود القضية ",
       accessor: "case_sequence",
+    },
+    {
+      header: "الرقم الالي للقضية ",
+      accessor: "reference_number",
     },
     {
       header: "نوع القضية",

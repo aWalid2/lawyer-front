@@ -10,30 +10,38 @@ export function Active() {
   const [courtSearch, setCourtSearch] = useState("");
   const debouncedCourtSearch = useDebounce(courtSearch, 500);
 
-  const { data: courts } = useGetCourts(undefined, undefined, debouncedCourtSearch);
+  const { data: courts } = useGetCourts(
+    undefined,
+    undefined,
+    debouncedCourtSearch,
+  );
 
   interface Court {
     id: string | number;
     name: string;
   }
 
-  const courtOptions = courts?.data?.map((court: Court) => ({
-    label: court.name,
-    value: String(court.id)
-  })) || [];
-
-
+  const courtOptions =
+    courts?.data?.map((court: Court) => ({
+      label: court.name,
+      value: String(court.id),
+    })) || [];
 
   return (
     <>
       <InputForm
         label="الرقم الالي للقضية"
-        name="case_sequence"
+        name="reference_number"
         type="number"
         placeholder="الرقم الالي للقضية"
       />
 
-      <InputForm label="رقم الشكوي" name="Complaint_Number" type="number" placeholder="رقم الشكوي" />
+      <InputForm
+        label="رقم الشكوي"
+        name="Complaint_Number"
+        type="number"
+        placeholder="رقم الشكوي"
+      />
 
       <SharedFormField />
 
@@ -52,7 +60,6 @@ export function Active() {
         placeholder="اختر درجة التقاضي الحالية"
         showSearch={true}
       />
-
     </>
   );
 }

@@ -23,13 +23,12 @@ export const RelationalCases: React.FC = () => {
   } = useGetRelatedCases(caseId);
   const { mutateAsync: deleteRelatedCase } = useDeleteRelatedCase(caseId);
 
-
   const relatedCasesTableData = React.useMemo(
     () =>
       relatedCases?.map((item) => ({
         id: item.related_case.id,
         related_case_id: item.related_case_id,
-        case_sequence: item.related_case.case_sequence,
+        reference_number: item.reference_number,
       })),
     [relatedCases],
   );
@@ -57,7 +56,7 @@ export const RelationalCases: React.FC = () => {
     },
     {
       header: "الرقم الآلي",
-      accessor: "case_sequence",
+      accessor: "reference_number",
       headerClassName: "w-35",
       className: "w-35",
     },
@@ -77,7 +76,11 @@ export const RelationalCases: React.FC = () => {
   return (
     <div>
       <HeaderRelationalCases title="القضايا ذات الصلة" caseId={caseId} />
-      {relatedCases.length > 0 ? <DataTable data={currentData} columns={columns} rowIdField="id" /> : <EmptyTable message="لا يوجد قضايا مرتبطه" />}
+      {relatedCases.length > 0 ? (
+        <DataTable data={currentData} columns={columns} rowIdField="id" />
+      ) : (
+        <EmptyTable message="لا يوجد قضايا مرتبطه" />
+      )}
       {/* {totalPages > 1 && (
                 <Pagination
                     currentPage={currentPage}
