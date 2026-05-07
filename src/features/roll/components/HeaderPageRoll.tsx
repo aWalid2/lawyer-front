@@ -1,5 +1,8 @@
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
 import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
+import {
+  HeaderExportMenu,
+  type HeaderExportType,
+} from "../../../shared/components/HeaderExportMenu";
 import { HeaderFilter } from "@/shared/components/HeaderFilter";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
@@ -12,6 +15,7 @@ interface HeaderPageRollProps {
     key: "type" | "fromDate" | "toDate",
     value: string | Date | undefined,
   ) => void;
+  onExport: (type: HeaderExportType) => void;
   searchTerm: string;
   filters: {
     type: string;
@@ -23,6 +27,7 @@ interface HeaderPageRollProps {
 export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
   onSearch,
   onFilterChange,
+  onExport,
   searchTerm,
   filters,
 }) => {
@@ -61,11 +66,7 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
           ]}
           className="md:w-[110px]"
         />
-        <HeaderActionButton
-          label="تصدير"
-          variant="gradient"
-          className="rounded-main h-12.5 px-8"
-        />
+        <HeaderExportMenu onSelect={onExport} />
       </div>
     </HeaderPageLayout>
   );

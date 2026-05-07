@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { HeaderPageRoll } from "./components/HeaderPageRoll";
 import type { RollSession } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
+import type { HeaderExportType } from "../../shared/components/HeaderExportMenu";
 import { Pagination } from "@/shared/components/Pagination";
 import { TableRollActions } from "./components/TableRollActions";
 import PageLayout from "@/shared/components/PageLayout";
@@ -76,6 +77,12 @@ const RollFeature = () => {
     return filteredSessions.slice(start, start + itemsPerPage);
   }, [filteredSessions, currentPage]);
 
+  const handleExport = (type: HeaderExportType) => {
+    console.log(
+      `Exporting ${filteredSessions.length} roll sessions as ${type}`,
+    );
+  };
+
   const columns: Column<RollSession>[] = [
     {
       header: "#",
@@ -147,6 +154,7 @@ const RollFeature = () => {
         searchTerm={searchTerm}
         onSearch={handleSearch}
         onFilterChange={handleFilterChange}
+        onExport={handleExport}
         filters={filters}
       />
 
