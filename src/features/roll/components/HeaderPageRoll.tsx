@@ -1,20 +1,22 @@
-import React from "react";
-import { Plus } from "lucide-react";
 import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
-import { RollSessionDialog } from "./RollSessionDialog";
+import { HeaderFilter } from "@/shared/components/HeaderFilter";
+import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import React from "react";
 
 interface HeaderPageRollProps {
   onSearch: (term: string) => void;
-  onFilterChange: (key: string, value: any) => void;
+  onFilterChange: (
+    key: "type" | "fromDate" | "toDate",
+    value: string | Date | undefined,
+  ) => void;
   searchTerm: string;
   filters: {
     type: string;
-    date?: Date;
+    fromDate?: Date;
+    toDate?: Date;
   };
 }
 
@@ -26,10 +28,8 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
 }) => {
   return (
     <HeaderPageLayout>
-      {/* العنوان - في الموبايل أول عنصر */}
       <HeaderTitle innerPage title="رول الجلسات" />
 
-      {/* السيرش - في الموبايل ثاني عنصر */}
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
@@ -37,15 +37,19 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
         className="lg:ms-0"
       />
 
-      {/* مجموعة الأزرار */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:flex lg:flex-row gap-3 w-full lg:w-auto">
-        {/* تاريخ الجلسة */}
+      <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-4 lg:flex lg:w-auto lg:flex-row">
         <HeaderDatePicker
-          date={filters.date}
-          onDateChange={(date) => onFilterChange("date", date)}
+          date={filters.fromDate}
+          onDateChange={(date) => onFilterChange("fromDate", date)}
+          placeholder="من تاريخ"
         />
 
-        {/* نوع الجلسة */}
+        <HeaderDatePicker
+          date={filters.toDate}
+          onDateChange={(date) => onFilterChange("toDate", date)}
+          placeholder="إلى تاريخ"
+        />
+
         <HeaderFilter
           placeholder="نوع الجلسة"
           value={filters.type}
@@ -57,18 +61,10 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
           ]}
           className="md:w-[110px]"
         />
-
-        {/* زر جلسة جديدة */}
-        <RollSessionDialog
-          onSave={(values) => console.log("Adding session:", values)}
-          trigger={
-            <HeaderActionButton
-              label="جلسة جديدة"
-              icon={<Plus size={18} />}
-              variant="gradient"
-              className="rounded-main h-12.5 px-8 w-full md:w-auto"
-            />
-          }
+        <HeaderActionButton
+          label="تصدير"
+          variant="gradient"
+          className="rounded-main h-12.5 px-8"
         />
       </div>
     </HeaderPageLayout>
