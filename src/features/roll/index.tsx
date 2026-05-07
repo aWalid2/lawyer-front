@@ -107,6 +107,10 @@ const RollFeature = () => {
       accessor: "sessionDateTime",
     },
     {
+      header: "درجة التقاضي",
+      accessor: "sessionDateTime",
+    },
+    {
       header: "اسم الموكل",
       accessor: "sessionDateTime",
     },
