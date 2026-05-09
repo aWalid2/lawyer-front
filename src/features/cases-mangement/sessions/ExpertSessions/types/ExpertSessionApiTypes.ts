@@ -4,6 +4,7 @@ export type ExpertSessionStatus =
   | "UNDER_REVIEW";
 
 export interface ExpertSessionRequest {
+  lawyer_id: number | string | null;
   expert_report_number: string;
   assigning_authority: string;
   assignment_date: string;
@@ -19,6 +20,7 @@ export interface ExpertSessionResponse {
   id: number;
   rowNumber?: number;
   case_id: number;
+  lawyer_id?: number | null;
   expert_report_number: string;
   assigning_authority: string;
   assignment_date: string;
@@ -28,6 +30,9 @@ export interface ExpertSessionResponse {
   final_opinion: string;
   submission_date: string;
   status: ExpertSessionStatus;
+  lawyer?: {
+    name?: string;
+  };
   created_at?: string;
   updated_at?: string;
 }

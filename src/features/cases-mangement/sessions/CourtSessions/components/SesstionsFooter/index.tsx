@@ -31,9 +31,13 @@ interface SessionRow {
   rowNumber?: number;
   session_date: string;
   court_id: number;
+  lawyer_id?: number | null;
   hall_floor: number;
   hall_number: number;
   court?: {
+    name?: string;
+  };
+  lawyer?: {
     name?: string;
   };
 }
@@ -192,6 +196,10 @@ export const SesstionsFooter = ({ tab }: { tab: string }) => {
     {
       header: "المحكمة",
       accessor: (item) => item.court?.name || "-",
+    },
+    {
+      header: "المحامي المسئول",
+      accessor: (item) => item.lawyer?.name || "-",
     },
     {
       header: "دور القاعة",

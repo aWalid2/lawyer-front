@@ -20,6 +20,7 @@ const AddExpertModal: React.FC<AddExpertModalProps> = ({
   initialValues,
 }) => {
   const defaultValues: ExpertSessionRequest = {
+    lawyer_id: initialValues?.lawyer_id || "",
     expert_report_number: initialValues?.expert_report_number || "",
     assigning_authority: initialValues?.assigning_authority || "",
     assignment_date: initialValues?.assignment_date || "",

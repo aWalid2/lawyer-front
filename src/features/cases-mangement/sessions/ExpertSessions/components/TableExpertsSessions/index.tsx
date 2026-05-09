@@ -75,6 +75,10 @@ export const TableExpertsSessions: React.FC = () => {
       accessor: (item) => formatDateToYYYYMMDD(item.assignment_date),
     },
     {
+      header: "المحامي المسئول",
+      accessor: (item) => item.lawyer?.name || "-",
+    },
+    {
       header: "مكتب الخبراء",
       accessor: (item) => (
         <span title={item.expert_office_name}>

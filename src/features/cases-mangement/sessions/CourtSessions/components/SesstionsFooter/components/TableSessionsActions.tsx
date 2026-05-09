@@ -12,9 +12,13 @@ interface Session {
   id?: number;
   session_date: string;
   court_id: number;
+  lawyer_id?: number | null;
   hall_floor: number;
   hall_number: number;
   court?: {
+    name?: string;
+  };
+  lawyer?: {
     name?: string;
   };
 }

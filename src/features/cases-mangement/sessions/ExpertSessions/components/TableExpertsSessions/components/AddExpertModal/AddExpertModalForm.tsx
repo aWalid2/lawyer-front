@@ -1,6 +1,7 @@
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { SubmitButton } from "@/shared/components/SubmitButton";
+import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
 import { Form, Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
@@ -16,7 +17,20 @@ interface AddExpertModalFormProps {
   onSubmit: (values: ExpertSessionRequest) => Promise<void>;
 }
 
+interface LawyerEntity {
+  user_id: number;
+  user?: {
+    first_name?: string;
+    last_name?: string;
+  };
+}
+
+interface DataResponse<T> {
+  data?: T[];
+}
+
 const validationSchema = Yup.object({
+  lawyer_id: Yup.number().required("المحامي المسئول مطلوب"),
   expert_report_number: Yup.string().required("رقم تقرير الخبير مطلوب"),
   assigning_authority: Yup.string().required("الجهة المكلفة مطلوبة"),
   assignment_date: Yup.string().required("تاريخ التكليف مطلوب"),
@@ -40,6 +54,18 @@ export const AddExpertModalForm: React.FC<AddExpertModalFormProps> = ({
   isPending,
   onSubmit,
 }) => {
+  const { data: lawyersResponse } = useFetchLawyers(true);
+
+  const lawyers = Array.isArray(lawyersResponse)
+    ? lawyersResponse
+    : (lawyersResponse as DataResponse<LawyerEntity> | undefined)?.data || [];
+
+  const lawyersOptions = lawyers.map((lawyer: LawyerEntity) => ({
+    value: String(lawyer.user_id),
+    label:
+      `${lawyer.user?.first_name || ""} ${lawyer.user?.last_name || ""}`.trim(),
+  }));
+
   return (
     <Formik
       initialValues={defaultValues}
@@ -47,7 +73,10 @@ export const AddExpertModalForm: React.FC<AddExpertModalFormProps> = ({
       enableReinitialize
       onSubmit={async (values, { setSubmitting }) => {
         try {
-          await onSubmit(values);
+          await onSubmit({
+            ...values,
+            lawyer_id: Number(values.lawyer_id),
+          });
         } finally {
           setSubmitting(false);
         }
@@ -56,6 +85,12 @@ export const AddExpertModalForm: React.FC<AddExpertModalFormProps> = ({
       {() => (
         <Form className="space-y-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <SelectForm
+              name="lawyer_id"
+              label="المحامي المسئول"
+              options={lawyersOptions}
+              placeholder="اختر المحامي المسئول"
+            />
             <InputForm
               name="expert_report_number"
               label="رقم تقرير الخبير"
@@ -68,9 +103,7 @@ export const AddExpertModalForm: React.FC<AddExpertModalFormProps> = ({
               type="text"
               placeholder="محكمة / نيابة / هيئة تحكيم"
             />
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <InputForm
               name="assignment_date"
               label="تاريخ التكليف"
@@ -82,9 +115,7 @@ export const AddExpertModalForm: React.FC<AddExpertModalFormProps> = ({
               type="text"
               placeholder="أدخل اسم مكتب الخبراء"
             />
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <InputForm
               name="task_start_date"
               label="تاريخ مباشرة المهمة"
@@ -96,9 +127,7 @@ export const AddExpertModalForm: React.FC<AddExpertModalFormProps> = ({
               type="text"
               placeholder="تقدير تعويض / فحص توقيع / فحص طبي ..."
             />
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <InputForm
               name="final_opinion"
               label="الرأي النهائي للخبير"
