@@ -9,6 +9,7 @@ export const useDeleteCaseExpense = (caseId: string | number) => {
     mutationFn: deleteCaseExpense,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["case-expenses", caseId] });
+      queryClient.invalidateQueries({ queryKey: ["case-expenses-summary", caseId] });
       toast.success("تم حذف المصروف بنجاح");
     },
     onError: () => {

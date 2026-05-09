@@ -1,27 +1,28 @@
 import React from "react";
 import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
+import { HeaderFilter } from "@/shared/components/HeaderFilter";
 
 interface HeaderPageReportsExpensesProps {
   onSearch: (term: string) => void;
-  onFilterChange: (key: string, value: any) => void;
+  onFilterChange: (
+    key: "expenseType" | "fromDate" | "toDate",
+    value: string | Date | undefined,
+  ) => void;
   searchTerm: string;
   filters: {
-    status: string;
-    date?: Date;
+    expenseType: string;
+    fromDate?: Date;
+    toDate?: Date;
   };
 }
 
-export const HeaderPageReportsExpenses: React.FC<HeaderPageReportsExpensesProps> = ({
-  onSearch,
-  onFilterChange,
-  searchTerm,
-  filters,
-}) => {
+export const HeaderPageReportsExpenses: React.FC<
+  HeaderPageReportsExpensesProps
+> = ({ onSearch, onFilterChange, searchTerm, filters }) => {
   return (
     <HeaderPageLayout>
       <HeaderTitle innerPage title="تقارير المصروفات" />
@@ -33,24 +34,33 @@ export const HeaderPageReportsExpenses: React.FC<HeaderPageReportsExpensesProps>
         className="lg:ms-0"
       />
 
-      <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+      <div className="flex w-full items-center justify-end gap-3 md:w-auto">
         <HeaderDatePicker
-          date={filters.date}
-          onDateChange={(date) => onFilterChange("date", date)}
+          date={filters.fromDate}
+          onDateChange={(date) => onFilterChange("fromDate", date)}
+          placeholder="من تاريخ"
+        />
+
+        <HeaderDatePicker
+          date={filters.toDate}
+          onDateChange={(date) => onFilterChange("toDate", date)}
+          placeholder="إلى تاريخ"
         />
 
         <HeaderFilter
-          placeholder="الحالة"
-          value={filters.status}
-          onFilterChange={(v) => onFilterChange("status", v)}
+          placeholder="نوع المصروف"
+          value={filters.expenseType}
+          onFilterChange={(value) => onFilterChange("expenseType", value)}
           options={[
-            { value: "all", label: "الحالة" },
-            { value: "paid", label: "مدفوعة" },
-            { value: "rejected", label: "مرفوضة" },
-            { value: "inactive", label: "غير نشط" },
+            { value: "all", label: "نوع المصروف" },
+            { value: "رسوم محكمة", label: "رسوم محكمة" },
+            { value: "رسوم إدارية", label: "رسوم إدارية" },
+            { value: "انتقالات", label: "انتقالات" },
+            { value: "طباعة وتصوير", label: "طباعة وتصوير" },
+            { value: "مصاريف أخرى", label: "مصاريف أخرى" },
           ]}
-          className="md:w-[110px]"
         />
+
         <HeaderActionButton
           label="تصدير"
           variant="gradient"

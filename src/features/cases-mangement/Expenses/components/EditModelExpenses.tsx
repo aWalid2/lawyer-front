@@ -5,12 +5,10 @@ import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { FileUpload } from "@/shared/components/FileUpload";
+import { useFetchEmployees } from "@/features/users/users-employees/employees/api/hooks/useGetAllEmployees";
+import { EXPENSE_TYPE_OPTIONS } from "@/shared/constants/ExpensesOptions";
 import type { ExpenseFormValues, ExpenseItem } from "../types";
-import {
-  EMPTY_EXPENSE_FORM_VALUES,
-  EXPENSE_TYPE_OPTIONS,
-  toExpenseFormValues,
-} from "../types";
+import { EMPTY_EXPENSE_FORM_VALUES, toExpenseFormValues } from "../types";
 
 import * as Yup from "yup";
 
@@ -22,6 +20,13 @@ interface EditModelExpensesProps {
   isPending?: boolean;
 }
 
+interface EmployeeEntity {
+  user_id?: number | string;
+  user?: {
+    first_name?: string;
+  };
+}
+
 export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
   expense,
   open,
@@ -29,13 +34,23 @@ export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
   onSave,
   isPending = false,
 }) => {
+  const { data: employeesResponse } = useFetchEmployees();
   const initialValues = expense
     ? toExpenseFormValues(expense)
     : EMPTY_EXPENSE_FORM_VALUES;
   const isEditMode = !!expense?.id;
 
+  const employeeOptions =
+    employeesResponse?.data?.map((employee: EmployeeEntity) => ({
+      label: employee?.user?.first_name || `#${employee?.user_id}`,
+      value: String(employee?.user_id),
+    })) || [];
+
   const validationSchema = Yup.object().shape({
     expenseType: Yup.string().required("نوع المصروف مطلوب"),
+    employeeId: Yup.number()
+      .typeError("اسم الموظف المسئول مطلوب")
+      .required("اسم الموظف المسئول مطلوب"),
     description: Yup.string().required("وصف المصروف مطلوب"),
     amount: Yup.number()
       .typeError("قيمة المصروف مطلوبة")
@@ -72,10 +87,17 @@ export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
                 options={EXPENSE_TYPE_OPTIONS}
                 placeholder="اختر نوع المصروف"
               />
-              <InputForm name="expenseDate" label="تاريخ المصروف" type="date" />
+              <SelectForm
+                name="employeeId"
+                label="اسم الموظف المسئول"
+                options={employeeOptions}
+                placeholder="اختر الموظف المسئول"
+                showSearch
+              />
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <InputForm name="expenseDate" label="تاريخ المصروف" type="date" />
               <InputForm
                 name="description"
                 label="وصف المصروف"

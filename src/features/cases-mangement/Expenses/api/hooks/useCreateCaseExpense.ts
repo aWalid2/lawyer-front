@@ -9,6 +9,7 @@ export const useCreateCaseExpense = (caseId: string | number) => {
     mutationFn: createCaseExpense,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["case-expenses", caseId] });
+      queryClient.invalidateQueries({ queryKey: ["case-expenses-summary", caseId] });
       toast.success("تمت إضافة المصروف بنجاح");
     },
     onError: () => {

@@ -1,70 +1,95 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { HeaderPageReportsExpenses } from "./components/HeaderPageReportsExpenses";
 import type { ReportExpense } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
 import PageLayout from "@/shared/components/PageLayout";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
+import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
+import { ButtonViewTable } from "@/shared/components/ButtonViewTable";
+import { toast } from "sonner";
 
 const MOCK_REPORT_EXPENSES: ReportExpense[] = Array.from(
   { length: 45 },
   (_, i) => ({
     id: `${i + 1}`,
-    invoiceNumber: i === 0 ? "1" : "2",
-    category: ["قضائية", "تشغيلية", "تسويقية", "طارئة"][i % 4],
-    description: "رسوم خبراء",
-    amount: "5000 ر.س",
-    responsibleEmployee: "علي العتيبي",
-    date: "14/10/2025",
-    status: i % 3 === 0 ? "paid" : i % 3 === 1 ? "rejected" : "inactive",
+    expenseType: [
+      "رسوم محكمة",
+      "رسوم إدارية",
+      "انتقالات",
+      "طباعة وتصوير",
+      "مصاريف أخرى",
+    ][i % 5],
+    employeeName: `موظف ${i + 1}`,
+    description: ["رسوم خبراء", "رسوم تسجيل", "مصاريف انتقال للمحكمة"][i % 3],
+    amount: 500 + i * 125,
+    expenseDate: `2025-10-${String((i % 28) + 1).padStart(2, "0")}`,
+    attachments:
+      i % 3 === 0
+        ? [`receipt-${i + 1}.pdf`, `note-${i + 1}.jpg`]
+        : i % 2 === 0
+          ? [`receipt-${i + 1}.pdf`]
+          : [],
+    notes: "بيانات تجريبية لعرض تقرير المصروفات",
   }),
 );
 
 const ReportsExpensesFeature = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState<{ status: string; date?: Date }>({
-    status: "all",
-  });
+  const [filters, setFilters] = useState<{
+    expenseType: string;
+    fromDate?: Date;
+    toDate?: Date;
+  }>({ expenseType: "all" });
   const itemsPerPage = 15;
 
-  const handleFilterChange = (key: string, value: any) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+  const handleFilterChange = (
+    key: string,
+    value: string | Date | undefined,
+  ) => {
+    setCurrentPage(1);
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const handleSearchChange = (value: string) => {
+    setCurrentPage(1);
+    setSearchTerm(value);
   };
 
   const filteredExpenses = useMemo(() => {
     return MOCK_REPORT_EXPENSES.filter((x) => {
       const searchStr = searchTerm.toLowerCase();
       const matchesSearch =
-        x.invoiceNumber.includes(searchStr) ||
-        x.category.toLowerCase().includes(searchStr) ||
+        x.expenseType.toLowerCase().includes(searchStr) ||
+        x.employeeName.toLowerCase().includes(searchStr) ||
         x.description.toLowerCase().includes(searchStr);
 
-      const matchesStatus =
-        filters.status === "all" || x.status === filters.status;
+      const matchesExpenseType =
+        filters.expenseType === "all" || x.expenseType === filters.expenseType;
 
-      let matchesDate = true;
-      if (filters.date) {
-        const expenseDate = new Date(x.date.split("/").reverse().join("-"));
-        matchesDate =
-          expenseDate.getDate() === filters.date.getDate() &&
-          expenseDate.getMonth() === filters.date.getMonth() &&
-          expenseDate.getFullYear() === filters.date.getFullYear();
-      }
+      const expenseDate = new Date(x.expenseDate);
+      const matchesFromDate =
+        !filters.fromDate || expenseDate >= filters.fromDate;
+      const matchesToDate = !filters.toDate || expenseDate <= filters.toDate;
 
-      return matchesSearch && matchesStatus && matchesDate;
+      return (
+        matchesSearch && matchesExpenseType && matchesFromDate && matchesToDate
+      );
     });
   }, [searchTerm, filters]);
 
   const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
+  const safeCurrentPage = Math.min(currentPage, Math.max(totalPages, 1));
 
   const paginatedExpenses = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
+    const start = (safeCurrentPage - 1) * itemsPerPage;
     return filteredExpenses.slice(start, start + itemsPerPage);
-  }, [filteredExpenses, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, filters]);
+  }, [filteredExpenses, safeCurrentPage]);
 
   const columns: Column<ReportExpense>[] = [
     {
@@ -74,46 +99,60 @@ const ReportsExpensesFeature = () => {
       headerClassName: "w-15",
     },
     {
-      header: "رقم الفاتورة",
-      accessor: "invoiceNumber",
+      header: "نوع المصروف",
+      accessor: "expenseType",
     },
     {
-      header: "الفئة",
-      accessor: "category",
+      header: "اسم الموظف المسؤول",
+      accessor: "employeeName",
     },
     {
-      header: "الوصف",
+      header: "وصف المصروف",
       accessor: "description",
     },
     {
-      header: "المبلغ",
-      accessor: "amount",
+      header: "قيمة المصروف",
+      accessor: (item) => `${item.amount.toLocaleString("en-US")} ج.م`,
     },
     {
-      header: "الموظف المسؤول",
-      accessor: "responsibleEmployee",
+      header: "تاريخ المصروف",
+      accessor: (item) => formatDateToYYYYMMDD(item.expenseDate) || "-",
     },
     {
-      header: "التاريخ",
-      accessor: "date",
+      header: "المرفقات",
+      accessor: (item) =>
+        item.attachments.length > 0
+          ? item.attachments.length === 1
+            ? item.attachments[0]
+            : `${item.attachments[0]} +${item.attachments.length - 1}`
+          : "-",
     },
     {
-      header: "الحالة",
-      accessor: (item) => {
-        const statusMap = {
-          paid: { label: "مدفوعة", color: "bg-success/20 text-success" },
-          rejected: { label: "مرفوضة", color: "bg-error/20 text-error" },
-          inactive: { label: "غير نشط", color: "bg-gray-200 text-gray-500" },
-        };
-        const config = statusMap[item.status];
-        return (
-          <span
-            className={`font-regular rounded-full px-3 py-1 text-xs ${config.color}`}
-          >
-            {config.label}
-          </span>
-        );
-      },
+      header: "إجراء",
+      accessor: (item) => (
+        <div className="flex items-center justify-center gap-2">
+          <ButtonViewTable
+            onClick={(event) => {
+              event.stopPropagation();
+              toast.info(`عرض المصروف: ${item.description}`);
+            }}
+          />
+
+          <ButtonUpdateTable
+            onClick={(event) => {
+              event.stopPropagation();
+              toast.info(`تعديل المصروف: ${item.description}`);
+            }}
+          />
+
+          <ButtonDeleteTable
+            onClick={(event) => {
+              event.stopPropagation();
+              toast.info(`حذف المصروف: ${item.description}`);
+            }}
+          />
+        </div>
+      ),
     },
   ];
 
@@ -121,7 +160,7 @@ const ReportsExpensesFeature = () => {
     <PageLayout>
       <HeaderPageReportsExpenses
         searchTerm={searchTerm}
-        onSearch={setSearchTerm}
+        onSearch={handleSearchChange}
         onFilterChange={handleFilterChange}
         filters={filters}
       />
@@ -130,7 +169,7 @@ const ReportsExpensesFeature = () => {
 
       {totalPages > 1 && (
         <Pagination
-          currentPage={currentPage}
+          currentPage={safeCurrentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
         />

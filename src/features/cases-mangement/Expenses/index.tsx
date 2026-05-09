@@ -5,12 +5,12 @@ import { EmptyTable } from "@/shared/components/EmptyTable";
 import { Error } from "@/shared/components/Error";
 import { Pagination } from "@/shared/components/Pagination";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { InputBox } from "@/shared/components/InputBox";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ExpenseDetailsDialog } from "./components/ExpenseDetailsDialog";
+import { ExpensesSummary } from "./components/ExpensesSummary";
 import { EditModelExpenses } from "./components/EditModelExpenses";
 import { ExpensesActions } from "./components/ExpensesActions";
 import type { ExpenseFormValues, ExpenseItem } from "./types";
@@ -52,23 +52,6 @@ export const ExpensesCaseFeature = () => {
     () => expensesResponse?.data ?? EMPTY_EXPENSES,
     [expensesResponse?.data],
   );
-
-  const totalExpensesValue = useMemo(
-    () => expenses.reduce((sum, expense) => sum + expense.amount, 0),
-    [expenses],
-  );
-
-  const latestExpenseDate = useMemo(() => {
-    if (!expenses.length) return "-";
-
-    const latest = [...expenses].sort(
-      (left, right) =>
-        new Date(right.expenseDate).getTime() -
-        new Date(left.expenseDate).getTime(),
-    )[0];
-
-    return formatDateToYYYYMMDD(latest.expenseDate) || "-";
-  }, [expenses]);
 
   const selectedExpense = useMemo(() => {
     const expenseFromList =
@@ -182,6 +165,10 @@ export const ExpensesCaseFeature = () => {
       accessor: "expenseType",
     },
     {
+      header: "اسم الموظف المسئول",
+      accessor: "employeeName",
+    },
+    {
       header: "وصف المصروف",
       accessor: "description",
       className: "text-right",
@@ -219,21 +206,7 @@ export const ExpensesCaseFeature = () => {
 
   return (
     <div className="w-full space-y-6">
-      <CustomLayoutBorder>
-        <div className="flex items-center justify-between pb-8">
-          <h1 className="text-secondary font-cairo w-full text-right text-[18px] font-semibold">
-            موجز المصروفات
-          </h1>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <InputBox
-            label="إجمالي المصروفات"
-            text={`${totalExpensesValue.toLocaleString("en-US")} ج.م`}
-          />
-          <InputBox label="تاريخ آخر مصروف" text={latestExpenseDate} />
-        </div>
-      </CustomLayoutBorder>
+      <ExpensesSummary caseId={caseId} />
 
       <CustomLayoutBorder>
         <div className="flex flex-col items-start justify-between gap-4 pb-6 sm:flex-row sm:items-center">

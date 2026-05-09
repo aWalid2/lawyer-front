@@ -42,6 +42,10 @@ export const ExpenseDetailsDialog: React.FC<ExpenseDetailsDialogProps> = ({
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
         <InputBox label="نوع المصروف" text={expense?.expenseType || "-"} />
         <InputBox
+          label="اسم الموظف المسئول"
+          text={expense?.employeeName || "-"}
+        />
+        <InputBox
           label="تاريخ المصروف"
           text={formatDateToYYYYMMDD(expense?.expenseDate) || "-"}
           icon={<DateIcon />}

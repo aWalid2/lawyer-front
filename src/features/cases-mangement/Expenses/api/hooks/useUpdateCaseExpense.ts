@@ -9,6 +9,7 @@ export const useUpdateCaseExpense = (caseId: string | number) => {
     mutationFn: updateCaseExpense,
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["case-expenses", caseId] });
+      queryClient.invalidateQueries({ queryKey: ["case-expenses-summary", caseId] });
       queryClient.invalidateQueries({
         queryKey: ["case-expense", String(variables.expenseId)],
       });

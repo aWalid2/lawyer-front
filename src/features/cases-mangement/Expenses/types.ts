@@ -3,6 +3,8 @@ import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 export interface ExpenseItem {
   id: string;
   expenseType: string;
+  employeeId: number | null;
+  employeeName: string;
   description: string;
   amount: number;
   expenseDate: string;
@@ -13,6 +15,7 @@ export interface ExpenseItem {
 
 export interface ExpenseFormValues {
   expenseType: string;
+  employeeId: number | "";
   description: string;
   amount: number | "";
   expenseDate: string;
@@ -20,16 +23,15 @@ export interface ExpenseFormValues {
   attachments: FileList | string[] | null;
 }
 
-export const EXPENSE_TYPE_OPTIONS = [
-  { label: "رسوم محكمة", value: "رسوم محكمة" },
-  { label: "رسوم إدارية", value: "رسوم إدارية" },
-  { label: "انتقالات", value: "انتقالات" },
-  { label: "طباعة وتصوير", value: "طباعة وتصوير" },
-  { label: "مصاريف أخرى", value: "مصاريف أخرى" },
-];
+export interface ExpenseSummary {
+  totalAmount: number;
+  latestExpenseDate: string | null;
+}
+
 
 export const EMPTY_EXPENSE_FORM_VALUES: ExpenseFormValues = {
   expenseType: "",
+  employeeId: "",
   description: "",
   amount: "",
   expenseDate: "",
@@ -41,6 +43,7 @@ export const toExpenseFormValues = (
   expense?: ExpenseItem | null,
 ): ExpenseFormValues => ({
   expenseType: expense?.expenseType ?? "",
+  employeeId: expense?.employeeId ?? "",
   description: expense?.description ?? "",
   amount: expense?.amount ?? "",
   expenseDate: formatDateToYYYYMMDD(expense?.expenseDate) || "",

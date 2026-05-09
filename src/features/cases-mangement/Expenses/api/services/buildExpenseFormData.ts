@@ -4,6 +4,7 @@ export const buildExpenseFormData = (values: ExpenseFormValues) => {
   const formData = new FormData();
 
   formData.append("expense_type", values.expenseType);
+  formData.append("employee_id", String(values.employeeId));
   formData.append("description", values.description);
   formData.append("amount", String(values.amount));
   formData.append("expense_date", values.expenseDate);

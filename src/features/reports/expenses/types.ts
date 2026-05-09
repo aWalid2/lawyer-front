@@ -1,10 +1,10 @@
 export interface ReportExpense {
   id: string;
-  invoiceNumber: string;
-  category: string;
+  expenseType: string;
+  employeeName: string;
   description: string;
-  amount: string;
-  responsibleEmployee: string;
-  date: string;
-  status: "paid" | "rejected" | "inactive";
+  amount: number;
+  expenseDate: string;
+  attachments: string[];
+  notes: string;
 }
