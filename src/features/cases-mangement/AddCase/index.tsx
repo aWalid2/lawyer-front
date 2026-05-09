@@ -16,7 +16,8 @@ import { useAddOtherCase } from "./api/hooks/useAddOtherCase";
 import { FeesForm } from "./components/FeesForm";
 import { InProsecution } from "./components/InProsecution";
 import { OpponentForm } from "./components/Opponent";
-import { PoliceStation } from "./components/PoliceStation";
+import { PublicProsection } from "./components/PublicProsection";
+import { PoliceStationCase } from "./components/PoliceStationCase";
 import { SharedFormField } from "./components/SharedFormField";
 import { validationSchema } from "./components/ValidationSchema";
 import { initialValues } from "./hooks/initialValues";
@@ -93,6 +94,11 @@ const FormCase = () => {
       enableReinitialize
       validationSchema={validationSchema}
       onSubmit={async (values) => {
+        if (values.case_situation === "POLICE_STATION") {
+          toast.error("لا يوجد API لإضافة قضية المخفر حالياً");
+          return;
+        }
+
         if (values.case_situation === "UNDER_APPEAL") {
           await addUnderAppealCase(values);
         } else if (values.case_situation === "PUBLIC_PROSECUTION") {
@@ -126,11 +132,14 @@ const FormCase = () => {
                 </div>
 
                 <div className={"grid grid-cols-1 gap-4 md:grid-cols-2"}>
+                  {values.case_situation === "POLICE_STATION" && (
+                    <PoliceStationCase />
+                  )}
                   {values.case_situation === "UNDER_APPEAL" && (
                     <SharedFormField />
                   )}
                   {values.case_situation === "PUBLIC_PROSECUTION" && (
-                    <PoliceStation />
+                    <PublicProsection />
                   )}
                   {values.case_situation === "AT_PROSECUTOR_OFFICE" &&
                     values.case_status_id && <InProsecution />}

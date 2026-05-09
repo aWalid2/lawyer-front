@@ -63,7 +63,7 @@ export type ProsecutionPayload = BasePayload & {
 // ================= ACTIVE =================
 export type ActivePayload = BasePayload & {
   case_situation: "ACTIVE";
-  reference_number: number;
+  reference_number: string;
   Complaint_Number: number;
   court_id: number;
   Current_court_degree: string;

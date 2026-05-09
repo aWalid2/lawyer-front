@@ -25,49 +25,60 @@ export const validationSchema = Yup.object({
   case_status_id: Yup.string().required("حالة القضية مطلوبة"),
   case_entry_date: Yup.date().required("تاريخ ورود القضية في المكتب مطلوب"),
   case_police_station_id: Yup.string().when("case_situation", {
-    is: "PUBLIC_PROSECUTION",
-    then: (schema: any) => schema.required("المخفر مطلوب"),
-    otherwise: (schema: any) => schema.notRequired(),
+    is: (value: string) =>
+      value === "PUBLIC_PROSECUTION" || value === "POLICE_STATION",
+    then: (schema: Yup.StringSchema) => schema.required("المخفر مطلوب"),
+    otherwise: (schema: Yup.StringSchema) => schema.notRequired(),
   }),
 
   regestration_date_of_case_at_prosecution: Yup.date()
     .nullable()
     .when("case_situation", {
       is: "PUBLIC_PROSECUTION",
-      then: (schema: any) => schema.required("تاريخ تسجيل القضية "),
-      otherwise: (schema: any) => schema.notRequired(),
+      then: (schema: Yup.DateSchema) => schema.required("تاريخ تسجيل القضية "),
+      otherwise: (schema: Yup.DateSchema) => schema.notRequired(),
     }),
 
   case_arrival_date_at_police_station: Yup.date()
     .nullable()
     .when("case_situation", {
-      is: "PUBLIC_PROSECUTION",
-      then: (schema: any) => schema.required("تاريخ ورود القضية "),
-      otherwise: (schema: any) => schema.notRequired(),
+      is: (value: string) =>
+        value === "PUBLIC_PROSECUTION" || value === "POLICE_STATION",
+      then: (schema: Yup.DateSchema) => schema.required("تاريخ ورود القضية "),
+      otherwise: (schema: Yup.DateSchema) => schema.notRequired(),
     }),
 
-  case_sequence: Yup.string().when("case_situation", {
+  case_number_at_police_station: Yup.string().when("case_situation", {
+    is: "POLICE_STATION",
+    then: (schema: Yup.StringSchema) =>
+      schema.required("رقم القضية في المخفر مطلوب"),
+    otherwise: (schema: Yup.StringSchema) => schema.notRequired(),
+  }),
+
+  reference_number: Yup.string().when("case_situation", {
     is: "ACTIVE",
-    then: (schema: any) => schema.required("الرقم الالي للقضية مطلوب"),
-    otherwise: (schema: any) => schema.notRequired(),
+    then: (schema: Yup.StringSchema) =>
+      schema.required("الرقم الالي للقضية مطلوب"),
+    otherwise: (schema: Yup.StringSchema) => schema.notRequired(),
   }),
   court_id: Yup.string().when("case_situation", {
     is: "ACTIVE",
-    then: (schema: any) => schema.required("المحكمة مطلوبة"),
-    otherwise: (schema: any) => schema.notRequired(),
+    then: (schema: Yup.StringSchema) => schema.required("المحكمة مطلوبة"),
+    otherwise: (schema: Yup.StringSchema) => schema.notRequired(),
   }),
   Current_court_degree: Yup.string().when("case_situation", {
     is: "ACTIVE",
-    then: (schema: any) => schema.required("درجة التقاضي مطلوبة"),
-    otherwise: (schema: any) => schema.notRequired(),
+    then: (schema: Yup.StringSchema) => schema.required("درجة التقاضي مطلوبة"),
+    otherwise: (schema: Yup.StringSchema) => schema.notRequired(),
   }),
 
   Case_Arrival_Date_at_the_Authority: Yup.date()
     .nullable()
     .when("case_situation", {
       is: "OTHER",
-      then: (schema: any) => schema.required("تاريخ ورود القضية مطلوب"),
-      otherwise: (schema: any) => schema.notRequired(),
+      then: (schema: Yup.DateSchema) =>
+        schema.required("تاريخ ورود القضية مطلوب"),
+      otherwise: (schema: Yup.DateSchema) => schema.notRequired(),
     }),
   opponents: Yup.array().when("has_opponent", {
     is: true,

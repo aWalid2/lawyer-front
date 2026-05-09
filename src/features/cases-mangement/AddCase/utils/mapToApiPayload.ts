@@ -69,6 +69,7 @@ contract_based?: undefined;
 }
 
 export type CaseSituation =
+  | "POLICE_STATION"
   | "PUBLIC_PROSECUTION"
   | "AT_PROSECUTOR_OFFICE"
   | "UNDER_APPEAL"
@@ -137,7 +138,7 @@ const case_fees: CaseFees = {
     return {
       ...base,
       case_situation: "ACTIVE",
-      reference_number: Number(values.reference_number),
+      reference_number: values.reference_number?.trim() || "",
       Complaint_Number: Number(values.Complaint_Number),
       court_id: Number(values.court_id),
       Current_court_degree: values.Current_court_degree,
@@ -158,6 +159,10 @@ const case_fees: CaseFees = {
       case_fees,
       opponents: normalizedOpponents,
     } as OtherPayload;
+  }
+
+  if (values.case_situation === "POLICE_STATION") {
+    throw new Error("POLICE_STATION submission is not implemented yet");
   }
 
   // ================= PROSECUTION =================

@@ -1,27 +1,28 @@
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
-import { SharedFormField } from "./SharedFormField";
 import { useFetchPoliceStations } from "@/shared/api/hooks/useGetStation";
+import { SharedFormField } from "./SharedFormField";
 
-interface PoliceStation {
+interface PoliceStationEntity {
   id: string;
   name: string;
 }
 
 interface PoliceStationsResponse {
-  data: PoliceStation[];
+  data: PoliceStationEntity[];
 }
 
-export function PoliceStation() {
+export function PoliceStationCase() {
   const { data: policeStations } = useFetchPoliceStations() as {
     data: PoliceStationsResponse;
   };
 
   const policeStationsOptions =
-    policeStations?.data?.map((policeStation: PoliceStation) => ({
+    policeStations?.data?.map((policeStation: PoliceStationEntity) => ({
       label: policeStation.name,
       value: policeStation.id,
     })) || [];
+
   return (
     <>
       <SharedFormField />
@@ -39,6 +40,7 @@ export function PoliceStation() {
         type="number"
         placeholder="رقم القضية في المخفر"
       />
+
       <InputForm
         label="تاريخ ورود القضية في المخفر"
         name="case_arrival_date_at_police_station"
@@ -57,12 +59,6 @@ export function PoliceStation() {
         name="investigation_name"
         type="text"
         placeholder="جهة التحقيق"
-      />
-
-      <InputForm
-        label="تاريخ تسجيل القضية في الادعاء العام"
-        name="regestration_date_of_case_at_prosecution"
-        type="date"
       />
     </>
   );

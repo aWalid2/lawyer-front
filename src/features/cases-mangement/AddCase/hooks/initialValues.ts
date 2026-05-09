@@ -67,7 +67,7 @@ contract_based: undefined,
   has_opponent: true,
 
   // Active Fields
-  case_sequence: "",
+reference_number: "",
   Complaint_Number: "",
   court_id: "",
   Current_court_degree: "",

@@ -9,6 +9,7 @@ export interface Case {
   case_type_id?: string;
   case_status_id?: string;
   client_id?: string;
+  reference_number?: string;
   client?: {
     first_name: string;
     id: string;

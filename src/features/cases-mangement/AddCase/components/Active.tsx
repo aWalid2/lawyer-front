@@ -32,7 +32,7 @@ export function Active() {
       <InputForm
         label="الرقم الالي للقضية"
         name="reference_number"
-        type="number"
+        type="string"
         placeholder="الرقم الالي للقضية"
       />
 

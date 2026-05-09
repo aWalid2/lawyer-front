@@ -159,7 +159,11 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
                   type="text"
                   disabled
                 />
-                <InputForm name="case_number" label="الرقم الآلي" type="text" />
+                <InputForm
+                  name="reference_number"
+                  label="الرقم الآلي"
+                  type="text"
+                />
                 <SelectForm
                   name="client_id"
                   label="اسم العميل"

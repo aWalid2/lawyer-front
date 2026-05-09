@@ -37,7 +37,7 @@ const MainCases = () => {
     },
     {
       header: "الرقم الآلي للقضية",
-      accessor: (item) => item.case_number,
+      accessor: (item) => item.reference_number,
     },
     {
       header: "اسم الموكل",
