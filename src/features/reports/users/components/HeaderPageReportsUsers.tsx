@@ -32,7 +32,7 @@ export const HeaderPageReportsUsers: React.FC<HeaderPageReportsUsersProps> = ({
         className="lg:ms-0"
       />
 
-      <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+      <div className="flex w-full items-center justify-end gap-3 md:w-auto">
         <HeaderFilter
           placeholder="الدور"
           value={filters.role}
@@ -41,9 +41,9 @@ export const HeaderPageReportsUsers: React.FC<HeaderPageReportsUsersProps> = ({
             { value: "all", label: "الدور" },
             { value: "lawyer", label: "محامي" },
             { value: "manager", label: "مدير" },
-            { value: "employee", label: "موظف" },
+            { value: "finance", label: "مدير مالي" },
           ]}
-          className="md:w-[110px]"
+          className="md:w-27.5"
         />
         <HeaderFilter
           placeholder="الحالة"
@@ -54,7 +54,7 @@ export const HeaderPageReportsUsers: React.FC<HeaderPageReportsUsersProps> = ({
             { value: "active", label: "نشط" },
             { value: "inactive", label: "غير نشط" },
           ]}
-          className="md:w-[110px]"
+          className="md:w-27.5"
         />
         <HeaderActionButton
           label="تصدير"

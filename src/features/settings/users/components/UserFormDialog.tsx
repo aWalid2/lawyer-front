@@ -12,14 +12,13 @@ import {
 import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
-import { TextAreaForm } from "@/shared/components/TextAreaForm";
-import type { UserT } from "../types/userT";
+import type { UserFormValues, UserT } from "../types/userT";
 
 interface UserFormDialogProps {
   user?: UserT;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  onUserUpdated?: () => void;
+  onUserUpdated?: (values?: UserFormValues, userId?: number) => void;
   trigger?: React.ReactNode;
 }
 
@@ -32,26 +31,33 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
 }) => {
   const isEditMode = !!user;
 
-  const initialValues = {
-    name: user?.name || "",
+  const initialValues: UserFormValues = {
+    first_name: user?.first_name || user?.name || "",
     email: user?.email || "",
-    userType: user?.userType || "محامي",
-    role: user?.role || "",
-    notes: "",
+    phone: user?.phone || "",
+    hire_date: user?.hire_date || user?.created_at || "",
+    civil_id: user?.civil_id || "",
+    role_name: user?.role?.role_name || "",
+    password: user?.password || "",
+    user_status: user?.user_status || "active",
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("اسم المستخدم مطلوب"),
+    first_name: Yup.string().required("اسم المستخدم مطلوب"),
     email: Yup.string()
       .email("البريد الإلكتروني غير صالح")
       .required("البريد الإلكتروني مطلوب"),
-    userType: Yup.string().required("نوع المستخدم مطلوب"),
-    role: Yup.string().required("الدور مطلوب"),
+    phone: Yup.string().required("رقم التليفون مطلوب"),
+    hire_date: Yup.string().required("تاريخ التعيين مطلوب"),
+    civil_id: Yup.string().required("الرقم المدني مطلوب"),
+    role_name: Yup.string().required("الدور مطلوب"),
+    password: Yup.string().required("كلمة المرور مطلوبة"),
+    user_status: Yup.string().required("الحالة مطلوبة"),
   });
 
-  const handleSubmit = (values: typeof initialValues) => {
+  const handleSubmit = (values: UserFormValues) => {
     console.log(isEditMode ? "تحديث المستخدم:" : "إضافة مستخدم جديد:", values);
-    if (onUserUpdated) onUserUpdated();
+    if (onUserUpdated) onUserUpdated(values, user?.id);
     if (onOpenChange) onOpenChange(false);
   };
 
@@ -59,7 +65,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
-        className="rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-[600px] sm:rounded-[24px] sm:px-16 sm:py-10"
+        className="rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-150 sm:rounded-[24px] sm:px-16 sm:py-10"
         dir="rtl"
         showCloseButton={false}
       >
@@ -83,31 +89,51 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
         >
           {() => (
             <Form className="custom-scrollbar flex-1 space-y-6 overflow-y-auto pb-2 pl-2">
-              <InputForm
-                name="name"
-                label="اسم المستخدم"
-                type="text"
-                placeholder="محمد علي"
-              />
-              <InputForm
-                name="email"
-                label="البريد الإلكتروني"
-                type="email"
-                placeholder="mohalia7@gmail.com"
-              />
-
-              <div className="grid grid-cols-2 gap-4">
-                <SelectForm
-                  name="userType"
-                  label="نوع المستخدم"
-                  options={[
-                    { value: "محامي", label: "محامي" },
-                    { value: "موظف", label: "موظف" },
-                    { value: "موكل", label: "موكل" },
-                  ]}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <InputForm
+                  name="first_name"
+                  label="اسم المستخدم"
+                  type="text"
+                  placeholder="محمد علي"
                 />
+                <InputForm
+                  name="email"
+                  label="البريد الإلكتروني"
+                  type="email"
+                  placeholder="mohalia7@gmail.com"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <InputForm
+                  name="phone"
+                  label="رقم التليفون"
+                  type="text"
+                  placeholder="97123456"
+                  dir="ltr"
+                />
+                <InputForm name="hire_date" label="تاريخ التعيين" type="date" />
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <InputForm
+                  name="civil_id"
+                  label="الرقم المدني"
+                  type="text"
+                  placeholder="أدخل الرقم المدني"
+                />
+                <InputForm
+                  name="password"
+                  label="كلمة المرور"
+                  type="password"
+                  placeholder="أدخل كلمة المرور"
+                  dir="ltr"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <SelectForm
-                  name="role"
+                  name="role_name"
                   label="الدور"
                   options={[
                     { value: "محاسب", label: "محاسب" },
@@ -115,9 +141,15 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                     { value: "مدير", label: "مدير" },
                   ]}
                 />
+                <SelectForm
+                  name="user_status"
+                  label="الحالة"
+                  options={[
+                    { value: "active", label: "نشط" },
+                    { value: "inactive", label: "غير نشط" },
+                  ]}
+                />
               </div>
-
-              <TextAreaForm name="notes" label="ملاحظات" placeholder="..." />
 
               <button
                 type="submit"

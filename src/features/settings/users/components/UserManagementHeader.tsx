@@ -24,14 +24,13 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
 
       <HeaderSearch value={searchTerm} onChange={onSearch} className="ms-2!" />
 
-
       <HeaderFilter
         defaultValue="all"
         options={[
           { value: "all", label: "جميع المستخدمين" },
           { value: "محامي", label: "محامين" },
-          { value: "موظف", label: "موظفين" },
-          { value: "موكل", label: "موكلين" },
+          { value: "مدير", label: "مدراء" },
+          { value: "مدير مالي", label: "مدراء ماليين" },
         ]}
         onFilterChange={(val) => console.log("Filter:", val)}
       />
@@ -39,13 +38,9 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
       <UserFormDialog
         onUserUpdated={onUserUpdated}
         trigger={
-          <HeaderActionButton
-            label="مستخدم جديد"
-            icon={<Plus size={18} />}
-          />
+          <HeaderActionButton label="مستخدم جديد" icon={<Plus size={18} />} />
         }
       />
-
     </HeaderPageLayout>
   );
 };

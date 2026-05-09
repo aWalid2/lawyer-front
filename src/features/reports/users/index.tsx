@@ -7,6 +7,10 @@ import LoadingPage from "@/shared/components/LoadingPage";
 import { Pagination } from "@/shared/components/Pagination";
 import PageLayout from "@/shared/components/PageLayout";
 import { useDebounce } from "@/shared/hooks/useDebounce";
+import {
+  getUserStatusBadgeClass,
+  getUserStatusLabel,
+} from "@/shared/utils/userStatus";
 import { useGetAllUsers } from "@/features/settings/users/api/hooks/useGetAllUsers";
 import { useGetAllUsersSearched } from "@/features/settings/users/api/hooks/useGetAllUsersSearched";
 import type { UserT } from "@/features/settings/users/types/userT";
@@ -14,7 +18,8 @@ import type { UserT } from "@/features/settings/users/types/userT";
 const ROLE_FILTER_MAP: Record<string, string[]> = {
   lawyer: ["lawyer", "محامي"],
   manager: ["manager", "admin", "مدير"],
-  employee: ["employee", "موظف"],
+  finance: ["finance", "مدير مالي"],
+  all: [],
 };
 
 const mapUserToReportUser = (user: UserT): ReportUser => ({
@@ -113,13 +118,11 @@ const ReportsUsersFeature = () => {
       header: "الحالة",
       accessor: (item) => (
         <span
-          className={`font-regular rounded-full px-3 py-1 text-xs ${
-            item.status === "active"
-              ? "bg-success/20 text-success"
-              : "bg-error/20 text-error"
-          }`}
+          className={`font-regular rounded-full px-3 py-1 text-xs ${getUserStatusBadgeClass(
+            item.status,
+          )}`}
         >
-          {item.status === "active" ? "نشط" : "غير نشط"}
+          {getUserStatusLabel(item.status)}
         </span>
       ),
     },
