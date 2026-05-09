@@ -28,7 +28,7 @@ export const RelationalCases: React.FC = () => {
       relatedCases?.map((item) => ({
         id: item.related_case.id,
         related_case_id: item.related_case_id,
-        reference_number: item.reference_number,
+        reference_number: item.related_case.reference_number,
       })),
     [relatedCases],
   );
