@@ -5,10 +5,11 @@ import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { FileUpload } from "@/shared/components/FileUpload";
-import { useFetchEmployees } from "@/features/users/users-employees/employees/api/hooks/useGetAllEmployees";
 import { EXPENSE_TYPE_OPTIONS } from "@/shared/constants/ExpensesOptions";
 import type { ExpenseFormValues, ExpenseItem } from "../types";
 import { EMPTY_EXPENSE_FORM_VALUES, toExpenseFormValues } from "../types";
+import { useGetExpenseUsers } from "../api/hooks/useGetExpenseUsers";
+import type { UserT } from "@/features/settings/users/types/userT";
 
 import * as Yup from "yup";
 
@@ -20,13 +21,6 @@ interface EditModelExpensesProps {
   isPending?: boolean;
 }
 
-interface EmployeeEntity {
-  user_id?: number | string;
-  user?: {
-    first_name?: string;
-  };
-}
-
 export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
   expense,
   open,
@@ -34,16 +28,16 @@ export const EditModelExpenses: React.FC<EditModelExpensesProps> = ({
   onSave,
   isPending = false,
 }) => {
-  const { data: employeesResponse } = useFetchEmployees();
+  const { data: usersResponse } = useGetExpenseUsers();
   const initialValues = expense
     ? toExpenseFormValues(expense)
     : EMPTY_EXPENSE_FORM_VALUES;
   const isEditMode = !!expense?.id;
 
   const employeeOptions =
-    employeesResponse?.data?.map((employee: EmployeeEntity) => ({
-      label: employee?.user?.first_name || `#${employee?.user_id}`,
-      value: String(employee?.user_id),
+    usersResponse?.map((user: UserT) => ({
+      label: user?.first_name || user?.fullName || `#${user?.id}`,
+      value: String(user?.id),
     })) || [];
 
   const validationSchema = Yup.object().shape({
