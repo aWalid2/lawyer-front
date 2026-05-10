@@ -9,10 +9,7 @@ import { useGetCassaionSessionTable } from "./api/hooks/useGetCassaionSessionTab
 import { useCreateCassaionSessionTable } from "./api/hooks/useCreateCassaionSessionTable";
 import { useUpdateCassaionSessionTable } from "./api/hooks/useUpdateCassaionSessionTable";
 import { useRemoveCassaionSessionTable } from "./api/hooks/useRemoveCassaionSessionTable";
-import {
-  formatDateToTime,
-  formatDateToYYYYMMDD,
-} from "@/shared/utils/convertDate";
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils";
 import { useGetFirstInstanceSessionTable } from "./api/hooks/useGetFirstInstanceSessionTable";
 import { useGetAppealSessionTable } from "./api/hooks/useGetAppealSessionTable";
 import { useIndexedData } from "@/shared/utils/useIndexedData";

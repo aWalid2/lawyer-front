@@ -12,13 +12,13 @@ import React from "react";
 interface HeaderPageRollProps {
   onSearch: (term: string) => void;
   onFilterChange: (
-    key: "type" | "fromDate" | "toDate",
+    key: "sessionSource" | "fromDate" | "toDate",
     value: string | Date | undefined,
   ) => void;
   onExport: (type: HeaderExportType) => void;
   searchTerm: string;
   filters: {
-    type: string;
+    sessionSource: string;
     fromDate?: Date;
     toDate?: Date;
   };
@@ -57,14 +57,16 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
 
         <HeaderFilter
           placeholder="نوع الجلسة"
-          value={filters.type}
-          onFilterChange={(v) => onFilterChange("type", v)}
+          value={filters.sessionSource}
+          onFilterChange={(v) => onFilterChange("sessionSource", v)}
           options={[
             { value: "all", label: "نوع الجلسة" },
             { value: "court", label: "محكمة" },
-            { value: "niyaba", label: "نيابة" },
+            { value: "prosecution", label: "نيابة" },
+            { value: "police", label: "مخفر" },
+            { value: "PROCEDURE", label: "إجراءات" },
           ]}
-          className="md:w-[110px]"
+          className="md:w-27.5"
         />
         <HeaderExportMenu onSelect={onExport} />
       </div>

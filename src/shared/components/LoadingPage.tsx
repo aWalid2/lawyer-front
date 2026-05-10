@@ -1,11 +1,17 @@
-import { Spinner } from '@/components/ui/spinner'
+import { Spinner } from "@/components/ui/spinner";
 
-const LoadingPage = () => {
-    return (
-        <div className="flex items-center justify-center h-screen">
-            <Spinner className="size-10 text-primary" />
-        </div>
-    )
+interface LoadingPageProps {
+  fullScreen?: boolean;
 }
 
-export default LoadingPage
+const LoadingPage = ({ fullScreen = true }: LoadingPageProps) => {
+  return (
+    <div
+      className={`flex items-center justify-center ${fullScreen ? "h-screen" : "h-full min-h-[240px] w-full"}`}
+    >
+      <Spinner className="text-primary size-10" />
+    </div>
+  );
+};
+
+export default LoadingPage;

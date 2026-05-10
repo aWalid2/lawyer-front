@@ -13,12 +13,15 @@ import { UsersAction } from "./components/UsersAction";
 import type { UserFormValues, UserT } from "./types/userT";
 import { Error } from "@/shared/components/Error";
 import { useGetAllUsersSearched } from "./api/hooks/useGetAllUsersSearched";
+import { Pagination } from "@/shared/components/Pagination";
 
 export const UserManagementFeature: React.FC = () => {
+  const [currentPage, setCurrentPage] = React.useState(1);
   const [searchTerm, setSearchTerm] = React.useState("");
   const [localUsers, setLocalUsers] = React.useState<UserT[]>([]);
   const { data: allUsers = [], isLoading, isError, error } = useGetAllUsers();
   const debouncedSearchTerm = useDebounce(searchTerm.trim(), 400);
+  const itemsPerPage = 15;
 
   const isSearching = debouncedSearchTerm.length > 0;
   const {
@@ -40,6 +43,21 @@ export const UserManagementFeature: React.FC = () => {
 
     return [...createdUsers, ...mergedApiUsers];
   }, [allUsers, allUsersSearched, isSearching, localUsers]);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(displayedUsers.length / itemsPerPage),
+  );
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedUsers = React.useMemo(() => {
+    const start = (safeCurrentPage - 1) * itemsPerPage;
+    return displayedUsers.slice(start, start + itemsPerPage);
+  }, [displayedUsers, itemsPerPage, safeCurrentPage]);
+
+  const handleSearch = React.useCallback((value: string) => {
+    setCurrentPage(1);
+    setSearchTerm(value);
+  }, []);
 
   const handleUserUpdated = React.useCallback(
     (values?: UserFormValues, userId?: number) => {
@@ -68,6 +86,7 @@ export const UserManagementFeature: React.FC = () => {
         const nextUsers = prev.filter((user) => user.id !== nextUser.id);
         return [...nextUsers, nextUser];
       });
+      setCurrentPage(1);
     },
     [],
   );
@@ -149,25 +168,23 @@ export const UserManagementFeature: React.FC = () => {
     <div className="space-y-6">
       <UserManagementHeader
         searchTerm={searchTerm}
-        onSearch={setSearchTerm}
+        onSearch={handleSearch}
         onUserUpdated={handleUserUpdated}
       />
 
       {isSearchingUsers ? (
         <LoadingPage />
       ) : (
-        <DataTable data={displayedUsers} columns={columns} rowIdField="id" />
+        <DataTable data={paginatedUsers} columns={columns} rowIdField="id" />
       )}
 
-      {/* {totalPages > 1 && (
-          <div className="mt-6 flex justify-center">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          </div>
-        )} */}
+      {totalPages > 1 && !isSearchingUsers && (
+        <Pagination
+          currentPage={safeCurrentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 };

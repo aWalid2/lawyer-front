@@ -1,40 +1,96 @@
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { HeaderPageRoll } from "./components/HeaderPageRoll";
-import type { RollSession } from "./types";
+import type { RollSession, RollSessionApiResponse } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import type { HeaderExportType } from "../../shared/components/HeaderExportMenu";
 import { Pagination } from "@/shared/components/Pagination";
 import { TableRollActions } from "./components/TableRollActions";
 import PageLayout from "@/shared/components/PageLayout";
+import { useGetAllRollSessions } from "./api/hooks/useGetAllSessions";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils";
+import { LITIGATION_LEVEL_OPTIONS } from "@/shared/constants/caseOptions";
 
 interface RollFilters {
-  type: string;
+  sessionSource: string;
   fromDate?: Date;
   toDate?: Date;
 }
 
-const normalizeDate = (date: Date) =>
-  new Date(date.getFullYear(), date.getMonth(), date.getDate());
+const FALLBACK_TEXT = "-";
 
-const MOCK_ROLL_SESSIONS: RollSession[] = Array.from(
-  { length: 45 },
-  (_, i) => ({
-    id: `${i + 1}`,
-    sessionDateTime: `2026-05-${String((i % 28) + 1).padStart(2, "0")}T09:00:00`,
-    hallNumber: "5",
-    hallFloor: "6",
-    rollNumber: "23",
-    decision: "قرار",
-  }),
+const LITIGATION_LEVEL_LABELS = Object.fromEntries(
+  LITIGATION_LEVEL_OPTIONS.map(({ value, label }) => [value, label]),
 );
+
+const formatSessionSourceLabel = (value: string | null) => {
+  if (value && value in LITIGATION_LEVEL_LABELS) {
+    return LITIGATION_LEVEL_LABELS[
+      value as keyof typeof LITIGATION_LEVEL_LABELS
+    ];
+  }
+
+  switch (value) {
+    case "court":
+      return "محكمة";
+    case "prosecution":
+      return "نيابة";
+    case "police":
+      return "مخفر";
+    case "PROCEDURE":
+      return "إجراءات";
+    default:
+      return value || FALLBACK_TEXT;
+  }
+};
+
+const mapRollSession = (
+  session: RollSessionApiResponse,
+  index: number,
+): RollSession => {
+  const hallNumber =
+    session.hall_number === null ? FALLBACK_TEXT : String(session.hall_number);
+  const referenceNumber = session.reference_number || FALLBACK_TEXT;
+
+  return {
+    id: `${session.case_id}-${session.session_date}-${session.session_source || "all"}-${index}`,
+    caseId: session.case_id,
+    caseSequence: session.case_sequence || FALLBACK_TEXT,
+    reference_number: referenceNumber,
+    sessionDate: session.session_date,
+    courtName: session.court_name || FALLBACK_TEXT,
+    sessionSource: formatSessionSourceLabel(session.session_source),
+    clientName: session.client_name || FALLBACK_TEXT,
+    client_status: session.client_type || FALLBACK_TEXT,
+    opponents: session.opponents || [],
+    caseTitle: session.case_title || FALLBACK_TEXT,
+    caseTypeName: session.case_type_name || FALLBACK_TEXT,
+    hallNumber,
+    sessionDateTime: session.session_date,
+    hallFloor: FALLBACK_TEXT,
+    rollNumber: referenceNumber,
+    decision: FALLBACK_TEXT,
+  };
+};
 
 const RollFeature = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<RollFilters>({
-    type: "all",
+    sessionSource: "all",
   });
   const itemsPerPage = 15;
+
+  const { data, isPending, isFetching } = useGetAllRollSessions({
+    sessionSource: filters.sessionSource,
+    dateFrom: filters.fromDate,
+    dateTo: filters.toDate,
+  });
+
+  const sessions = useMemo(
+    () => (data || []).map((session, index) => mapRollSession(session, index)),
+    [data],
+  );
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
@@ -50,32 +106,32 @@ const RollFeature = () => {
   };
 
   const filteredSessions = useMemo(() => {
-    return MOCK_ROLL_SESSIONS.filter((s) => {
+    return sessions.filter((s) => {
       const searchStr = searchTerm.toLowerCase();
-      const sessionDate = normalizeDate(new Date(s.sessionDateTime));
-      const fromDate = filters.fromDate
-        ? normalizeDate(filters.fromDate)
-        : undefined;
-      const toDate = filters.toDate ? normalizeDate(filters.toDate) : undefined;
+
       const matchesSearch =
+        s.caseSequence.toLowerCase().includes(searchStr) ||
+        s.reference_number.toLowerCase().includes(searchStr) ||
         s.sessionDateTime.toLowerCase().includes(searchStr) ||
+        s.courtName.toLowerCase().includes(searchStr) ||
+        s.clientName.toLowerCase().includes(searchStr) ||
+        s.caseTitle.toLowerCase().includes(searchStr) ||
+        s.caseTypeName.toLowerCase().includes(searchStr) ||
         s.hallNumber.includes(searchStr) ||
-        s.hallFloor.includes(searchStr);
+        s.sessionSource.toLowerCase().includes(searchStr);
 
-      const matchesType = filters.type === "all";
-      const matchesFromDate = !fromDate || sessionDate >= fromDate;
-      const matchesToDate = !toDate || sessionDate <= toDate;
-
-      return matchesSearch && matchesType && matchesFromDate && matchesToDate;
+      return matchesSearch;
     });
-  }, [searchTerm, filters]);
+  }, [searchTerm, sessions]);
 
   const totalPages = Math.ceil(filteredSessions.length / itemsPerPage);
+  const safeCurrentPage =
+    totalPages === 0 ? 1 : Math.min(currentPage, totalPages);
 
   const paginatedSessions = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
+    const start = (safeCurrentPage - 1) * itemsPerPage;
     return filteredSessions.slice(start, start + itemsPerPage);
-  }, [filteredSessions, currentPage]);
+  }, [filteredSessions, safeCurrentPage]);
 
   const handleExport = (type: HeaderExportType) => {
     console.log(
@@ -92,52 +148,56 @@ const RollFeature = () => {
     },
     {
       header: "الرقم الالي للقضية",
-      accessor: "sessionDateTime",
+      accessor: "reference_number",
     },
     {
       header: "رقم القضية داخل المكتب",
-      accessor: "sessionDateTime",
+      accessor: "caseSequence",
     },
     {
       header: "تاريخ ووقت الجلسة",
-      accessor: "sessionDateTime",
+      accessor: (item) =>
+        formatDateToYYYYMMDD(item.sessionDateTime) +
+        " " +
+        formatDateToTime(item.sessionDateTime),
     },
     {
       header: "اسم الجهة",
-      accessor: "sessionDateTime",
+      accessor: "courtName",
     },
     {
       header: "درجة التقاضي",
-      accessor: "sessionDateTime",
+      accessor: "sessionSource",
     },
     {
       header: "اسم الموكل",
-      accessor: "sessionDateTime",
+      accessor: "clientName",
     },
     {
       header: "صفة الموكل",
-      accessor: "sessionDateTime",
+      accessor: "client_status",
     },
     {
       header: "اسم الخصم",
-      accessor: "sessionDateTime",
+      accessor: (item) =>
+        item.opponents.length > 0 ? item.opponents.join("، ") : FALLBACK_TEXT,
     },
     {
       header: "صفة الخصم",
-      accessor: "sessionDateTime",
+      accessor: () => FALLBACK_TEXT,
     },
     {
       header: "عنوان القضية",
-      accessor: "hallNumber",
+      accessor: "caseTitle",
     },
     {
       header: "نوع القضية",
-      accessor: "hallNumber",
+      accessor: "caseTypeName",
     },
 
     {
-      header: "دور القاعة",
-      accessor: "hallFloor",
+      header: "رقم القاعة",
+      accessor: "hallNumber",
     },
 
     {
@@ -152,6 +212,10 @@ const RollFeature = () => {
     },
   ];
 
+  if (isPending && !data) {
+    return <LoadingPage />;
+  }
+
   return (
     <PageLayout>
       <HeaderPageRoll
@@ -162,11 +226,19 @@ const RollFeature = () => {
         filters={filters}
       />
 
-      <DataTable columns={columns} data={paginatedSessions} rowIdField="id" />
+      <div className="relative">
+        {isFetching ? (
+          <div className="dark:bg-backgroundDark/70 absolute inset-0 z-10 bg-white/70">
+            <LoadingPage fullScreen={false} />
+          </div>
+        ) : null}
+
+        <DataTable columns={columns} data={paginatedSessions} rowIdField="id" />
+      </div>
 
       {totalPages > 1 && (
         <Pagination
-          currentPage={currentPage}
+          currentPage={safeCurrentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
         />
