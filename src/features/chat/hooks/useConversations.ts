@@ -7,7 +7,10 @@ export function useConversations() {
   const [activeId, setActiveId] = useState<string | null>(null)
 
   useEffect(() => {
-    chatMock.getConversations().then(setConversations)
+    chatMock.getConversations().then((data) => {
+      setConversations(data)
+      setActiveId((currentActiveId) => currentActiveId ?? data[0]?.id ?? null)
+    })
   }, [])
 
   return {
