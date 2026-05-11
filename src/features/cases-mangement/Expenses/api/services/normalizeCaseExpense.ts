@@ -20,6 +20,9 @@ interface ExpenseApiItem {
       first_name?: string | null;
     };
   } | null;
+  employe?: {
+    first_name?: string | null;
+  } | null;
 }
 
 const toAttachmentList = (attachment?: string | null) => {
@@ -37,6 +40,7 @@ export const normalizeCaseExpense = (
   expenseType: expense?.expense_type ?? "",
   employeeId: Number(expense?.employee_id ?? expense?.Employee_id ?? 0) || null,
   employeeName:
+    expense?.employe?.first_name ??
     expense?.employee?.user?.first_name ??
     expense?.Employee?.user?.first_name ??
     "-",
@@ -45,4 +49,7 @@ export const normalizeCaseExpense = (
   expenseDate: expense?.expense_date ?? "",
   notes: expense?.notes ?? "",
   attachments: toAttachmentList(expense?.attachment),
+  employe: expense?.employe?.first_name
+    ? { first_name: expense.employe.first_name }
+    : undefined,
 });

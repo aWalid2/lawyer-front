@@ -10,7 +10,7 @@ export const updateCaseExpense = async ({
   expenseId,
   data,
 }: UpdateCaseExpensePayload) => {
-  const response = await api.put(`/case-expenses/${expenseId}`, data,
+  const response = await api.patch(`/case-expenses/${expenseId}`, data,
     data instanceof FormData
       ? {
           headers: {

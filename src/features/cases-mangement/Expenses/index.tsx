@@ -166,7 +166,7 @@ export const ExpensesCaseFeature = () => {
     },
     {
       header: "اسم الموظف المسئول",
-      accessor: "employeeName",
+      accessor: (item) => item.employeeName || "-",
     },
     {
       header: "وصف المصروف",

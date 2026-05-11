@@ -1,5 +1,6 @@
 export interface RollSessionApiResponse {
-  case_id: number;
+  session_id?: number | null;
+  case_id: number | null;
   case_sequence: string | null;
   reference_number: string | null;
   session_date: string;
@@ -21,9 +22,19 @@ export interface RollSessionsParams {
   dateTo?: Date;
 }
 
+export type RollSessionSourceKey =
+  | "police"
+  | "prosecution"
+  | "procedure"
+  | "first_instance"
+  | "appeal"
+  | "cassation"
+  | "court";
+
 export interface RollSession {
   id: string;
-  caseId: number;
+  sessionId?: number | null;
+  caseId: number | null;
   caseSequence: string;
   reference_number: string;
   sessionDate: string;
@@ -31,6 +42,7 @@ export interface RollSession {
   police_station_name?: string;
   presecution_name?: string;
   sessionSource: string;
+  sessionSourceKey: RollSessionSourceKey;
   clientName: string;
   client_status: string;
   opponents: string[];

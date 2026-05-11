@@ -11,6 +11,9 @@ export interface ExpenseItem {
   notes: string;
   attachments: string[];
   rowNumber?: number;
+  employe?: {
+    first_name: string;
+  };
 }
 
 export interface ExpenseFormValues {

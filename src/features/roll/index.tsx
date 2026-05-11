@@ -1,10 +1,13 @@
 import { useMemo, useState } from "react";
 import { HeaderPageRoll } from "./components/HeaderPageRoll";
-import type { RollSession, RollSessionApiResponse } from "./types";
+import type {
+  RollSession,
+  RollSessionApiResponse,
+  RollSessionSourceKey,
+} from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import type { HeaderExportType } from "../../shared/components/HeaderExportMenu";
 import { Pagination } from "@/shared/components/Pagination";
-import { TableRollActions } from "./components/TableRollActions";
 import PageLayout from "@/shared/components/PageLayout";
 import { useGetAllRollSessions } from "./api/hooks/useGetAllSessions";
 import LoadingPage from "@/shared/components/LoadingPage";
@@ -48,12 +51,15 @@ const mapRollSession = (
   session: RollSessionApiResponse,
   index: number,
 ): RollSession => {
+  const sessionSourceKey = (session.session_source ||
+    "court") as RollSessionSourceKey;
   const hallNumber =
     session.hall_number === null ? FALLBACK_TEXT : String(session.hall_number);
   const referenceNumber = session.reference_number || FALLBACK_TEXT;
 
   return {
     id: `${session.case_id}-${session.session_date}-${session.session_source || "all"}-${index}`,
+    sessionId: session.session_id ?? null,
     caseId: session.case_id,
     caseSequence: session.case_sequence || FALLBACK_TEXT,
     reference_number: referenceNumber,
@@ -62,6 +68,7 @@ const mapRollSession = (
     police_station_name: session.police_station_name || undefined,
     presecution_name: session.presecution_name || undefined,
     sessionSource: formatSessionSourceLabel(session.session_source),
+    sessionSourceKey,
     clientName: session.client_name || FALLBACK_TEXT,
     client_status: session.client_type || FALLBACK_TEXT,
     opponents: session.opponents || [],
@@ -204,17 +211,6 @@ const RollFeature = () => {
     {
       header: "رقم القاعة",
       accessor: "hallNumber",
-    },
-
-    {
-      header: "إجراء",
-      accessor: (item) => (
-        <TableRollActions
-          session={item}
-          onEdit={(s) => console.log("Editing session:", s)}
-          onDelete={(s) => console.log("Deleting session:", s)}
-        />
-      ),
     },
   ];
 
