@@ -4,6 +4,8 @@ export interface RollSessionApiResponse {
   reference_number: string | null;
   session_date: string;
   court_name: string | null;
+  police_station_name?: string | null;
+  presecution_name?: string | null;
   session_source: string | null;
   client_name: string | null;
   client_type: string | null;
@@ -26,6 +28,8 @@ export interface RollSession {
   reference_number: string;
   sessionDate: string;
   courtName: string;
+  police_station_name?: string;
+  presecution_name?: string;
   sessionSource: string;
   clientName: string;
   client_status: string;

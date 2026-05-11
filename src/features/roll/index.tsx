@@ -37,7 +37,7 @@ const formatSessionSourceLabel = (value: string | null) => {
       return "نيابة";
     case "police":
       return "مخفر";
-    case "PROCEDURE":
+    case "procedure":
       return "إجراءات";
     default:
       return value || FALLBACK_TEXT;
@@ -59,6 +59,8 @@ const mapRollSession = (
     reference_number: referenceNumber,
     sessionDate: session.session_date,
     courtName: session.court_name || FALLBACK_TEXT,
+    police_station_name: session.police_station_name || undefined,
+    presecution_name: session.presecution_name || undefined,
     sessionSource: formatSessionSourceLabel(session.session_source),
     clientName: session.client_name || FALLBACK_TEXT,
     client_status: session.client_type || FALLBACK_TEXT,
@@ -163,7 +165,11 @@ const RollFeature = () => {
     },
     {
       header: "اسم الجهة",
-      accessor: "courtName",
+      accessor: (item) =>
+        (item.courtName !== FALLBACK_TEXT ? item.courtName : undefined) ||
+        item.police_station_name ||
+        item.presecution_name ||
+        FALLBACK_TEXT,
     },
     {
       header: "درجة التقاضي",

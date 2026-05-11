@@ -2,6 +2,7 @@ export interface CaseFormValues {
   case_sequence: string;
   Complaint_Number: string;
   client_id: string;
+  ClientStatus_id: string;
   case_title: string;
   Current_court_degree: string;
   case_status_id: string;
@@ -11,7 +12,6 @@ export interface CaseFormValues {
   created_at: string;
   case_entry_date: string;
   notes: string;
-
 }
 
 export interface FormCaseDetailsProps {

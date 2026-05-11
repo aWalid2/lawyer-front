@@ -9,6 +9,7 @@ import { useGetCaseInfo } from "../../api/hooks/useGetCaseInfo";
 import { useParams } from "react-router-dom";
 import { useGetCaseStatus } from "@/features/cases-mangement/api/hooks/useGetCaseStatus";
 import { useFetchClients } from "@/shared/api/hooks/useGetClients";
+import { useGetClientStatuses } from "@/shared/api/hooks/useGetClientStatuses";
 import { useGetCaseType } from "@/features/cases-mangement/api/hooks/useGetCaseType";
 import { useUpdateCase } from "@/features/cases-mangement/MainCases/api/hooks/useUpdateCase";
 import { SubmitButton } from "@/shared/components/SubmitButton";
@@ -16,9 +17,18 @@ import { TextAreaForm } from "@/shared/components/TextAreaForm";
 
 import {
   CASE_SITUATION_OPTIONS,
-  CASE_TITLE_OPTIONS,
   LITIGATION_LEVEL_OPTIONS,
 } from "@/shared/constants/caseOptions";
+
+type SelectOptionEntity = {
+  id: number | string;
+  name: string;
+};
+
+type ClientOptionEntity = {
+  user_id: number | string;
+  name: string;
+};
 
 export const FormCaseDialog: React.FC = () => {
   const { id } = useParams();
@@ -32,30 +42,44 @@ export const FormCaseDialog: React.FC = () => {
     open,
   );
   const { data: caseTypes } = useGetCaseType(open);
+  const { data: clientStatuses } = useGetClientStatuses(
+    open ? 1 : undefined,
+    100,
+  );
   const { mutateAsync: updateCase, isPending } = useUpdateCase();
 
   const caseStatusOptions =
-    caseStatus?.data?.map((status: any) => ({
+    caseStatus?.data?.map((status: SelectOptionEntity) => ({
       label: status.name,
       value: String(status.id),
     })) || [];
 
   const clientNameOptions =
-    clients?.data?.map((client: any) => ({
+    clients?.data?.map((client: ClientOptionEntity) => ({
       label: client.name,
       value: String(client.user_id),
     })) || [];
 
   const caseTypeOptions =
-    caseTypes?.data?.map((type: any) => ({
+    caseTypes?.data?.map((type: SelectOptionEntity) => ({
       label: type.name,
       value: String(type.id),
+    })) || [];
+
+  const clientStatusOptions =
+    clientStatuses?.data?.map((status: SelectOptionEntity) => ({
+      label: status.name,
+      value: String(status.id),
     })) || [];
 
   const initialValues: CaseFormValues = {
     case_sequence: caseInfo?.case_sequence || "",
     Complaint_Number: caseInfo?.Complaint_Number || "",
     client_id: caseInfo?.client?.id || "",
+    ClientStatus_id:
+      caseInfo?.ClientStatus_id != null
+        ? String(caseInfo.ClientStatus_id)
+        : caseInfo?.client_type || "",
     case_title: caseInfo?.case_title || "",
     case_status_id: caseInfo?.caseStatus?.id || "",
     Current_court_degree: caseInfo?.Current_court_degree || "",
@@ -88,8 +112,9 @@ export const FormCaseDialog: React.FC = () => {
         enableReinitialize={true}
         onSubmit={async (values, { setSubmitting }) => {
           try {
+            const { ClientStatus_id, ...restValues } = values;
             const payload = {
-              ...values,
+              ...restValues,
               client_id: values.client_id
                 ? Number(values.client_id)
                 : undefined,
@@ -99,8 +124,11 @@ export const FormCaseDialog: React.FC = () => {
               case_status_id: values.case_status_id
                 ? Number(values.case_status_id)
                 : undefined,
+              ...(ClientStatus_id != null && ClientStatus_id !== ""
+                ? { ClientStatus_id: Number(ClientStatus_id) }
+                : {}),
             };
-            await updateCase({ id: id!, data: payload as any });
+            await updateCase({ id: id!, data: payload });
             setOpen(false);
           } catch (error) {
             console.error(error);
@@ -124,10 +152,12 @@ export const FormCaseDialog: React.FC = () => {
                 label="اسم الموكل"
                 options={clientNameOptions}
               />
+
               <SelectForm
-                name="case_title"
+                name="ClientStatus_id"
                 label="صفة الموكل"
-                options={CASE_TITLE_OPTIONS}
+                options={clientStatusOptions}
+                placeholder="اختر صفة الموكل"
               />
 
               <SelectForm

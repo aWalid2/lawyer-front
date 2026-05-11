@@ -64,7 +64,7 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
             { value: "court", label: "محكمة" },
             { value: "prosecution", label: "نيابة" },
             { value: "police", label: "مخفر" },
-            { value: "PROCEDURE", label: "إجراءات" },
+            { value: "procedure", label: "إجراءات" },
           ]}
           className="md:w-27.5"
         />

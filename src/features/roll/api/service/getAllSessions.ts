@@ -19,7 +19,10 @@ export const fetchAllRollSessions = async (
   const queryParams: Record<string, string> = {};
 
   if (params.sessionSource && params.sessionSource !== "all") {
-    queryParams.session_source = params.sessionSource;
+    queryParams.session_source =
+      params.sessionSource === "PROCEDURE"
+        ? "procedure"
+        : params.sessionSource;
   }
 
   const dateFrom = formatDateParam(params.dateFrom);
