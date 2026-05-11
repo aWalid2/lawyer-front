@@ -1,55 +1,74 @@
-import { useState, useMemo } from "react";
+import { DataTable, type Column } from "@/shared/components/DataTable";
+import { Error } from "@/shared/components/Error";
+import LoadingPage from "@/shared/components/LoadingPage";
+import PageLayout from "@/shared/components/PageLayout";
+import { PaginationApi } from "@/shared/components/PaginationApi";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { useMemo, useState } from "react";
+import { useGetAllCaseExpenses } from "./api/hooks/useGetAllCaseExpenses";
+import type { ReportExpenseApiItem } from "./api/service/getAllCaseExpenses";
 import { HeaderPageReportsExpenses } from "./components/HeaderPageReportsExpenses";
 import type { ReportExpense } from "./types";
-import { DataTable, type Column } from "@/shared/components/DataTable";
-import { Pagination } from "@/shared/components/Pagination";
-import PageLayout from "@/shared/components/PageLayout";
-import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
-import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
-import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
-import { ButtonViewTable } from "@/shared/components/ButtonViewTable";
-import { toast } from "sonner";
 
-const MOCK_REPORT_EXPENSES: ReportExpense[] = Array.from(
-  { length: 45 },
-  (_, i) => ({
-    id: `${i + 1}`,
-    expenseType: [
-      "رسوم محكمة",
-      "رسوم إدارية",
-      "انتقالات",
-      "طباعة وتصوير",
-      "مصاريف أخرى",
-    ][i % 5],
-    employeeName: `موظف ${i + 1}`,
-    description: ["رسوم خبراء", "رسوم تسجيل", "مصاريف انتقال للمحكمة"][i % 3],
-    amount: 500 + i * 125,
-    expenseDate: `2025-10-${String((i % 28) + 1).padStart(2, "0")}`,
-    attachments:
-      i % 3 === 0
-        ? [`receipt-${i + 1}.pdf`, `note-${i + 1}.jpg`]
-        : i % 2 === 0
-          ? [`receipt-${i + 1}.pdf`]
-          : [],
-    notes: "بيانات تجريبية لعرض تقرير المصروفات",
-  }),
-);
+const FALLBACK_TEXT = "-";
+
+const toAttachments = (attachment?: string | null) => {
+  if (!attachment || typeof attachment !== "string") {
+    return [];
+  }
+
+  return [attachment];
+};
+
+const normalizeReportExpense = (
+  item?: ReportExpenseApiItem,
+): ReportExpense => ({
+  id: String(item?.id ?? ""),
+  caseId: item?.case_id ?? null,
+  caseTitle: item?.case?.case_title ?? FALLBACK_TEXT,
+  caseSequence: item?.case?.case_sequence ?? FALLBACK_TEXT,
+  expenseType: item?.expense_type ?? FALLBACK_TEXT,
+  employeeName:
+    item?.employee_id !== undefined && item?.employee_id !== null
+      ? String(item.employee_id)
+      : FALLBACK_TEXT,
+  description: item?.description ?? FALLBACK_TEXT,
+  amount: Number(item?.amount ?? 0),
+  expenseDate: item?.expense_date ?? "",
+  attachments: toAttachments(item?.attachment),
+  notes: item?.notes ?? "",
+});
 
 const ReportsExpensesFeature = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<{
     expenseType: string;
     fromDate?: Date;
     toDate?: Date;
   }>({ expenseType: "all" });
-  const itemsPerPage = 15;
+  const limit = 15;
+
+  const {
+    data: expensesData,
+    isPending,
+    isError,
+    error,
+  } = useGetAllCaseExpenses(page, limit);
+
+  const expenses = useMemo(
+    () =>
+      (expensesData?.data ?? []).map((item) => normalizeReportExpense(item)),
+    [expensesData?.data],
+  );
+
+  const indexedExpenses = useIndexedData(expenses, page, limit);
 
   const handleFilterChange = (
     key: string,
     value: string | Date | undefined,
   ) => {
-    setCurrentPage(1);
     setFilters((prev) => ({
       ...prev,
       [key]: value,
@@ -57,46 +76,46 @@ const ReportsExpensesFeature = () => {
   };
 
   const handleSearchChange = (value: string) => {
-    setCurrentPage(1);
     setSearchTerm(value);
   };
 
   const filteredExpenses = useMemo(() => {
-    return MOCK_REPORT_EXPENSES.filter((x) => {
+    return indexedExpenses.filter((x) => {
       const searchStr = searchTerm.toLowerCase();
       const matchesSearch =
         x.expenseType.toLowerCase().includes(searchStr) ||
         x.employeeName.toLowerCase().includes(searchStr) ||
-        x.description.toLowerCase().includes(searchStr);
+        x.description.toLowerCase().includes(searchStr) ||
+        x.caseTitle.toLowerCase().includes(searchStr) ||
+        x.caseSequence.toLowerCase().includes(searchStr);
 
-      const matchesExpenseType =
-        filters.expenseType === "all" || x.expenseType === filters.expenseType;
-
-      const expenseDate = new Date(x.expenseDate);
-      const matchesFromDate =
-        !filters.fromDate || expenseDate >= filters.fromDate;
-      const matchesToDate = !filters.toDate || expenseDate <= filters.toDate;
-
-      return (
-        matchesSearch && matchesExpenseType && matchesFromDate && matchesToDate
-      );
+      return matchesSearch;
     });
-  }, [searchTerm, filters]);
+  }, [indexedExpenses, searchTerm]);
 
-  const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
-  const safeCurrentPage = Math.min(currentPage, Math.max(totalPages, 1));
+  const totalPages = expensesData?.meta?.totalPages ?? 1;
 
-  const paginatedExpenses = useMemo(() => {
-    const start = (safeCurrentPage - 1) * itemsPerPage;
-    return filteredExpenses.slice(start, start + itemsPerPage);
-  }, [filteredExpenses, safeCurrentPage]);
+  if (isPending) {
+    return <LoadingPage />;
+  }
+
+  if (isError) {
+    return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
+  }
 
   const columns: Column<ReportExpense>[] = [
     {
       header: "#",
-      accessor: (item) =>
-        filteredExpenses.findIndex((d) => d.id === item.id) + 1,
+      accessor: (item) => item.rowNumber || 0,
       headerClassName: "w-15",
+    },
+    {
+      header: "رقم القضية داخل المكتب",
+      accessor: "caseSequence",
+    },
+    {
+      header: "عنوان القضية",
+      accessor: "caseTitle",
     },
     {
       header: "نوع المصروف",
@@ -127,33 +146,6 @@ const ReportsExpensesFeature = () => {
             : `${item.attachments[0]} +${item.attachments.length - 1}`
           : "-",
     },
-    {
-      header: "إجراء",
-      accessor: (item) => (
-        <div className="flex items-center justify-center gap-2">
-          <ButtonViewTable
-            onClick={(event) => {
-              event.stopPropagation();
-              toast.info(`عرض المصروف: ${item.description}`);
-            }}
-          />
-
-          <ButtonUpdateTable
-            onClick={(event) => {
-              event.stopPropagation();
-              toast.info(`تعديل المصروف: ${item.description}`);
-            }}
-          />
-
-          <ButtonDeleteTable
-            onClick={(event) => {
-              event.stopPropagation();
-              toast.info(`حذف المصروف: ${item.description}`);
-            }}
-          />
-        </div>
-      ),
-    },
   ];
 
   return (
@@ -165,13 +157,13 @@ const ReportsExpensesFeature = () => {
         filters={filters}
       />
 
-      <DataTable columns={columns} data={paginatedExpenses} rowIdField="id" />
+      <DataTable columns={columns} data={filteredExpenses} rowIdField="id" />
 
       {totalPages > 1 && (
-        <Pagination
-          currentPage={safeCurrentPage}
+        <PaginationApi
+          currentPage={page}
           totalPages={totalPages}
-          onPageChange={setCurrentPage}
+          onPageChange={setPage}
         />
       )}
     </PageLayout>

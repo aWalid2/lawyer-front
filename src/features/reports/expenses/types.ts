@@ -1,5 +1,9 @@
 export interface ReportExpense {
   id: string;
+  rowNumber?: number;
+  caseId: number | null;
+  caseTitle: string;
+  caseSequence: string;
   expenseType: string;
   employeeName: string;
   description: string;
