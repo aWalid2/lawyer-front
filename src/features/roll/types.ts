@@ -4,15 +4,21 @@ export interface RollSessionApiResponse {
   case_sequence: string | null;
   reference_number: string | null;
   session_date: string;
+  session_decision?: string | null;
+  decision?: string | null;
   court_name: string | null;
   police_station_name?: string | null;
   presecution_name?: string | null;
   session_source: string | null;
   client_name: string | null;
+  client_status?: string | null;
   client_type: string | null;
   opponents: string[];
   case_title: string | null;
   case_type_name: string | null;
+  case_type?: {
+    name?: string | null;
+  } | null;
   hall_number: number | null;
 }
 
@@ -52,5 +58,6 @@ export interface RollSession {
   sessionDateTime: string;
   hallFloor: string;
   rollNumber: string;
+  session_decision: string;
   decision: string;
 }

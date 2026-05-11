@@ -24,12 +24,13 @@ export interface ReportExpensesResponse {
     page?: number;
     limit?: number;
     totalPages?: number;
+    
   };
 }
 
 export const getAllCaseExpenses = async (
-  page: number,
-  limit: number,
+  page?: number,
+  limit?: number,
 ): Promise<ReportExpensesResponse> => {
   const { data } = await api.get("/reports/allCaseExpenses", {
     params: { page, limit },

@@ -56,6 +56,10 @@ const mapRollSession = (
   const hallNumber =
     session.hall_number === null ? FALLBACK_TEXT : String(session.hall_number);
   const referenceNumber = session.reference_number || FALLBACK_TEXT;
+  const sessionDecision =
+    session.session_decision || session.decision || FALLBACK_TEXT;
+  const caseTypeName =
+    session.case_type_name || session.case_type?.name || FALLBACK_TEXT;
 
   return {
     id: `${session.case_id}-${session.session_date}-${session.session_source || "all"}-${index}`,
@@ -70,15 +74,17 @@ const mapRollSession = (
     sessionSource: formatSessionSourceLabel(session.session_source),
     sessionSourceKey,
     clientName: session.client_name || FALLBACK_TEXT,
-    client_status: session.client_type || FALLBACK_TEXT,
+    client_status:
+      session.client_status || session.client_type || FALLBACK_TEXT,
     opponents: session.opponents || [],
     caseTitle: session.case_title || FALLBACK_TEXT,
-    caseTypeName: session.case_type_name || FALLBACK_TEXT,
+    caseTypeName,
     hallNumber,
     sessionDateTime: session.session_date,
     hallFloor: FALLBACK_TEXT,
     rollNumber: referenceNumber,
-    decision: FALLBACK_TEXT,
+    session_decision: sessionDecision,
+    decision: sessionDecision,
   };
 };
 
@@ -211,6 +217,10 @@ const RollFeature = () => {
     {
       header: "رقم القاعة",
       accessor: "hallNumber",
+    },
+    {
+      header: "قرار الاحالة",
+      accessor: "session_decision",
     },
   ];
 

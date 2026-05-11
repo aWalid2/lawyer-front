@@ -63,7 +63,9 @@ const ReportsExpensesFeature = () => {
     [expensesData?.data],
   );
 
-  const indexedExpenses = useIndexedData(expenses, page, limit);
+  const effectiveLimit = expensesData?.meta?.limit ?? limit;
+
+  const indexedExpenses = useIndexedData(expenses, page, effectiveLimit);
 
   const handleFilterChange = (
     key: string,
@@ -93,7 +95,8 @@ const ReportsExpensesFeature = () => {
     });
   }, [indexedExpenses, searchTerm]);
 
-  const totalPages = expensesData?.meta?.totalPages ?? 1;
+  const totalPages =
+    expensesData?.meta?.totalPages ?? expensesData?.meta?.totalPages ?? 1;
 
   if (isPending) {
     return <LoadingPage />;

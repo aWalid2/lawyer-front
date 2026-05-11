@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getAllCaseExpenses } from "../service/getAllCaseExpenses";
 
-export const useGetAllCaseExpenses = (page: number, limit: number) => {
+export const useGetAllCaseExpenses = (page?: number, limit?: number) => {
   const query = useQuery({
     queryKey: ["reports-all-case-expenses", page, limit],
     queryFn: () => getAllCaseExpenses(page, limit),
