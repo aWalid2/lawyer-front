@@ -1,6 +1,7 @@
+import ChatBotFeature from "@/features/chat-bot";
 
 const ChatBot = () => {
-  return <div>chat bot</div>;
+  return <ChatBotFeature />;
 };
 
 export default ChatBot;
