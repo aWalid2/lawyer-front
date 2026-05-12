@@ -1,12 +1,21 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { getAllCaseExpenses } from "../service/getAllCaseExpenses";
+import {
+  getAllCaseExpenses,
+  type GetAllCaseExpensesParams,
+} from "../service/getAllCaseExpenses";
 
-export const useGetAllCaseExpenses = (page?: number, limit?: number) => {
+export const useGetAllCaseExpenses = (params: GetAllCaseExpensesParams) => {
   const query = useQuery({
-    queryKey: ["reports-all-case-expenses", page, limit],
-    queryFn: () => getAllCaseExpenses(page, limit),
+    queryKey: [
+      "reports-all-case-expenses",
+      params.page,
+      params.limit,
+      params.dateFrom?.toISOString(),
+      params.dateTo?.toISOString(),
+    ],
+    queryFn: () => getAllCaseExpenses(params),
     staleTime: 1000 * 60 * 2,
     retry: 2,
   });

@@ -29,10 +29,9 @@ const normalizeReportExpense = (
   caseTitle: item?.case?.case_title ?? FALLBACK_TEXT,
   caseSequence: item?.case?.case_sequence ?? FALLBACK_TEXT,
   expenseType: item?.expense_type ?? FALLBACK_TEXT,
-  employeeName:
-    item?.employee_id !== undefined && item?.employee_id !== null
-      ? String(item.employee_id)
-      : FALLBACK_TEXT,
+  employeeName: item?.employe
+    ? String(item.employe.first_name ?? "")
+    : FALLBACK_TEXT,
   description: item?.description ?? FALLBACK_TEXT,
   amount: Number(item?.amount ?? 0),
   expenseDate: item?.expense_date ?? "",
@@ -55,7 +54,12 @@ const ReportsExpensesFeature = () => {
     isPending,
     isError,
     error,
-  } = useGetAllCaseExpenses(page, limit);
+  } = useGetAllCaseExpenses({
+    page,
+    limit,
+    dateFrom: filters.fromDate,
+    dateTo: filters.toDate,
+  });
 
   const expenses = useMemo(
     () =>
@@ -71,6 +75,10 @@ const ReportsExpensesFeature = () => {
     key: string,
     value: string | Date | undefined,
   ) => {
+    if (key === "fromDate" || key === "toDate") {
+      setPage(1);
+    }
+
     setFilters((prev) => ({
       ...prev,
       [key]: value,
