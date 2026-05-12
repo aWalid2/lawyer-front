@@ -11,7 +11,6 @@ export const ChatBotPanel = () => {
     handleAppend,
     handleInputChange,
     handleSend,
-    handleStop,
   } = useChatBot();
 
   return (

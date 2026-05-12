@@ -1,4 +1,4 @@
-import ChatBotFeature from "@/features/chat-bot";
+import ChatBotFeature from "@/features/ChatBot";
 
 const ChatBot = () => {
   return <ChatBotFeature />;

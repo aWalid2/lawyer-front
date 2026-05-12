@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { Message } from "@/components/ui/chat-message";
-import { generateAssistantReply } from "../services/chatBotResponse";
+import { toast } from "sonner";
 import type { ChatAttachment } from "../types";
+import { openAiChat } from "../services/openAiChat";
 
 const fileToDataUrl = (file: File) => {
   return new Promise<string>((resolve, reject) => {
@@ -32,34 +33,55 @@ export const useChatBot = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const timeoutRef = useRef<number | null>(null);
+  const requestSequenceRef = useRef(0);
 
   useEffect(() => {
     return () => {
-      if (timeoutRef.current) {
-        window.clearTimeout(timeoutRef.current);
-      }
+      requestSequenceRef.current += 1;
     };
   }, []);
 
-  const pushAssistantReply = (
+  const pushAssistantReply = async (
     prompt: string,
     attachments?: ChatAttachment[],
   ) => {
     setIsGenerating(true);
+    const requestId = requestSequenceRef.current + 1;
+    requestSequenceRef.current = requestId;
 
-    timeoutRef.current = window.setTimeout(() => {
+    try {
+      const response = await openAiChat(prompt);
+
+      if (requestSequenceRef.current !== requestId) {
+        return;
+      }
+
       const assistantMessage: Message = {
         id: `assistant-${Date.now()}`,
         role: "assistant",
-        content: generateAssistantReply(prompt, attachments?.length ?? 0),
+        content:
+          response.message ||
+          `لم يتم استلام رد من الخادم.${
+            attachments?.length
+              ? `\n\nتم استلام ${attachments.length} مرفق في الرسالة.`
+              : ""
+          }`,
         createdAt: new Date(),
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
-      setIsGenerating(false);
-      timeoutRef.current = null;
-    }, 700);
+    } catch (error: any) {
+      if (requestSequenceRef.current === requestId) {
+        toast.error(
+          error?.response?.data?.message ||
+            "حدث خطأ أثناء التواصل مع المساعد الذكي",
+        );
+      }
+    } finally {
+      if (requestSequenceRef.current === requestId) {
+        setIsGenerating(false);
+      }
+    }
   };
 
   const submitMessage = async (text: string, files?: FileList) => {
@@ -80,7 +102,10 @@ export const useChatBot = () => {
 
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
-    pushAssistantReply(trimmedText || "يرجى مراجعة المرفقات.", attachments);
+    await pushAssistantReply(
+      trimmedText || "يرجى مراجعة المرفقات.",
+      attachments,
+    );
   };
 
   const handleAppend = ({ content }: { role: "user"; content: string }) => {
@@ -96,10 +121,7 @@ export const useChatBot = () => {
   };
 
   const handleStop = () => {
-    if (timeoutRef.current) {
-      window.clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
+    requestSequenceRef.current += 1;
     setIsGenerating(false);
   };
 
