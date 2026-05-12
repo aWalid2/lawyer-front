@@ -29,6 +29,7 @@ export const RelationalCases: React.FC = () => {
         id: item.related_case.id,
         related_case_id: item.related_case_id,
         reference_number: item.related_case.reference_number,
+        case_sequence: item.related_case.case_sequence,
       })),
     [relatedCases],
   );
@@ -50,7 +51,7 @@ export const RelationalCases: React.FC = () => {
     },
     {
       header: "كود القضية",
-      accessor: "id",
+      accessor: "case_sequence",
       headerClassName: "w-35",
       className: "w-35",
     },

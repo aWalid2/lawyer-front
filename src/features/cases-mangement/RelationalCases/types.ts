@@ -1,6 +1,7 @@
 export interface RelatedCaseDetails {
   id: number;
   reference_number: string;
+  case_sequence: string;
 }
 
 export interface RelatedCaseRecord {
@@ -17,4 +18,5 @@ export interface RelatedCaseTableItem {
   related_case_id: number;
   reference_number: string;
   rowNumber?: number;
+  case_sequence: string;
 }
