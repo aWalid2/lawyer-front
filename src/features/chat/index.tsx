@@ -46,6 +46,11 @@ const ChatFeature = () => {
   return (
     <div className="min-h-screen bg-transparent p-4 md:p-6">
       <div className="mx-auto flex min-h-[calc(100vh-2rem)] max-w-7xl flex-col gap-4 lg:flex-row">
+        <ChatSidebar
+          conversations={conversations}
+          activeId={activeId}
+          onSelect={setActive}
+        />
         <div className="flex min-h-0 flex-1 flex-col gap-4">
           <ChatHeader conversation={activeConversation} />
           <ChatMessagesPanel messages={messages} />
@@ -55,12 +60,6 @@ const ChatFeature = () => {
             onSend={handleSend}
           />
         </div>
-
-        <ChatSidebar
-          conversations={conversations}
-          activeId={activeId}
-          onSelect={setActive}
-        />
       </div>
     </div>
   );
