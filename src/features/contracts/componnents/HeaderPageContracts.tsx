@@ -6,6 +6,7 @@ import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { ContractDialog } from "./ContractDialog";
+import { ContractValueFilters } from "./ContractValueFilters";
 import type { ContractFormValues } from "../types";
 
 interface HeaderPageContractsProps {
@@ -57,24 +58,10 @@ export const HeaderPageContracts: React.FC<HeaderPageContractsProps> = ({
           placeholder="نهاية العقد إلى"
         />
 
-        <input
-          type="number"
-          value={filters.contractValueMin}
-          onChange={(event) =>
-            onFilterChange("contractValueMin", event.target.value)
-          }
-          placeholder="أقل قيمة"
-          className="h-12.5 w-full rounded-[18px] border border-[#E2E8F0] bg-white px-4 text-right text-sm transition-all outline-none focus:border-[#BF9A61] focus:ring-2 focus:ring-[#BF9A61]/10 md:w-32.5"
-        />
-
-        <input
-          type="number"
-          value={filters.contractValueMax}
-          onChange={(event) =>
-            onFilterChange("contractValueMax", event.target.value)
-          }
-          placeholder="أعلى قيمة"
-          className="h-12.5 w-full rounded-[18px] border border-[#E2E8F0] bg-white px-4 text-right text-sm transition-all outline-none focus:border-[#BF9A61] focus:ring-2 focus:ring-[#BF9A61]/10 md:w-32.5"
+        <ContractValueFilters
+          contractValueMin={filters.contractValueMin}
+          contractValueMax={filters.contractValueMax}
+          onFilterChange={(key, value) => onFilterChange(key, value)}
         />
 
         <ContractDialog

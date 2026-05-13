@@ -15,6 +15,7 @@ import { useDeleteContract } from "./api/hooks/useDeleteContract";
 import { buildContractFormData } from "./api/services/buildContractFormData";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { useFetchClients } from "@/shared/api/hooks/useGetClients";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 
 import type { ContractApiItem } from "./api/services/getContracts";
@@ -48,6 +49,7 @@ const ContractsFeature = () => {
     contractValueMax: string;
   }>({ contractValueMin: "", contractValueMax: "" });
   const itemsPerPage = 15;
+  const debouncedSearchTerm = useDebounce(searchTerm.trim(), 400);
 
   const {
     data: contractsResponse,
@@ -96,7 +98,7 @@ const ContractsFeature = () => {
 
   const filteredContracts = useMemo(() => {
     return contracts.filter((contract) => {
-      const searchStr = searchTerm.toLowerCase();
+      const searchStr = debouncedSearchTerm.toLowerCase();
 
       if (!searchStr) {
         return true;
@@ -110,7 +112,7 @@ const ContractsFeature = () => {
 
       return matchesSearch;
     });
-  }, [contracts, searchTerm]);
+  }, [contracts, debouncedSearchTerm]);
 
   const effectiveLimit = contractsResponse?.meta?.limit ?? itemsPerPage;
   const indexedContracts = useIndexedData(
