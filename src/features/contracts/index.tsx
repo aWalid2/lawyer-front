@@ -1,130 +1,218 @@
-import { useState, useMemo, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { HeaderPageContracts } from "./componnents/HeaderPageContracts";
-import type { Contract } from "./types";
+import type { Contract, ContractFormValues } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { Pagination } from "@/shared/components/Pagination";
+import { EmptyTable } from "@/shared/components/EmptyTable";
+import { Error } from "@/shared/components/Error";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { PaginationApi } from "@/shared/components/PaginationApi";
 import { TableContractsActions } from "./componnents/TableContractsActions";
 import PageLayout from "@/shared/components/PageLayout";
+import { useGetContracts } from "./api/hooks/useGetContracts";
+import { useCreateContract } from "./api/hooks/useCreateContract";
+import { useUpdateContract } from "./api/hooks/useUpdateContract";
+import { useDeleteContract } from "./api/hooks/useDeleteContract";
+import { buildContractFormData } from "./api/services/buildContractFormData";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { useFetchClients } from "@/shared/api/hooks/useGetClients";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
 
-const MOCK_CONTRACTS: Contract[] = Array.from({ length: 45 }, (_, i) => ({
-  id: `${i + 1}`,
-  contractNumber: `CONT-${String(i + 1).padStart(3, "0")}`,
-  clientName: [
-    "أحمد محمد",
-    "فاطمة علي",
-    "محمد إبراهيم",
-    "سارة خالد",
-    "عمر حسن",
-  ][i % 5],
-  contractType: ["بيع", "إيجار", "صيانة", "استشارات", "خدمات"][i % 5],
-  status: ["نشط", "منتهي", "ملغي", "معلق"][i % 4],
-  startDate: `2024-${String((i % 12) + 1).padStart(2, "0")}-01`,
-  endDate: `2025-${String((i % 12) + 1).padStart(2, "0")}-01`,
-}));
+import type { ContractApiItem } from "./api/services/getContracts";
+
+const FALLBACK_TEXT = "-";
+
+const normalizeContract = (
+  item: ContractApiItem,
+  clientNameById: Map<string, string>,
+): Contract => ({
+  id: String(item.id ?? ""),
+  clientId: item.client_id ? String(item.client_id) : "",
+  clientName: item.client_id
+    ? clientNameById.get(String(item.client_id)) || `#${item.client_id}`
+    : FALLBACK_TEXT,
+  startDate: item.start_date ? item.start_date.split("T")[0] : "",
+  endDate: item.end_date ? item.end_date.split("T")[0] : "",
+  contractValue: String(item.contract_value ?? ""),
+  contractDuration: String(item.contract_duration ?? ""),
+  documentFile: item.document_file ?? "",
+  createdAt: item.created_at ? item.created_at.split("T")[0] : "",
+});
 
 const ContractsFeature = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<{
-    contractType: string;
-    status: string;
-  }>({
-    contractType: "all",
-    status: "all",
-  });
+    endDateFrom?: Date;
+    endDateTo?: Date;
+    contractValueMin: string;
+    contractValueMax: string;
+  }>({ contractValueMin: "", contractValueMax: "" });
   const itemsPerPage = 15;
 
-  const handleFilterChange = (key: string, value: any) => {
+  const {
+    data: contractsResponse,
+    isPending,
+    isError,
+    error,
+  } = useGetContracts({
+    page: currentPage,
+    limit: itemsPerPage,
+    endDateFrom: filters.endDateFrom,
+    endDateTo: filters.endDateTo,
+    contractValueMin: filters.contractValueMin,
+    contractValueMax: filters.contractValueMax,
+  });
+  const { data: clientsResponse } = useFetchClients(1, 500);
+  const createContractMutation = useCreateContract();
+  const updateContractMutation = useUpdateContract();
+  const deleteContractMutation = useDeleteContract();
+
+  const clientNameById = useMemo(() => {
+    return new Map<string, string>(
+      (clientsResponse?.data ?? []).map(
+        (client: { name?: string; user_id?: string | number }) => [
+          String(client.user_id ?? ""),
+          client.name || `#${client.user_id}`,
+        ],
+      ),
+    );
+  }, [clientsResponse?.data]);
+
+  const contracts = useMemo(
+    () =>
+      (contractsResponse?.data ?? []).map((item) =>
+        normalizeContract(item, clientNameById),
+      ),
+    [contractsResponse?.data, clientNameById],
+  );
+
+  const handleFilterChange = (
+    key: "endDateFrom" | "endDateTo" | "contractValueMin" | "contractValueMax",
+    value: string | Date | undefined,
+  ) => {
+    setCurrentPage(1);
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
   const filteredContracts = useMemo(() => {
-    return MOCK_CONTRACTS.filter((contract) => {
+    return contracts.filter((contract) => {
       const searchStr = searchTerm.toLowerCase();
+
+      if (!searchStr) {
+        return true;
+      }
+
       const matchesSearch =
-        contract.contractNumber.toLowerCase().includes(searchStr) ||
-        contract.clientName.includes(searchStr);
+        contract.clientName.toLowerCase().includes(searchStr) ||
+        contract.contractValue.toLowerCase().includes(searchStr) ||
+        contract.contractDuration.toLowerCase().includes(searchStr) ||
+        contract.id.toLowerCase().includes(searchStr);
 
-      const matchesContractType =
-        filters.contractType === "all" ||
-        contract.contractType === filters.contractType;
-      const matchesStatus =
-        filters.status === "all" || contract.status === filters.status;
-
-      return matchesSearch && matchesContractType && matchesStatus;
+      return matchesSearch;
     });
-  }, [searchTerm, filters]);
+  }, [contracts, searchTerm]);
 
-  const totalPages = Math.ceil(filteredContracts.length / itemsPerPage);
+  const effectiveLimit = contractsResponse?.meta?.limit ?? itemsPerPage;
+  const indexedContracts = useIndexedData(
+    filteredContracts,
+    currentPage,
+    effectiveLimit,
+  ) as Contract[];
+  const totalPages = contractsResponse?.meta?.totalPages ?? 1;
 
-  const paginatedContracts = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredContracts.slice(start, start + itemsPerPage);
-  }, [filteredContracts, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, filters]);
-
-  const getStatusStyle = (status: string): string => {
-    switch (status) {
-      case "نشط":
-        return "bg-[#11B32433] text-[#0B6E1F]";
-      case "منتهي":
-        return "bg-[#C600001F] text-[#C60000]";
-      case "ملغي":
-        return "bg-gray-100 text-gray-700";
-      case "معلق":
-        return "bg-[#DBC33B29] text-[#9E7F0F]";
-      default:
-        return "bg-gray-100 text-gray-700";
-    }
+  const handleCreate = async (values: ContractFormValues) => {
+    await createContractMutation.mutateAsync({
+      clientId: values.clientId,
+      data: buildContractFormData(values),
+    });
   };
+
+  const handleUpdate = async (
+    values: ContractFormValues,
+    contractId: string,
+  ) => {
+    await updateContractMutation.mutateAsync({
+      contractId,
+      data: buildContractFormData(values),
+    });
+  };
+
+  const handleDelete = async (contractId: string) => {
+    await deleteContractMutation.mutateAsync(contractId);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setCurrentPage(1);
+    setSearchTerm(value);
+  };
+
+  if (isPending) {
+    return <LoadingPage />;
+  }
+
+  if (isError) {
+    return <Error message="حدث خطأ في تحميل العقود" error={error} />;
+  }
 
   const columns: Column<Contract>[] = [
     {
       header: "#",
-      accessor: (item) =>
-        filteredContracts.findIndex((d) => d.id === item.id) + 1,
+      accessor: (item) => item.rowNumber || 0,
       headerClassName: "w-15",
     },
     {
-      header: "رقم العقد",
-      accessor: "contractNumber",
+      header: "كود العقد",
+      accessor: "id",
     },
     {
       header: "اسم الموكل",
       accessor: "clientName",
     },
     {
-      header: "نوع العقد",
-      accessor: "contractType",
+      header: "قيمة العقد",
+      accessor: (item) => item.contractValue || FALLBACK_TEXT,
     },
     {
-      header: "الحالة",
-      accessor: (item) => (
-        <span
-          className={`inline-block rounded-full px-3 py-1.5 text-sm font-medium ${getStatusStyle(item.status)}`}
-        >
-          {item.status}
-        </span>
-      ),
+      header: "مدة العقد",
+      accessor: (item) =>
+        item.contractDuration ? `${item.contractDuration} شهر` : FALLBACK_TEXT,
     },
     {
       header: "تاريخ بداية العقد",
-      accessor: "startDate",
+      accessor: (item) => formatDateToYYYYMMDD(item.startDate) || FALLBACK_TEXT,
     },
     {
       header: "تاريخ نهاية العقد",
-      accessor: "endDate",
+      accessor: (item) => formatDateToYYYYMMDD(item.endDate) || FALLBACK_TEXT,
+    },
+    {
+      header: "ملف العقد",
+      accessor: (item) =>
+        item.documentFile ? (
+          <a
+            href={item.documentFile}
+            target="_blank"
+            rel="noreferrer"
+            className="text-[#BF9A61] underline"
+          >
+            عرض الملف
+          </a>
+        ) : (
+          FALLBACK_TEXT
+        ),
+    },
+    {
+      header: "تاريخ الإنشاء",
+      accessor: (item) => formatDateToYYYYMMDD(item.createdAt) || FALLBACK_TEXT,
     },
     {
       header: "إجراء",
       accessor: (item) => (
         <TableContractsActions
           contract={item}
-          onEdit={(c) => console.log("Editing contract:", c)}
-          onDelete={(c) => console.log("Deleting contract:", c)}
+          onEdit={handleUpdate}
+          onDelete={handleDelete}
+          isPending={updateContractMutation.isPending}
         />
       ),
     },
@@ -134,15 +222,21 @@ const ContractsFeature = () => {
     <PageLayout>
       <HeaderPageContracts
         searchTerm={searchTerm}
-        onSearch={setSearchTerm}
+        onSearch={handleSearchChange}
         onFilterChange={handleFilterChange}
         filters={filters}
+        onCreate={handleCreate}
+        isCreatePending={createContractMutation.isPending}
       />
 
-      <DataTable columns={columns} data={paginatedContracts} rowIdField="id" />
+      {indexedContracts.length === 0 ? (
+        <EmptyTable message="لا توجد عقود متاحة" />
+      ) : (
+        <DataTable columns={columns} data={indexedContracts} rowIdField="id" />
+      )}
 
       {totalPages > 1 && (
-        <Pagination
+        <PaginationApi
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}

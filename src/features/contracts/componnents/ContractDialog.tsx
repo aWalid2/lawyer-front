@@ -4,127 +4,174 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
+import { FileUpload } from "@/shared/components/FileUpload";
 import { XIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form } from "formik";
-import type { Contract } from "../types";
+import type { Contract, ContractFormValues } from "../types";
+import { EMPTY_CONTRACT_FORM_VALUES, toContractFormValues } from "../types";
 import * as Yup from "yup";
+import { useFetchClients } from "@/shared/api/hooks/useGetClients";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 
 interface ContractDialogProps {
-  onSave: (values: Contract) => void;
+  onSave: (values: ContractFormValues) => Promise<void> | void;
   initialValues?: Contract;
   trigger: React.ReactNode;
+  isPending?: boolean;
 }
 
 const validationSchema = Yup.object().shape({
-  clientName: Yup.string().required("اسم الموكل مطلوب"),
-  contractType: Yup.string().required("نوع العقد مطلوب"),
-  status: Yup.string().required("الحالة مطلوبة"),
+  clientId: Yup.string().required("اسم الموكل مطلوب"),
   startDate: Yup.string().required("تاريخ بداية العقد مطلوب"),
-  endDate: Yup.string().required("تاريخ نهاية العقد مطلوب"),
+  contractValue: Yup.string().required("قيمة العقد مطلوبة"),
+  contractDuration: Yup.string().required("مدة العقد مطلوبة"),
+  file: Yup.mixed().nullable(),
 });
 
 export const ContractDialog: React.FC<ContractDialogProps> = ({
   trigger,
   onSave,
   initialValues,
+  isPending = false,
 }) => {
-  const defaultValues: Contract = {
-    id: initialValues?.id || "",
-    contractNumber: initialValues?.contractNumber || `CONT-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
-    clientName: initialValues?.clientName || "",
-    contractType: initialValues?.contractType || "",
-    status: initialValues?.status || "",
-    startDate: initialValues?.startDate || "",
-    endDate: initialValues?.endDate || "",
+  const [open, setOpen] = useState(false);
+  const [clientSearch, setClientSearch] = useState("");
+  const debouncedClientSearch = useDebounce(clientSearch, 500);
+  const { data: clientsResponse } = useFetchClients(
+    1,
+    200,
+    debouncedClientSearch,
+    open,
+  );
+
+  const defaultValues = initialValues
+    ? toContractFormValues(initialValues)
+    : EMPTY_CONTRACT_FORM_VALUES;
+
+  const clientOptions = [
+    ...(initialValues?.clientId
+      ? [
+          {
+            label: initialValues.clientName || `#${initialValues.clientId}`,
+            value: String(initialValues.clientId),
+          },
+        ]
+      : []),
+    ...((clientsResponse?.data?.map(
+      (client: { name?: string; user_id?: string | number }) => ({
+        label: client.name || `#${client.user_id}`,
+        value: String(client.user_id ?? ""),
+      }),
+    ) as Array<{ label: string; value: string }>) || []),
+  ].filter(
+    (option, index, options) =>
+      options.findIndex((item) => item.value === option.value) === index,
+  );
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+
+    if (!nextOpen) {
+      setClientSearch("");
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
-        className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
+        className="rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-193 sm:rounded-[24px] sm:px-20 sm:py-10"
         dir="rtl"
         showCloseButton={false}
       >
-        <DialogClose asChild>
-          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-400 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all outline-none">
-            <XIcon size={23} />
-          </button>
-        </DialogClose>
-        <DialogHeader className="mb-2 mt-15">
-          <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
+        <button
+          type="button"
+          onClick={() => setOpen(false)}
+          className="rounded-main absolute inset-e-6 top-8 flex h-12.5 items-center gap-2 px-6 py-2.5 font-semibold text-gray-400 transition-all outline-none sm:inset-e-15"
+        >
+          <XIcon size={23} />
+        </button>
+        <DialogHeader className="mt-15 mb-2">
+          <DialogTitle className="text-center text-2xl font-bold text-[#153A4D]">
             {initialValues ? "تعديل العقد" : "إضافة عقد جديد"}
           </DialogTitle>
         </DialogHeader>
 
         <Formik
+          key={initialValues?.id ?? "create-contract"}
           initialValues={defaultValues}
           validationSchema={validationSchema}
-          onSubmit={(values) => {
-            onSave(values);
+          enableReinitialize
+          onSubmit={async (values, { resetForm, setSubmitting }) => {
+            try {
+              await onSave(values);
+
+              if (!initialValues) {
+                resetForm({ values: EMPTY_CONTRACT_FORM_VALUES });
+              }
+
+              setClientSearch("");
+              setOpen(false);
+            } catch (error) {
+              console.error(error);
+            } finally {
+              setSubmitting(false);
+            }
           }}
         >
-          {() => (
-            <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
-
-              <InputForm
-                name="clientName"
+          {({ isSubmitting }) => (
+            <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
+              <SelectForm
+                name="clientId"
                 label="اسم الموكل"
-                type="text"
-                placeholder="أدخل اسم الموكل"
+                options={clientOptions}
+                placeholder="اختر اسم الموكل"
+                showSearch
+                onSearchChange={setClientSearch}
+                disabled={Boolean(initialValues)}
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <SelectForm
-                  name="contractType"
-                  label="نوع العقد"
-                  options={[
-                    { value: "بيع", label: "بيع" },
-                    { value: "إيجار", label: "إيجار" },
-                    { value: "صيانة", label: "صيانة" },
-                    { value: "استشارات", label: "استشارات" },
-                    { value: "خدمات", label: "خدمات" },
-                  ]}
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <InputForm
+                  name="startDate"
+                  label="تاريخ بداية العقد"
+                  type="date"
                 />
 
-                <SelectForm
-                  name="status"
-                  label="الحالة"
-                  options={[
-                    { value: "نشط", label: "نشط" },
-                    { value: "منتهي", label: "منتهي" },
-                    { value: "ملغي", label: "ملغي" },
-                    { value: "معلق", label: "معلق" },
-                  ]}
+                <InputForm
+                  name="contractValue"
+                  label="قيمة العقد"
+                  type="number"
+                  placeholder="أدخل قيمة العقد"
+                  dir="ltr"
+                />
+
+                <InputForm
+                  name="contractDuration"
+                  label="مدة العقد"
+                  type="number"
+                  placeholder="أدخل مدة العقد"
+                  dir="ltr"
                 />
               </div>
 
-              <InputForm
-                name="startDate"
-                label="تاريخ بداية العقد"
-                type="date"
-              />
+              <FileUpload name="file" label="ملف العقد" className="w-full" />
 
-
-              <InputForm
-                name="endDate"
-                label="تاريخ نهاية العقد"
-                type="date"
-              />
-
-              <DialogClose asChild>
-                <button
-                  type="submit"
-                  className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity font-cairo"
-                >
-                  {initialValues ? "حفظ التغييرات" : "إضافة العقد"}
-                </button>
-              </DialogClose>
+              <button
+                type="submit"
+                disabled={isSubmitting || isPending}
+                className="bg-primary-gradient rounded-main font-cairo mt-4 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:opacity-50"
+              >
+                {isSubmitting || isPending
+                  ? "جارٍ الحفظ..."
+                  : initialValues
+                    ? "حفظ التغييرات"
+                    : "إضافة العقد"}
+              </button>
             </Form>
           )}
         </Formik>
