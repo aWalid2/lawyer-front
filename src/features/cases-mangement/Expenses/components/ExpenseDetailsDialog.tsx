@@ -3,6 +3,7 @@ import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
 import { InputBox } from "@/shared/components/InputBox";
 import { DateIcon } from "@/shared/icons/Date";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { getExpenseTypeLabel } from "@/shared/utils/getExpenseTypeLabel";
 import type { ExpenseItem } from "../types";
 
 interface ExpenseDetailsDialogProps {
@@ -40,7 +41,10 @@ export const ExpenseDetailsDialog: React.FC<ExpenseDetailsDialogProps> = ({
       </div>
 
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-        <InputBox label="نوع المصروف" text={expense?.expenseType || "-"} />
+        <InputBox
+          label="نوع المصروف"
+          text={getExpenseTypeLabel(expense?.expenseType) || "-"}
+        />
         <InputBox
           label="اسم الموظف المسئول"
           text={expense?.employeeName || "-"}

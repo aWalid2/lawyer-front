@@ -4,6 +4,7 @@ import LoadingPage from "@/shared/components/LoadingPage";
 import PageLayout from "@/shared/components/PageLayout";
 import { PaginationApi } from "@/shared/components/PaginationApi";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { getExpenseTypeLabel } from "@/shared/utils/getExpenseTypeLabel";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import { useMemo, useState } from "react";
 import { useGetAllCaseExpenses } from "./api/hooks/useGetAllCaseExpenses";
@@ -59,6 +60,8 @@ const ReportsExpensesFeature = () => {
     limit,
     dateFrom: filters.fromDate,
     dateTo: filters.toDate,
+    expenseType: filters.expenseType,
+    search: searchTerm,
   });
 
   const expenses = useMemo(
@@ -86,22 +89,9 @@ const ReportsExpensesFeature = () => {
   };
 
   const handleSearchChange = (value: string) => {
+    setPage(1);
     setSearchTerm(value);
   };
-
-  const filteredExpenses = useMemo(() => {
-    return indexedExpenses.filter((x) => {
-      const searchStr = searchTerm.toLowerCase();
-      const matchesSearch =
-        x.expenseType.toLowerCase().includes(searchStr) ||
-        x.employeeName.toLowerCase().includes(searchStr) ||
-        x.description.toLowerCase().includes(searchStr) ||
-        x.caseTitle.toLowerCase().includes(searchStr) ||
-        x.caseSequence.toLowerCase().includes(searchStr);
-
-      return matchesSearch;
-    });
-  }, [indexedExpenses, searchTerm]);
 
   const totalPages =
     expensesData?.meta?.totalPages ?? expensesData?.meta?.totalPages ?? 1;
@@ -130,7 +120,7 @@ const ReportsExpensesFeature = () => {
     },
     {
       header: "نوع المصروف",
-      accessor: "expenseType",
+      accessor: (item) => getExpenseTypeLabel(item.expenseType) || "-",
     },
     {
       header: "اسم الموظف المسؤول",
@@ -168,7 +158,7 @@ const ReportsExpensesFeature = () => {
         filters={filters}
       />
 
-      <DataTable columns={columns} data={filteredExpenses} rowIdField="id" />
+      <DataTable columns={columns} data={indexedExpenses} rowIdField="id" />
 
       {totalPages > 1 && (
         <PaginationApi

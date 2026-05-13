@@ -6,141 +6,40 @@ import { Error } from "@/shared/components/Error";
 import { Pagination } from "@/shared/components/Pagination";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
-import { useIndexedData } from "@/shared/utils/useIndexedData";
-import React, { useMemo, useState } from "react";
+import { getExpenseTypeLabel } from "@/shared/utils/getExpenseTypeLabel";
 import { useParams } from "react-router-dom";
 import { ExpenseDetailsDialog } from "./components/ExpenseDetailsDialog";
 import { ExpensesSummary } from "./components/ExpensesSummary";
 import { EditModelExpenses } from "./components/EditModelExpenses";
 import { ExpensesActions } from "./components/ExpensesActions";
-import type { ExpenseFormValues, ExpenseItem } from "./types";
-import { buildExpenseFormData } from "./api/services/buildExpenseFormData";
-import { useCreateCaseExpense } from "./api/hooks/useCreateCaseExpense";
-import { useDeleteCaseExpense } from "./api/hooks/useDeleteCaseExpense";
-import { useGetCaseExpense } from "./api/hooks/useGetCaseExpense";
-import { useGetCaseExpenses } from "./api/hooks/useGetCaseExpenses";
-import { useUpdateCaseExpense } from "./api/hooks/useUpdateCaseExpense";
-
-const ITEMS_PER_PAGE = 10;
-const EMPTY_EXPENSES: ExpenseItem[] = [];
+import { useExpensesCaseFeature } from "./hooks/useExpensesCaseFeature";
+import type { ExpenseItem } from "./types";
 
 export const ExpensesCaseFeature = () => {
   const { id } = useParams();
   const caseId = id ?? "";
-  const [page, setPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isViewOpen, setIsViewOpen] = useState(false);
-  const [selectedExpenseId, setSelectedExpenseId] = useState<string | null>(
-    null,
-  );
-
   const {
-    data: expensesResponse,
+    page,
+    setPage,
+    isModalOpen,
+    isViewOpen,
+    expenses,
+    indexedExpenses,
+    selectedExpense,
+    totalPages,
     isPending,
     isError,
     error,
-  } = useGetCaseExpenses(caseId);
-  const createExpenseMutation = useCreateCaseExpense(caseId);
-  const updateExpenseMutation = useUpdateCaseExpense(caseId);
-  const deleteExpenseMutation = useDeleteCaseExpense(caseId);
-  const { data: selectedExpenseDetails } = useGetCaseExpense(
-    selectedExpenseId,
-    Boolean(selectedExpenseId && (isModalOpen || isViewOpen)),
-  );
-
-  const expenses = useMemo(
-    () => expensesResponse?.data ?? EMPTY_EXPENSES,
-    [expensesResponse?.data],
-  );
-
-  const selectedExpense = useMemo(() => {
-    const expenseFromList =
-      expenses.find((expense) => expense.id === selectedExpenseId) ?? null;
-
-    return selectedExpenseDetails ?? expenseFromList;
-  }, [expenses, selectedExpenseDetails, selectedExpenseId]);
-
-  const totalPages =
-    expensesResponse?.meta?.totalPages ??
-    Math.max(1, Math.ceil(expenses.length / ITEMS_PER_PAGE));
-
-  const paginatedExpenses = useMemo(() => {
-    const startIndex = (page - 1) * ITEMS_PER_PAGE;
-    return expenses.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [expenses, page]);
-
-  const indexedExpenses = useIndexedData(
-    paginatedExpenses,
-    page,
-    ITEMS_PER_PAGE,
-  ) as ExpenseItem[];
-
-  React.useEffect(() => {
-    setPage(1);
-  }, [expenses.length]);
-
-  const handleModalOpenChange = (open: boolean) => {
-    setIsModalOpen(open);
-    if (!open && !isViewOpen) {
-      setSelectedExpenseId(null);
-    }
-  };
-
-  const handleOpenCreate = () => {
-    setSelectedExpenseId(null);
-    setIsModalOpen(true);
-  };
-
-  const handleOpenEdit = (expenseId: string) => {
-    setSelectedExpenseId(expenseId);
-    setIsModalOpen(true);
-  };
-
-  const handleOpenView = (expenseId: string) => {
-    setSelectedExpenseId(expenseId);
-    setIsViewOpen(true);
-  };
-
-  const handleViewOpenChange = (open: boolean) => {
-    setIsViewOpen(open);
-    if (!open) {
-      setSelectedExpenseId(null);
-    }
-  };
-
-  const handleEditFromView = () => {
-    setIsViewOpen(false);
-    setIsModalOpen(true);
-  };
-
-  const handleDelete = (expenseId: string) => {
-    deleteExpenseMutation.mutate(expenseId);
-    if (selectedExpenseId === expenseId) {
-      setSelectedExpenseId(null);
-      setIsModalOpen(false);
-      setIsViewOpen(false);
-    }
-  };
-
-  const handleSaveChanges = async (
-    values: ExpenseFormValues,
-    expenseId?: string,
-  ) => {
-    const formData = buildExpenseFormData(values);
-
-    if (expenseId) {
-      await updateExpenseMutation.mutateAsync({
-        expenseId,
-        data: formData,
-      });
-      return;
-    }
-
-    await createExpenseMutation.mutateAsync({
-      caseId,
-      data: formData,
-    });
-  };
+    handleModalOpenChange,
+    handleOpenCreate,
+    handleOpenEdit,
+    handleOpenView,
+    handleViewOpenChange,
+    handleEditFromView,
+    handleDelete,
+    handleSaveChanges,
+    isSaving,
+  } = useExpensesCaseFeature(caseId);
 
   if (!caseId) {
     return <Error message="معرف القضية غير موجود في الرابط" />;
@@ -162,7 +61,7 @@ export const ExpensesCaseFeature = () => {
     },
     {
       header: "نوع المصروف",
-      accessor: "expenseType",
+      accessor: (item) => getExpenseTypeLabel(item.expenseType) || "-",
     },
     {
       header: "اسم الموظف المسئول",
@@ -246,9 +145,7 @@ export const ExpensesCaseFeature = () => {
         open={isModalOpen}
         onOpenChange={handleModalOpenChange}
         onSave={handleSaveChanges}
-        isPending={
-          createExpenseMutation.isPending || updateExpenseMutation.isPending
-        }
+        isPending={isSaving}
       />
 
       {selectedExpense && (

@@ -5,6 +5,7 @@ import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
 import { HeaderFilter } from "@/shared/components/HeaderFilter";
+import { REPORT_EXPENSE_TYPE_OPTIONS } from "@/shared/constants/ExpensesOptions";
 
 interface HeaderPageReportsExpensesProps {
   onSearch: (term: string) => void;
@@ -51,14 +52,7 @@ export const HeaderPageReportsExpenses: React.FC<
           placeholder="نوع المصروف"
           value={filters.expenseType}
           onFilterChange={(value) => onFilterChange("expenseType", value)}
-          options={[
-            { value: "all", label: "نوع المصروف" },
-            { value: "رسوم محكمة", label: "رسوم محكمة" },
-            { value: "رسوم إدارية", label: "رسوم إدارية" },
-            { value: "انتقالات", label: "انتقالات" },
-            { value: "طباعة وتصوير", label: "طباعة وتصوير" },
-            { value: "مصاريف أخرى", label: "مصاريف أخرى" },
-          ]}
+          options={REPORT_EXPENSE_TYPE_OPTIONS}
         />
 
         <HeaderActionButton

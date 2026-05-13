@@ -10,6 +10,7 @@ export const useDeleteCaseExpense = (caseId: string | number) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["case-expenses", caseId] });
       queryClient.invalidateQueries({ queryKey: ["case-expenses-summary", caseId] });
+      queryClient.invalidateQueries({ queryKey: ["reports-all-case-expenses"] });
       toast.success("تم حذف المصروف بنجاح");
     },
     onError: () => {

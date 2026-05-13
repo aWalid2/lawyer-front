@@ -14,6 +14,8 @@ export const useGetAllCaseExpenses = (params: GetAllCaseExpensesParams) => {
       params.limit,
       params.dateFrom?.toISOString(),
       params.dateTo?.toISOString(),
+      params.expenseType,
+      params.search,
     ],
     queryFn: () => getAllCaseExpenses(params),
     staleTime: 1000 * 60 * 2,

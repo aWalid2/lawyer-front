@@ -5,6 +5,8 @@ export interface GetAllCaseExpensesParams {
   limit?: number;
   dateFrom?: Date;
   dateTo?: Date;
+  expenseType?: string;
+  search?: string;
 }
 
 const formatDateParam = (date?: Date) => {
@@ -73,6 +75,14 @@ export const getAllCaseExpenses = async (
 
   if (dateTo) {
     queryParams.date_to = dateTo;
+  }
+
+  if (params.expenseType && params.expenseType !== "all") {
+    queryParams.expense_type = params.expenseType;
+  }
+
+  if (params.search?.trim()) {
+    queryParams.search = params.search.trim();
   }
 
   const { data } = await api.get("/reports/allCaseExpenses", {

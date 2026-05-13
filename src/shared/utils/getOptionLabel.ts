@@ -9,3 +9,5 @@ export const getOptionLabel = (
 ) => {
   return options.find((option) => option.value === value)?.label || value;
 };
+
+export type { Option };

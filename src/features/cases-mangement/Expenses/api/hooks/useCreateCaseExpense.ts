@@ -10,6 +10,7 @@ export const useCreateCaseExpense = (caseId: string | number) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["case-expenses", caseId] });
       queryClient.invalidateQueries({ queryKey: ["case-expenses-summary", caseId] });
+      queryClient.invalidateQueries({ queryKey: ["reports-all-case-expenses"] });
       toast.success("تمت إضافة المصروف بنجاح");
     },
     onError: () => {
