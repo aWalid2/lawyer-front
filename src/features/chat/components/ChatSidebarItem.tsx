@@ -5,7 +5,7 @@ import type { Conversation } from "../types/chatT";
 interface ChatSidebarItemProps {
   conversation: Conversation;
   active: boolean;
-  onSelect: (id: string) => void;
+  onSelect: (conversation: Conversation) => void;
 }
 
 export const ChatSidebarItem = ({
@@ -16,7 +16,7 @@ export const ChatSidebarItem = ({
   return (
     <button
       type="button"
-      onClick={() => onSelect(conversation.id)}
+      onClick={() => onSelect(conversation)}
       className={`flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-right transition-all ${
         active
           ? "border-[#E7D6B2] bg-[#FBF8F2] shadow-sm"

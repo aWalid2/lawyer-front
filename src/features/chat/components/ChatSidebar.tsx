@@ -6,7 +6,7 @@ import { ChatSidebarItem } from "./ChatSidebarItem";
 interface ChatSidebarProps {
   conversations: Conversation[];
   activeId: string | null;
-  onSelect: (id: string) => void;
+  onSelect: (conversation: Conversation) => void;
 }
 
 export const ChatSidebar = ({
@@ -15,7 +15,7 @@ export const ChatSidebar = ({
   onSelect,
 }: ChatSidebarProps) => {
   return (
-    <aside className="flex h-full w-full flex-col rounded-[28px] border border-[#EEE8DC] bg-white p-4 shadow-[0_16px_38px_rgba(15,23,42,0.06)] lg:max-w-[360px]">
+    <aside className="flex h-screen w-full flex-col rounded-[28px] border border-[#EEE8DC] bg-white p-4 shadow-[0_16px_38px_rgba(15,23,42,0.06)] lg:max-w-90">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-bold text-[#24364B]">الدردشات</h2>
         <div className="flex items-center gap-2 text-[#607080]">
@@ -38,7 +38,7 @@ export const ChatSidebar = ({
         />
       </div>
 
-      <div className="space-y-2 overflow-y-auto pr-1">
+      <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
         {conversations.map((conversation) => (
           <ChatSidebarItem
             key={conversation.id}
