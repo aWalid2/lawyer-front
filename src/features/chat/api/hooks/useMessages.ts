@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { chatApi } from "../services/chatApi"
+import { getMessages } from "../services/getMessages"
 import type { Message } from "../../types/chatT"
 
 export function useMessages(
@@ -21,7 +21,7 @@ export function useMessages(
       setIsLoading(true)
 
       try {
-        const nextMessages = await chatApi.getMessages(
+        const nextMessages = await getMessages(
           conversationId,
           currentUserId,
         )

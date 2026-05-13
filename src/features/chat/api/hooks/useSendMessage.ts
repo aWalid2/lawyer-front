@@ -1,4 +1,4 @@
-import { chatApi } from "../services/chatApi"
+import { sendMessage as sendMessageService } from "../services/sendMessage"
 import type { Message } from "../../types/chatT"
 
 export function useSendMessage(
@@ -9,7 +9,7 @@ export function useSendMessage(
   const sendMessage = async (text: string) => {
     if (!receiverId) return
 
-    const newMsg = await chatApi.sendMessage({
+    const newMsg = await sendMessageService({
       receiverId,
       content: text,
       currentUserId,

@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Paperclip, SendHorizonal } from "lucide-react";
 
 interface ChatComposerProps {
@@ -13,12 +14,23 @@ export const ChatComposer = ({
   onSend,
   disabled = false,
 }: ChatComposerProps) => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleSend = () => {
+    if (disabled) {
+      return;
+    }
+
+    onSend();
+    inputRef.current?.focus();
+  };
+
   return (
     <div className="rounded-[28px] border border-[#EEE8DC] bg-white p-4 shadow-[0_16px_38px_rgba(15,23,42,0.06)]">
       <div className="flex items-center gap-3">
         <button
           type="button"
-          onClick={onSend}
+          onClick={handleSend}
           disabled={disabled}
           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#D8B26A] text-white shadow-sm transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
@@ -27,13 +39,14 @@ export const ChatComposer = ({
 
         <div className="flex flex-1 items-center gap-3 rounded-2xl border border-[#EEE8DC] bg-[#FCFBF8] px-3 py-2">
           <input
+            ref={inputRef}
             value={input}
             disabled={disabled}
             onChange={(event) => onInputChange(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter" && !disabled) {
                 event.preventDefault();
-                onSend();
+                handleSend();
               }
             }}
             placeholder="اكتب رسالتك..."
