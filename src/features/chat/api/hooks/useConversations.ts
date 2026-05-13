@@ -12,7 +12,7 @@ export function useConversations() {
       )
 
       if (!existingConversation) {
-        return [conversation, ...currentConversations]
+        return [...currentConversations, conversation]
       }
 
       return currentConversations.map((item) =>
