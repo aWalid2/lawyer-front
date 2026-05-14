@@ -1,12 +1,14 @@
 import { useMemo } from "react";
-import { SearchIcon, Sun, Moon } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { LogOut, SearchIcon, Sun, Moon } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "next-themes";
+import { toast } from "sonner";
 import { AlertIcon } from "../../icons/Alert";
 import { ChatBotIcon } from "../../icons/ChatBot";
 import { CheveronDownIcon } from "../../icons/CheveronDown";
 import { MessagesIcon } from "../../icons/Messages";
 import { SettingsIcon } from "../../icons/Settings";
+import { useAuth } from "@/shared/context/AuthContext";
 
 const ROUTE_TITLES: Record<string, string> = {
   "/dashboard": "الرئيسية",
@@ -37,7 +39,6 @@ const ROUTE_TITLES: Record<string, string> = {
   "/dashboard/messages": "الرسائل",
   "/dashboard/profile": "الملف الشخصي",
 
-
   //consultations
   "/dashboard/consultations": "الاستشارات",
 
@@ -65,9 +66,29 @@ const ROUTE_TITLES: Record<string, string> = {
 const LINK_SIZE = "h-8 w-8 md:h-10 md:w-10 xl:h-12 xl:w-12";
 const ICON_CLASSES = "h-4 w-4 md:h-5 md:w-5 xl:h-6 xl:w-6";
 
+const getUserDisplayName = (user: Record<string, unknown> | null) => {
+  const candidateKeys = ["name", "full_name", "username", "email", "role"];
+
+  for (const key of candidateKeys) {
+    const value = user?.[key];
+    if (typeof value === "string" && value.trim()) {
+      if (key === "email") {
+        return value.split("@")[0] || value;
+      }
+
+      return value;
+    }
+  }
+
+  return "المستخدم";
+};
+
 export default function NavbarHeader() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
+  const { user, logout } = useAuth();
+  console.log("Authenticated user:", user);
 
   const currentTitle = useMemo(() => {
     if (ROUTE_TITLES[pathname]) return ROUTE_TITLES[pathname];
@@ -87,17 +108,25 @@ export default function NavbarHeader() {
     return "لوحة التحكم";
   }, [pathname]);
 
+  const displayName = useMemo(() => getUserDisplayName(user), [user]);
+
+  const handleLogout = () => {
+    logout();
+    toast.success("تم تسجيل الخروج بنجاح");
+    navigate("/auth/login", { replace: true });
+  };
+
   return (
-    <header className="w-full bg-white dark:bg-backgroundDark rounded-0  md:rounded-main px-6 shadow-[0_0_24px_0_rgba(21,58,77,0.16)] py-2   ">
-      <div className="h-20 flex justify-between   ">
-        <div className="flex flex-wrap items-center justify-between w-full  ">
-          <h1 className="text-lg lg:text-lg xl:text-xl font-semibold text-secondary dark:text-white mb-2 md:mb-0">
+    <header className="dark:bg-backgroundDark rounded-0 md:rounded-main h-fit w-full bg-white px-6 py-2 shadow-[0_0_24px_0_rgba(21,58,77,0.16)]">
+      <div className="flex min-h-20 justify-between">
+        <div className="flex w-full flex-wrap items-center justify-between">
+          <h1 className="text-secondary mb-2 text-lg font-semibold md:mb-0 lg:text-lg xl:text-xl dark:text-white">
             {currentTitle}
           </h1>
-          <div className=" flex gap-2 md:gap-3 ">
+          <div className="flex flex-wrap gap-2 md:gap-3">
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center rounded-full hover:bg-secondary dark:hover:bg-white/20 hover:text-white transition`}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
             >
               {theme === "dark" ? (
                 <Sun className={ICON_CLASSES} />
@@ -108,51 +137,64 @@ export default function NavbarHeader() {
             </button>
             <Link
               to={"notifications"}
-              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center rounded-full hover:bg-secondary dark:hover:bg-white/20 hover:text-white transition`}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
             >
               <AlertIcon className={ICON_CLASSES} />
             </Link>
             <Link
               to={"chat-bot"}
-              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center rounded-full hover:bg-secondary dark:hover:bg-white/20 hover:text-white transition`}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
             >
               <ChatBotIcon className={ICON_CLASSES} />
             </Link>
 
             <Link
               to={"messages"}
-              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center rounded-full hover:bg-secondary dark:hover:bg-white/20 hover:text-white transition`}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
             >
               <MessagesIcon className={ICON_CLASSES} />
             </Link>
             <Link
               to={"settings"}
-              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center rounded-full hover:bg-secondary dark:hover:bg-white/20 hover:text-white transition`}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
             >
               <SettingsIcon className={ICON_CLASSES} />
             </Link>
             <Link
               to={"global-search"}
-              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center rounded-full hover:bg-secondary dark:hover:bg-white/20 hover:text-white transition`}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
             >
               <SearchIcon className={ICON_CLASSES} />
             </Link>
 
-            <Link to={"profile"} className="flex items-center gap-2 dark:text-white">
-              <div
-                className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 dark:bg-white/10 flex justify-center items-center 
-                rounded-full overflow-hidden border border-secondary dark:border-white/20`}
+            <div className="flex items-center gap-2 md:gap-3">
+              <Link
+                to={"profile"}
+                className="flex items-center gap-2 dark:text-white"
               >
-                <img
-                  src="/images/user-placeholder.jpg"
-                  alt="User avatar"
-                  className="block w-full h-full object-contain "
-                />
-              </div>
-              <p> علاء</p>
+                <div
+                  className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 border-secondary flex items-center justify-center overflow-hidden rounded-full border dark:border-white/20 dark:bg-white/10`}
+                >
+                  <img
+                    src="/images/user-placeholder.jpg"
+                    alt="User avatar"
+                    className="block h-full w-full object-contain"
+                  />
+                </div>
+                <p className="max-w-32 truncate">{displayName}</p>
 
-              <CheveronDownIcon className={`h-3 w-3 sm:h-5 sm:w-5`} />
-            </Link>
+                <CheveronDownIcon className={`h-3 w-3 sm:h-5 sm:w-5`} />
+              </Link>
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100 dark:border-red-400/30 dark:bg-red-500/10 dark:text-red-300 dark:hover:bg-red-500/20"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden md:inline">تسجيل الخروج</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
