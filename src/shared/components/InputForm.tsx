@@ -109,6 +109,7 @@ export const InputForm: React.FC<InputFormProps> = ({
           className={cn(
             "dark:text-foreground h-12.5 w-full bg-[#FBFBFB] text-right dark:border-white/40 dark:bg-transparent",
             type === "password" && "pl-10",
+            readonly && "cursor-default",
             meta.touched && meta.error && "border-red-500",
           )}
         />

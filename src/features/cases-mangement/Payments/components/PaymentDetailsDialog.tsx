@@ -1,0 +1,73 @@
+import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
+import { InputBox } from "@/shared/components/InputBox";
+import { DateIcon } from "@/shared/icons/Date";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import type { PaymentItem } from "@/features/cases-mangement/Payments/types";
+
+interface PaymentDetailsDialogProps {
+  payment: PaymentItem | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onEdit?: () => void;
+}
+
+export const PaymentDetailsDialog: React.FC<PaymentDetailsDialogProps> = ({
+  payment,
+  open,
+  onOpenChange,
+  onEdit,
+}) => {
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit();
+      return;
+    }
+    onOpenChange(false);
+  };
+
+  return (
+    <LayoutDialog
+      title="تفاصيل الدفعة"
+      open={open}
+      onOpenChange={onOpenChange}
+      size="xl"
+      padding="wide"
+    >
+      <div className="mb-6 flex justify-end">
+        <ButtonUpdateInfo onEdit={handleEdit} />
+      </div>
+
+      <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
+        <InputBox label="نوع الدفعة" text={payment?.paymentType || "-"} />
+        <InputBox
+          label="اسم الموظف المسئول"
+          text={payment?.employeeName || "-"}
+        />
+        <InputBox
+          label="تاريخ الدفعة"
+          text={formatDateToYYYYMMDD(payment?.paymentDate) || "-"}
+          icon={<DateIcon />}
+        />
+        <InputBox label="وصف الدفعة" text={payment?.description || "-"} />
+        <InputBox
+          label="المبلغ"
+          text={payment ? `${payment.amount.toLocaleString("en-US")} ج.م` : "-"}
+        />
+        <div className="col-span-1 md:col-span-2">
+          <InputBox
+            label="المرفقات"
+            text={
+              payment?.attachments.length ? payment.attachments.join("، ") : "-"
+            }
+          />
+        </div>
+        <div className="col-span-1 md:col-span-2">
+          <InputBox label="ملاحظات" text={payment?.notes || "-"} />
+        </div>
+      </div>
+    </LayoutDialog>
+  );
+};
+
+export default PaymentDetailsDialog;

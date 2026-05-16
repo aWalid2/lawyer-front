@@ -44,6 +44,11 @@ export const NavigationMenu = () => {
       to: `/dashboard/case-management/${id}/expenses`,
     },
     {
+      label: "المدفوعات",
+      icon: <ManagmentsIcon className="h-5 w-5" />,
+      to: `/dashboard/case-management/${id}/payments`,
+    },
+    {
       label: "إجراءات",
       icon: <BarChartIcon className="h-5 w-5" />,
       to: `/dashboard/case-management/${id}/procedures`,
