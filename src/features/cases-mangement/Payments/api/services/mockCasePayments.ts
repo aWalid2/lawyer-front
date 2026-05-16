@@ -127,6 +127,26 @@ export const getCasePaymentsSummaryMock = async (caseId: string | number) => {
 };
 
 export const getPaymentUsersMock = async () => [
-  { id: 1, first_name: "أحمد" },
-  { id: 2, first_name: "منى" },
+  {
+    id: 1,
+    first_name: "أحمد",
+    last_name: "محمد",
+    email: "ahmed@example.com",
+    phone: "01001234567",
+    role: { role_name: "Lawyer" },
+    userType: "employee",
+    user_status: "active",
+    fullName: "أحمد محمد",
+  },
+  {
+    id: 2,
+    first_name: "منى",
+    last_name: "علي",
+    email: "mona@example.com",
+    phone: "01012345678",
+    role: { role_name: "Secretary" },
+    userType: "employee",
+    user_status: "active",
+    fullName: "منى علي",
+  },
 ];
