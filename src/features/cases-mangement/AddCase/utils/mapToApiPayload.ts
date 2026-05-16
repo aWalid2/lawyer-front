@@ -162,7 +162,19 @@ const case_fees: CaseFees = {
   }
 
   if (values.case_situation === "POLICE_STATION") {
-    throw new Error("POLICE_STATION submission is not implemented yet");
+    const { client_type, ...policeBase } = base;
+    return {
+      ...policeBase,
+      case_situation: "POLICE_CASE",
+      case_police_station_id: Number(values.case_police_station_id),
+      case_number_at_police_station: Number(values.case_number_at_police_station),
+      case_arrival_date_at_police_station: formatDate(values.case_arrival_date_at_police_station),
+      detective_name: values.detective_name,
+      investigation_name: values.investigation_name,
+      reference_number: values.reference_number?.trim() || "",
+      case_fees,
+      opponents: normalizedOpponents,
+    } as any; // Using any or PolicePayload
   }
 
   // ================= PROSECUTION =================

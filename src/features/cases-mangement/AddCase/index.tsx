@@ -13,6 +13,7 @@ import { useAddPublicProsecutionOfficeCase } from "./api/hooks/useAddPublicProse
 import { useAddUnderAppealCase } from "./api/hooks/useAddUnderAppealCase";
 import { useAddActiveCase } from "./api/hooks/useAddActiveCase";
 import { useAddOtherCase } from "./api/hooks/useAddOtherCase";
+import { useAddPoliceCase } from "./api/hooks/useAddPoliceCase";
 import { FeesForm } from "./components/FeesForm";
 import { InProsecution } from "./components/InProsecution";
 import { OpponentForm } from "./components/Opponent";
@@ -83,6 +84,8 @@ const FormCase = () => {
     useAddActiveCase();
   const { mutateAsync: addOtherCase, isPending: isPendingOtherCase } =
     useAddOtherCase();
+  const { mutateAsync: addPoliceCase, isPending: isPendingPoliceCase } =
+    useAddPoliceCase();
   const formInitialValues: FormValues = {
     ...initialValues,
     client_id: clientIdFromUrl || initialValues.client_id,
@@ -95,11 +98,8 @@ const FormCase = () => {
       validationSchema={validationSchema}
       onSubmit={async (values) => {
         if (values.case_situation === "POLICE_STATION") {
-          toast.error("لا يوجد API لإضافة قضية المخفر حالياً");
-          return;
-        }
-
-        if (values.case_situation === "UNDER_APPEAL") {
+          await addPoliceCase(values);
+        } else if (values.case_situation === "UNDER_APPEAL") {
           await addUnderAppealCase(values);
         } else if (values.case_situation === "PUBLIC_PROSECUTION") {
           await addPublicProsecutionCase(values);
@@ -171,7 +171,8 @@ const FormCase = () => {
                     isPendingPublicProsecutionCase ||
                     isPendingPublicProsecutionOfficeCase ||
                     isPendingActiveCase ||
-                    isPendingOtherCase
+                    isPendingOtherCase ||
+                    isPendingPoliceCase
                   }
                   loadingText="جاري الإضافة..."
                   className="mt-6"

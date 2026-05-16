@@ -91,9 +91,27 @@ export type OtherPayload = BasePayload & {
   }[];
 };
 
+// ================= POLICE =================
+export type PolicePayload = Omit<BasePayload, "case_situation" | "client_type"> & {
+  case_situation: "POLICE_CASE" | "POLICE_STATION";
+  case_police_station_id: number;
+  case_number_at_police_station: number;
+  case_arrival_date_at_police_station: string;
+  detective_name: string;
+  investigation_name: string;
+  reference_number: string;
+  case_fees: CaseFees;
+  opponents: {
+    name: string;
+    ssn: string;
+    phone_number: string;
+  }[];
+};
+
 // ================= UNION =================
 export type CasePayload =
   | UnderAppealPayload
   | ProsecutionPayload
   | ActivePayload
-  | OtherPayload;
+  | OtherPayload
+  | PolicePayload;
