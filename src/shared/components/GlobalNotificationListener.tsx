@@ -16,8 +16,9 @@ export const GlobalNotificationListener = () => {
             : 'http://localhost:8000'; // Default fallback
 
         const socket = io(backendUrl, {
-            query: { userId: user?.id || 3 }, // Fallback to 3 if user is missing as you mentioned earlier
+            query: { userId: user?.id || 3 },
             transports: ['websocket', 'polling'],
+            reconnection: false, // Disabled reconnect temporarily to stop console spam
         });
 
         socket.on('connect', () => {
@@ -50,5 +51,5 @@ export const GlobalNotificationListener = () => {
         };
     }, [user?.id, queryClient]);
 
-    return null; // This component doesn't render anything visually
+    return null;
 };
