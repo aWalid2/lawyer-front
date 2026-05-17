@@ -9,6 +9,7 @@ import { CheveronDownIcon } from "../../icons/CheveronDown";
 import { MessagesIcon } from "../../icons/Messages";
 import { SettingsIcon } from "../../icons/Settings";
 import { useAuth } from "@/shared/context/AuthContext";
+import { useGetNotifications } from "@/features/Notifications/api/hooks/useGetNotifications";
 
 const ROUTE_TITLES: Record<string, string> = {
   "/dashboard": "الرئيسية",
@@ -90,6 +91,14 @@ export default function NavbarHeader() {
   const { user, logout } = useAuth();
   console.log("Authenticated user:", user);
 
+  const userId = (user?.sub as number | string) || 3;
+  const { data: apiNotifications } = useGetNotifications(userId);
+
+  const unreadCount = useMemo(() => {
+    if (!apiNotifications) return 0;
+    return apiNotifications.filter((n: any) => !n.is_read).length;
+  }, [apiNotifications]);
+
   const currentTitle = useMemo(() => {
     if (ROUTE_TITLES[pathname]) return ROUTE_TITLES[pathname];
 
@@ -137,9 +146,14 @@ export default function NavbarHeader() {
             </button>
             <Link
               to={"notifications"}
-              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
+              className={`relative text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
             >
               <AlertIcon className={ICON_CLASSES} />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow">
+                  {unreadCount > 9 ? "+9" : unreadCount}
+                </span>
+              )}
             </Link>
             <Link
               to={"chat-bot"}

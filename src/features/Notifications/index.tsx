@@ -9,6 +9,7 @@ import { useGetAllUsers } from "@/features/settings/users/api/hooks/useGetAllUse
 import type { UserT } from "@/features/settings/users/types/userT";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
+import { useAuth } from "@/shared/context/AuthContext";
 
 interface Notification {
     id: string;
@@ -27,7 +28,9 @@ function Notification() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(15);
 
-    const userId = 3;
+    const { user } = useAuth();
+    const userId = user?.sub as number | string || 3;
+
     const { data: apiNotifications, isPending, isError, error } = useGetNotifications(userId);
     const { mutate: markAsRead } = useMarkNotificationRead(userId);
     const { data: usersResponse } = useGetAllUsers();
@@ -51,7 +54,7 @@ function Notification() {
             const sender = notificationsMap.get(item.sender_id) || { name: `مستخدم #${item.sender_id}`, avatar: "" };
 
             const date = new Date(item.created_at);
-            const formattedDate = date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' });
 
             return {
                 id: String(item.id),
@@ -73,9 +76,7 @@ function Notification() {
         markAsRead(id);
     };
 
-    useEffect(() => {
-        console.log("Filters changed:", filters);
-    }, [filters]);
+
 
     const filteredNotifications = useMemo(() => {
         return notifications.filter((notification) => {

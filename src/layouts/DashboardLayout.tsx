@@ -1,6 +1,7 @@
 import Header from "@/shared/Header";
 import SidebarDashboard from "@/features/dashboard/components/SidebarDashboard";
 import { Outlet } from "react-router-dom";
+import { GlobalNotificationListener } from "@/shared/components/GlobalNotificationListener";
 
 const DashboardLayout = () => {
   return (
@@ -12,7 +13,7 @@ const DashboardLayout = () => {
              bg-cover bg-center bg-no-repeat
              md:p-6 md:gap-6 container "
     >
-
+      <GlobalNotificationListener />
       <SidebarDashboard />
 
       <main className="flex-1 flex flex-col min-w-0">
