@@ -3,6 +3,12 @@ import PageLayout from "@/shared/components/PageLayout";
 import NotificationFilters from "./componnents/NotificationFilters";
 import NotificationsList from "./componnents/NotificationsList";
 import { Pagination } from "@/shared/components/Pagination";
+import { useGetNotifications } from "./api/hooks/useGetNotifications";
+import { useMarkNotificationRead } from "./api/hooks/useMarkNotificationRead";
+import { useGetAllUsers } from "@/features/settings/users/api/hooks/useGetAllUsers";
+import type { UserT } from "@/features/settings/users/types/userT";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { Error } from "@/shared/components/Error";
 
 interface Notification {
     id: string;
@@ -21,200 +27,42 @@ function Notification() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(15);
 
-    const [notifications, setNotifications] = useState<Notification[]>([
-        {
-            id: "1",
-            senderName: "أحمد محمد",
-            senderAvatar: "https://tse2.mm.bing.net/th/id/OIP.4mEmvA0J25PMkIWp3gMy_AHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "قام بالتعليق على منشورك ام بالتعليق على منشوركام بالتعليق على منشوركام بالتعليق على منشوركام بالتعليق على منشوركام بالتعليق على منشوركام بالتعليق على منشوركام بالتعليق على منشوركام بالتعليق على منشوركام بالتعليق على منشوركام بالتعليق على منشوركام بالتعليق على منشورك",
-            isRead: false,
-            timestamp: "منذ 5 دقائق",
-        },
-        {
-            id: "2",
-            senderName: "سارة علي",
-            senderAvatar: "https://tse1.mm.bing.net/th/id/OIP.X808-dA6q1pDb2975vKYRAHaIt?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "أرسلت لك طلب صداقة",
-            isRead: false,
-            timestamp: "منذ ساعة",
-        },
-        {
-            id: "3",
-            senderName: "محمد إبراهيم",
-            senderAvatar: "https://tse3.mm.bing.net/th/id/OIP.f98qZq5xOtfkxbUdhnGQtwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "قام بالإعجاب بصورتك",
-            isRead: true,
-            timestamp: "منذ يومين",
-        },
-        {
-            id: "4",
-            senderName: "فاطمة حسن",
-            senderAvatar: "https://tse1.mm.bing.net/th/id/OIP.SXGI39_V0C1VobA2jHjl1gHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "ذكرك في تعليق",
-            isRead: true,
-            timestamp: "منذ 3 أيام",
-        },
-        {
-            id: "5",
-            senderName: "أحمد محمد",
-            senderAvatar: "https://tse2.mm.bing.net/th/id/OIP.4mEmvA0J25PMkIWp3gMy_AHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "قام بالتعليق على منشورك",
-            isRead: false,
-            timestamp: "منذ 5 دقائق",
-        },
-        {
-            id: "6",
-            senderName: "سارة علي",
-            senderAvatar: "https://tse1.mm.bing.net/th/id/OIP.X808-dA6q1pDb2975vKYRAHaIt?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "أرسلت لك طلب صداقة",
-            isRead: false,
-            timestamp: "منذ ساعة",
-        },
-        {
-            id: "7",
-            senderName: "محمد إبراهيم",
-            senderAvatar: "https://tse3.mm.bing.net/th/id/OIP.f98qZq5xOtfkxbUdhnGQtwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "قام بالإعجاب بصورتك",
-            isRead: true,
-            timestamp: "منذ يومين",
-        },
-        {
-            id: "8",
-            senderName: "فاطمة حسن",
-            senderAvatar: "https://tse1.mm.bing.net/th/id/OIP.SXGI39_V0C1VobA2jHjl1gHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "ذكرك في تعليق",
-            isRead: true,
-            timestamp: "منذ 3 أيام",
-        },
-        {
-            id: "9",
-            senderName: "أحمد محمد",
-            senderAvatar: "https://tse2.mm.bing.net/th/id/OIP.4mEmvA0J25PMkIWp3gMy_AHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "قام بالتعليق على منشورك",
-            isRead: false,
-            timestamp: "منذ 5 دقائق",
-        },
-        {
-            id: "10",
-            senderName: "سارة علي",
-            senderAvatar: "https://tse1.mm.bing.net/th/id/OIP.X808-dA6q1pDb2975vKYRAHaIt?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "أرسلت لك طلب صداقة",
-            isRead: false,
-            timestamp: "منذ ساعة",
-        },
-        {
-            id: "11",
-            senderName: "محمد إبراهيم",
-            senderAvatar: "https://tse3.mm.bing.net/th/id/OIP.f98qZq5xOtfkxbUdhnGQtwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "قام بالإعجاب بصورتك",
-            isRead: true,
-            timestamp: "منذ يومين",
-        },
-        {
-            id: "12",
-            senderName: "فاطمة حسن",
-            senderAvatar: "https://tse1.mm.bing.net/th/id/OIP.SXGI39_V0C1VobA2jHjl1gHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "ذكرك في تعليق",
-            isRead: true,
-            timestamp: "منذ 3 أيام",
-        },
-        {
-            id: "13",
-            senderName: "أحمد محمد",
-            senderAvatar: "https://tse2.mm.bing.net/th/id/OIP.4mEmvA0J25PMkIWp3gMy_AHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "قام بالتعليق على منشورك",
-            isRead: false,
-            timestamp: "منذ 5 دقائق",
-        },
-        {
-            id: "14",
-            senderName: "سارة علي",
-            senderAvatar: "https://tse1.mm.bing.net/th/id/OIP.X808-dA6q1pDb2975vKYRAHaIt?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "أرسلت لك طلب صداقة",
-            isRead: false,
-            timestamp: "منذ ساعة",
-        },
-        {
-            id: "15",
-            senderName: "محمد إبراهيم",
-            senderAvatar: "https://tse3.mm.bing.net/th/id/OIP.f98qZq5xOtfkxbUdhnGQtwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "قام بالإعجاب بصورتك",
-            isRead: true,
-            timestamp: "منذ يومين",
-        },
-        {
-            id: "16",
-            senderName: "فاطمة حسن",
-            senderAvatar: "https://tse1.mm.bing.net/th/id/OIP.SXGI39_V0C1VobA2jHjl1gHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "ذكرك في تعليق",
-            isRead: true,
-            timestamp: "منذ 3 أيام",
-        },
-        {
-            id: "17",
-            senderName: "أحمد محمد",
-            senderAvatar: "https://tse2.mm.bing.net/th/id/OIP.4mEmvA0J25PMkIWp3gMy_AHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "قام بالتعليق على منشورك",
-            isRead: false,
-            timestamp: "منذ 5 دقائق",
-        },
-        {
-            id: "18",
-            senderName: "سارة علي",
-            senderAvatar: "https://tse1.mm.bing.net/th/id/OIP.X808-dA6q1pDb2975vKYRAHaIt?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "أرسلت لك طلب صداقة",
-            isRead: false,
-            timestamp: "منذ ساعة",
-        },
-        {
-            id: "19",
-            senderName: "محمد إبراهيم",
-            senderAvatar: "https://tse3.mm.bing.net/th/id/OIP.f98qZq5xOtfkxbUdhnGQtwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "قام بالإعجاب بصورتك",
-            isRead: true,
-            timestamp: "منذ يومين",
-        },
-        {
-            id: "20",
-            senderName: "فاطمة حسن",
-            senderAvatar: "https://tse1.mm.bing.net/th/id/OIP.SXGI39_V0C1VobA2jHjl1gHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "ذكرك في تعليق",
-            isRead: true,
-            timestamp: "منذ 3 أيام",
-        },
-        {
-            id: "21",
-            senderName: "أحمد محمد",
-            senderAvatar: "https://tse2.mm.bing.net/th/id/OIP.4mEmvA0J25PMkIWp3gMy_AHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "قام بالتعليق على منشورك",
-            isRead: false,
-            timestamp: "منذ 5 دقائق",
-        },
-        {
-            id: "22",
-            senderName: "سارة علي",
-            senderAvatar: "https://tse1.mm.bing.net/th/id/OIP.X808-dA6q1pDb2975vKYRAHaIt?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "أرسلت لك طلب صداقة",
-            isRead: false,
-            timestamp: "منذ ساعة",
-        },
-        {
-            id: "23",
-            senderName: "محمد إبراهيم",
-            senderAvatar: "https://tse3.mm.bing.net/th/id/OIP.f98qZq5xOtfkxbUdhnGQtwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "قام بالإعجاب بصورتك",
-            isRead: true,
-            timestamp: "منذ يومين",
-        },
-        {
-            id: "24",
-            senderName: "فاطمة حسن",
-            senderAvatar: "https://tse1.mm.bing.net/th/id/OIP.SXGI39_V0C1VobA2jHjl1gHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
-            content: "ذكرك في تعليق",
-            isRead: true,
-            timestamp: "منذ 3 أيام",
-        },
-    ]);
+    const userId = 3;
+    const { data: apiNotifications, isPending, isError, error } = useGetNotifications(userId);
+    const { mutate: markAsRead } = useMarkNotificationRead(userId);
+    const { data: usersResponse } = useGetAllUsers();
+
+    const notificationsMap = useMemo(() => {
+        const userMap = new Map();
+        if (usersResponse) {
+            usersResponse.forEach((user: UserT) => {
+                userMap.set(user.id, {
+                    name: user.first_name || user.fullName || `مستخدم #${user.id}`,
+                    avatar: ""
+                });
+            });
+        }
+        return userMap;
+    }, [usersResponse]);
+
+    const notifications = useMemo<Notification[]>(() => {
+        if (!apiNotifications) return [];
+        return apiNotifications.map(item => {
+            const sender = notificationsMap.get(item.sender_id) || { name: `مستخدم #${item.sender_id}`, avatar: "" };
+
+            const date = new Date(item.created_at);
+            const formattedDate = date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+            return {
+                id: String(item.id),
+                senderName: sender.name,
+                senderAvatar: sender.avatar,
+                content: item.content,
+                isRead: item.is_read,
+                timestamp: formattedDate
+            };
+        });
+    }, [apiNotifications, notificationsMap]);
 
     const onFilterChange = (key: string, value: any) => {
         setCurrentPage(1);
@@ -222,13 +70,7 @@ function Notification() {
     };
 
     const handleMarkAsRead = (id: string) => {
-        setNotifications(prev =>
-            prev.map(notification =>
-                notification.id === id
-                    ? { ...notification, isRead: true }
-                    : notification
-            )
-        );
+        markAsRead(id);
     };
 
     useEffect(() => {
@@ -254,6 +96,9 @@ function Notification() {
     useEffect(() => {
         setCurrentPage(1);
     }, [filters.notificationStatus]);
+
+    if (isPending) return <LoadingPage />;
+    if (isError) return <Error message="حدث خطأ في تحميل الإشعارات" error={error} />;
 
     return (
         <PageLayout>

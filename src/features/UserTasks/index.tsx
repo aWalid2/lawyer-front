@@ -3,7 +3,7 @@ import { DataTable, type Column } from '@/shared/components/DataTable'
 import { UsersTaskActions } from './components/UsersTaskActions';
 import { HeaderTasksUser } from './components/HeaderTasksUser';
 import { useFetchTasks } from './api/hooks/useGetTasks';
-import { useFetchLawyers } from '../users/users-lawyers/api/hooks/useLawyersGet';
+import type { UserT } from '@/features/settings/users/types/userT';
 import { useFetchCases } from './api/hooks/useGetCase';
 import { Error } from '@/shared/components/Error';
 import LoadingPage from '@/shared/components/LoadingPage';
@@ -12,6 +12,7 @@ import { statusMapping } from './types/types';
 import { getStatusStyle } from './types/types';
 import { PaginationApi } from '@/shared/components/PaginationApi';
 import { useIndexedData } from '@/shared/utils/useIndexedData';
+import { useGetPaymentUsers } from '../cases-mangement/Payments/api/hooks/useGetPaymentUsers';
 
 const StatusCell: React.FC<{ status: string }> = ({ status }) => {
     const cleanStatus = status?.trim() || "";
@@ -25,7 +26,7 @@ const StatusCell: React.FC<{ status: string }> = ({ status }) => {
 
 export const UsersTask: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const { data: lawyers } = useFetchLawyers();
+    const { data: usersResponse } = useGetPaymentUsers();
     const { data: cases } = useFetchCases();
     const [statusFilter, setStatusFilter] = useState<string>("all");
     const [page, setPage] = useState(1);
@@ -35,13 +36,13 @@ export const UsersTask: React.FC = () => {
     const totalPages = tasksResponse?.meta?.total_pages ?? 1;
     const indexedData = useIndexedData(tasks || []);
 
-    const lawyersMap = useMemo(() => {
-        if (!lawyers) return new Map();
-        return new Map(lawyers.map((lawyer: any) => [lawyer.user_id, lawyer.user?.first_name || `محامي ${lawyer.user_id}`]));
-    }, [lawyers]);
+    const usersMap = useMemo(() => {
+        if (!usersResponse) return new Map();
+        return new Map(usersResponse.map((user: UserT) => [user.id, user.first_name || user.fullName || `مستخدم ${user.id}`]));
+    }, [usersResponse]);
 
-    const getLawyerName = (userId: number): string => {
-        return lawyersMap.get(userId) || `محامي ${userId}`;
+    const getUserName = (userId: number): string => {
+        return usersMap.get(userId) || `مستخدم ${userId}`;
     };
 
     const casesMap = useMemo(() => {
@@ -81,7 +82,7 @@ export const UsersTask: React.FC = () => {
         },
         {
             header: "المُكلف",
-            accessor: (item: TaskRelatedT) => getLawyerName(item.assigned_to),
+            accessor: (item: TaskRelatedT) => getUserName(item.assigned_to),
             headerClassName: "w-35",
             className: "w-35",
         },
@@ -108,11 +109,11 @@ export const UsersTask: React.FC = () => {
         {
             header: "إجراء",
             accessor: (item: TaskRelatedT) => (
-                <UsersTaskActions 
-                    caseItem={item} 
+                <UsersTaskActions
+                    caseItem={item}
                     onTaskUpdated={() => {
                         refetch();
-                    }} 
+                    }}
                 />
             ),
             headerClassName: "w-35",

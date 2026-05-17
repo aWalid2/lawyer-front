@@ -12,10 +12,11 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
-import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
+import type { UserT } from "@/features/settings/users/types/userT";
 import { useTaskUser } from "../api/hooks/useAddTask";
 import { useUpdateTask } from "../api/hooks/useUpdateTask";
 import { useFetchCases } from "../api/hooks/useGetCase";
+import { useGetAllUsers } from "@/features/settings/users/api/hooks/useGetAllUsers";
 
 interface AddTaskModalProps {
   onClose: () => void;
@@ -72,12 +73,12 @@ const defaultValues: TaskFormValues = {
 function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }: AddTaskModalProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const isEditMode = !!taskId;
-  
+
   const { mutate: addTask, isPending: isAdding } = useTaskUser();
-  const { mutate: updateTask, isPending: isUpdating } = useUpdateTask();  
-  const { data: lawyers, isPending: isClientsLoading } = useFetchLawyers();
+  const { mutate: updateTask, isPending: isUpdating } = useUpdateTask();
+  const { data: usersResponse, isPending: isUsersLoading } = useGetAllUsers();
   const { data: cases, isPending: isCasesLoading } = useFetchCases();
-  
+
   const isLoading = isEditMode ? isUpdating : isAdding;
 
   const handleCloseModal = () => {
@@ -87,8 +88,7 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
 
   const handleSubmit = (values: TaskFormValues) => {
     const submitValues = { ...values };
-    
-    // تحويل التواريخ إلى صيغة ISO
+
     if (submitValues.delivery_date) {
       submitValues.delivery_date = new Date(submitValues.delivery_date).toISOString();
     }
@@ -98,8 +98,7 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
     if (submitValues.end_date) {
       submitValues.end_date = new Date(submitValues.end_date).toISOString();
     }
-    
-    // تجهيز البيانات للإرسال
+
     const apiValues: any = {
       task_title: submitValues.task_title,
       assigned_to: submitValues.assigned_to,
@@ -110,15 +109,15 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
       start_date: submitValues.start_date,
       end_date: submitValues.end_date,
     };
-    
+
     if (values.task_relation === "case") {
       apiValues.task_type = submitValues.task_type;
     } else {
       apiValues.task_type = submitValues.task_type;
     }
-    
+
     console.log("Sending data:", apiValues);
-    
+
     if (isEditMode && taskId) {
       updateTask(
         { id: taskId, data: apiValues },
@@ -143,19 +142,17 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
     }
   };
 
-  const LawyerOptions = useMemo(() => {
-    if (!lawyers || lawyers.length === 0) return [];
-    return lawyers.map((lawyer: any) => ({
-      value: lawyer.user_id,        
-      label: lawyer.user?.first_name || `محامي ${lawyer.user_id}` 
-    }));
-  }, [lawyers]);
+  const employeeOptions =
+    usersResponse?.map((user: UserT) => ({
+      label: user?.first_name || user?.fullName || `#${user?.id}`,
+      value: String(user?.id),
+    })) || [];
 
   const CaseOptions = useMemo(() => {
     if (!cases?.data || cases.data.length === 0) return [];
     return cases.data.map((caseItem: any) => ({
-      value: caseItem.case_title,
-      label: caseItem.case_title
+      value: String(caseItem.id || caseItem.case_id),
+      label: caseItem.case_title || `قضية رقم ${caseItem.id || caseItem.case_id}`
     }));
   }, [cases]);
 
@@ -207,13 +204,13 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
                   type="text"
                   placeholder="أدخل عنوان المهمة"
                 />
-                
+
                 <SelectForm
                   name="assigned_to"
                   label="المكلف"
-                  options={LawyerOptions}
-                  placeholder={isClientsLoading ? "جاري تحميل المحامين..." : "اختر المكلف"}
-                  disabled={isClientsLoading || LawyerOptions.length === 0}
+                  options={employeeOptions}
+                  placeholder={isUsersLoading ? "جاري تحميل المستخدمين..." : "اختر المكلف"}
+                  disabled={isUsersLoading || employeeOptions.length === 0}
                 />
               </div>
 
@@ -234,7 +231,7 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
                     placeholder="أدخل نوع المهمة"
                   />
                 )}
-                
+
                 <InputForm
                   name="delivery_date"
                   label="تاريخ التسليم"
@@ -252,7 +249,7 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
                 label="تفاصيل المهمة"
                 placeholder="أدخل تفاصيل إضافية"
               />
-              
+
               <div className="grid grid-cols-1  gap-4">
                 <InputForm
                   name="start_date"
