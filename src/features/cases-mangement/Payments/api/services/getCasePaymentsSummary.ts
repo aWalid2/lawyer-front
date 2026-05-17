@@ -1,8 +1,16 @@
 import type { PaymentSummary } from "@/features/cases-mangement/Payments/types";
-import { getCasePaymentsSummaryMock } from "./mockCasePayments";
+import api from "@/lib/api";
 
 export const getCasePaymentsSummary = async (caseId: string | number): Promise<PaymentSummary | null> => {
-  const payload = await getCasePaymentsSummaryMock(caseId);
-  if (!payload) return null;
-  return { totalAmount: Number(payload.total_amount ?? 0), latestPaymentDate: payload.data ?? null };
+  try {
+    const response = await api.get(`/payments/case/${caseId}/summary`);
+    const data = response.data;
+    return {
+      totalAmount: Number(data.total_amount ?? 0),
+      latestPaymentDate: data.last_payment_date ?? null,
+    };
+  } catch (error) {
+    console.error("Error fetching case payments summary:", error);
+    throw error;
+  }
 };

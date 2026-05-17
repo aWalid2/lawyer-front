@@ -2,25 +2,28 @@ import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
 export interface PaymentItem {
   id: string;
-  paymentType: string;
+  payment_type: string;
   employeeId: number | null;
-  employeeName: string;
-  description: string;
+  employee_name: string;
+  payment_description: string;
   amount: number;
-  paymentDate: string;
+  payment_date: string;
   notes: string;
   attachments: string[];
   rowNumber?: number;
+  caseId?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface PaymentFormValues {
-  paymentType: string;
+  payment_type: string;
   employeeId: number | "";
-  description: string;
+  employee_name: string;
+  payment_description: string;
   amount: number | "";
-  paymentDate: string;
+  payment_date: string;
   notes: string;
-  attachments: FileList | string[] | null;
 }
 
 export interface PaymentSummary {
@@ -29,21 +32,21 @@ export interface PaymentSummary {
 }
 
 export const EMPTY_PAYMENT_FORM_VALUES: PaymentFormValues = {
-  paymentType: "",
+  payment_type: "",
   employeeId: "",
-  description: "",
+  employee_name: "",
+  payment_description: "",
   amount: "",
-  paymentDate: formatDateToYYYYMMDD(new Date().toISOString()) || "",
+  payment_date: formatDateToYYYYMMDD(new Date().toISOString()) || "",
   notes: "",
-  attachments: null,
 };
 
 export const toPaymentFormValues = (payment?: PaymentItem | null): PaymentFormValues => ({
-  paymentType: payment?.paymentType ?? "",
+  payment_type: payment?.payment_type ?? "",
   employeeId: payment?.employeeId ?? "",
-  description: payment?.description ?? "",
+  employee_name: payment?.employee_name ?? "",
+  payment_description: payment?.payment_description ?? "",
   amount: payment?.amount ?? "",
-  paymentDate: (payment?.paymentDate ?? formatDateToYYYYMMDD(new Date().toISOString())) || "",
+  payment_date: (payment?.payment_date ?? formatDateToYYYYMMDD(new Date().toISOString())) || "",
   notes: payment?.notes ?? "",
-  attachments: payment?.attachments ?? null,
 });

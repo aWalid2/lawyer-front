@@ -3,14 +3,15 @@ import type { PaymentItem } from "@/features/cases-mangement/Payments/types";
 interface PaymentApiItem {
   id?: number | string;
   payment_type?: string | null;
-  employee_id?: string | number | null;
-  description?: string | null;
+  case_id?: number | null;
+  employee_name?: string | null;
+  payment_description?: string | null;
   amount?: string | number | null;
   payment_date?: string | null;
   notes?: string | null;
   attachment?: string | null;
-  employe?: { first_name?: string | null } | null;
-  employee?: { user?: { first_name?: string | null } } | null;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 const toAttachmentList = (attachment?: string | null) => {
@@ -21,11 +22,14 @@ const toAttachmentList = (attachment?: string | null) => {
 export const normalizeCasePayment = (p?: PaymentApiItem | null): PaymentItem => ({
   id: String(p?.id ?? ""),
   paymentType: p?.payment_type ?? "",
-  employeeId: Number(p?.employee_id ?? 0) || null,
-  employeeName: p?.employe?.first_name ?? p?.employee?.user?.first_name ?? "-",
-  description: p?.description ?? "",
+  employeeId: null,
+  employeeName: p?.employee_name ?? "-",
+  description: p?.payment_description ?? "",
   amount: Number(p?.amount ?? 0),
   paymentDate: p?.payment_date ?? "",
   notes: p?.notes ?? "",
   attachments: toAttachmentList(p?.attachment),
+  caseId: p?.case_id ?? undefined,
+  createdAt: p?.created_at ?? undefined,
+  updatedAt: p?.updated_at ?? undefined,
 });

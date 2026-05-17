@@ -4,7 +4,6 @@ import { LayoutDialog } from "@/shared/components/LayoutDialog";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
-import { FileUpload } from "@/shared/components/FileUpload";
 import type {
   PaymentFormValues,
   PaymentItem,
@@ -15,10 +14,11 @@ import {
 } from "@/features/cases-mangement/Payments/types";
 import * as Yup from "yup";
 import { useGetPaymentUsers } from "@/features/cases-mangement/Payments/api/hooks/useGetPaymentUsers";
+import type { UserT } from "@/features/settings/users/types/userT";
 
 const PAYMENT_TYPE_OPTIONS = [
-  { value: "client-payment", label: "دفعة من العميل" },
-  { value: "refund", label: "استرداد" },
+  { value: "client refund", label: "استرداد من العميل" },
+  { value: "payment refund", label: "دفعة من العميل" },
   { value: "other", label: "أخرى" },
 ];
 
@@ -37,16 +37,17 @@ export const EditModelPayments: React.FC<Props> = ({
   onSave,
   isPending = false,
 }) => {
-  const { data: users } = useGetPaymentUsers();
+  const { data: usersResponse } = useGetPaymentUsers();
   const initialValues = payment
     ? toPaymentFormValues(payment)
     : EMPTY_PAYMENT_FORM_VALUES;
   const isEdit = !!payment?.id;
 
-  const employeeOptions = (users || []).map((u: any) => ({
-    label: u.first_name || `#${u.id}`,
-    value: String(u.id),
-  }));
+  const employeeOptions =
+    usersResponse?.map((user: UserT) => ({
+      label: user?.first_name || user?.fullName || `#${user?.id}`,
+      value: String(user?.id),
+    })) || [];
 
   const validationSchema = Yup.object().shape({
     paymentType: Yup.string().required("نوع الدفعة مطلوب"),
@@ -59,7 +60,6 @@ export const EditModelPayments: React.FC<Props> = ({
       .required("المبلغ مطلوب")
       .moreThan(0, "المبلغ يجب أن يكون أكبر من صفر"),
     paymentDate: Yup.string().required("تاريخ الدفعة مطلوب"),
-    attachments: Yup.mixed().nullable(),
     notes: Yup.string().nullable(),
   });
 
@@ -80,21 +80,34 @@ export const EditModelPayments: React.FC<Props> = ({
           onOpenChange(false);
         }}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, setFieldValue }) => (
           <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <SelectForm
-                name="paymentType"
+                name="payment_type"
                 label="نوع الدفعة"
                 options={PAYMENT_TYPE_OPTIONS}
                 placeholder="اختر نوع الدفعة"
               />
               <SelectForm
-                name="employeeId"
+                name="employee_name"
                 label="اسم الموظف المسئول"
                 options={employeeOptions}
                 placeholder="اختر الموظف"
                 showSearch
+                onChange={(selectedId) => {
+                  if (selectedId && usersResponse) {
+                    const selectedUser = usersResponse.find(
+                      (u: UserT) => u.id === Number(selectedId),
+                    );
+                    if (selectedUser) {
+                      setFieldValue(
+                        "employeeName",
+                        selectedUser.first_name || selectedUser.fullName || "",
+                      );
+                    }
+                  }
+                }}
               />
             </div>
 
@@ -114,8 +127,6 @@ export const EditModelPayments: React.FC<Props> = ({
                 dir="ltr"
               />
             </div>
-
-            <FileUpload name="attachments" label="مرفقات" className="w-full" />
 
             <TextAreaForm
               name="notes"

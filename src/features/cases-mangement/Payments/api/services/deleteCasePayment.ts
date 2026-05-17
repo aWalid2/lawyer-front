@@ -1,5 +1,11 @@
-import { deleteCasePaymentMock } from "./mockCasePayments";
+import api from "@/lib/api";
 
 export const deleteCasePayment = async (paymentId: string | number) => {
-  return deleteCasePaymentMock(paymentId);
+  try {
+    await api.delete(`/payments/${paymentId}`);
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting case payment:", error);
+    throw error;
+  }
 };
