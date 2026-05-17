@@ -49,16 +49,16 @@ const PaymentsCaseFeature = () => {
     },
     {
       header: "اسم الموظف المسئول",
-      accessor: (item) => item.employeeName || "-",
+      accessor: (item) => item.employee_name || "-",
     },
-    { header: "وصف الدفعة", accessor: "description", className: "text-right" },
+    { header: "وصف الدفعة", accessor: "payment_description", className: "text-right" },
     {
       header: "المبلغ",
       accessor: (item) => `${item.amount.toLocaleString("en-US")} ج.م`,
     },
     {
       header: "تاريخ الدفعة",
-      accessor: (item) => formatDateToYYYYMMDD(item.paymentDate) || "-",
+      accessor: (item) => formatDateToYYYYMMDD(item.payment_date) || "-",
     },
     {
       header: "إجراء",

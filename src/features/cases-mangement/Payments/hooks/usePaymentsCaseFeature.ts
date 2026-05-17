@@ -28,7 +28,7 @@ export const usePaymentsCaseFeature = (caseId: string) => {
     return selectedPaymentDetails ?? fromList;
   }, [payments, selectedPaymentDetails, selectedId]);
 
-  const totalPages = paymentsResponse?.meta?.totalPages ?? Math.max(1, Math.ceil(payments.length / ITEMS_PER_PAGE));
+  const totalPages = paymentsResponse?.meta?.total_pages ?? Math.max(1, Math.ceil(payments.length / ITEMS_PER_PAGE));
 
   const paginated = useMemo(() => {
     const start = (page - 1) * ITEMS_PER_PAGE;

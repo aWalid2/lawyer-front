@@ -39,17 +39,17 @@ export const PaymentDetailsDialog: React.FC<PaymentDetailsDialogProps> = ({
       </div>
 
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-        <InputBox label="نوع الدفعة" text={payment?.paymentType || "-"} />
+        <InputBox label="نوع الدفعة" text={payment?.payment_type || "-"} />
         <InputBox
           label="اسم الموظف المسئول"
-          text={payment?.employeeName || "-"}
+          text={payment?.employee_name || "-"}
         />
         <InputBox
           label="تاريخ الدفعة"
-          text={formatDateToYYYYMMDD(payment?.paymentDate) || "-"}
+          text={formatDateToYYYYMMDD(payment?.payment_date) || "-"}
           icon={<DateIcon />}
         />
-        <InputBox label="وصف الدفعة" text={payment?.description || "-"} />
+        <InputBox label="وصف الدفعة" text={payment?.payment_description || "-"} />
         <InputBox
           label="المبلغ"
           text={payment ? `${payment.amount.toLocaleString("en-US")} ج.م` : "-"}

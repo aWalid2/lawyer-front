@@ -50,16 +50,16 @@ export const EditModelPayments: React.FC<Props> = ({
     })) || [];
 
   const validationSchema = Yup.object().shape({
-    paymentType: Yup.string().required("نوع الدفعة مطلوب"),
+    payment_type: Yup.string().required("نوع الدفعة مطلوب"),
     employeeId: Yup.number()
       .typeError("اسم الموظف المسئول مطلوب")
       .required("اسم الموظف المسئول مطلوب"),
-    description: Yup.string().required("وصف الدفعة مطلوب"),
+    payment_description: Yup.string().required("وصف الدفعة مطلوب"),
     amount: Yup.number()
       .typeError("المبلغ مطلوب")
       .required("المبلغ مطلوب")
       .moreThan(0, "المبلغ يجب أن يكون أكبر من صفر"),
-    paymentDate: Yup.string().required("تاريخ الدفعة مطلوب"),
+    payment_date: Yup.string().required("تاريخ الدفعة مطلوب"),
     notes: Yup.string().nullable(),
   });
 
@@ -90,7 +90,7 @@ export const EditModelPayments: React.FC<Props> = ({
                 placeholder="اختر نوع الدفعة"
               />
               <SelectForm
-                name="employee_name"
+                name="employeeId"
                 label="اسم الموظف المسئول"
                 options={employeeOptions}
                 placeholder="اختر الموظف"
@@ -102,7 +102,7 @@ export const EditModelPayments: React.FC<Props> = ({
                     );
                     if (selectedUser) {
                       setFieldValue(
-                        "employeeName",
+                        "employee_name",
                         selectedUser.first_name || selectedUser.fullName || "",
                       );
                     }
@@ -112,9 +112,9 @@ export const EditModelPayments: React.FC<Props> = ({
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <InputForm name="paymentDate" label="تاريخ الدفعة" type="date" />
+              <InputForm name="payment_date" label="تاريخ الدفعة" type="date" />
               <InputForm
-                name="description"
+                name="payment_description"
                 label="وصف الدفعة"
                 type="text"
                 placeholder="أدخل وصف الدفعة"

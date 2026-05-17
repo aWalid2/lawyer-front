@@ -21,12 +21,12 @@ const toAttachmentList = (attachment?: string | null) => {
 
 export const normalizeCasePayment = (p?: PaymentApiItem | null): PaymentItem => ({
   id: String(p?.id ?? ""),
-  paymentType: p?.payment_type ?? "",
+  payment_type: p?.payment_type ?? "",
   employeeId: null,
-  employeeName: p?.employee_name ?? "-",
-  description: p?.payment_description ?? "",
+  employee_name: p?.employee_name ?? "-",
+  payment_description: p?.payment_description ?? "",
   amount: Number(p?.amount ?? 0),
-  paymentDate: p?.payment_date ?? "",
+  payment_date: p?.payment_date ?? "",
   notes: p?.notes ?? "",
   attachments: toAttachmentList(p?.attachment),
   caseId: p?.case_id ?? undefined,

@@ -9,7 +9,7 @@ interface UpdateCasePaymentPayload {
 
 export const updateCasePayment = async ({ paymentId, data }: UpdateCasePaymentPayload) => {
   try {
-    const response = await api.put(`/payments/${paymentId}`, data);
+    const response = await api.patch(`/payments/${paymentId}`, data);
     return normalizeCasePayment(response.data.data || response.data);
   } catch (error) {
     console.error("Error updating case payment:", error);

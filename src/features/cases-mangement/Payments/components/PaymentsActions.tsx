@@ -33,7 +33,7 @@ export const PaymentsActions = ({
       />
       <ConfirmDeleteDialog
         title="حذف الدفعة"
-        description={`هل أنت متأكد من حذف الدفعة "${payment.description}"؟`}
+        description={`هل أنت متأكد من حذف الدفعة "${payment.payment_description}"؟`}
         onConfirm={onDelete}
         trigger={<ButtonDeleteTable onClick={(e) => e.stopPropagation()} />}
       />
