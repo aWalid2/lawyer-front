@@ -14,7 +14,6 @@ export const ContractDetails: React.FC<ContractDetailsProps> = ({
   if (!contract) {
     return null;
   }
-  console.log("ContractDetails rendered with contract:", contract);
 
   return (
     <CustomLayoutBorder>

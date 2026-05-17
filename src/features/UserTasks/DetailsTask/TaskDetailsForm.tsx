@@ -27,9 +27,7 @@ export default function TaskDetailsForm({ task }: TaskDetailsFormProps) {
                     DeliveryDate: task.DeliveryDate || "",
                     status: task.status || "",
                 }}
-                onSubmit={(values) => {
-                    console.log("Form submitted:", values);
-                }}
+                onSubmit={() => { }}
             >
                 {() => (
                     <Form>

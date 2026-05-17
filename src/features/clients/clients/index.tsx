@@ -63,9 +63,7 @@ export const ClientsFeature: React.FC = () => {
             header: "الإجراءات",
             accessor: (item: ClientRelatedT) => (
                 <UserClientsAction client={item}
-                    onClientUpdated={(values) => {
-                        console.log(values);
-                    }} />
+                    onClientUpdated={() => { }} />
             ),
             headerClassName: "w-35 text-center",
             className: "w-35 text-center",
@@ -78,9 +76,7 @@ export const ClientsFeature: React.FC = () => {
         <div className="space-y-6">
             <HeaderClient
                 searchTerm={""}
-                onSearch={(value) => {
-                    console.log(value);
-                }}
+                onSearch={() => { }}
             />
 
 

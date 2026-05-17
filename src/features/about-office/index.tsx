@@ -91,9 +91,8 @@ const About = () => {
       <Formik<FormValues>
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log("Form Values:", values);
-          console.log("Services:", services);
+        onSubmit={() => {
+
         }}
       >
         {({ values, setFieldValue }) => (

@@ -46,7 +46,7 @@ function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: Pros
         label: lawyer?.user?.first_name,
     })) || [];
 
-    console.log(lawyersOptions);
+
 
     const defaultFormValues = {
         session_date: initialValues?.session_date

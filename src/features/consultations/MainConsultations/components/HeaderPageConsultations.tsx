@@ -21,9 +21,8 @@ export const HeaderPageConsultations: React.FC<HeaderPageConsultationsProps> = (
   searchTerm,
   filters,
 }) => {
-  // Add logging to debug
+
   const handleFilterChange = (value: string) => {
-    console.log("Filter changed to:", value); // Debug log
     onFilterChange(value);
   };
 
@@ -52,7 +51,7 @@ export const HeaderPageConsultations: React.FC<HeaderPageConsultationsProps> = (
         />
 
         <ConsultationsDialog
-          onSave={(values) => console.log("New Consultation:", values)}
+          onSave={() => { }}
           trigger={
             <HeaderActionButton
               label="استشارة جديدة"

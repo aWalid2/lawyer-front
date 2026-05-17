@@ -77,8 +77,7 @@ const MainCases = () => {
       <HeaderPageCase
         searchTerm={searchTerm}
         onSearch={setSearchTerm}
-        onFilterChange={(value) => console.log(value)}
-      />
+        onFilterChange={() => { }} />
 
       {indexedData?.length === 0 ? (
         <EmptyTable message="لا توجد بيانات حالية لادارة القضايا" />

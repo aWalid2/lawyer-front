@@ -23,7 +23,6 @@ export const PoliceStationsAction: React.FC<PoliceStationsActionProps> = ({ stat
     };
 
     const handleSaveStation = () => {
-        console.log("تم حفظ المخفر");
         if (onStationUpdated) {
             onStationUpdated();
         }

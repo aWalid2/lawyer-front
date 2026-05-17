@@ -86,7 +86,6 @@ function PoliceStationInfoModel({
             case_entry: values.case_entry,
           },
         });
-        console.log(values);
       }
       setIsModalOpen(false);
       onSave(values);

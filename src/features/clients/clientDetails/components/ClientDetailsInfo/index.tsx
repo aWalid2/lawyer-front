@@ -11,7 +11,6 @@ const ClientDetailsInfo: React.FC = () => {
 
   if (isPending) return <LoadingPage />;
   if (isError) return <Error />;
-  console.log("ClientDetailsInfo rendered with client:", client);
 
   return (
     <div className="space-y-6">

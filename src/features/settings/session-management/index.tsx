@@ -88,7 +88,7 @@ export const SessionManagementFeature: React.FC = () => {
       <LitigationDegreesHeader
         searchTerm={searchTerm}
         onSearch={setSearchTerm}
-        onTypeAdded={() => console.log("Type added")}
+        onTypeAdded={() => { }}
       />
 
       <DataTable data={currentData} columns={columns} rowIdField="id" />

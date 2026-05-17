@@ -116,8 +116,6 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
       apiValues.task_type = submitValues.task_type;
     }
 
-    console.log("Sending data:", apiValues);
-
     if (isEditMode && taskId) {
       updateTask(
         { id: taskId, data: apiValues },

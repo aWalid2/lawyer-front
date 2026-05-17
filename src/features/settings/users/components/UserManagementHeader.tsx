@@ -32,7 +32,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
           { value: "مدير", label: "مدراء" },
           { value: "مدير مالي", label: "مدراء ماليين" },
         ]}
-        onFilterChange={(val) => console.log("Filter:", val)}
+        onFilterChange={() => { }}
       />
 
       <UserFormDialog

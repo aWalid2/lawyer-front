@@ -15,7 +15,6 @@ export const UsersAction: React.FC<UsersActionProps> = ({
   onUserUpdated,
 }) => {
   const handleDelete = () => {
-    console.log("Deleting user:", user.id);
     onUserUpdated();
   };
 

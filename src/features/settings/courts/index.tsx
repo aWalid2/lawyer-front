@@ -74,7 +74,7 @@ export const CourtsFeature: React.FC = () => {
   return (
     <PageLayout>
       <CourtsHeader
-        onCourtAdded={() => console.log("Court added")}
+        onCourtAdded={() => { }}
       />
 
       {indexedData?.length > 0 ? (

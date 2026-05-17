@@ -23,8 +23,7 @@ export const UsersTaskActions: React.FC<UsersTaskActionsProps> = ({ caseItem, on
         setIsEditModalOpen(false);
     };
 
-    const handleSaveTask = (values: any) => {
-        console.log("تم حفظ المهمة:", values);
+    const handleSaveTask = () => {
         if (onTaskUpdated) {
             onTaskUpdated();
         }

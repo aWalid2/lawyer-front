@@ -23,7 +23,6 @@ export const ProsecutionsAction: React.FC<ProsecutionsActionProps> = ({ prosecut
     };
 
     const handleSaveProsecution = () => {
-        console.log("تم حفظ النيابة");
         if (onProsecutionUpdated) {
             onProsecutionUpdated();
         }

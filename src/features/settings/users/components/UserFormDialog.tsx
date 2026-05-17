@@ -56,7 +56,6 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
   });
 
   const handleSubmit = (values: UserFormValues) => {
-    console.log(isEditMode ? "تحديث المستخدم:" : "إضافة مستخدم جديد:", values);
     if (onUserUpdated) onUserUpdated(values, user?.id);
     if (onOpenChange) onOpenChange(false);
   };

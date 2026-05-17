@@ -29,9 +29,7 @@ export const GeneralSettingsFeature = () => {
     darkMode: false,
   };
 
-  const handleSubmit = (values: any) => {
-    console.log(values);
-  };
+  const handleSubmit = () => { };
 
   return (
     <PageLayout>

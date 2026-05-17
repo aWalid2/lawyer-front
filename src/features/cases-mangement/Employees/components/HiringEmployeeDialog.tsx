@@ -28,8 +28,8 @@ export const HiringEmployeeDialog: React.FC<HiringEmployeeDialogProps> = ({
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log("Hiring employee:", values);
+        onSubmit={() => {
+
         }}
       >
         {() => (

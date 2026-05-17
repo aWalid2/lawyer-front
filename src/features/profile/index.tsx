@@ -203,9 +203,7 @@ const ProfileUser = () => {
     await updateProfileMutation.mutateAsync(values);
   };
 
-  const handleImageChange = (file: File | null) => {
-    console.log("Profile Image:", file);
-  };
+  const handleImageChange = () => { };
 
   if (isLoading) {
     return <Loading />;

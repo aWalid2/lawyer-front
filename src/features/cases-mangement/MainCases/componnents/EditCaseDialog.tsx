@@ -60,7 +60,6 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
     open ? 1 : undefined,
     100,
   );
-  console.log("Clients data:", clientStatuses);
   const initialValues: Case = {
     ...caseItem,
     case_number: caseItem.case_number || "",

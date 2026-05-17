@@ -81,8 +81,8 @@ const ConsultationsFeature = () => {
       accessor: (item) => (
         <TableConsultationsActions
           consultation={item}
-          onEdit={(c) => console.log("Editing:", c)}
-          onDelete={(c) => console.log("Deleting:", c)}
+          onEdit={() => { }}
+          onDelete={() => { }}
         />
       ),
     },

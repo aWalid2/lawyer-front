@@ -18,9 +18,6 @@ const MOCK_CASES: any[] = Array.from({ length: 19 }, (_, i) => ({
 const TableCases = () => {
   const navigate = useNavigate();
 
-  const handleEdit = (caseItem: Case) => {
-    console.log("Edit case:", caseItem);
-  };
 
   const handleCaseClick = (caseItem: Case) => {
     navigate(`/dashboard/case-management/${caseItem.id}`);
@@ -85,7 +82,7 @@ const TableCases = () => {
       accessor: (item) => (
         <TableCasesActions
           caseItem={item}
-          onEdit={(c) => handleEdit(c)}
+          onEdit={() => { }}
         />
       ),
     },

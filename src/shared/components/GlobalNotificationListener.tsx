@@ -9,24 +9,23 @@ export const GlobalNotificationListener = () => {
     const queryClient = useQueryClient();
 
     useEffect(() => {
-        // Connect if user exists (or adapt if user is not available)
-        // Ensure we connect to the root of the API URL if VITE_API_URL has /api suffix
+
         const backendUrl = import.meta.env.VITE_API_URL
             ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '')
-            : 'http://localhost:8000'; // Default fallback
+            : 'http://localhost:8000';
 
         const socket = io(backendUrl, {
             query: { userId: user?.id || 3 },
             transports: ['websocket', 'polling'],
-            reconnection: false, // Disabled reconnect temporarily to stop console spam
+            reconnection: false,
         });
 
         socket.on('connect', () => {
-            console.log('Connected to socket server for notifications');
+            // console.log('Connected to socket server for notifications');
         });
 
         const handleNewNotification = (data: any) => {
-            console.log("New notification received via socket:", data);
+            // console.log("New notification received via socket:", data);
 
             // Trigger toast
             toast.info("لديك إشعار جديد", {

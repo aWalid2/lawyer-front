@@ -60,9 +60,7 @@ export const TableClients: React.FC = () => {
             header: "الإجراءات",
             accessor: (item: ClientRelatedT) => (
                 <UserClientsAction client={item}
-                    onClientUpdated={(values) => {
-                        console.log(values);
-                    }} />
+                    onClientUpdated={() => { }} />
             ),
             headerClassName: "w-35 text-center",
             className: "w-35 text-center",

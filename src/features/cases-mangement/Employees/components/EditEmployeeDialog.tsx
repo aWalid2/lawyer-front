@@ -38,9 +38,7 @@ export const EditEmployeeDialog: React.FC<EditEmployeeDialogProps> = ({
         initialValues={initialValues}
         validationSchema={validationSchema}
         enableReinitialize
-        onSubmit={(values) => {
-          console.log("Updating employee:", { id: employee.id, ...values });
-        }}
+        onSubmit={() => { }}
       >
         {() => (
           <Form className="space-y-4">

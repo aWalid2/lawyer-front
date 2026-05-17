@@ -6,7 +6,6 @@ import type {
   RollSessionSourceKey,
 } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import type { HeaderExportType } from "../../shared/components/HeaderExportMenu";
 import { Pagination } from "@/shared/components/Pagination";
 import PageLayout from "@/shared/components/PageLayout";
 import { useGetAllRollSessions } from "./api/hooks/useGetAllSessions";
@@ -148,11 +147,7 @@ const RollFeature = () => {
     return filteredSessions.slice(start, start + itemsPerPage);
   }, [filteredSessions, safeCurrentPage]);
 
-  const handleExport = (type: HeaderExportType) => {
-    console.log(
-      `Exporting ${filteredSessions.length} roll sessions as ${type}`,
-    );
-  };
+  const handleExport = () => { }
 
   const columns: Column<RollSession>[] = [
     {

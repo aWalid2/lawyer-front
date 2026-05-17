@@ -93,13 +93,13 @@ export const DistrictsDialog: React.FC<DistrictsDialogProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
 
-  // Only fetch when the dialog is actually open
+
   const {
     data: districts,
     isPending,
     isError,
   } = useGetCircles(Number(court.id), isOpen);
-  console.log(districts);
+
   const { mutate: createCircle, isPending: isCreating } = useCreateCircle();
   const { mutate: updateCircle, isPending: isUpdating } = useUpdateCircle();
   const { mutate: deleteCircle, isPending: isDeleting } = useDeleteCircle();

@@ -13,8 +13,7 @@ export const AddTask: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const handleSaveTask = (values: any) => {
-    console.log("تم حفظ المهمة:", values);
+  const handleSaveTask = () => {
     handleCloseModal();
   };
 
@@ -31,7 +30,7 @@ export const AddTask: React.FC = () => {
       </button>
 
       {isModalOpen && (
-        <AddTaskModal 
+        <AddTaskModal
           onClose={handleCloseModal}
           onSave={handleSaveTask}
         />

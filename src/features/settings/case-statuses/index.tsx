@@ -21,7 +21,6 @@ export const CaseStatusesFeature: React.FC = () => {
     isPending,
     isError,
   } = useFetchCaseStatuses(page, limit, searchTerm);
-  console.log("Fetched case statuses:", statusesResponse);
 
   const statuses = statusesResponse?.data || [];
   const totalPages = statusesResponse?.meta?.total_pages ?? 1;

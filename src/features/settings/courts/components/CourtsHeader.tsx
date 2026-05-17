@@ -28,8 +28,7 @@ export const CourtsHeader: React.FC<CourtsHeaderProps> = ({
       />
 
       <CourtFormDialog
-        onSave={(values) => {
-          console.log("Saving court:", values);
+        onSave={() => {
           onCourtAdded && onCourtAdded();
         }}
         trigger={

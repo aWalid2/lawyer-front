@@ -8,7 +8,6 @@ export const useAddPermissions = () => {
   return useMutation({
     mutationFn: (payload: AddPermissionsRequest): Promise<AddPermissionsResponse> => addPermissions(payload),
     onSuccess: () => {
-      // Invalidate role queries to refresh permissions
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       queryClient.invalidateQueries({ queryKey: ["role-permissions"] });
     },

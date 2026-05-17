@@ -28,8 +28,7 @@ export const LitigationDegreesHeader: React.FC<LitigationDegreesHeaderProps> = (
       />
 
       <LitigationDegreeFormDialog
-        onSave={(values) => {
-          console.log("Saving degree type:", values);
+        onSave={() => {
           onTypeAdded && onTypeAdded();
         }}
         trigger={

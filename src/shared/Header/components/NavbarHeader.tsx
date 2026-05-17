@@ -89,7 +89,7 @@ export default function NavbarHeader() {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const { user, logout } = useAuth();
-  console.log("Authenticated user:", user);
+
 
   const userId = (user?.sub as number | string) || 3;
   const { data: apiNotifications } = useGetNotifications(userId);

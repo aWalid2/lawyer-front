@@ -21,9 +21,7 @@ export default function TimelineForm({ startDate, endDate }: TimelineFormProps) 
                     StartDate: startDate || "",
                     EndDate: endDate || "",
                 }}
-                onSubmit={(values) => {
-                    console.log("Form submitted:", values);
-                }}
+                onSubmit={() => { }}
             >
                 {() => (
                     <Form>

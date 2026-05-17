@@ -37,12 +37,8 @@ const PoliceStationInfo = () => {
     setIsModalOpen(false);
   };
 
-  const handleSaveChanges = (values: FormValues) => {
-    if (modalMode === "add") {
-      console.log("تم إضافة بيانات جديدة:", values);
-    } else {
-      console.log("تم تعديل البيانات:", values);
-    }
+  const handleSaveChanges = () => {
+
     setIsModalOpen(false);
   };
 
