@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { PermissionsHeader } from "./components/PermissionsHeader";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
@@ -6,28 +6,31 @@ import { PermissionsAction } from "./components/PermissionsAction";
 import { usePagination } from "@/shared/hooks/usePagination";
 import PageLayout from "@/shared/components/PageLayout";
 import type { RoleT } from "./types";
-
-const initialRoles: RoleT[] = [
-  { id: "1", name: "محامي", userCount: 3 },
-  { id: "2", name: "مدير عام", userCount: 3 },
-  { id: "3", name: "مستشار", userCount: 3 },
-  { id: "4", name: "محاسب", userCount: 3 },
-  { id: "5", name: "موكل", userCount: 3 },
-  { id: "6", name: "سكرتير", userCount: 3 },
-  ...Array.from({ length: 12 }).map((_, i) => ({
-    id: (i + 7).toString(),
-    name: `دور اختبار ${i + 7}`,
-    userCount: Math.floor(Math.random() * 10),
-  })),
-];
+import { useGetAllRoles } from "./api";
+import LoadingPage from "@/shared/components/LoadingPage";
 
 export const PermissionsFeature: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [roles, setRoles] = useState<RoleT[]>(initialRoles);
+  const [deletedRoleIds, setDeletedRoleIds] = useState<string[]>([]);
 
-  const filteredRoles = roles.filter((p) =>
-    p.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const { data: apiRoles, isLoading, error } = useGetAllRoles();
+
+  const roles = useMemo<RoleT[]>(() => {
+    if (!apiRoles) return [];
+    return apiRoles.map((role) => ({
+      id: role.id.toString(),
+      name: role.role_name,
+      userCount: role._count?.users ?? 0,
+    }));
+  }, [apiRoles]);
+
+  const filteredRoles = useMemo(() => {
+    return roles.filter(
+      (p) =>
+        !deletedRoleIds.includes(p.id) &&
+        p.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [roles, searchTerm, deletedRoleIds]);
 
   const {
     currentData,
@@ -37,9 +40,8 @@ export const PermissionsFeature: React.FC = () => {
   } = usePagination(filteredRoles, 15);
 
   const handleDelete = (id: string) => {
-    setRoles(roles.filter((p) => p.id !== id));
+    setDeletedRoleIds((prev) => [...prev, id]);
   };
-
 
   const columns: Column<RoleT>[] = [
     {
@@ -79,9 +81,17 @@ export const PermissionsFeature: React.FC = () => {
         onSearch={setSearchTerm}
       />
 
-      <DataTable data={currentData} columns={columns} rowIdField="id" />
+      {isLoading ? (
+        <LoadingPage fullScreen={false} />
+      ) : error ? (
+        <div className="text-center py-8 text-red-500 font-semibold">
+          حدث خطأ أثناء تحميل الأدوار. يرجى المحاولة مرة أخرى.
+        </div>
+      ) : (
+        <DataTable data={currentData} columns={columns} rowIdField="id" />
+      )}
 
-      {totalPages > 1 && (
+      {!isLoading && !error && totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

@@ -15,12 +15,12 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { FormSection } from "./FormSection";
 import { useRoleModulesData } from "../hooks/useRoleModulesData";
-import { useCreateRole } from "../api/hooks/useCreateRole";
-import { useAddPermissions } from "../api/hooks/useAddPermissions";
+import { useCreateRole, useAddPermissions, useUpdateRole } from "../api";
 import { toast } from "sonner";
 
 interface RoleFormProps {
   initialData?: {
+    id?: string;
     name?: string;
     description?: string;
     permissions?: Record<string, string[]>;
@@ -38,6 +38,7 @@ export const AddRoleFeature = ({ initialData, isEdit }: RoleFormProps) => {
 
   const createRoleMutation = useCreateRole();
   const addPermissionsMutation = useAddPermissions();
+  const updateRoleMutation = useUpdateRole();
 
   const toggleModule = (module: string) => {
     setExpandedModules((prev) =>
@@ -78,10 +79,24 @@ export const AddRoleFeature = ({ initialData, isEdit }: RoleFormProps) => {
     description: string;
   }) => {
     try {
-      // Step 1: Create the role
-      const roleResponse = await createRoleMutation.mutateAsync({
-        role_name: values.name,
-      });
+      let roleId: number;
+
+      if (isEdit && initialData?.id) {
+        roleId = Number(initialData.id);
+        // Step 1: Update the role
+        await updateRoleMutation.mutateAsync({
+          id: roleId,
+          data: {
+            role_name: values.name,
+          },
+        });
+      } else {
+        // Step 1: Create the role
+        const roleResponse = await createRoleMutation.mutateAsync({
+          role_name: values.name,
+        });
+        roleId = roleResponse.id;
+      }
 
       // Step 2: Convert selected permissions to permission IDs
       // Flatten the selected permissions array and map to IDs (1-indexed)
@@ -99,7 +114,7 @@ export const AddRoleFeature = ({ initialData, isEdit }: RoleFormProps) => {
       // Step 3: Add permissions to the role
       if (permissionIds.length > 0) {
         await addPermissionsMutation.mutateAsync({
-          roleId: roleResponse.id,
+          roleId: roleId,
           permissionIds,
         });
       }

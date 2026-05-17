@@ -4,6 +4,23 @@ export interface RoleT {
   userCount: number;
 }
 
+export interface RoleResponse {
+  id: number;
+  role_name: string;
+  _count: {
+    users: number;
+  };
+}
+
+export interface UpdateRoleRequest {
+  role_name: string;
+}
+
+export interface UpdateRoleResponse {
+  id: number;
+  role_name: string;
+}
+
 export interface CreateRoleRequest {
   role_name: string;
 }
