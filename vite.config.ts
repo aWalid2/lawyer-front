@@ -19,25 +19,6 @@ export default defineConfig({
         secure: true,
       },
     },
-  },
-  build: {
-    chunkSizeWarningLimit: 1500, // Increase warning limit to 1500kb
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            // Split out big react libraries into their own chunk
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
-              return 'vendor-react';
-            }
-            if (id.includes('@tanstack')) {
-              return 'vendor-tanstack';
-            }
-            // Put other dependencies in a general vendor chunk
-            return 'vendor';
-          }
-        }
-      }
-    }
   }
+
 })
