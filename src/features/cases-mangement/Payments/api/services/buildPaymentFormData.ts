@@ -1,25 +1,18 @@
 import type { PaymentFormValues } from "@/features/cases-mangement/Payments/types";
 
-export interface PaymentRequestBody {
-  payment_type: string;
-  employee_id: number;
-  payment_description: string;
-  amount: number;
-  payment_date: string;
-  notes: string;
-}
+export const buildPaymentFormData = (values: PaymentFormValues): FormData => {
+  const formData = new FormData();
 
-export type PaymentRequestPayload = PaymentRequestBody;
+  formData.append("payment_type", values.payment_type);
+  formData.append("employee_id", String(values.employee_id || ""));
+  formData.append("payment_description", values.payment_description);
+  formData.append("amount", String(values.amount || ""));
+  formData.append("payment_date", values.payment_date);
+  formData.append("notes", values.notes || "");
 
-export const buildPaymentFormData = (values: PaymentFormValues): PaymentRequestBody => {
-  const amount = typeof values.amount === "number" ? values.amount : Number(values.amount);
+  if (values.attachment instanceof File) {
+    formData.append("attachment", values.attachment);
+  }
 
-  return {
-    payment_type: values.payment_type,
-    employee_id: Number(values.employee_id),
-    payment_description: values.payment_description,
-    amount,
-    payment_date: values.payment_date,
-    notes: values.notes || "",
-  };
+  return formData;
 };

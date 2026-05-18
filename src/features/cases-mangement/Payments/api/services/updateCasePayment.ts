@@ -1,16 +1,22 @@
-import type { PaymentRequestPayload } from "./buildPaymentFormData";
+import type { PaymentFormValues } from "@/features/cases-mangement/Payments/types";
+import { buildPaymentFormData } from "./buildPaymentFormData";
 import api from "@/lib/api";
 import { normalizeCasePayment } from "./normalizeCasePayment";
 import { toast } from "sonner";
 
 interface UpdateCasePaymentPayload {
   paymentId: string | number;
-  data: PaymentRequestPayload;
+  data: PaymentFormValues;
 }
 
 export const updateCasePayment = async ({ paymentId, data }: UpdateCasePaymentPayload) => {
   try {
-    const response = await api.patch(`/payments/${paymentId}`, data);
+    const formData = buildPaymentFormData(data);
+    const response = await api.patch(`/payments/${paymentId}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     toast.success(response.data.message || "تم تحديث الدفعة بنجاح");
     return normalizeCasePayment(response.data.data || response.data);
   } catch (error: any) {

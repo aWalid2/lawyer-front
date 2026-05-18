@@ -4,6 +4,7 @@ import { LayoutDialog } from "@/shared/components/LayoutDialog";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
+import { FileUpload } from "@/shared/components/FileUpload";
 import type {
   PaymentFormValues,
   PaymentItem,
@@ -53,6 +54,7 @@ export const EditModelPayments: React.FC<Props> = ({
       .moreThan(0, "المبلغ يجب أن يكون أكبر من صفر"),
     payment_date: Yup.string().required("تاريخ الدفعة مطلوب"),
     notes: Yup.string().nullable(),
+    attachment: Yup.mixed().nullable(),
   });
 
   return (
@@ -106,6 +108,12 @@ export const EditModelPayments: React.FC<Props> = ({
               name="notes"
               label="ملاحظات"
               placeholder="أدخل أي ملاحظات إضافية"
+            />
+
+            <FileUpload
+              name="attachment"
+              label="مرفق الدفعة"
+              placeholder="انقر هنا لتحميل مرفق الدفعة أو سحبه وإفلاته"
             />
 
             <button

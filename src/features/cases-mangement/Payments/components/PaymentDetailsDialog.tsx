@@ -5,6 +5,7 @@ import { DateIcon } from "@/shared/icons/Date";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import type { PaymentItem } from "@/features/cases-mangement/Payments/types";
 import { PAYMENT_TYPE_OPTIONS } from "@/shared/constants/PaymentsOptions";
+import { ImagePreviewCard } from "@/features/clients/clientDetails/components/ClientDetailsInfo/components/ImagePreviewCard";
 
 interface PaymentDetailsDialogProps {
   payment: PaymentItem | null;
@@ -61,17 +62,19 @@ export const PaymentDetailsDialog: React.FC<PaymentDetailsDialogProps> = ({
         <InputBox label="وصف الدفعة" text={payment?.payment_description || "-"} />
         <InputBox
           label="المبلغ"
-          text={payment ? `${payment.amount.toLocaleString("en-US")} ج.م` : "-"}
+          text={payment ? `${payment.amount.toLocaleString("en-US")}` : "-"}
         />
+
         <div className="col-span-1 md:col-span-2">
-          <InputBox
-            label="المرفقات"
-            text={
-              payment?.attachments.length ? payment.attachments.join("، ") : "-"
-            }
+          <ImagePreviewCard
+            src={payment?.attachments?.[0]}
+            alt="صورة التوكيل"
+            label="صورة التوكيل"
+            title="معاينة صورة التوكيل"
           />
         </div>
-        <div className="col-span-1 md:col-span-2">
+
+        <div className="col-span-1">
           <InputBox label="ملاحظات" text={payment?.notes || "-"} />
         </div>
       </div>
