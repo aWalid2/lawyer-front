@@ -7,9 +7,15 @@ interface PaymentListResponse {
   meta: { total: number; page?: number; limit?: number; total_pages?: number };
 }
 
-export const getCasePayments = async (caseId: string | number): Promise<PaymentListResponse> => {
+export const getCasePayments = async (
+  caseId: string | number,
+  page?: number,
+  limit?: number
+): Promise<PaymentListResponse> => {
   try {
-    const response = await api.get(`/payments/case/${caseId}`);
+    const response = await api.get(`/payments/case/${caseId}`, {
+      params: { page, limit },
+    });
     const { data, meta } = response.data;
     return {
       data: Array.isArray(data) ? data.map(normalizeCasePayment) : [],

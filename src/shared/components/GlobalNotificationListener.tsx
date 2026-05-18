@@ -1,54 +1,94 @@
-import { useEffect } from 'react';
-import { io } from 'socket.io-client';
-import { toast } from 'sonner';
-import { useQueryClient } from '@tanstack/react-query';
-import { useAuth } from '../context/AuthContext';
+import { useEffect } from "react";
+import { io } from "socket.io-client";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "../context/AuthContext";
 
 export const GlobalNotificationListener = () => {
-    const { user } = useAuth();
-    const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
 
-    useEffect(() => {
+  useEffect(() => {
+    // Don't connect if user is not loaded
+    if (!user?.sub) {
+      console.log("⏳ Waiting for user to load...");
+      return;
+    }
 
-        const backendUrl = import.meta.env.VITE_API_URL
-            ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '')
-            : 'http://localhost:8000';
+    const backendUrl = import.meta.env.VITE_API_URL;
 
-        const socket = io(backendUrl, {
-            query: { userId: user?.id || 3 },
-            transports: ['websocket', 'polling'],
-            reconnection: false,
-        });
+    // Get token from localStorage or cookies
+    const token = localStorage.getItem("access_token") || "";
 
-        socket.on('connect', () => {
-            // console.log('Connected to socket server for notifications');
-        });
+    console.log(
+      "🔌 Connecting to socket at:",
+      backendUrl,
+      "with userId:",
+      user.sub,
+    );
 
-        const handleNewNotification = (data: any) => {
-            // console.log("New notification received via socket:", data);
+    const socket = io(backendUrl, {
+      query: { userId: user.sub },
+      transports: ["websocket", "polling"],
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 10,
+      secure: true,
+      extraHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+      // cors: {
+      //   origin: true,
+      //   credentials: true,
+      // },
+    });
 
-            // Trigger toast
-            toast.info("لديك إشعار جديد", {
-                description: data?.content || "تمت إضافة مهمة جديدة إليك",
-            });
+    socket.on("connect", () => {
+      console.log("✅ Connected to socket server for notifications");
+      console.log("📡 Using transport:", socket.io.engine.transport.name);
+    });
 
-            // Invalidate notifications cache to update dropdowns/pages instantly
-            queryClient.invalidateQueries({ queryKey: ["notifications"] });
-        };
+    socket.on("connect_error", (error: any) => {
+      console.error("❌ Socket connection error:", error);
+      console.error("📡 Error details:", error.message, error.type);
+    });
 
-        // Listen for common notification event names
-        // Adjust these to match what your backend emits
-        socket.on('new_notification', handleNewNotification);
-        socket.on('notification', handleNewNotification);
-        socket.on('new_task', handleNewNotification);
+    socket.on("disconnect", (reason: string) => {
+      console.log("⚠️ Socket disconnected. Reason:", reason);
+    });
 
-        return () => {
-            socket.off('new_notification', handleNewNotification);
-            socket.off('notification', handleNewNotification);
-            socket.off('new_task', handleNewNotification);
-            socket.disconnect();
-        };
-    }, [user?.id, queryClient]);
+    socket.on("error", (error: any) => {
+      console.error("❌ Socket error event:", error);
+    });
 
-    return null;
+    const handleNewNotification = (data: any) => {
+      console.log("🔔 New notification received via socket:", data);
+
+      toast.info("لديك إشعار جديد", {
+        description: data?.content || "تمت إضافة مهمة جديدة إليك",
+      });
+
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    };
+
+    // Listen for backend event names
+    socket.on("notification", handleNewNotification);
+    socket.on("pending_notifications", handleNewNotification);
+    socket.on("receive_message", handleNewNotification);
+
+    // Log ALL incoming events to help debug
+    socket.onAny((eventName: string, ...args: any[]) => {
+      console.log(`📨 Socket event received: "${eventName}"`, args);
+    });
+
+    return () => {
+      socket.off("notification", handleNewNotification);
+      socket.off("pending_notifications", handleNewNotification);
+      socket.off("receive_message", handleNewNotification);
+      socket.disconnect();
+    };
+  }, [user?.sub, queryClient]);
+
+  return null;
 };

@@ -1,6 +1,7 @@
 import type { PaymentRequestPayload } from "./buildPaymentFormData";
 import api from "@/lib/api";
 import { normalizeCasePayment } from "./normalizeCasePayment";
+import { toast } from "sonner";
 
 interface UpdateCasePaymentPayload {
   paymentId: string | number;
@@ -10,9 +11,9 @@ interface UpdateCasePaymentPayload {
 export const updateCasePayment = async ({ paymentId, data }: UpdateCasePaymentPayload) => {
   try {
     const response = await api.patch(`/payments/${paymentId}`, data);
+    toast.success(response.data.message || "تم تحديث الدفعة بنجاح");
     return normalizeCasePayment(response.data.data || response.data);
-  } catch (error) {
-    console.error("Error updating case payment:", error);
-    throw error;
+  } catch (error: any) {
+    toast.error(error.response?.data?.message || "حدث خطأ أثناء تحديث الدفعة");
   }
 };

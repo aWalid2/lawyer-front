@@ -1,13 +1,13 @@
-import { useIndexedData } from "@/shared/utils/useIndexedData";
-import React, { useMemo, useState } from "react";
-import { useGetCasePayments } from "@/features/cases-mangement/Payments/api/hooks/useGetCasePayments";
-import { useGetCasePayment } from "@/features/cases-mangement/Payments/api/hooks/useGetCasePayment";
 import { useCreateCasePayment } from "@/features/cases-mangement/Payments/api/hooks/useCreateCasePayment";
-import { useUpdateCasePayment } from "@/features/cases-mangement/Payments/api/hooks/useUpdateCasePayment";
 import { useDeleteCasePayment } from "@/features/cases-mangement/Payments/api/hooks/useDeleteCasePayment";
-import type { PaymentFormValues, PaymentItem } from "@/features/cases-mangement/Payments/types";
+import { useGetCasePayment } from "@/features/cases-mangement/Payments/api/hooks/useGetCasePayment";
+import { useGetCasePayments } from "@/features/cases-mangement/Payments/api/hooks/useGetCasePayments";
+import { useUpdateCasePayment } from "@/features/cases-mangement/Payments/api/hooks/useUpdateCasePayment";
+import type { PaymentFormValues } from "@/features/cases-mangement/Payments/types";
+import { useIndexedApiPagination } from "@/shared/hooks/useIndexedApiPagination";
+import { useMemo, useState } from "react";
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 15;
 
 export const usePaymentsCaseFeature = (caseId: string) => {
   const [page, setPage] = useState(1);
@@ -15,7 +15,7 @@ export const usePaymentsCaseFeature = (caseId: string) => {
   const [isViewOpen, setIsViewOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const { data: paymentsResponse, isPending, isError, error } = useGetCasePayments(caseId);
+  const { data: paymentsResponse, isPending, isError, error } = useGetCasePayments(caseId, page, ITEMS_PER_PAGE);
   const createPayment = useCreateCasePayment(caseId);
   const updatePayment = useUpdateCasePayment(caseId);
   const deletePayment = useDeleteCasePayment(caseId);
@@ -28,16 +28,12 @@ export const usePaymentsCaseFeature = (caseId: string) => {
     return selectedPaymentDetails ?? fromList;
   }, [payments, selectedPaymentDetails, selectedId]);
 
-  const totalPages = paymentsResponse?.meta?.total_pages ?? Math.max(1, Math.ceil(payments.length / ITEMS_PER_PAGE));
-
-  const paginated = useMemo(() => {
-    const start = (page - 1) * ITEMS_PER_PAGE;
-    return payments.slice(start, start + ITEMS_PER_PAGE);
-  }, [payments, page]);
-
-  const indexed = useIndexedData(paginated, page, ITEMS_PER_PAGE) as PaymentItem[];
-
-  React.useEffect(() => setPage(1), [payments.length]);
+  const { indexedData: indexed, totalPages } = useIndexedApiPagination({
+    data: payments,
+    page,
+    itemsPerPage: ITEMS_PER_PAGE,
+    meta: paymentsResponse?.meta,
+  });
 
   const handleModalOpenChange = (open: boolean) => { setIsModalOpen(open); if (!open && !isViewOpen) setSelectedId(null); };
   const handleOpenCreate = () => { setSelectedId(null); setIsModalOpen(true); };

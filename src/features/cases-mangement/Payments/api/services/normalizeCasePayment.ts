@@ -4,6 +4,7 @@ interface PaymentApiItem {
   id?: number | string;
   payment_type?: string | null;
   case_id?: number | null;
+  employee_id?: number | string | null;
   employee_name?: string | null;
   payment_description?: string | null;
   amount?: string | number | null;
@@ -22,7 +23,7 @@ const toAttachmentList = (attachment?: string | null) => {
 export const normalizeCasePayment = (p?: PaymentApiItem | null): PaymentItem => ({
   id: String(p?.id ?? ""),
   payment_type: p?.payment_type ?? "",
-  employeeId: null,
+  employee_id: p?.employee_id ? Number(p.employee_id) : "",
   employee_name: p?.employee_name ?? "-",
   payment_description: p?.payment_description ?? "",
   amount: Number(p?.amount ?? 0),

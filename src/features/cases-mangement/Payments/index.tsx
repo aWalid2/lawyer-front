@@ -11,12 +11,17 @@ import { EditModelPayments } from "./components/EditModelPayments";
 import { PaymentDetailsDialog } from "./components/PaymentDetailsDialog";
 import { PaymentsSummary } from "./components/PaymentsSummary";
 import type { PaymentItem } from "./types";
+import { Pagination } from "@/shared/components/Pagination";
+import { PAYMENT_TYPE_OPTIONS } from "@/shared/constants/PaymentsOptions";
 
 const PaymentsCaseFeature = () => {
   const { id } = useParams();
   const caseId = id ?? "";
 
   const {
+    page,
+    setPage,
+    totalPages,
     isModalOpen,
     isViewOpen,
     payments,
@@ -28,7 +33,7 @@ const PaymentsCaseFeature = () => {
     error,
     handleModalOpenChange,
     handleOpenCreate,
-    handleOpenEdit,
+
     handleOpenView,
     handleViewOpenChange,
     handleEditFromView,
@@ -47,14 +52,12 @@ const PaymentsCaseFeature = () => {
       accessor: (item) => item.rowNumber,
       headerClassName: "w-[60px]",
     },
-    {
-      header: "اسم الموظف المسئول",
-      accessor: (item) => item.employee_name || "-",
-    },
-    { header: "وصف الدفعة", accessor: "payment_description", className: "text-right" },
+
+    { header: "اسم الموظف المسئول", accessor: "employee_name", className: "text-right" },
+    { header: "نوع الدفعة", accessor: (item) => PAYMENT_TYPE_OPTIONS.find((opt) => opt.value === item.payment_type)?.label || item.payment_type || "-", className: "text-right" },
     {
       header: "المبلغ",
-      accessor: (item) => `${item.amount.toLocaleString("en-US")} ج.م`,
+      accessor: (item) => `${item.amount}`,
     },
     {
       header: "تاريخ الدفعة",
@@ -66,7 +69,6 @@ const PaymentsCaseFeature = () => {
         <PaymentsActions
           payment={item}
           onView={() => handleOpenView(item.id)}
-          onEdit={() => handleOpenEdit(item.id)}
           onDelete={() => handleDelete(item.id)}
         />
       ),
@@ -98,7 +100,13 @@ const PaymentsCaseFeature = () => {
               columns={columns}
               rowIdField="id"
             />
-            {/* pagination lives in surrounding layout if needed */}
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+              />
+            )}
           </>
         )}
       </CustomLayoutBorder>

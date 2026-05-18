@@ -4,6 +4,7 @@ import { InputBox } from "@/shared/components/InputBox";
 import { DateIcon } from "@/shared/icons/Date";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import type { PaymentItem } from "@/features/cases-mangement/Payments/types";
+import { PAYMENT_TYPE_OPTIONS } from "@/shared/constants/PaymentsOptions";
 
 interface PaymentDetailsDialogProps {
   payment: PaymentItem | null;
@@ -39,7 +40,15 @@ export const PaymentDetailsDialog: React.FC<PaymentDetailsDialogProps> = ({
       </div>
 
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-        <InputBox label="نوع الدفعة" text={payment?.payment_type || "-"} />
+        <InputBox
+          label="نوع الدفعة"
+          text={
+            PAYMENT_TYPE_OPTIONS.find((opt) => opt.value === payment?.payment_type)
+              ?.label ||
+            payment?.payment_type ||
+            "-"
+          }
+        />
         <InputBox
           label="اسم الموظف المسئول"
           text={payment?.employee_name || "-"}

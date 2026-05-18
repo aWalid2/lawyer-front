@@ -13,14 +13,11 @@ import {
   toPaymentFormValues,
 } from "@/features/cases-mangement/Payments/types";
 import * as Yup from "yup";
-import { useGetPaymentUsers } from "@/features/cases-mangement/Payments/api/hooks/useGetPaymentUsers";
-import type { UserT } from "@/features/settings/users/types/userT";
+import { useAuth } from "@/shared/context/AuthContext";
+import { PAYMENT_TYPE_OPTIONS } from "@/shared/constants/PaymentsOptions";
 
-const PAYMENT_TYPE_OPTIONS = [
-  { value: "client refund", label: "استرداد من العميل" },
-  { value: "payment refund", label: "دفعة من العميل" },
-  { value: "other", label: "أخرى" },
-];
+
+
 
 interface Props {
   payment?: PaymentItem | null;
@@ -37,23 +34,18 @@ export const EditModelPayments: React.FC<Props> = ({
   onSave,
   isPending = false,
 }) => {
-  const { data: usersResponse } = useGetPaymentUsers();
+  const { user } = useAuth();
+  console.log(user)
+
   const initialValues = payment
     ? toPaymentFormValues(payment)
     : EMPTY_PAYMENT_FORM_VALUES;
   const isEdit = !!payment?.id;
 
-  const employeeOptions =
-    usersResponse?.map((user: UserT) => ({
-      label: user?.first_name || user?.fullName || `#${user?.id}`,
-      value: String(user?.id),
-    })) || [];
+
 
   const validationSchema = Yup.object().shape({
     payment_type: Yup.string().required("نوع الدفعة مطلوب"),
-    employeeId: Yup.number()
-      .typeError("اسم الموظف المسئول مطلوب")
-      .required("اسم الموظف المسئول مطلوب"),
     payment_description: Yup.string().required("وصف الدفعة مطلوب"),
     amount: Yup.number()
       .typeError("المبلغ مطلوب")
@@ -76,11 +68,14 @@ export const EditModelPayments: React.FC<Props> = ({
         validationSchema={validationSchema}
         enableReinitialize
         onSubmit={async (values) => {
-          await onSave(values, payment?.id);
+          await onSave(
+            { ...values, employee_id: user?.sub ? Number(user.sub) : "" },
+            payment?.id
+          );
           onOpenChange(false);
         }}
       >
-        {({ isSubmitting, setFieldValue }) => (
+        {({ isSubmitting }) => (
           <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <SelectForm
@@ -89,29 +84,8 @@ export const EditModelPayments: React.FC<Props> = ({
                 options={PAYMENT_TYPE_OPTIONS}
                 placeholder="اختر نوع الدفعة"
               />
-              <SelectForm
-                name="employeeId"
-                label="اسم الموظف المسئول"
-                options={employeeOptions}
-                placeholder="اختر الموظف"
-                showSearch
-                onChange={(selectedId) => {
-                  if (selectedId && usersResponse) {
-                    const selectedUser = usersResponse.find(
-                      (u: UserT) => u.id === Number(selectedId),
-                    );
-                    if (selectedUser) {
-                      setFieldValue(
-                        "employee_name",
-                        selectedUser.first_name || selectedUser.fullName || "",
-                      );
-                    }
-                  }
-                }}
-              />
-            </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+
               <InputForm name="payment_date" label="تاريخ الدفعة" type="date" />
               <InputForm
                 name="payment_description"

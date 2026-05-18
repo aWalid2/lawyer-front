@@ -2,7 +2,7 @@ import type { PaymentFormValues } from "@/features/cases-mangement/Payments/type
 
 export interface PaymentRequestBody {
   payment_type: string;
-  employee_name: string;
+  employee_id: number;
   payment_description: string;
   amount: number;
   payment_date: string;
@@ -16,7 +16,7 @@ export const buildPaymentFormData = (values: PaymentFormValues): PaymentRequestB
 
   return {
     payment_type: values.payment_type,
-    employee_name: values.employee_name,
+    employee_id: Number(values.employee_id),
     payment_description: values.payment_description,
     amount,
     payment_date: values.payment_date,
