@@ -13,9 +13,7 @@ const formatDateParam = (date?: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-export const fetchAllRollSessions = async (
-  params: RollSessionsParams,
-): Promise<RollSessionApiResponse[]> => {
+export const buildQueryParams = (params: RollSessionsParams) => {
   const queryParams: Record<string, string> = {};
 
   if (params.sessionSource && params.sessionSource !== "all") {
@@ -35,6 +33,14 @@ export const fetchAllRollSessions = async (
   if (dateTo) {
     queryParams.date_to = dateTo;
   }
+
+  return queryParams;
+};
+
+export const fetchAllRollSessions = async (
+  params: RollSessionsParams,
+): Promise<RollSessionApiResponse[]> => {
+  const queryParams = buildQueryParams(params);
 
   const { data } = await api.get("/sessions/all-sessions", {
     params: queryParams,

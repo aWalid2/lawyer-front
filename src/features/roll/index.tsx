@@ -12,6 +12,9 @@ import { useGetAllRollSessions } from "./api/hooks/useGetAllSessions";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils";
 import { LITIGATION_LEVEL_OPTIONS } from "@/shared/constants/caseOptions";
+import { useExport } from "@/shared/hooks/useExport";
+import { exportRollSessionsExcel } from "./api/service/exportRollSessionsExcel";
+import { exportRollSessionsPdf } from "./api/service/exportRollSessionsPdf";
 
 interface RollFilters {
   sessionSource: string;
@@ -101,6 +104,30 @@ const RollFeature = () => {
     dateTo: filters.toDate,
   });
 
+  const { handleExport: triggerExport } = useExport({
+    exportExcelFn: exportRollSessionsExcel,
+    exportPdfFn: exportRollSessionsPdf,
+    getFileName: (type, params) => {
+      const dateStr = new Date().toISOString().split("T")[0];
+      let fileName = `roll-sessions-${dateStr}`;
+      if (params.sessionSource !== "all") {
+        fileName += `-${params.sessionSource}`;
+      }
+      fileName += type === "excel" ? ".xlsx" : ".pdf";
+      return fileName;
+    },
+    loadingMessage: (type) => `جاري تحميل ملف رول الجلسات (${type === "excel" ? "Excel" : "PDF"})...`,
+    successMessage: (type) => `تم تحميل ملف رول الجلسات (${type === "excel" ? "Excel" : "PDF"}) بنجاح!`,
+  });
+
+  const handleExport = (type: "pdf" | "excel") => {
+    triggerExport(type, {
+      sessionSource: filters.sessionSource,
+      dateFrom: filters.fromDate,
+      dateTo: filters.toDate,
+    });
+  };
+
   const sessions = useMemo(
     () => (data || []).map((session, index) => mapRollSession(session, index)),
     [data],
@@ -147,7 +174,7 @@ const RollFeature = () => {
     return filteredSessions.slice(start, start + itemsPerPage);
   }, [filteredSessions, safeCurrentPage]);
 
-  const handleExport = () => { }
+
 
   const columns: Column<RollSession>[] = [
     {
@@ -214,7 +241,7 @@ const RollFeature = () => {
       accessor: "hallNumber",
     },
     {
-      header: "قرار الاحالة",
+      header: "قرار الجلسة",
       accessor: "session_decision",
     },
   ];
