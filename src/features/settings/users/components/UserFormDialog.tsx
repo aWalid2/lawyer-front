@@ -13,13 +13,17 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import type { UserFormValues, UserT } from "../types/userT";
-import { useGetAllRoles } from "../../permissions/api";
+import { useGetRoles } from "../api/hooks/useGetRoles";
+import { useAddUser } from "../api/hooks/useAddUser";
+import { useUpdateUser } from "../api/hooks/useUpdateUser";
+import { toast } from "sonner";
+import type { RoleT } from "../types/addUserRequest";
 
 interface UserFormDialogProps {
   user?: UserT;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  onUserUpdated?: (values?: UserFormValues, userId?: number) => void;
+  onUserUpdated?: () => void;
   trigger?: React.ReactNode;
 }
 
@@ -31,12 +35,14 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
   trigger,
 }) => {
   const isEditMode = !!user;
-  const { data: rolesData } = useGetAllRoles();
+  const { data: rolesData } = useGetRoles();
+  const { mutate: addUser, isPending: isAddingUser } = useAddUser();
+  const { mutate: updateUser, isPending: isUpdatingUser } = useUpdateUser();
 
   const getRoleOptions = () => {
     if (!rolesData) return [];
-    return rolesData.map((role: { id: number; role_name: string }) => ({
-      value: role.role_name,
+    return rolesData.map((role: RoleT) => ({
+      value: String(role.id),
       label: role.role_name,
     }));
   };
@@ -47,9 +53,11 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
     phone: user?.phone || "",
     hire_date: user?.hire_date || user?.created_at || "",
     civil_id: user?.civil_id || "",
+    ssn: user?.ssn || "",
     role_name: user?.role?.role_name || "",
+    role_id: user?.role_id,
     password: user?.password || "",
-    user_status: user?.user_status || "active",
+    user_status: user?.user_status || "ACTIVE",
   };
 
   const validationSchema = Yup.object().shape({
@@ -60,14 +68,70 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
     phone: Yup.string().required("رقم التليفون مطلوب"),
     hire_date: Yup.string().required("تاريخ التعيين مطلوب"),
     civil_id: Yup.string().required("الرقم المدني مطلوب"),
+    ssn: !isEditMode ? Yup.string().required("رقم الضمان مطلوب") : Yup.string(),
     role_name: Yup.string().required("الدور مطلوب"),
-    password: Yup.string().required("كلمة المرور مطلوبة"),
+    password: !isEditMode ? Yup.string().required("كلمة المرور مطلوبة") : Yup.string(),
     user_status: Yup.string().required("الحالة مطلوبة"),
   });
 
   const handleSubmit = (values: UserFormValues) => {
-    if (onUserUpdated) onUserUpdated(values, user?.id);
-    if (onOpenChange) onOpenChange(false);
+    if (isEditMode && user?.id) {
+      updateUser(
+        {
+          employeeId: user.id,
+          userData: {
+            first_name: values.first_name,
+            email: values.email,
+            phone: values.phone,
+            hire_date: values.hire_date,
+            civil_id: values.civil_id,
+            ssn: values.ssn,
+            role: values.role_id || parseInt(values.role_name),
+            status: values.user_status,
+            password: values.password || undefined,
+          },
+        },
+        {
+          onSuccess: () => {
+            toast.success("تم تحديث المستخدم بنجاح");
+            if (onOpenChange) onOpenChange(false);
+            if (onUserUpdated) onUserUpdated();
+          },
+          onError: (error: unknown) => {
+            const err = error as Record<string, unknown>;
+            const message = (err?.response as Record<string, unknown>)?.data as Record<string, unknown> || {};
+            const errorMessage = (message?.message as string) || "حدث خطأ أثناء تحديث المستخدم";
+            toast.error(errorMessage);
+          },
+        }
+      );
+    } else {
+      addUser(
+        {
+          username: values.first_name,
+          email: values.email,
+          phone: values.phone,
+          ssn: values.ssn || "",
+          password: values.password,
+          role: values.role_id || parseInt(values.role_name),
+          status: values.user_status,
+          hire_date: values.hire_date,
+        },
+        {
+          onSuccess: () => {
+            toast.success("تم إضافة المستخدم بنجاح");
+            if (onOpenChange) onOpenChange(false);
+            if (onUserUpdated) onUserUpdated();
+          },
+          onError: (error: unknown) => {
+            const err = error as Record<string, unknown>;
+            const message = (err?.response as Record<string, unknown>)?.data as Record<string, unknown> || {};
+            const errorMessage = (message?.message as string) || "حدث خطأ أثناء إضافة المستخدم";
+            toast.error(errorMessage);
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -132,8 +196,22 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                   placeholder="أدخل الرقم المدني"
                 />
                 <InputForm
+                  name="ssn"
+                  label="رقم الضمان الاجتماعي"
+                  type="text"
+                  placeholder="أدخل رقم الضمان"
+                  dir="ltr"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <InputForm
                   name="password"
-                  label="كلمة المرور"
+                  label={
+                    isEditMode
+                      ? "كلمة المرور (اتركها فارغة إذا لم تغيرها)"
+                      : "كلمة المرور"
+                  }
                   type="password"
                   placeholder="أدخل كلمة المرور"
                   dir="ltr"
@@ -150,17 +228,22 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                   name="user_status"
                   label="الحالة"
                   options={[
-                    { value: "active", label: "نشط" },
-                    { value: "inactive", label: "غير نشط" },
+                    { value: "ACTIVE", label: "نشط" },
+                    { value: "INACTIVE", label: "غير نشط" },
                   ]}
                 />
               </div>
 
               <button
                 type="submit"
-                className="bg-primary-gradient rounded-main mt-4 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90"
+                disabled={isAddingUser || isUpdatingUser}
+                className="bg-primary-gradient rounded-main mt-4 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isEditMode ? "حفظ التغييرات" : "إضافة مستخدم"}
+                {isAddingUser || isUpdatingUser
+                  ? "جاري المعالجة..."
+                  : isEditMode
+                    ? "حفظ التغييرات"
+                    : "إضافة مستخدم"}
               </button>
             </Form>
           )}

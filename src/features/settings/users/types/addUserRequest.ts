@@ -12,6 +12,7 @@ export interface AddUserRequest {
 export interface UpdateUserRequest extends Partial<AddUserRequest> {
   first_name?: string;
   last_name?: string;
+  civil_id?: string;
 }
 
 export interface RoleT {

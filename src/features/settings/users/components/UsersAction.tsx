@@ -4,6 +4,8 @@ import { TableEditButton } from "@/shared/components/TableEditButton";
 import React from "react";
 import type { UserT } from "../types/userT";
 import { UserFormDialog } from "./UserFormDialog";
+import { useDeleteUser } from "../api/hooks/useDeleteUser";
+import { toast } from "sonner";
 
 interface UsersActionProps {
   user: UserT;
@@ -14,8 +16,19 @@ export const UsersAction: React.FC<UsersActionProps> = ({
   user,
   onUserUpdated,
 }) => {
+  const { mutate: deleteUser } = useDeleteUser();
+
   const handleDelete = () => {
-    onUserUpdated();
+    deleteUser(user.id, {
+      onSuccess: () => {
+        toast.success("تم حذف المستخدم بنجاح");
+        onUserUpdated();
+      },
+      onError: (error: unknown) => {
+        const errorMessage = (error as any)?.response?.data?.message || "حدث خطأ أثناء حذف المستخدم";
+        toast.error(errorMessage);
+      },
+    });
   };
 
   return (

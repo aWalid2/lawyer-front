@@ -10,7 +10,7 @@ import {
 import { useGetAllUsers } from "./api/hooks/useGetAllUsers";
 import { UserManagementHeader } from "./components/UserManagementHeader";
 import { UsersAction } from "./components/UsersAction";
-import type { UserFormValues, UserT } from "./types/userT";
+import type { UserT } from "./types/userT";
 import { Error } from "@/shared/components/Error";
 import { useGetAllUsersSearched } from "./api/hooks/useGetAllUsersSearched";
 import { Pagination } from "@/shared/components/Pagination";
@@ -18,8 +18,7 @@ import { Pagination } from "@/shared/components/Pagination";
 export const UserManagementFeature: React.FC = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchTerm, setSearchTerm] = React.useState("");
-  const [localUsers, setLocalUsers] = React.useState<UserT[]>([]);
-  const { data: allUsers = [], isLoading, isError, error } = useGetAllUsers();
+  const { data: allUsers = [], isLoading, isError, error, refetch } = useGetAllUsers();
   const debouncedSearchTerm = useDebounce(searchTerm.trim(), 400);
   const itemsPerPage = 15;
 
@@ -29,20 +28,13 @@ export const UserManagementFeature: React.FC = () => {
     isFetching: isSearchingUsers,
     isError: isSearchError,
     error: searchError,
+    refetch: refetchSearched,
   } = useGetAllUsersSearched(debouncedSearchTerm);
 
   const displayedUsers = React.useMemo(() => {
     const apiUsers = (isSearching ? allUsersSearched : allUsers) as UserT[];
-    const apiUserIds = new Set(apiUsers.map((user) => user.id));
-    const overrides = new Map(localUsers.map((user) => [user.id, user]));
-
-    const mergedApiUsers = apiUsers.map(
-      (user) => overrides.get(user.id) ?? user,
-    );
-    const createdUsers = localUsers.filter((user) => !apiUserIds.has(user.id));
-
-    return [...createdUsers, ...mergedApiUsers];
-  }, [allUsers, allUsersSearched, isSearching, localUsers]);
+    return apiUsers;
+  }, [allUsers, allUsersSearched, isSearching]);
 
   const totalPages = Math.max(
     1,
@@ -59,37 +51,15 @@ export const UserManagementFeature: React.FC = () => {
     setSearchTerm(value);
   }, []);
 
-  const handleUserUpdated = React.useCallback(
-    (values?: UserFormValues, userId?: number) => {
-      if (!values) {
-        return;
-      }
-
-      const nextUser: UserT = {
-        id: userId ?? Date.now(),
-        name: values.first_name,
-        first_name: values.first_name,
-        email: values.email,
-        phone: values.phone,
-        hire_date: values.hire_date,
-        civil_id: values.civil_id,
-        password: values.password,
-        role: {
-          role_name: values.role_name,
-        },
-        userType: "",
-        user_status: values.user_status,
-        fullName: values.first_name,
-      };
-
-      setLocalUsers((prev) => {
-        const nextUsers = prev.filter((user) => user.id !== nextUser.id);
-        return [...nextUsers, nextUser];
-      });
-      setCurrentPage(1);
-    },
-    [],
-  );
+  const handleUserUpdated = React.useCallback(() => {
+    // Refetch data based on current search state
+    if (isSearching) {
+      refetchSearched();
+    } else {
+      refetch();
+    }
+    setCurrentPage(1);
+  }, [isSearching, refetch, refetchSearched]);
 
   if (isLoading) return <LoadingPage />;
   if (isError)
