@@ -15,6 +15,7 @@ export const normalizeCaseEmployee = (employee: any): CaseEmployee => ({
         ),
         position: employee?.Employee?.position ?? "",
         notes: employee?.Employee?.notes ?? "",
+        username: employee?.Employee?.username ?? "",
         user: employee?.Employee?.user
           ? {
               first_name: employee.Employee.user.first_name ?? "",

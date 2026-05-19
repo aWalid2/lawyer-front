@@ -1,6 +1,6 @@
-// employees/api/hooks/useGetEmployee.ts
+
 import { useQuery } from "@tanstack/react-query";
-import { getOneEmployee } from "../service/getOneEmployee";
+import { getOneEmployee } from "../services/getOneEmployee";
 
 export const useGetEmployee = (id: string) => {
     return useQuery({

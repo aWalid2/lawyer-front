@@ -1,19 +1,13 @@
-import { useGetAllUsers } from "@/features/settings/users/api/hooks/useGetAllUsers";
-import { useIndexedApiPagination } from "@/shared/hooks/useIndexedApiPagination";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useIndexedApiPagination } from "@/shared/hooks/useIndexedApiPagination";
 import { useCreateCaseEmployee } from "../api/hooks/useCreateCaseEmployee";
 import { useDeleteCaseEmployee } from "../api/hooks/useDeleteCaseEmployee";
 import { useGetCaseEmployees } from "../api/hooks/useGetCaseEmployees";
 import { useUpdateCaseEmployee } from "../api/hooks/useUpdateCaseEmployee";
-import type {
-  CaseEmployeeFormValues,
-  EmployeeOption,
-} from "../types";
-import {
-  mergeCaseEmployeeWithOption,
-  toCaseEmployeeRequest,
-} from "../types";
+import type { CaseEmployeeFormValues } from "../types";
+import { toCaseEmployeeRequest } from "../types";
+import { useGetAllUsers } from "@/features/settings/users/api/hooks/useGetAllUsers";
 
 const ITEMS_PER_PAGE = 15;
 
@@ -32,41 +26,16 @@ export const useEmployeesTable = () => {
     isError,
     error,
   } = useGetCaseEmployees(caseId);
+
+
+
   const { data: employeesOptionsResponse, isPending: isEmployeesPending } =
     useGetAllUsers();
-   
 
-  const employeeOptionsSource: EmployeeOption[] = useMemo(() => {
-    if (!Array.isArray(employeesOptionsResponse)) return [];
-    return employeesOptionsResponse.map((user) => ({
-      user_id: user.id,
-      user: {
-        first_name: user.first_name,
-      },
-    }));
-  }, [employeesOptionsResponse]);
-
-  const employeesLookup = useMemo(
-    () =>
-      new Map(
-        employeeOptionsSource.map((employee) => [
-          Number(employee.user_id),
-          employee,
-        ]),
-      ),
-    [employeeOptionsSource],
+  const caseEmployees = useMemo(
+    () => caseEmployeesResponse?.data ?? [],
+    [caseEmployeesResponse?.data],
   );
-
-  const caseEmployees = useMemo(() => {
-    const records = caseEmployeesResponse?.data ?? [];
-
-    return records.map((employee) =>
-      mergeCaseEmployeeWithOption(
-        employee,
-        employeesLookup.get(Number(employee.Employee_id)),
-      ),
-    );
-  }, [caseEmployeesResponse?.data, employeesLookup]);
 
   const { indexedData: indexedEmployeesData, totalPages } =
     useIndexedApiPagination({
@@ -76,14 +45,13 @@ export const useEmployeesTable = () => {
       meta: caseEmployeesResponse?.meta,
     });
 
-  const employeeOptions = useMemo(
-    () =>
-      employeeOptionsSource.map((employee) => ({
-        value: employee.user_id,
-        label: employee.user?.first_name || `#${employee.user_id}`,
-      })),
-    [employeeOptionsSource],
-  );
+  const employeeOptions = useMemo(() => {
+    if (!Array.isArray(employeesOptionsResponse)) return [];
+    return employeesOptionsResponse.map((user) => ({
+      value: user.id,
+      label: user.first_name || `#${user.id}`,
+    }));
+  }, [employeesOptionsResponse]);
 
   const selectedEmployee = useMemo(
     () =>

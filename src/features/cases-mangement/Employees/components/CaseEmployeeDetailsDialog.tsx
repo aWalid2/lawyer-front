@@ -2,11 +2,12 @@ import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
 import { Error } from "@/shared/components/Error";
 import { InputBox } from "@/shared/components/InputBox";
 import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import LoadingPage from "@/shared/components/LoadingPage";
+import React from "react";
+import { useGetEmployee } from "../api/hooks/useGetOneEmployee";
 import type { CaseEmployee } from "../types";
 import {
-  getCaseEmployeeName,
-  getCaseEmployeeNotes,
-  getCaseEmployeePosition,
+  getCaseEmployeeName
 } from "../types";
 
 interface CaseEmployeeDetailsDialogProps {
@@ -19,6 +20,10 @@ interface CaseEmployeeDetailsDialogProps {
 export const CaseEmployeeDetailsDialog: React.FC<
   CaseEmployeeDetailsDialogProps
 > = ({ employee, open, onOpenChange, onEdit }) => {
+  const { data: apiEmployee, isPending } = useGetEmployee(
+    open && employee ? String(employee.Employee_id) : "",
+  );
+
   const handleEdit = () => {
     if (onEdit) {
       onEdit();
@@ -42,26 +47,26 @@ export const CaseEmployeeDetailsDialog: React.FC<
 
       {!employee ? (
         <Error message="تعذر تحميل تفاصيل الموظف." />
+      ) : isPending ? (
+        <LoadingPage />
       ) : (
         <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-          <InputBox label="اسم الموظف" text={getCaseEmployeeName(employee)} />
+          <InputBox
+            label="اسم الموظف"
+            text={apiEmployee?.user?.first_name || getCaseEmployeeName(employee)}
+          />
           <InputBox label="رقم الهاتف" text={employee.phone || "-"} />
           <InputBox label="الوظيفة" text={employee.job || "-"} />
-          <InputBox
-            label="المسمى الوظيفي"
-            text={getCaseEmployeePosition(employee)}
-          />
+
           <InputBox
             label="البريد الإلكتروني"
-            text={employee.Employee?.user?.email || "-"}
+            text={
+              apiEmployee?.user?.email ||
+              employee.Employee?.user?.email ||
+              "-"
+            }
           />
-          <InputBox
-            label="رقم هاتف الموظف"
-            text={employee.Employee?.user?.phone || "-"}
-          />
-          <div className="col-span-1 md:col-span-2">
-            <InputBox label="ملاحظات" text={getCaseEmployeeNotes(employee)} />
-          </div>
+
         </div>
       )}
     </LayoutDialog>

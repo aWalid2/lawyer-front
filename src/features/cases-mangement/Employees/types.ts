@@ -19,6 +19,7 @@ export interface CaseEmployee {
     user_id?: number;
     position?: string;
     notes?: string;
+    username: string;
     user?: {
       first_name?: string;
       email?: string;
@@ -71,7 +72,7 @@ export const toCaseEmployeeRequest = (
 });
 
 export const getCaseEmployeeName = (employee: CaseEmployee) => {
-  return employee.Employee?.user?.first_name || `#${employee.Employee_id}`;
+  return employee.Employee?.username || `#${employee.Employee_id}`;
 };
 
 export const getCaseEmployeePosition = (employee: CaseEmployee) => {
@@ -91,6 +92,6 @@ export const mergeCaseEmployeeWithOption = (
     user_id: employee.Employee?.user_id ?? option?.user_id,
     position: employee.Employee?.position ?? option?.position,
     notes: employee.Employee?.notes ?? option?.notes,
-    user: employee.Employee?.user ?? option?.user,
+    username: employee.Employee?.username ??  "",
   },
 });
