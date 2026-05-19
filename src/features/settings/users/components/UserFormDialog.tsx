@@ -13,11 +13,11 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import type { UserFormValues, UserT } from "../types/userT";
-import { useGetRoles } from "../api/hooks/useGetRoles";
 import { useAddUser } from "../api/hooks/useAddUser";
 import { useUpdateUser } from "../api/hooks/useUpdateUser";
 import { toast } from "sonner";
 import type { RoleT } from "../types/addUserRequest";
+import { useGetAllRoles } from "../../permissions/api";
 
 interface UserFormDialogProps {
   user?: UserT;
@@ -29,14 +29,13 @@ interface UserFormDialogProps {
 
 export const UserFormDialog: React.FC<UserFormDialogProps> = ({
   user,
-  open,
-  onOpenChange,
-  onUserUpdated,
   trigger,
 }) => {
+  const [open, setOpen] = React.useState(false);
   const isEditMode = !!user;
-  // Only fetch roles when modal is open
-  const { data: rolesData } = useGetRoles(open ?? false);
+
+  const { data: rolesData } = useGetAllRoles(open);
+
   const { mutate: addUser, isPending: isAddingUser } = useAddUser();
   const { mutate: updateUser, isPending: isUpdatingUser } = useUpdateUser();
 
@@ -97,8 +96,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
         {
           onSuccess: () => {
             toast.success("تم تحديث المستخدم بنجاح");
-            if (onOpenChange) onOpenChange(false);
-            if (onUserUpdated) onUserUpdated();
+            setOpen(false);
           },
           onError: (error: unknown) => {
             const err = error as Record<string, unknown>;
@@ -128,8 +126,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
         {
           onSuccess: () => {
             toast.success("تم إضافة المستخدم بنجاح");
-            if (onOpenChange) onOpenChange(false);
-            if (onUserUpdated) onUserUpdated();
+            setOpen(false);
           },
           onError: (error: unknown) => {
             const err = error as Record<string, unknown>;
@@ -148,7 +145,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
         className="rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-150 sm:rounded-[24px] sm:px-16 sm:py-10"
