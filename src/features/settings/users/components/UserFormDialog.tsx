@@ -35,24 +35,24 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
   trigger,
 }) => {
   const isEditMode = !!user;
-  const { data: rolesData } = useGetRoles();
+  // Only fetch roles when modal is open
+  const { data: rolesData } = useGetRoles(open ?? false);
   const { mutate: addUser, isPending: isAddingUser } = useAddUser();
   const { mutate: updateUser, isPending: isUpdatingUser } = useUpdateUser();
 
-  const getRoleOptions = () => {
+  const roleOptions = React.useMemo(() => {
     if (!rolesData) return [];
     return rolesData.map((role: RoleT) => ({
-      value: String(role.id),
+      value: role.id.toString(),
       label: role.role_name,
     }));
-  };
+  }, [rolesData]);
 
   const initialValues: UserFormValues = {
     first_name: user?.first_name || user?.name || "",
     email: user?.email || "",
     phone: user?.phone || "",
     hire_date: user?.hire_date || user?.created_at || "",
-    civil_id: user?.civil_id || "",
     ssn: user?.ssn || "",
     role_name: user?.role?.role_name || "",
     role_id: user?.role_id,
@@ -67,10 +67,14 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
       .required("البريد الإلكتروني مطلوب"),
     phone: Yup.string().required("رقم التليفون مطلوب"),
     hire_date: Yup.string().required("تاريخ التعيين مطلوب"),
-    civil_id: Yup.string().required("الرقم المدني مطلوب"),
-    ssn: !isEditMode ? Yup.string().required("رقم الضمان مطلوب") : Yup.string(),
+
+    ssn: !isEditMode
+      ? Yup.string().required("الرقم المدني مطلوب")
+      : Yup.string(),
     role_name: Yup.string().required("الدور مطلوب"),
-    password: !isEditMode ? Yup.string().required("كلمة المرور مطلوبة") : Yup.string(),
+    password: !isEditMode
+      ? Yup.string().required("كلمة المرور مطلوبة")
+      : Yup.string(),
     user_status: Yup.string().required("الحالة مطلوبة"),
   });
 
@@ -84,7 +88,6 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
             email: values.email,
             phone: values.phone,
             hire_date: values.hire_date,
-            civil_id: values.civil_id,
             ssn: values.ssn,
             role: values.role_id || parseInt(values.role_name),
             status: values.user_status,
@@ -99,11 +102,16 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
           },
           onError: (error: unknown) => {
             const err = error as Record<string, unknown>;
-            const message = (err?.response as Record<string, unknown>)?.data as Record<string, unknown> || {};
-            const errorMessage = (message?.message as string) || "حدث خطأ أثناء تحديث المستخدم";
+            const message =
+              ((err?.response as Record<string, unknown>)?.data as Record<
+                string,
+                unknown
+              >) || {};
+            const errorMessage =
+              (message?.message as string) || "حدث خطأ أثناء تحديث المستخدم";
             toast.error(errorMessage);
           },
-        }
+        },
       );
     } else {
       addUser(
@@ -125,11 +133,16 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
           },
           onError: (error: unknown) => {
             const err = error as Record<string, unknown>;
-            const message = (err?.response as Record<string, unknown>)?.data as Record<string, unknown> || {};
-            const errorMessage = (message?.message as string) || "حدث خطأ أثناء إضافة المستخدم";
+            const message =
+              ((err?.response as Record<string, unknown>)?.data as Record<
+                string,
+                unknown
+              >) || {};
+            const errorMessage =
+              (message?.message as string) || "حدث خطأ أثناء إضافة المستخدم";
             toast.error(errorMessage);
           },
-        }
+        },
       );
     }
   };
@@ -175,9 +188,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                   type="email"
                   placeholder="mohalia7@gmail.com"
                 />
-              </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <InputForm
                   name="phone"
                   label="رقم التليفون"
@@ -186,25 +197,14 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                   dir="ltr"
                 />
                 <InputForm name="hire_date" label="تاريخ التعيين" type="date" />
-              </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <InputForm
-                  name="civil_id"
+                  name="ssn"
                   label="الرقم المدني"
                   type="text"
                   placeholder="أدخل الرقم المدني"
                 />
-                <InputForm
-                  name="ssn"
-                  label="رقم الضمان الاجتماعي"
-                  type="text"
-                  placeholder="أدخل رقم الضمان"
-                  dir="ltr"
-                />
-              </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <InputForm
                   name="password"
                   label={
@@ -216,13 +216,11 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                   placeholder="أدخل كلمة المرور"
                   dir="ltr"
                 />
-              </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <SelectForm
                   name="role_name"
                   label="الدور"
-                  options={getRoleOptions()}
+                  options={roleOptions}
                 />
                 <SelectForm
                   name="user_status"
@@ -237,7 +235,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
               <button
                 type="submit"
                 disabled={isAddingUser || isUpdatingUser}
-                className="bg-primary-gradient rounded-main mt-4 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-primary-gradient rounded-main mt-4 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isAddingUser || isUpdatingUser
                   ? "جاري المعالجة..."

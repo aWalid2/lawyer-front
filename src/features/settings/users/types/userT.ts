@@ -5,7 +5,6 @@ export interface UserT {
   last_name?: string;
   email: string;
   phone?: string;
-  civil_id?: string;
   ssn?: string;
   hire_date?: string;
   created_at?: string;
@@ -24,7 +23,6 @@ export interface UserFormValues {
   email: string;
   phone: string;
   hire_date: string;
-  civil_id: string;
   ssn?: string;
   role_name: string;
   role_id?: number;

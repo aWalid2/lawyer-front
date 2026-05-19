@@ -25,7 +25,9 @@ export const UsersAction: React.FC<UsersActionProps> = ({
         onUserUpdated();
       },
       onError: (error: unknown) => {
-        const errorMessage = (error as any)?.response?.data?.message || "حدث خطأ أثناء حذف المستخدم";
+        const errorMessage =
+          (error as any)?.response?.data?.message ||
+          "حدث خطأ أثناء حذف المستخدم";
         toast.error(errorMessage);
       },
     });

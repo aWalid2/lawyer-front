@@ -18,7 +18,13 @@ import { Pagination } from "@/shared/components/Pagination";
 export const UserManagementFeature: React.FC = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchTerm, setSearchTerm] = React.useState("");
-  const { data: allUsers = [], isLoading, isError, error, refetch } = useGetAllUsers();
+  const {
+    data: allUsers = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetAllUsers();
   const debouncedSearchTerm = useDebounce(searchTerm.trim(), 400);
   const itemsPerPage = 15;
 
@@ -52,7 +58,6 @@ export const UserManagementFeature: React.FC = () => {
   }, []);
 
   const handleUserUpdated = React.useCallback(() => {
-    // Refetch data based on current search state
     if (isSearching) {
       refetchSearched();
     } else {
@@ -102,7 +107,7 @@ export const UserManagementFeature: React.FC = () => {
     },
     {
       header: "الرقم المدني",
-      accessor: (user) => user.civil_id || "-",
+      accessor: (user) => user.ssn || "-",
       className: "text-center",
     },
 
