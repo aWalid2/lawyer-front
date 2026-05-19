@@ -13,6 +13,7 @@ import { XIcon } from "lucide-react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import type { UserFormValues, UserT } from "../types/userT";
+import { useGetAllRoles } from "../../permissions/api";
 
 interface UserFormDialogProps {
   user?: UserT;
@@ -30,6 +31,15 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
   trigger,
 }) => {
   const isEditMode = !!user;
+  const { data: rolesData } = useGetAllRoles();
+
+  const getRoleOptions = () => {
+    if (!rolesData) return [];
+    return rolesData.map((role: { id: number; role_name: string }) => ({
+      value: role.role_name,
+      label: role.role_name,
+    }));
+  };
 
   const initialValues: UserFormValues = {
     first_name: user?.first_name || user?.name || "",
@@ -134,11 +144,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                 <SelectForm
                   name="role_name"
                   label="الدور"
-                  options={[
-                    { value: "محاسب", label: "محاسب" },
-                    { value: "سكرتير", label: "سكرتير" },
-                    { value: "مدير", label: "مدير" },
-                  ]}
+                  options={getRoleOptions()}
                 />
                 <SelectForm
                   name="user_status"
