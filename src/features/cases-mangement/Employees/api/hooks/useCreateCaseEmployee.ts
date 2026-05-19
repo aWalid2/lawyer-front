@@ -11,8 +11,8 @@ export const useCreateCaseEmployee = (caseId: string | number) => {
       queryClient.invalidateQueries({ queryKey: ["case-employees", caseId] });
       toast.success("تم تعيين الموظف بنجاح");
     },
-    onError: () => {
-      toast.error("حدث خطأ أثناء تعيين الموظف");
+    onError: (err) => {
+      toast.error((err as any).response?.data.message || "حدث خطأ أثناء تعيين الموظف");
     },
   });
 };

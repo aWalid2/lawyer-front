@@ -1,7 +1,7 @@
+import { useGetAllUsers } from "@/features/settings/users/api/hooks/useGetAllUsers";
+import { useIndexedApiPagination } from "@/shared/hooks/useIndexedApiPagination";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useFetchEmployees } from "@/features/users/users-employees/employees/api/hooks/useGetAllEmployees";
-import { useIndexedApiPagination } from "@/shared/hooks/useIndexedApiPagination";
 import { useCreateCaseEmployee } from "../api/hooks/useCreateCaseEmployee";
 import { useDeleteCaseEmployee } from "../api/hooks/useDeleteCaseEmployee";
 import { useGetCaseEmployees } from "../api/hooks/useGetCaseEmployees";
@@ -33,18 +33,26 @@ export const useEmployeesTable = () => {
     error,
   } = useGetCaseEmployees(caseId);
   const { data: employeesOptionsResponse, isPending: isEmployeesPending } =
-    useFetchEmployees();
+    useGetAllUsers();
+   
 
-  const employeeOptionsSource: EmployeeOption[] = Array.isArray(
-    employeesOptionsResponse,
-  )
-    ? employeesOptionsResponse
-    : [];
+  const employeeOptionsSource: EmployeeOption[] = useMemo(() => {
+    if (!Array.isArray(employeesOptionsResponse)) return [];
+    return employeesOptionsResponse.map((user) => ({
+      user_id: user.id,
+      user: {
+        first_name: user.first_name,
+      },
+    }));
+  }, [employeesOptionsResponse]);
 
   const employeesLookup = useMemo(
     () =>
       new Map(
-        employeeOptionsSource.map((employee) => [Number(employee.user_id), employee]),
+        employeeOptionsSource.map((employee) => [
+          Number(employee.user_id),
+          employee,
+        ]),
       ),
     [employeeOptionsSource],
   );

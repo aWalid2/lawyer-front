@@ -28,7 +28,6 @@ export const Employees: React.FC = () => {
     employeeOptions,
     handleSave,
     handleDelete,
-    handleOpenEdit,
     handleOpenView,
     handleFormOpenChange,
     handleViewOpenChange,
@@ -67,7 +66,6 @@ export const Employees: React.FC = () => {
         <EmployeesActions
           employee={item}
           onView={() => handleOpenView(item.id)}
-          onEdit={() => handleOpenEdit(item.id)}
           onDelete={() => handleDelete(item.id)}
         />
       ),

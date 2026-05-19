@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { InputForm } from "@/shared/components/InputForm";
 import { LayoutDialog } from "@/shared/components/LayoutDialog";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { SelectForm } from "@/shared/components/SelectForm";
@@ -27,8 +26,6 @@ const validationSchema = Yup.object({
   Employee_id: Yup.number()
     .typeError("اسم الموظف مطلوب")
     .required("اسم الموظف مطلوب"),
-  phone: Yup.string().trim().required("رقم الهاتف مطلوب"),
-  job: Yup.string().trim().required("الوظيفة مطلوبة"),
 });
 
 export const CaseEmployeeDialog: React.FC<CaseEmployeeDialogProps> = ({
@@ -87,13 +84,6 @@ export const CaseEmployeeDialog: React.FC<CaseEmployeeDialogProps> = ({
                 placeholder="اختر الموظف"
                 showSearch
               />
-              <InputForm
-                name="phone"
-                label="رقم الهاتف"
-                type="text"
-                dir="ltr"
-              />
-              <InputForm name="job" label="الوظيفة" type="text" />
 
               <Button
                 type="submit"

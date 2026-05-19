@@ -11,8 +11,8 @@ export const useUpdateCaseEmployee = (caseId: string | number) => {
       queryClient.invalidateQueries({ queryKey: ["case-employees", caseId] });
       toast.success("تم تعديل الموظف بنجاح");
     },
-    onError: () => {
-      toast.error("حدث خطأ أثناء تعديل الموظف");
+    onError: (err) => {
+      toast.error((err as any).response?.data.message || "حدث خطأ أثناء تعديل الموظف");
     },
   });
 };
