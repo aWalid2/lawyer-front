@@ -1,33 +1,32 @@
-import { useMemo, useState } from "react";
-import { HeaderPageReportsUsers } from "./components/HeaderPageReportsUsers";
-import type { ReportUser } from "./types";
+import { useGetAllRoles } from "@/features/settings/permissions/api";
+import { useGetAllUsersSearched } from "@/features/settings/users/api/hooks/useGetAllUsersSearched";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { Pagination } from "@/shared/components/Pagination";
 import PageLayout from "@/shared/components/PageLayout";
+import { Pagination } from "@/shared/components/Pagination";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import {
   getUserStatusBadgeClass,
   getUserStatusLabel,
 } from "@/shared/utils/userStatus";
-import { useGetAllUsers } from "@/features/settings/users/api/hooks/useGetAllUsers";
-import { useGetAllUsersSearched } from "@/features/settings/users/api/hooks/useGetAllUsersSearched";
-import type { UserT } from "@/features/settings/users/types/userT";
+import { useMemo, useState } from "react";
+import { useGetAllUserReports } from "./api/hooks/useGetAllUserReports";
+import { HeaderPageReportsUsers } from "./components/HeaderPageReportsUsers";
+import type { ReportUser } from "./types";
 
-const ROLE_FILTER_MAP: Record<string, string[]> = {
-  lawyer: ["lawyer", "محامي"],
-  manager: ["manager", "admin", "مدير"],
-  finance: ["finance", "مدير مالي"],
-  all: [],
-};
 
-const mapUserToReportUser = (user: UserT): ReportUser => ({
+
+
+
+
+const mapUserToReportUser = (user: any, index: number): ReportUser => ({
   id: String(user.id),
-  name: [user.first_name, user.last_name].filter(Boolean).join(" ").trim(),
-  role: user.role?.role_name || "-",
-  email: user.email,
-  status: user.user_status === "active" ? "active" : "inactive",
+  name: user.name ?? "",
+  role: user.role ?? "-",
+  email: user.email ?? "",
+  status: user.status ?? "inactive",
+  rowNumber: index + 1,
 });
 
 const ReportsUsersFeature = () => {
@@ -36,8 +35,13 @@ const ReportsUsersFeature = () => {
   const [filters, setFilters] = useState({ role: "all", status: "all" });
   const itemsPerPage = 15;
   const debouncedSearchTerm = useDebounce(searchTerm.trim(), 400);
+  const { data: roles = [] } = useGetAllRoles();
 
-  const { data: allUsers = [], isLoading, isError, error } = useGetAllUsers();
+
+  const { data: allUsers = [], isLoading, isError, error } = useGetAllUserReports({
+    status: filters.status === "all" ? undefined : filters.status,
+    role_id: filters.role === "all" ? undefined : filters.role,
+  });
   const isSearching = debouncedSearchTerm.length > 0;
   const {
     data: searchedUsers = [],
@@ -49,7 +53,7 @@ const ReportsUsersFeature = () => {
   const displayedUsers = isSearching ? searchedUsers : allUsers;
 
   const reportUsers = useMemo(
-    () => displayedUsers.map(mapUserToReportUser),
+    () => displayedUsers.map((u, i) => mapUserToReportUser(u, i)),
     [displayedUsers],
   );
 
@@ -57,6 +61,16 @@ const ReportsUsersFeature = () => {
     setSearchTerm(term);
     setCurrentPage(1);
   };
+
+
+  const roleOptions = useMemo(() => {
+    return roles.map((role) => ({
+
+      value: String(role.id),
+      label: role.role_name,
+    }));
+  }, [roles]);
+
 
   const handleFilterChange = (key: string, value: string) => {
     setCurrentPage(1);
@@ -70,16 +84,15 @@ const ReportsUsersFeature = () => {
         u.name.toLowerCase().includes(searchStr) ||
         u.email.toLowerCase().includes(searchStr);
 
-      const allowedRoles = ROLE_FILTER_MAP[filters.role] ?? [];
-      const normalizedRole = u.role.toLowerCase();
+      const selectedOption = roleOptions.find(opt => String(opt.value) === filters.role);
       const matchesRole =
-        filters.role === "all" || allowedRoles.includes(normalizedRole);
+        filters.role === "all" || (selectedOption && u.role === selectedOption.label);
       const matchesStatus =
         filters.status === "all" || u.status === filters.status;
 
       return matchesSearch && matchesRole && matchesStatus;
     });
-  }, [reportUsers, searchTerm, filters]);
+  }, [reportUsers, searchTerm, filters, roleOptions]);
 
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
@@ -99,7 +112,7 @@ const ReportsUsersFeature = () => {
   const columns: Column<ReportUser>[] = [
     {
       header: "#",
-      accessor: (item) => filteredUsers.findIndex((d) => d.id === item.id) + 1,
+      accessor: (item) => item.rowNumber,
       headerClassName: "w-15",
     },
     {
@@ -135,6 +148,7 @@ const ReportsUsersFeature = () => {
         onSearch={handleSearch}
         onFilterChange={handleFilterChange}
         filters={filters}
+        roleOptions={roleOptions}
       />
 
       {isSearchingUsers ? (

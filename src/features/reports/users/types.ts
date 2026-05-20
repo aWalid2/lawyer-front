@@ -4,4 +4,5 @@ export interface ReportUser {
   role: string;
   email: string;
   status: "active" | "inactive";
+  rowNumber: number;
 }

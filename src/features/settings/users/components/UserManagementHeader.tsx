@@ -14,9 +14,9 @@ interface UserManagementHeaderProps {
   searchTerm: string;
   onUserUpdated?: () => void;
   /** currently selected role */
-  selectedRole?: string;
+  selectedRole: string;
   /** update selected role */
-  setSelectedRole?: (role: string) => void;
+  setSelectedRole: (role: string) => void;
 }
 
 export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({

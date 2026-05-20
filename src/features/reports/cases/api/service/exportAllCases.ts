@@ -1,4 +1,4 @@
-// service/exportAllCases.ts
+
 import api from "@/lib/api";
 
 export const exportAllCases = async (searchTerm?: string, filter?: string): Promise<Blob> => {

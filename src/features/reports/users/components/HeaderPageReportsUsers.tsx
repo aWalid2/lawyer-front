@@ -13,6 +13,7 @@ interface HeaderPageReportsUsersProps {
     role: string;
     status: string;
   };
+  roleOptions: { value: string; label: string }[];
 }
 
 export const HeaderPageReportsUsers: React.FC<HeaderPageReportsUsersProps> = ({
@@ -20,6 +21,7 @@ export const HeaderPageReportsUsers: React.FC<HeaderPageReportsUsersProps> = ({
   onFilterChange,
   searchTerm,
   filters,
+  roleOptions
 }) => {
   return (
     <HeaderPageLayout>
@@ -37,12 +39,7 @@ export const HeaderPageReportsUsers: React.FC<HeaderPageReportsUsersProps> = ({
           placeholder="الدور"
           value={filters.role}
           onFilterChange={(v) => onFilterChange("role", v)}
-          options={[
-            { value: "all", label: "الدور" },
-            { value: "lawyer", label: "محامي" },
-            { value: "manager", label: "مدير" },
-            { value: "finance", label: "مدير مالي" },
-          ]}
+          options={[{ value: "all", label: "جميع المستخدمين" }, ...roleOptions]}
           className="md:w-27.5"
         />
         <HeaderFilter
