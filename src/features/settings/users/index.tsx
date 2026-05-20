@@ -18,13 +18,13 @@ import { Pagination } from "@/shared/components/Pagination";
 export const UserManagementFeature: React.FC = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [selectedRole, setSelectedRole] = React.useState<string | undefined>("all");
   const {
     data: allUsers = [],
     isLoading,
     isError,
     error,
-    refetch,
-  } = useGetAllUsers();
+  } = useGetAllUsers(selectedRole === "all" ? undefined : selectedRole);
   const debouncedSearchTerm = useDebounce(searchTerm.trim(), 400);
   const itemsPerPage = 15;
 
@@ -60,11 +60,9 @@ export const UserManagementFeature: React.FC = () => {
   const handleUserUpdated = React.useCallback(() => {
     if (isSearching) {
       refetchSearched();
-    } else {
-      refetch();
     }
     setCurrentPage(1);
-  }, [isSearching, refetch, refetchSearched]);
+  }, [isSearching, refetchSearched]);
 
   if (isLoading) return <LoadingPage />;
   if (isError)
@@ -113,7 +111,7 @@ export const UserManagementFeature: React.FC = () => {
 
     {
       header: "الدور",
-      accessor: (user) => user.role.role_name || "-",
+      accessor: (user) => user.role?.role_name || "-",
       className: "text-center",
     },
     {
@@ -145,6 +143,8 @@ export const UserManagementFeature: React.FC = () => {
         searchTerm={searchTerm}
         onSearch={handleSearch}
         onUserUpdated={handleUserUpdated}
+        selectedRole={selectedRole}
+        setSelectedRole={setSelectedRole}
       />
 
       {isSearchingUsers ? (
