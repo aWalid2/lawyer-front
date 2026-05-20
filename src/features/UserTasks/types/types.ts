@@ -9,6 +9,9 @@ export interface TaskRelatedT {
     notes?: string;
     created_at?: string;
     updated_at?: string;
+    assignee: {
+        first_name: string;
+    }
 }
 
 export const statusMapping: Record<string, string> = {
