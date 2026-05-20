@@ -23,17 +23,28 @@ const StatusCell: React.FC<{ status: string }> = ({ status }) => {
 export const UsersTask: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState<string>("all");
+    const [deliverDateFrom, setDeliverDateFrom] = useState<Date | undefined>(undefined);
+    const [deliverDateTo, setDeliverDateTo] = useState<Date | undefined>(undefined);
     const [page, setPage] = useState(1);
     const limit = 15;
-    const { data: tasksResponse, isPending, isError, error, refetch } = useFetchTasks(page, limit, statusFilter, searchTerm);
+    const { data: tasksResponse, isPending, isError, error, isFetching } = useFetchTasks(
+        page,
+        limit,
+        deliverDateFrom,
+        deliverDateTo
+    );
     const tasks = tasksResponse?.data;
+
+    const handleDateFilterChange = (key: "deliverDateFrom" | "deliverDateTo", value: Date | undefined) => {
+        setPage(1);
+        if (key === "deliverDateFrom") {
+            setDeliverDateFrom(value);
+        } else {
+            setDeliverDateTo(value);
+        }
+    };
     const totalPages = tasksResponse?.meta?.total_pages ?? 1;
     const indexedData = useIndexedData(tasks || []);
-
-
-
-
-
 
 
     const getTaskTypeDisplay = (taskType: string): string => {
@@ -91,9 +102,6 @@ export const UsersTask: React.FC = () => {
             accessor: (item: TaskRelatedT) => (
                 <UsersTaskActions
                     caseItem={item}
-                    onTaskUpdated={() => {
-                        refetch();
-                    }}
                 />
             ),
             headerClassName: "w-35",
@@ -111,24 +119,41 @@ export const UsersTask: React.FC = () => {
         ];
     }, []);
 
-    if (isPending) return <LoadingPage />
+    if (isPending && !tasks) return <LoadingPage />
     if (isError) return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
 
     return (
         <div className="space-y-4">
             <HeaderTasksUser
                 searchTerm={searchTerm}
-                onSearch={setSearchTerm}
-                onFilterChange={setStatusFilter}
+                onSearch={(term) => {
+                    setSearchTerm(term);
+                    setPage(1);
+                }}
+                onFilterChange={(status) => {
+                    setStatusFilter(status);
+                    setPage(1);
+                }}
                 statusFilter={statusFilter}
                 filterOptions={filterOptions}
+                deliverDateFrom={deliverDateFrom}
+                deliverDateTo={deliverDateTo}
+                onDateFilterChange={handleDateFilterChange}
             />
 
-            <DataTable
-                data={indexedData}
-                columns={columns}
-                rowIdField="id"
-            />
+            <div className="relative">
+                {isFetching ? (
+                    <div className="absolute inset-0 z-10 bg-white/70 dark:bg-backgroundDark/70 flex items-center justify-center">
+                        <LoadingPage fullScreen={false} />
+                    </div>
+                ) : null}
+
+                <DataTable
+                    data={indexedData}
+                    columns={columns}
+                    rowIdField="id"
+                />
+            </div>
 
             {totalPages > 1 && (
                 <PaginationApi
