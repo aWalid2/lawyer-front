@@ -1,13 +1,15 @@
 import React from "react";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { HeaderFilter } from "@/shared/components/HeaderFilter";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { LITIGATION_LEVEL_OPTIONS } from "@/shared/constants/caseOptions";
+import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
 
 interface HeaderPageReportsSessionsProps {
   onSearch: (term: string) => void;
   onFilterChange: (key: string, value: string) => void;
+  onExport: (type: "pdf" | "excel") => void;
   searchTerm: string;
   filters: {
     type: string;
@@ -18,6 +20,7 @@ interface HeaderPageReportsSessionsProps {
 export const HeaderPageReportsSessions: React.FC<HeaderPageReportsSessionsProps> = ({
   onSearch,
   onFilterChange,
+  onExport,
   searchTerm,
   filters,
 }) => {
@@ -34,32 +37,25 @@ export const HeaderPageReportsSessions: React.FC<HeaderPageReportsSessionsProps>
 
       <div className="flex items-center gap-3 w-full md:w-auto justify-end">
         <HeaderFilter
-          placeholder="النوع"
+          placeholder="نوع الجلسة"
           value={filters.type}
           onFilterChange={(v) => onFilterChange("type", v)}
           options={[
-            { value: "all", label: "النوع" },
+            { value: "all", label: "نوع الجلسة" },
             { value: "court", label: "محكمة" },
-            { value: "niyaba", label: "نيابة" },
+            { value: "prosecution", label: "نيابة" },
+            { value: "police", label: "مخفر" },
           ]}
-          className="md:w-[110px]"
+          className="md:w-27.5"
         />
         <HeaderFilter
-          placeholder="الحالة"
+          placeholder="الدرجة القضائية"
           value={filters.status}
           onFilterChange={(v) => onFilterChange("status", v)}
-          options={[
-            { value: "all", label: "الحالة" },
-            { value: "attended", label: "انعقدت" },
-            { value: "postponed", label: "مؤجلة" },
-          ]}
-          className="md:w-[110px]"
+          options={[{ value: "all", label: "الدرجة القضائية" }, ...LITIGATION_LEVEL_OPTIONS]}
+          className="md:w-[150px]"
         />
-        <HeaderActionButton
-          label="تصدير"
-          variant="gradient"
-          className="rounded-main h-12.5 px-8"
-        />
+        <HeaderExportMenu onSelect={onExport} />
       </div>
     </HeaderPageLayout>
   );

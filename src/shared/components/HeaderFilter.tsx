@@ -32,7 +32,7 @@ export const HeaderFilter: React.FC<HeaderFilterProps> = ({
   placeholder,
   className,
   value,
-  showSearch = true,
+  showSearch = false,
   onSearchChange,
   onChange,
 }) => {

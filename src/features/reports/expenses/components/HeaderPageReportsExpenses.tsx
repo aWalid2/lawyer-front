@@ -81,7 +81,7 @@ export const HeaderPageReportsExpenses: React.FC<
         />
 
         <HeaderFilter
-          placeholder="نوع المصروف"
+          placeholder="بحث..."
           value={filters.expenseType}
           onFilterChange={(value) => onFilterChange("expenseType", value)}
           options={REPORT_EXPENSE_TYPE_OPTIONS}

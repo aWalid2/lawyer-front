@@ -4,126 +4,93 @@ import type { ReportSession } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
 import PageLayout from "@/shared/components/PageLayout";
+import { useGetAllSessionsReports } from "./api/hooks/useGetAllSessionsReports";
+import { exportSessions } from "./api/services/exportSessions";
+import { formatDateToYYYYMMDD } from "@/shared/utils";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { toast } from "sonner";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { Error } from "@/shared/components/Error";
 
-const MOCK_REPORT_SESSIONS: ReportSession[] = Array.from(
-  { length: 45 },
-  (_, i) => ({
-    id: `${i + 1}`,
-    sessionType: i % 3 === 0 ? "محكمة" : i % 3 === 1 ? "نيابة" : "مخفر",
-    judicialGrade: i % 3 === 0 ? "أول درجة" : i % 3 === 1 ? "استئناف" : "تمييز",
-    caseAutoNumber: "001",
-    clientName: "علي محمد",
-    lawyerName: "أحمد العتيبي",
-    entity: "محكمة العراق",
-    sessionDate: "14/10/2025",
-    status: i % 2 === 0 ? "attended" : "postponed",
-  }),
-);
+const itemsPerPage = 15;
 
-const ReportsSessionsFeature = () => {
+export const ReportsSessionsFeature: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({ type: "all", status: "all" });
-  const itemsPerPage = 15;
 
-  const handleFilterChange = (key: string, value: string) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  };
+  const apiParams = useMemo(() => {
+    const params: any = { page: 1, limit: 1000 };
+    if (filters.type !== "all") params.session_source = filters.type;
+    if (filters.status !== "all") params.session_type = filters.status;
+    if (searchTerm) params.search = searchTerm;
+    return params;
+  }, [filters, searchTerm]);
 
-  const filteredSessions = useMemo(() => {
-    return MOCK_REPORT_SESSIONS.filter((s) => {
-      const searchStr = searchTerm.toLowerCase();
-      const matchesSearch =
-        s.clientName.toLowerCase().includes(searchStr) ||
-        s.lawyerName.toLowerCase().includes(searchStr) ||
-        s.caseAutoNumber.includes(searchStr);
 
-      const matchesType =
-        filters.type === "all" ||
-        (filters.type === "court" && s.sessionType === "محكمة") ||
-        (filters.type === "niyaba" && s.sessionType === "نيابة");
-      const matchesStatus =
-        filters.status === "all" || s.status === filters.status;
+  const { data, isPending, isError, error } = useGetAllSessionsReports(apiParams, 1);
+  const sessions = useMemo(() => data?.data ?? [], [data]);
 
-      return matchesSearch && matchesType && matchesStatus;
-    });
-  }, [searchTerm, filters]);
 
-  const totalPages = Math.ceil(filteredSessions.length / itemsPerPage);
+  const indexedSessions = useIndexedData(sessions, currentPage, itemsPerPage);
+  const totalPages = Math.ceil(sessions.length / itemsPerPage);
 
-  const paginatedSessions = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredSessions.slice(start, start + itemsPerPage);
-  }, [filteredSessions, currentPage]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, filters]);
 
+
+  const handleSearchChange = (value: string) => setSearchTerm(value);
+  const handleFilterChange = (key: string, value: string) =>
+    setFilters((prev) => ({ ...prev, [key]: value }));
+
+  const handleExport = async (type: "pdf" | "excel") => {
+    try {
+      const blob = await exportSessions(type, apiParams);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `sessions-report.${type === "excel" ? "xlsx" : "pdf"}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      toast.error(`خطأ أثناء تصدير تقرير الجلسات ${type}`);
+    }
+  };
+
   const columns: Column<ReportSession>[] = [
-    {
-      header: "#",
-      accessor: (item) =>
-        filteredSessions.findIndex((d) => d.id === item.id) + 1,
-      headerClassName: "w-15",
-    },
-    {
-      header: "نوع الجلسة",
-      accessor: "sessionType",
-    },
-    {
-      header: "الدرجة القضائية",
-      accessor: (item) => item.judicialGrade || "-",
-    },
-    {
-      header: "الرقم الآلي للقضية",
-      accessor: "caseAutoNumber",
-    },
-    {
-      header: "اسم الموكل",
-      accessor: "clientName",
-    },
-    {
-      header: "اسم المحامي",
-      accessor: "lawyerName",
-    },
-    {
-      header: "الجهة",
-      accessor: "entity",
-    },
+    { header: "#", accessor: "rowNumber", headerClassName: "w-15" },
+    { header: "نوع الجلسة", accessor: "session_source" },
+    { header: "الدرجة القضائية", accessor: "session_type" },
+    { header: "رقم القضية", accessor: "case_sequence" },
+    { header: "اسم الموكل", accessor: "client_name" },
+    { header: "اسم المحامي", accessor: "lawyer_name" },
+    { header: "الجهة", accessor: "entity" },
     {
       header: "تاريخ الجلسة",
-      accessor: "sessionDate",
+      accessor: (item) => formatDateToYYYYMMDD(item.session_decision) || "-",
     },
-    {
-      header: "الحالة",
-      accessor: (item) => {
-        const statusMap = {
-          attended: { label: "انعقدت", color: "bg-success/20 text-success" },
-          postponed: { label: "مؤجلة", color: "bg-error/20 text-error" },
-        };
-        const config = statusMap[item.status];
-        return (
-          <span
-            className={`font-regular rounded-full px-3 py-1 text-xs ${config.color}`}
-          >
-            {config.label}
-          </span>
-        );
-      },
-    },
+    { header: "قرار الجلسة", accessor: "session_decision" },
   ];
+
+
+  if (isPending) return <LoadingPage />;
+  if (isError) return <Error message={error?.message} />;
 
   return (
     <PageLayout>
       <HeaderPageReportsSessions
         searchTerm={searchTerm}
-        onSearch={setSearchTerm}
+        onSearch={handleSearchChange}
         onFilterChange={handleFilterChange}
+        onExport={handleExport}
         filters={filters}
       />
 
-      <DataTable columns={columns} data={paginatedSessions} rowIdField="id" />
+      <DataTable columns={columns} data={indexedSessions} rowIdField="id" />
 
       {totalPages > 1 && (
         <Pagination

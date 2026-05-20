@@ -1,11 +1,13 @@
 export interface ReportSession {
   id: string;
+  rowNumber?: number;
   sessionType: string;
-  judicialGrade: string;
-  caseAutoNumber: string;
+  sessionSource: string;
+  judicialGrade?: string;
+  caseAutoNumber?: string;
   clientName: string;
   lawyerName: string;
   entity: string;
   sessionDate: string;
-  status: "attended" | "postponed";
+  sessionDecision?: string | null;
 }
