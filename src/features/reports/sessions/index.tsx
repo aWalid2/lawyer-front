@@ -7,39 +7,47 @@ import PageLayout from "@/shared/components/PageLayout";
 import { useGetAllSessionsReports } from "./api/hooks/useGetAllSessionsReports";
 import { exportSessions } from "./api/services/exportSessions";
 import { formatDateToYYYYMMDD } from "@/shared/utils";
-import { useIndexedData } from "@/shared/utils/useIndexedData";
 import { toast } from "sonner";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
+import type { GetAllSessionsParams } from "./api/services/getAllSessionsReports";
 
 const itemsPerPage = 15;
 
 export const ReportsSessionsFeature: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({ type: "all", status: "all" });
+  const [filters, setFilters] = useState({ session_source: "all", session_type: "all" });
 
   const apiParams = useMemo(() => {
-    const params: any = { page: 1, limit: 1000 };
-    if (filters.type !== "all") params.session_source = filters.type;
-    if (filters.status !== "all") params.session_type = filters.status;
+    const params: GetAllSessionsParams = { page: currentPage, limit: itemsPerPage };
+    if (filters.session_source !== "all") params.session_source = filters.session_source;
+    if (filters.session_type !== "all") params.session_type = filters.session_type;
     if (searchTerm) params.search = searchTerm;
     return params;
-  }, [filters, searchTerm]);
+  }, [filters, searchTerm, currentPage]);
 
-
-  const { data, isPending, isError, error } = useGetAllSessionsReports(apiParams, 1);
+  const { data, isPending, isError, error } = useGetAllSessionsReports(apiParams);
   const sessions = useMemo(() => data?.data ?? [], [data]);
 
 
-  const indexedSessions = useIndexedData(sessions, currentPage, itemsPerPage);
-  const totalPages = Math.ceil(sessions.length / itemsPerPage);
+  const totalPages = data?.meta?.total_pages ?? 1;
 
+  const safeCurrentPage = useMemo(
+    () => Math.min(currentPage, totalPages),
+    [currentPage, totalPages]
+  );
+
+  const paginatedSessions = useMemo(() =>
+    sessions.map((session, index) => ({
+      ...session,
+      rowNumber: (currentPage - 1) * itemsPerPage + index + 1,
+    }))
+    , [sessions, currentPage]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, filters]);
-
 
   const handleSearchChange = (value: string) => setSearchTerm(value);
   const handleFilterChange = (key: string, value: string) =>
@@ -71,7 +79,7 @@ export const ReportsSessionsFeature: React.FC = () => {
     { header: "الجهة", accessor: "entity" },
     {
       header: "تاريخ الجلسة",
-      accessor: (item) => formatDateToYYYYMMDD(item.session_decision) || "-",
+      accessor: (item) => formatDateToYYYYMMDD(item.session_date) || "-",
     },
     { header: "قرار الجلسة", accessor: "session_decision" },
   ];
@@ -90,11 +98,11 @@ export const ReportsSessionsFeature: React.FC = () => {
         filters={filters}
       />
 
-      <DataTable columns={columns} data={indexedSessions} rowIdField="id" />
+      <DataTable columns={columns} data={paginatedSessions} rowIdField="id" />
 
       {totalPages > 1 && (
         <Pagination
-          currentPage={currentPage}
+          currentPage={safeCurrentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
         />

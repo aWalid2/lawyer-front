@@ -12,8 +12,8 @@ interface HeaderPageReportsSessionsProps {
   onExport: (type: "pdf" | "excel") => void;
   searchTerm: string;
   filters: {
-    type: string;
-    status: string;
+    session_source: string;
+    session_type: string;
   };
 }
 
@@ -38,8 +38,8 @@ export const HeaderPageReportsSessions: React.FC<HeaderPageReportsSessionsProps>
       <div className="flex items-center gap-3 w-full md:w-auto justify-end">
         <HeaderFilter
           placeholder="نوع الجلسة"
-          value={filters.type}
-          onFilterChange={(v) => onFilterChange("type", v)}
+          value={filters.session_type}
+          onFilterChange={(v) => onFilterChange("session_type", v)}
           options={[
             { value: "all", label: "نوع الجلسة" },
             { value: "court", label: "محكمة" },
@@ -50,8 +50,8 @@ export const HeaderPageReportsSessions: React.FC<HeaderPageReportsSessionsProps>
         />
         <HeaderFilter
           placeholder="الدرجة القضائية"
-          value={filters.status}
-          onFilterChange={(v) => onFilterChange("status", v)}
+          value={filters.session_source}
+          onFilterChange={(v) => onFilterChange("session_source", v)}
           options={[{ value: "all", label: "الدرجة القضائية" }, ...LITIGATION_LEVEL_OPTIONS]}
           className="md:w-[150px]"
         />

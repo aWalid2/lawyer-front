@@ -1,13 +1,12 @@
 export interface ReportSession {
   id: string;
   rowNumber?: number;
-  sessionType: string;
-  sessionSource: string;
-  judicialGrade?: string;
-  caseAutoNumber?: string;
-  clientName: string;
-  lawyerName: string;
+  session_type: string;
+  case_sequence: string;
+  session_source: string;
+  client_name?: string;
+  lawyer_name: string;
   entity: string;
-  sessionDate: string;
-  sessionDecision?: string | null;
+  session_date?: string;
+  session_decision?: string | null;
 }

@@ -1,4 +1,5 @@
 import api from '@/lib/api';
+import type { ReportSession } from '../../types';
 
 export interface GetAllSessionsParams {
   page?: number;
@@ -22,18 +23,7 @@ export interface GetAllSessionsResponse {
   };
 }
 
-export interface ReportSession {
-  id: string;
-  sessionType: string;
-  judicialGrade: string;
-  caseAutoNumber: string;
-  clientName: string;
-  lawyerName: string;
-  entity: string;
-  sessionDate: string;
-  status: string;
-  sessionDecision?: string;
-}
+
 
 
 export const getAllSessionsReports = async (params: GetAllSessionsParams) => {
