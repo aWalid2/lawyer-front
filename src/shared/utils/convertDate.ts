@@ -1,4 +1,5 @@
 export function formatDateToYYYYMMDD(isoString: string | null | undefined): string {
+
   if (!isoString) return "";
   const date = new Date(isoString);
 
