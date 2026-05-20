@@ -1,9 +1,11 @@
 import React from "react";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { HeaderFilter } from "@/shared/components/HeaderFilter";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
+import { exportUserReports } from "../api/services/exportUserReports";
+import { toast } from "sonner";
 
 interface HeaderPageReportsUsersProps {
   onSearch: (term: string) => void;
@@ -23,6 +25,24 @@ export const HeaderPageReportsUsers: React.FC<HeaderPageReportsUsersProps> = ({
   filters,
   roleOptions
 }) => {
+  const handleExport = async (type: "pdf" | "excel") => {
+    try {
+      const params: { status?: string; role_id?: string } = {};
+      if (filters.status !== "all") params.status = filters.status;
+      if (filters.role !== "all") params.role_id = filters.role;
+      const blob = type === "pdf" ? await exportUserReports("pdf", params) : await exportUserReports("excel", params);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `user-reports.${type === "excel" ? "xlsx" : "pdf"}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      toast.error("حدث خطأ أثناء تصدير التقرير");
+    }
+  };
   return (
     <HeaderPageLayout>
       <HeaderTitle innerPage title="تقارير المستخدمين" />
@@ -53,11 +73,7 @@ export const HeaderPageReportsUsers: React.FC<HeaderPageReportsUsersProps> = ({
           ]}
           className="md:w-27.5"
         />
-        <HeaderActionButton
-          label="تصدير"
-          variant="gradient"
-          className="rounded-main h-12.5 px-8"
-        />
+        <HeaderExportMenu onSelect={handleExport} />
       </div>
     </HeaderPageLayout>
   );
