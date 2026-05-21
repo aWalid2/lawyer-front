@@ -121,9 +121,7 @@ function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: Pros
                                     label="وقت الجلسة"
                                     type="time"
                                 />
-                            </div>
 
-                            <div className="grid grid-cols-1 gap-4">
                                 <SelectForm
                                     name="lawyer_id"
                                     label="المحامي المسؤول"
@@ -131,8 +129,9 @@ function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: Pros
                                     placeholder="اختر المحامي المسؤول"
                                 />
                                 <TextAreaForm
+                                    className="col-span-1 md:col-span-2"
                                     name="session_decision"
-                                    label="القرار "
+                                    label="قرار الجلسة "
                                     placeholder="أدخل قرار الجلسة"
                                 />
                             </div>

@@ -68,6 +68,7 @@ export const FirstInstanceSessionDetailsDialog: React.FC<
             <InputBox label="المحكمة" text={session.court?.name || "-"} />
             <InputBox label="دور القاعة" text={session.hall_floor || "-"} />
             <InputBox label="رقم القاعة" text={session.hall_number || "-"} />
+            <InputBox label="قرار الجلسة" text={session.session_decision || "-"} />
           </div>
         </CustomLayoutBorder>
       )}

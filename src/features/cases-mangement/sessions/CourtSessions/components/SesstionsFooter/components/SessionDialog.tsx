@@ -14,6 +14,8 @@ import * as Yup from "yup";
 import { useGetCourts } from "@/shared/api/hooks/useGetCourts";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
+import { TextAreaForm } from "@/shared/components/TextAreaForm";
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils";
 
 interface SessionPayload {
   id?: number;
@@ -22,15 +24,18 @@ interface SessionPayload {
   lawyer_id?: number | null;
   hall_floor: number;
   hall_number: number;
+  session_decision?: string;
 }
 
 interface SessionFormValues {
   id?: number;
   session_date: string;
+  time_date: string;
   court_id: number;
   lawyer_id?: number | null | string;
   hall_floor: number;
   hall_number: number;
+  session_decision: string;
 }
 
 interface CourtEntity {
@@ -59,11 +64,13 @@ interface SessionDialogProps {
 }
 
 const validationSchema = Yup.object({
-  session_date: Yup.string().required("تاريخ ووقت الجلسة مطلوب"),
+  session_date: Yup.string().required("تاريخ الجلسة مطلوب"),
+  time_date: Yup.string().required("وقت الجلسة مطلوب"),
   court_id: Yup.number().required("المحكمة مطلوبة"),
   lawyer_id: Yup.number().required("المحامي المسؤول مطلوب"),
   hall_floor: Yup.number().required("دور القاعة مطلوب"),
   hall_number: Yup.number().required("رقم القاعة مطلوب"),
+  session_decision: Yup.string().optional(),
 });
 
 export const SessionDialog: React.FC<SessionDialogProps> = ({
@@ -94,11 +101,13 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
 
   const defaultValues: SessionFormValues = {
     id: initialValues?.id,
-    session_date: initialValues?.session_date || "",
+    session_date: formatDateToYYYYMMDD(initialValues?.session_date) || "",
+    time_date: formatDateToTime(initialValues?.session_date) || "",
     court_id: initialValues?.court_id || 1,
     lawyer_id: initialValues?.lawyer_id ?? "",
     hall_floor: initialValues?.hall_floor || 1,
     hall_number: initialValues?.hall_number || 1,
+    session_decision: initialValues?.session_decision || "",
   };
 
   return (
@@ -128,6 +137,7 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
               await onSave({
                 ...values,
                 lawyer_id: values.lawyer_id ? Number(values.lawyer_id) : null,
+                session_date: values.session_date + "T" + values.time_date,
               });
               onOpenChange(false);
             } finally {
@@ -140,8 +150,13 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
               <div className="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2">
                 <InputForm
                   name="session_date"
-                  label="تاريخ ووقت الجلسة"
-                  type="datetime-local"
+                  label="تاريخ الجلسة"
+                  type="date"
+                />
+                <InputForm
+                  name="time_date"
+                  label="وقت الجلسة"
+                  type="time"
                 />
                 <SelectForm
                   name="court_id"
@@ -159,6 +174,11 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
                   name="hall_number"
                   label="رقم القاعة"
                   type="number"
+                />
+                <TextAreaForm
+                  name="session_decision"
+                  label="قرار الجلسة"
+                  className="col-span-1 md:col-span-2"
                 />
               </div>
               <button
