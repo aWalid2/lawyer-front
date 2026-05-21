@@ -5,6 +5,7 @@ import type {
   ExpertSessionStatus,
 } from "../../../types/ExpertSessionApiTypes";
 import { AddExpertModalForm } from "./AddExpertModal/AddExpertModalForm";
+import { formatDateToYYYYMMDD } from "@/shared/utils";
 
 interface AddExpertModalProps {
   onClose: () => void;
@@ -23,12 +24,12 @@ const AddExpertModal: React.FC<AddExpertModalProps> = ({
     lawyer_id: initialValues?.lawyer_id || "",
     expert_report_number: initialValues?.expert_report_number || "",
     assigning_authority: initialValues?.assigning_authority || "",
-    assignment_date: initialValues?.assignment_date || "",
+    assignment_date: formatDateToYYYYMMDD(initialValues?.assignment_date) || "",
     expert_office_name: initialValues?.expert_office_name || "",
-    task_start_date: initialValues?.task_start_date || "",
+    task_start_date: formatDateToYYYYMMDD(initialValues?.task_start_date) || "",
     subject_of_expertise: initialValues?.subject_of_expertise || "",
     final_opinion: initialValues?.final_opinion || "",
-    submission_date: initialValues?.submission_date || "",
+    submission_date: formatDateToYYYYMMDD(initialValues?.submission_date) || "",
     status: (initialValues?.status as ExpertSessionStatus) || "UNDER_REVIEW",
   };
   const isEditMode = !!initialValues;
