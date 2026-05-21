@@ -6,6 +6,7 @@ import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { useExport } from "@/shared/hooks/useExport";
 import { exportAllCases } from "../api/service/exportAllCases";
+import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
 
 interface HeaderPageReportsCasesProps {
   onSearch: (term: string) => void;
@@ -45,8 +46,8 @@ export const HeaderPageReportsCases: React.FC<HeaderPageReportsCasesProps> = ({
     },
   });
 
-  const handleExport = () => {
-    triggerExport("excel", { searchTerm, filter });
+  const handleExport = (type: "pdf" | "excel") => {
+    triggerExport(type, { searchTerm, filter });
   };
 
   return (
@@ -73,12 +74,9 @@ export const HeaderPageReportsCases: React.FC<HeaderPageReportsCasesProps> = ({
           ]}
           className="md:w-[120px]"
         />
-        <HeaderActionButton
-          label={isExporting ? "جاري التصدير..." : "تصدير"}
-          variant="gradient"
-          className="rounded-main h-12.5 px-8"
-          onClick={handleExport}
-          disabled={isExporting}
+        <HeaderExportMenu
+          onSelect={handleExport}
+
         />
       </div>
     </HeaderPageLayout>

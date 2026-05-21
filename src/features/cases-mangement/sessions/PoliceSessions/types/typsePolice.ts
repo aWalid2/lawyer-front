@@ -1,10 +1,10 @@
 export interface FormValues {
-  
-    case_number: string;           
-    judge_name: string;           
-    investigation_authirity_transferd_from: string;  
-    case_entry: string;      
-    station_id: string;                
+
+    case_number: string;
+    judge_name: string;
+    investigation_authirity_transferd_from: string;
+    case_entry: string;
+    station_id: string;
 }
 
 export interface PoliceSession {
@@ -13,7 +13,7 @@ export interface PoliceSession {
     case_id: number;
     lawyer_id: number;
     session_date: string;
-    session_ruling: string;
+    session_decision: string;
     session_time: string;
     case: {
         id: number;
@@ -42,14 +42,14 @@ export interface CreatePoliceSessionPayload {
     case_id?: number;
     lawyer_id: number;
     session_date: string;
-    session_ruling: string;
+    session_decision: string;
     session_time?: string;
 }
 
 export interface SessionFormValues {
     session_date: string;
     session_time: string;
-    lawyer_id: string; 
-    session_ruling: string;
-    case_id?: string; 
+    lawyer_id: string;
+    session_decision: string;
+    case_id?: string;
 }

@@ -4,5 +4,5 @@ export const validationSchema = Yup.object({
     session_date: Yup.string().required("تاريخ الجلسة مطلوب"),
     session_time: Yup.string().required("وقت الجلسة مطلوب"),
     lawyer_id: Yup.string().required("اسم المحامي مطلوب"),
-    session_ruling: Yup.string().required("قرار الجلسة مطلوب"),
+    session_decision: Yup.string().required("قرار الجلسة مطلوب"),
 });

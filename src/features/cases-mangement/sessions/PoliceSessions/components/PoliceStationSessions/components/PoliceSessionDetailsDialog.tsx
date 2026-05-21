@@ -65,7 +65,6 @@ export const PoliceSessionDetailsDialog: React.FC<
             <InputBox
               label="وقت الجلسة"
               text={
-                session.session_time ||
                 formatDateToTime(session.session_date) ||
                 "-"
               }
@@ -73,7 +72,7 @@ export const PoliceSessionDetailsDialog: React.FC<
             <InputBox label="المحامي المتابع" text={lawyerName || "-"} />
             <InputBox
               label="قرار الجلسة"
-              text={session.session_ruling || "-"}
+              text={session.session_decision || "-"}
             />
             <div className="col-span-1 md:col-span-2">
               <InputBox

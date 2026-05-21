@@ -17,7 +17,7 @@ export const useReportCase = (page: number, limit: number, status?: string, sear
       toast.error(query.error.message || "Failed to fetch cases. Please try again later.");
     }
   }, [query.error]);
-  
+
 
   return query;
 };

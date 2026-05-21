@@ -70,7 +70,7 @@ const PoliceStationsession = () => {
     },
     {
       header: "قرار الجلسة",
-      accessor: (item) => item.session_ruling,
+      accessor: (item) => item.session_decision,
     },
     {
       header: "الإجراءات",

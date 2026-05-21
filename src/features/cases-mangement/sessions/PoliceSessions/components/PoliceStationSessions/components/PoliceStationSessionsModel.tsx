@@ -18,6 +18,8 @@ import { useCreatePoliceSessions } from "../../../api/hooks/useCreatePoliceSessi
 import { useUpdatePoliceSessions } from "../../../api/hooks/useUpdatePoliceSessions";
 import type { CreatePoliceSessionPayload, PoliceSession, SessionFormValues } from "../../../types/typsePolice";
 import { validationSchema } from "./ValidationSchema";
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils";
+import { TextAreaForm } from "@/shared/components/TextAreaForm";
 
 interface PoliceStationSessionsModelProps {
   onClose: () => void;
@@ -47,19 +49,17 @@ function PoliceStationSessionsModel({
   }));
 
   const defaultFormValues: SessionFormValues = {
-    session_date: initialValues?.session_date
-      ? initialValues.session_date.split("T")[0]
-      : "",
-    session_time: initialValues?.session_time || "",
+    session_date: formatDateToYYYYMMDD(initialValues?.session_date),
+    session_time: formatDateToTime(initialValues?.session_date),
     lawyer_id: initialValues?.lawyer_id
       ? String(initialValues.lawyer_id)
       : "",
-    session_ruling: initialValues?.session_ruling || "",
+    session_decision: initialValues?.session_decision || "",
   };
   const handleSubmit = async (values: SessionFormValues) => {
     try {
       if (!id) {
-        toast.error("معرف القضية غير موجود في الرابط");
+        toast.error("معرف القضية غير موجود في الرابط")
         return;
       }
 
@@ -67,7 +67,7 @@ function PoliceStationSessionsModel({
         case_id: Number(id),
         lawyer_id: Number(values.lawyer_id),
         session_date: values.session_date + "T" + values.session_time,
-        session_ruling: values.session_ruling,
+        session_decision: values.session_decision,
       };
 
 
@@ -145,20 +145,13 @@ function PoliceStationSessionsModel({
                   label="المحامي المتابع للجلسة"
                   options={lawyerOptions}
                 />
-                <SelectForm
-                  name="session_ruling"
+                <TextAreaForm
+                  name="session_decision"
                   label="قرار الجلسة"
-                  options={[
-                    { value: "تم التأجيل", label: "تم التأجيل" },
-                    { value: "تم الحضور", label: "تم الحضور" },
-                    { value: "انتظار القرار", label: "انتظار القرار" },
-                    { value: "تم الصلح", label: "تم الصلح" },
-                    { value: "تم الحبس", label: "تم الحبس" },
-                  ]}
                 />
               </div>
 
-              <SubmitButton isPending={isCreating || isUpdating}>
+              <SubmitButton type="submit" isPending={isCreating || isUpdating}>
                 {mode === "add" ? "إضافة" : "حفظ التعديلات"}
               </SubmitButton>
             </Form>
