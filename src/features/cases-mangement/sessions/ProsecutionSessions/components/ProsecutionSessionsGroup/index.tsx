@@ -67,7 +67,7 @@ const ProsecutionSessionsGroup = () => {
     },
     {
       header: "قرار الجلسة",
-      accessor: (item) => item.session_ruling || "لا يوجد",
+      accessor: (item) => item?.session_decision || "لا يوجد",
     },
     {
       header: "الإجراءات",

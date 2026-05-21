@@ -16,6 +16,7 @@ import { useCreateProsecutionSessions } from "../../../api/hooks/useCreateProsec
 import { useUpdateProsecutionSessions } from "../../../api/hooks/useUpdateProsecutionSessions";
 import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
 import { SelectForm } from "@/shared/components/SelectForm";
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils";
 
 interface ProsecutionSessionsModelProps {
     onClose: () => void;
@@ -27,7 +28,7 @@ const validationSchema = Yup.object({
     session_date: Yup.string().required("تاريخ الجلسة مطلوب"),
     session_time: Yup.string().required("وقت الجلسة مطلوب"),
     lawyer_id: Yup.string().required("اسم المحامي المسؤول مطلوب"),
-    session_ruling: Yup.string().required("قرار الجلسة مطلوب"),
+    session_decision: Yup.string().required("قرار الجلسة مطلوب"),
 });
 
 function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: ProsecutionSessionsModelProps) {
@@ -49,21 +50,17 @@ function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: Pros
 
 
     const defaultFormValues = {
-        session_date: initialValues?.session_date
-            ? initialValues.session_date.split("T")[0]
-            : "",
-        session_time: initialValues?.session_time
-            ? initialValues.session_time.split("T")[1]
-            : "",
+        session_date: formatDateToYYYYMMDD(initialValues?.session_date),
+        session_time: formatDateToTime(initialValues?.session_date),
         lawyer_id: initialValues?.lawyer_id ? String(initialValues.lawyer_id) : "",
-        session_ruling: initialValues?.session_ruling || "",
+        session_decision: initialValues?.session_decision || "",
     };
 
     const handleSubmit = async (values: any) => {
         const payload = {
             session_date: values.session_date + "T" + values.session_time,
             lawyer_id: Number(values.lawyer_id),
-            session_ruling: values.session_ruling,
+            session_decision: values.session_decision,
         };
 
         try {
@@ -134,7 +131,7 @@ function ProsecutionSessionsModel({ onClose, initialValues, mode = "add" }: Pros
                                     placeholder="اختر المحامي المسؤول"
                                 />
                                 <TextAreaForm
-                                    name="session_ruling"
+                                    name="session_decision"
                                     label="القرار "
                                     placeholder="أدخل قرار الجلسة"
                                 />

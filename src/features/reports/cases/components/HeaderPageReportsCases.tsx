@@ -1,12 +1,11 @@
-import React from "react";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { useExport } from "@/shared/hooks/useExport";
-import { exportAllCases } from "../api/service/exportAllCases";
 import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
+import { HeaderFilter } from "@/shared/components/HeaderFilter";
+import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { useExport } from "@/shared/hooks/useExport";
+import React from "react";
+import { exportAllCases } from "../api/service/exportAllCases";
 
 interface HeaderPageReportsCasesProps {
   onSearch: (term: string) => void;
@@ -21,7 +20,7 @@ export const HeaderPageReportsCases: React.FC<HeaderPageReportsCasesProps> = ({
   searchTerm,
   filter,
 }) => {
-  const { handleExport: triggerExport, isPending: isExporting } = useExport({
+  const { handleExport: triggerExport } = useExport({
     exportExcelFn: (params: { searchTerm: string; filter: string }) =>
       exportAllCases(params.searchTerm, params.filter),
     getFileName: (_, params) => {
@@ -76,7 +75,6 @@ export const HeaderPageReportsCases: React.FC<HeaderPageReportsCasesProps> = ({
         />
         <HeaderExportMenu
           onSelect={handleExport}
-
         />
       </div>
     </HeaderPageLayout>

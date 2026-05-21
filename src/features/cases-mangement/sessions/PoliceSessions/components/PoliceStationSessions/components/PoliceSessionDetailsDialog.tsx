@@ -74,12 +74,7 @@ export const PoliceSessionDetailsDialog: React.FC<
               label="قرار الجلسة"
               text={session.session_decision || "-"}
             />
-            <div className="col-span-1 md:col-span-2">
-              <InputBox
-                label="عنوان القضية"
-                text={session.case?.case_title || "-"}
-              />
-            </div>
+
           </div>
         </CustomLayoutBorder>
       )}

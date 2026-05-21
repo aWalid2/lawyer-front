@@ -67,7 +67,7 @@ export const ProsecutionSessionDetailsDialog: React.FC<
             <InputBox label="المحامي المتابع" text={lawyerName || "-"} />
             <InputBox
               label="قرار الجلسة"
-              text={session.session_ruling || "-"}
+              text={session.session_decision || "-"}
             />
           </div>
         </CustomLayoutBorder>
