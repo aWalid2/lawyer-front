@@ -25,18 +25,11 @@ const validationSchema = Yup.object({
   referral_date: Yup.string().required("تاريخ الإحالة مطلوب"),
   admin_authority: Yup.string().required("الجهة الإدارية مطلوبة"),
   session_date: Yup.string().required("موعد الجلسة مطلوب"),
+  time_session: Yup.string().required("وقت الجلسة مطلوب"),
   lawyer_id: Yup.string().required("المحامي المسؤول مطلوب"),
   session_decision: Yup.string().required("قرار الجلسة مطلوب"),
   notes: Yup.string(),
 });
-
-const decisionOptions: SelectOption[] = [
-  { label: "تم التأجيل", value: "تم التأجيل" },
-  { label: "تم الحضور", value: "تم الحضور" },
-  { label: "انتظار القرار", value: "انتظار القرار" },
-  { label: "تم الصلح", value: "تم الصلح" },
-  { label: "مؤجلة", value: "Postponed" },
-];
 
 export const AddOtherSessionDialogForm: React.FC<
   AddOtherSessionDialogFormProps
@@ -48,7 +41,10 @@ export const AddOtherSessionDialogForm: React.FC<
       enableReinitialize
       onSubmit={async (values, { setSubmitting }) => {
         try {
-          await onSubmit(values);
+          await onSubmit({
+            ...values,
+            session_date: `${values.session_date}T${values.time_session}`,
+          });
         } catch (error) {
           console.error(error);
         } finally {
@@ -62,14 +58,19 @@ export const AddOtherSessionDialogForm: React.FC<
             <InputForm name="actionType" label="نوع الإجراء" type="text" />
             <InputForm name="referral_date" label="تاريخ الإحالة" type="date" />
             <InputForm
+              name="session_date"
+              label="تاريخ الجلسة"
+              type="date"
+            />
+            <InputForm
+              name="time_session"
+              label="وقت الجلسة"
+              type="time"
+            />
+            <InputForm
               name="admin_authority"
               label="الجهة الإدارية"
               type="text"
-            />
-            <InputForm
-              name="session_date"
-              label="تاريخ ووقت الجلسة"
-              type="datetime-local"
             />
             <SelectForm
               name="lawyer_id"
@@ -77,10 +78,10 @@ export const AddOtherSessionDialogForm: React.FC<
               options={lawyersOptions}
               showSearch={true}
             />
-            <SelectForm
+            <TextAreaForm
+              className="col-span-1 md:col-span-2"
               name="session_decision"
               label="قرار الجلسة"
-              options={decisionOptions}
             />
             <TextAreaForm
               name="notes"

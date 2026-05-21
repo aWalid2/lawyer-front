@@ -59,19 +59,20 @@ export const OtherSessionDetailsDialog: React.FC<
               icon={<DateIcon />}
             />
             <InputBox
-              label="الجهة الإدارية"
-              text={session.admin_authority || "-"}
+              label="تاريخ الجلسة "
+              text={
+                formatDateToYYYYMMDD(session.session_date)
+              }
             />
             <InputBox
-              label="موعد الجلسة"
+              label="وقت الجلسة"
               text={
-                [
-                  formatDateToYYYYMMDD(session.session_date),
-                  formatDateToTime(session.session_date),
-                ]
-                  .filter(Boolean)
-                  .join(" - ") || "-"
+                formatDateToTime(session.session_date)
               }
+            />
+            <InputBox
+              label="الجهة الإدارية"
+              text={session.admin_authority || "-"}
             />
             <InputBox
               label="المحامي المسؤول"

@@ -1,3 +1,5 @@
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils";
+
 export interface OtherSessionRequest {
   actionType: string;
   referral_date: string;
@@ -10,7 +12,7 @@ export interface OtherSessionRequest {
 
 export interface OtherSessionLawyer {
   user_id?: number;
-    name?: string;
+  name?: string;
 }
 
 export interface OtherSession {
@@ -44,6 +46,7 @@ export interface OtherSessionFormValues {
   referral_date: string;
   admin_authority: string;
   session_date: string;
+  time_session: string;
   lawyer_id: string;
   session_decision: string;
   notes: string;
@@ -54,6 +57,7 @@ export const EMPTY_OTHER_SESSION_FORM_VALUES: OtherSessionFormValues = {
   referral_date: "",
   admin_authority: "",
   session_date: "",
+  time_session: "",
   lawyer_id: "",
   session_decision: "",
   notes: "",
@@ -65,7 +69,8 @@ export const toOtherSessionFormValues = (
   actionType: session?.actionType || "",
   referral_date: session?.referral_date || "",
   admin_authority: session?.admin_authority || "",
-  session_date: session?.session_date ? session.session_date.slice(0, 16) : "",
+  session_date: formatDateToYYYYMMDD(session?.session_date) || "",
+  time_session: formatDateToTime(session?.session_date) || "",
   lawyer_id: session?.lawyer_id ? String(session.lawyer_id) : "",
   session_decision: session?.session_decision || "",
   notes: session?.notes || "",
