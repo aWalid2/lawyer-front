@@ -1,10 +1,10 @@
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { HeaderFilter } from "@/shared/components/HeaderFilter";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { useExport } from "@/shared/hooks/useExport";
 import { exportAllClients } from "../api/service/exportClients";
+import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
 
 interface HeaderPageReportsClientsProps {
   onSearch: (term: string) => void;
@@ -13,13 +13,10 @@ interface HeaderPageReportsClientsProps {
   filter: string;
 }
 
-export const HeaderPageReportsClients: React.FC<HeaderPageReportsClientsProps> = ({
-  onSearch,
-  onFilterChange,
-  searchTerm,
-  filter,
-}) => {
-  const { handleExport: triggerExport, isPending: isExporting } = useExport({
+export const HeaderPageReportsClients: React.FC<
+  HeaderPageReportsClientsProps
+> = ({ onSearch, onFilterChange, searchTerm, filter }) => {
+  const { handleExport: triggerExport } = useExport({
     exportExcelFn: (params: { searchTerm: string; filter: string }) =>
       exportAllClients(params.searchTerm, params.filter),
     getFileName: (_, params) => {
@@ -58,7 +55,7 @@ export const HeaderPageReportsClients: React.FC<HeaderPageReportsClientsProps> =
         className="lg:ms-0"
       />
 
-      <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+      <div className="flex w-full items-center justify-end gap-3 md:w-auto">
         <HeaderFilter
           placeholder="الحالة"
           value={filter}
@@ -70,13 +67,7 @@ export const HeaderPageReportsClients: React.FC<HeaderPageReportsClientsProps> =
           ]}
           className="md:w-[120px]"
         />
-        <HeaderActionButton
-         label={isExporting ? "جاري التصدير..." : "تصدير"}
-          variant="gradient"
-          className="rounded-main h-12.5 px-8"
-          onClick={handleExport}
-          disabled={isExporting}
-        />
+        <HeaderExportMenu onSelect={handleExport} />
       </div>
     </HeaderPageLayout>
   );

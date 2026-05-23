@@ -3,8 +3,9 @@ import { HeaderPageCase } from "./componnents/HeaderPageCase";
 import type { Case } from "./types/casesTypes";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { TableCasesActions } from "./componnents/TableCasesActions";
-import { useGetCases } from "./api/hooks/useGetCases";
+import { useGetCases, useSearchCases } from "./api/hooks/useGetCases";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 import { PaginationApi } from "@/shared/components/PaginationApi";
@@ -64,8 +65,22 @@ const MainCases = () => {
   ];
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState<number>(1);
+  const debouncedSearchTerm = useDebounce(searchTerm, 1000);
 
-  const { data: cases, isPending, isError } = useGetCases(page);
+  const {
+    data: allCases,
+    isPending: isAllPending,
+    isError: isAllError,
+  } = useGetCases(page);
+  const {
+    data: searchResults,
+    isPending: isSearchPending,
+    isError: isSearchError,
+  } = useSearchCases(page, debouncedSearchTerm);
+
+  const cases = debouncedSearchTerm ? searchResults : allCases;
+  const isPending = debouncedSearchTerm ? isSearchPending : isAllPending;
+  const isError = debouncedSearchTerm ? isSearchError : isAllError;
   const totalPages = cases?.meta?.total_pages ?? 1;
   const limit = cases?.meta?.limit || 15;
   const indexedData = useIndexedData(cases?.data || [], page, limit);
@@ -77,7 +92,8 @@ const MainCases = () => {
       <HeaderPageCase
         searchTerm={searchTerm}
         onSearch={setSearchTerm}
-        onFilterChange={() => { }} />
+        onFilterChange={() => {}}
+      />
 
       {indexedData?.length === 0 ? (
         <EmptyTable message="لا توجد بيانات حالية لادارة القضايا" />

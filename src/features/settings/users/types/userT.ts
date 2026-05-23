@@ -24,8 +24,8 @@ export interface UserFormValues {
   phone: string;
   hire_date: string;
   ssn?: string;
-  role_name: string;
-  role_id?: number;
+  role_name: string ;
+  role_id?: number ;
   password: string;
   user_status: string;
 }

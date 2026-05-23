@@ -46,6 +46,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
       label: role.role_name,
     }));
   }, [rolesData]);
+  console.log("🚀 ~ file: UserFormDialog.tsx:64 ~ roleOptions:", user);
 
   const initialValues: UserFormValues = {
     first_name: user?.first_name || user?.name || "",
@@ -53,10 +54,10 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
     phone: user?.phone || "",
     hire_date: user?.hire_date || user?.created_at || "",
     ssn: user?.ssn || "",
-    role_name: user?.role?.role_name || "",
+    role_name: user?.role_id?.toString() || "",
     role_id: user?.role_id,
     password: user?.password || "",
-    user_status: user?.user_status || "ACTIVE",
+    user_status: user?.user_status || "active",
   };
 
   const validationSchema = Yup.object().shape({
@@ -223,8 +224,8 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                   name="user_status"
                   label="الحالة"
                   options={[
-                    { value: "ACTIVE", label: "نشط" },
-                    { value: "INACTIVE", label: "غير نشط" },
+                    { value: "active", label: "نشط" },
+                    { value: "inactive", label: "غير نشط" },
                   ]}
                 />
               </div>
