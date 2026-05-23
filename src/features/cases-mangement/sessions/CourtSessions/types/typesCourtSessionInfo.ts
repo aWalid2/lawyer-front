@@ -17,6 +17,9 @@ export interface CourtSessionInfoValues {
   lawyer?: {
     name: string;
   };
+  circle?: {
+    name: string;
+  };
 }
 
 export interface CourtInfoInfProps {

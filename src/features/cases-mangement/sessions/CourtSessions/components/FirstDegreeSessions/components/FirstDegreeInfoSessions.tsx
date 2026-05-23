@@ -30,8 +30,8 @@ export const FirstDegreeInfoSessions: React.FC<CourtInfoInfProps> = ({
           />
 
           <InputBox
-            label="رقم الدائرة"
-            text={courtInfoData?.district_number || "-"}
+            label="اسم  الدائرة"
+            text={courtInfoData?.circle?.name || "-"}
           />
 
           <InputBox

@@ -29,8 +29,8 @@ export const DistinctionInfoSessions: React.FC<CourtInfoInfProps> = ({
             text={courtInfoData?.hall_number || "-"}
           />
           <InputBox
-            label="رقم الدائرة"
-            text={courtInfoData?.district_number || "-"}
+            label="اسم  الدائرة"
+            text={courtInfoData?.circle?.name || "-"}
           />
           <InputBox
             label="نوع الدائرة"
@@ -59,8 +59,8 @@ export const DistinctionInfoSessions: React.FC<CourtInfoInfProps> = ({
           label="تاريخ تسجيل القضية بالمحكمة:"
           text={
             formatDateToYYYYMMDD(courtInfoData?.registration_date) +
-              " - " +
-              formatDateToTime(courtInfoData?.registration_date) || "-"
+            " - " +
+            formatDateToTime(courtInfoData?.registration_date) || "-"
           }
           icon={<DateIcon />}
         />
