@@ -8,7 +8,6 @@ import { UserFormDialog } from "./UserFormDialog";
 import { Plus } from "lucide-react";
 import { useGetAllRoles } from "../../permissions/api";
 
-
 interface UserManagementHeaderProps {
   onSearch: (value: string) => void;
   searchTerm: string;
@@ -22,15 +21,15 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
   searchTerm,
   onUserUpdated,
   selectedRole = "all",
-  setSelectedRole = () => { },
+  setSelectedRole = () => {},
 }) => {
   const { data: roles } = useGetAllRoles();
-  console.log(roles)
 
-  const roleOptions = roles?.map((role) => ({
-    value: String(role.id),
-    label: role.role_name,
-  })) || [];
+  const roleOptions =
+    roles?.map((role) => ({
+      value: String(role.id),
+      label: role.role_name,
+    })) || [];
 
   return (
     <HeaderPageLayout>
@@ -41,16 +40,11 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
       <HeaderFilter
         defaultValue="all"
         value={selectedRole}
-        options={[
-          { value: "all", label: "جميع المستخدمين" },
-          ...roleOptions,
-        ]}
+        options={[{ value: "all", label: "جميع المستخدمين" }, ...roleOptions]}
         onFilterChange={(val) => {
           if (setSelectedRole) setSelectedRole(val);
         }}
       />
-
-
 
       <UserFormDialog
         onUserUpdated={onUserUpdated}

@@ -17,9 +17,6 @@ import * as Yup from "yup";
 import { useAuth } from "@/shared/context/AuthContext";
 import { PAYMENT_TYPE_OPTIONS } from "@/shared/constants/PaymentsOptions";
 
-
-
-
 interface Props {
   payment?: PaymentItem | null;
   open: boolean;
@@ -36,14 +33,11 @@ export const EditModelPayments: React.FC<Props> = ({
   isPending = false,
 }) => {
   const { user } = useAuth();
-  console.log(user)
 
   const initialValues = payment
     ? toPaymentFormValues(payment)
     : EMPTY_PAYMENT_FORM_VALUES;
   const isEdit = !!payment?.id;
-
-
 
   const validationSchema = Yup.object().shape({
     payment_type: Yup.string().required("نوع الدفعة مطلوب"),
@@ -72,7 +66,7 @@ export const EditModelPayments: React.FC<Props> = ({
         onSubmit={async (values) => {
           await onSave(
             { ...values, employee_id: user?.sub ? Number(user.sub) : "" },
-            payment?.id
+            payment?.id,
           );
           onOpenChange(false);
         }}
@@ -86,7 +80,6 @@ export const EditModelPayments: React.FC<Props> = ({
                 options={PAYMENT_TYPE_OPTIONS}
                 placeholder="اختر نوع الدفعة"
               />
-
 
               <InputForm name="payment_date" label="تاريخ الدفعة" type="date" />
               <InputForm

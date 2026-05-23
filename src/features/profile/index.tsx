@@ -9,10 +9,13 @@ import api from "@/lib/api";
 import { toast } from "sonner";
 import ProfileForm from "./components/ProfileForm";
 import ProfileImage from "./components/ProfileImage";
+import type {
+  UpdateProfilePayload,
+  UserProfileResponse,
+} from "./types/profileT";
 
 type ProfileFormValues = {
   firstName: string;
-  lastName: string;
   email: string;
   phoneNumber: string;
   countryCode: string;
@@ -23,34 +26,8 @@ type ProfileFormValues = {
   password: string;
 };
 
-type UserProfileResponse = {
-  id: number;
-  first_name: string | null;
-  last_name: string | null;
-  phone: string | null;
-  email: string | null;
-  nationality: string | null;
-  country: string | null;
-  ssn: string | null;
-  address: string | null;
-  photo: string | null;
-};
-
-type UpdateProfilePayload = {
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone: string;
-  nationality: string;
-  country: string;
-  ssn: string;
-  address: string;
-  password?: string;
-};
-
 const defaultFormValues: ProfileFormValues = {
   firstName: "",
-  lastName: "",
   email: "",
   phoneNumber: "",
   countryCode: "+966",
@@ -127,7 +104,6 @@ const mapUserToFormValues = (
 
   return {
     firstName: name.firstName,
-    lastName: name.lastName,
     email: user.email ?? "",
     phoneNumber: phone.phoneNumber,
     countryCode: phone.countryCode,
@@ -169,7 +145,6 @@ const ProfileUser = () => {
 
       const payload: UpdateProfilePayload = {
         first_name: values.firstName.trim(),
-        last_name: values.lastName.trim(),
         email: values.email.trim(),
         phone: `${values.countryCode}${values.phoneNumber.trim()}`,
         nationality: values.nationality.trim(),
@@ -203,7 +178,7 @@ const ProfileUser = () => {
     await updateProfileMutation.mutateAsync(values);
   };
 
-  const handleImageChange = () => { };
+  const handleImageChange = () => {};
 
   if (isLoading) {
     return <Loading />;

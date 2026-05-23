@@ -46,7 +46,6 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
       label: role.role_name,
     }));
   }, [rolesData]);
-  console.log("🚀 ~ file: UserFormDialog.tsx:64 ~ roleOptions:", user);
 
   const initialValues: UserFormValues = {
     first_name: user?.first_name || user?.name || "",
@@ -121,7 +120,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
           ssn: values.ssn || "",
           password: values.password,
           role: values.role_id || parseInt(values.role_name),
-          status: values.user_status,
+          status: values.user_status === "active" ? "ACTIVE" : "INACTIVE",
           hire_date: values.hire_date,
         },
         {
@@ -201,6 +200,18 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                   label="الرقم المدني"
                   type="text"
                   placeholder="أدخل الرقم المدني"
+                />
+                <InputForm
+                  name="nationality"
+                  label="الجنسية"
+                  type="text"
+                  placeholder="أدخل الجنسية"
+                />
+                <InputForm
+                  name="address"
+                  label="العنوان"
+                  type="text"
+                  placeholder="أدخل الجنسية"
                 />
 
                 <InputForm

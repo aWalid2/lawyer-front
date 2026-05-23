@@ -3,7 +3,7 @@ import { HeaderFilter } from "@/shared/components/HeaderFilter";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { useExport } from "@/shared/hooks/useExport";
-import { exportAllClients } from "../api/service/exportClients";
+import { exportReportsClients } from "../api/service/exportReportClients";
 import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
 
 interface HeaderPageReportsClientsProps {
@@ -18,8 +18,10 @@ export const HeaderPageReportsClients: React.FC<
 > = ({ onSearch, onFilterChange, searchTerm, filter }) => {
   const { handleExport: triggerExport } = useExport({
     exportExcelFn: (params: { searchTerm: string; filter: string }) =>
-      exportAllClients(params.searchTerm, params.filter),
-    getFileName: (_, params) => {
+      exportReportsClients("excel", params.filter),
+    exportPdfFn: (params: { searchTerm: string; filter: string }) =>
+      exportReportsClients("pdf", params.filter),
+    getFileName: (type, params) => {
       let fileName = `clients-report-${new Date().toISOString().split("T")[0]}`;
       if (params.filter !== "all") {
         fileName += `-${params.filter}`;
@@ -27,7 +29,7 @@ export const HeaderPageReportsClients: React.FC<
       if (params.searchTerm) {
         fileName += `-search`;
       }
-      return fileName + `.xlsx`;
+      return fileName + `.${type === "excel" ? "xlsx" : "pdf"}`;
     },
     loadingMessage: () => {
       const filterText = filter !== "all" ? ` (${filter})` : "";
@@ -41,8 +43,10 @@ export const HeaderPageReportsClients: React.FC<
     },
   });
 
-  const handleExport = () => {
-    triggerExport("excel", { searchTerm, filter });
+  const handleExport = (format: string) => {
+    if (format === "excel") {
+      triggerExport(format as "excel", { searchTerm, filter });
+    }
   };
   return (
     <HeaderPageLayout>
@@ -65,7 +69,7 @@ export const HeaderPageReportsClients: React.FC<
             { value: "active", label: "نشط" },
             { value: "inactive", label: "غير نشط" },
           ]}
-          className="md:w-[120px]"
+          className="md:w-30"
         />
         <HeaderExportMenu onSelect={handleExport} />
       </div>

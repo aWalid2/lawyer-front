@@ -5,7 +5,6 @@ import { validationSchema } from "./ProfileValidation";
 
 type ProfileFormValues = {
   firstName: string;
-  lastName: string;
   email: string;
   phoneNumber: string;
   countryCode: string;
@@ -41,25 +40,16 @@ const ProfileForm = ({
       {() => (
         <Form>
           <div className="flex-1">
-      
             <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
               <InputForm
-                label="الاسم الأول"
+                label="الاسم "
                 name="firstName"
                 type="text"
-                placeholder="أدخل الاسم الأول"
-                readonly={!isEditing}
-              />
-              <InputForm
-                label="الاسم الأخير"
-                name="lastName"
-                type="text"
-                placeholder="أدخل الاسم الأخير"
+                placeholder="أدخل الاسم "
                 readonly={!isEditing}
               />
             </div>
 
-      
             <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
               <InputForm
                 name="email"
