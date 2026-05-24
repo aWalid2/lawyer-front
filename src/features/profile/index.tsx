@@ -1,14 +1,12 @@
 import { useMemo, useState } from "react";
-import type { AxiosError } from "axios";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/shared/context/AuthContext";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import PageLayout from "@/shared/components/PageLayout";
 import Loading from "@/shared/Loading";
-import { useAuth } from "@/shared/context/AuthContext";
-import api from "@/lib/api";
-import { toast } from "sonner";
 import ProfileForm from "./components/ProfileForm";
 import ProfileImage from "./components/ProfileImage";
+import { useUpdateUserProfile } from "./api/hooks/useUpdateUserProfile";
+import { useUserProfile } from "./api/hooks/useUserProfile";
 import type {
   UpdateProfilePayload,
   UserProfileResponse,
@@ -118,64 +116,44 @@ const mapUserToFormValues = (
 const ProfileUser = () => {
   const [isEditing, setIsEditing] = useState(false);
   const { user } = useAuth();
-  const queryClient = useQueryClient();
   const rawUserId = user?.id ?? user?.["sub"];
-  const userId =
-    typeof rawUserId === "string" || typeof rawUserId === "number"
-      ? Number(rawUserId)
-      : null;
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["profile-user", userId],
-    queryFn: async () => {
-      const response = await api.get<UserProfileResponse>(`/users/${userId}`);
-      return response.data;
-    },
-    enabled: Number.isFinite(userId),
-    retry: 1,
-  });
+  const parseUserId = (value: unknown): number => {
+    const id =
+      typeof value === "string" || typeof value === "number"
+        ? Number(value)
+        : NaN;
+    return Number.isFinite(id) ? id : 2;
+  };
+
+  const effectiveUserId = parseUserId(rawUserId);
+
+  const { data, isLoading, isError } = useUserProfile(effectiveUserId);
+  const updateProfileMutation = useUpdateUserProfile(effectiveUserId);
 
   const initialValues = useMemo(() => mapUserToFormValues(data), [data]);
 
-  const updateProfileMutation = useMutation({
-    mutationFn: async (values: ProfileFormValues) => {
-      if (!Number.isFinite(userId)) {
-        throw new Error("معرف المستخدم غير صالح");
-      }
-
-      const payload: UpdateProfilePayload = {
-        first_name: values.firstName.trim(),
-        email: values.email.trim(),
-        phone: `${values.countryCode}${values.phoneNumber.trim()}`,
-        nationality: values.nationality.trim(),
-        country: values.country.trim(),
-        ssn: values.civilId.trim(),
-        address: values.address.trim(),
-      };
-
-      if (values.password.trim()) {
-        payload.password = values.password.trim();
-      }
-
-      const response = await api.patch(`/users/${userId}`, payload);
-      return response.data;
-    },
-    onSuccess: async (response) => {
-      toast.success(response?.message || "تم تحديث البيانات بنجاح");
-      setIsEditing(false);
-      await queryClient.invalidateQueries({
-        queryKey: ["profile-user", userId],
-      });
-    },
-    onError: (error: AxiosError<{ message?: string }>) => {
-      toast.error(
-        error.response?.data?.message || "حدث خطأ أثناء تحديث البيانات",
-      );
-    },
-  });
-
   const handleSubmit = async (values: ProfileFormValues) => {
-    await updateProfileMutation.mutateAsync(values);
+    const payload: UpdateProfilePayload = {
+      first_name: values.firstName.trim(),
+      email: values.email.trim(),
+      phone: `${values.countryCode}${values.phoneNumber.trim()}`,
+      nationality: values.nationality.trim(),
+      country: values.country.trim(),
+      ssn: values.civilId.trim(),
+      address: values.address.trim(),
+    };
+
+    if (values.password.trim()) {
+      payload.password = values.password.trim();
+    }
+
+    try {
+      await updateProfileMutation.mutateAsync(payload);
+      setIsEditing(false);
+    } catch {
+      // Errors are handled inside the hook.
+    }
   };
 
   const handleImageChange = () => {};

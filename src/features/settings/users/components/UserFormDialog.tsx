@@ -56,6 +56,8 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
     role_name: user?.role_id?.toString() || "",
     role_id: user?.role_id,
     password: user?.password || "",
+    address: user?.address || "",
+    nationality: user?.nationality || "",
     user_status: user?.user_status || "active",
   };
 

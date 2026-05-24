@@ -9,6 +9,8 @@ export interface UserT {
   hire_date?: string;
   created_at?: string;
   password?: string;
+  address:string;
+  nationality:string;
   role: {
     role_name: string;
   };
@@ -26,6 +28,8 @@ export interface UserFormValues {
   ssn?: string;
   role_name: string ;
   role_id?: number ;
+  address?: string;
+  nationality?: string; 
   password: string;
   user_status: string;
 }
