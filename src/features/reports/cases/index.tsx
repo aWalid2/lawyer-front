@@ -14,6 +14,17 @@ const ReportsCasesFeature = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const limit = 15;
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setPage(1);
+  };
+
+  const handleFilterChange = (status: string) => {
+    setStatusFilter(status);
+    setPage(1);
+  };
+
   const {
     data: cases,
     isPending,
@@ -73,8 +84,8 @@ const ReportsCasesFeature = () => {
     <PageLayout>
       <HeaderPageReportsCases
         searchTerm={searchTerm}
-        onSearch={setSearchTerm}
-        onFilterChange={setStatusFilter}
+        onSearch={handleSearch}
+        onFilterChange={handleFilterChange}
         filter={statusFilter}
       />
 

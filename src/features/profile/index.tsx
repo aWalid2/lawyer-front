@@ -16,9 +16,7 @@ type ProfileFormValues = {
   firstName: string;
   email: string;
   phoneNumber: string;
-  countryCode: string;
   civilId: string;
-  country: string;
   nationality: string;
   address: string;
   password: string;
@@ -28,9 +26,7 @@ const defaultFormValues: ProfileFormValues = {
   firstName: "",
   email: "",
   phoneNumber: "",
-  countryCode: "+966",
   civilId: "",
-  country: "",
   nationality: "",
   address: "",
   password: "",
@@ -70,7 +66,6 @@ const splitName = (firstName: string | null, lastName: string | null) => {
 const splitPhone = (phone: string | null) => {
   if (!phone) {
     return {
-      countryCode: defaultFormValues.countryCode,
       phoneNumber: "",
     };
   }
@@ -79,7 +74,6 @@ const splitPhone = (phone: string | null) => {
 
   if (!matchedCode) {
     return {
-      countryCode: defaultFormValues.countryCode,
       phoneNumber: phone,
     };
   }
@@ -100,16 +94,16 @@ const mapUserToFormValues = (
   const name = splitName(user.first_name, user.last_name);
   const phone = splitPhone(user.phone);
 
+
+  
   return {
     firstName: name.firstName,
     email: user.email ?? "",
     phoneNumber: phone.phoneNumber,
-    countryCode: phone.countryCode,
     civilId: user.ssn ?? "",
-    country: user.country ?? "",
     nationality: user.nationality ?? "",
     address: user.address ?? "",
-    password: "",
+    password: user?.password ?? "",
   };
 };
 
@@ -137,9 +131,8 @@ const ProfileUser = () => {
     const payload: UpdateProfilePayload = {
       first_name: values.firstName.trim(),
       email: values.email.trim(),
-      phone: `${values.countryCode}${values.phoneNumber.trim()}`,
+      phone: `${values.phoneNumber.trim()}`,
       nationality: values.nationality.trim(),
-      country: values.country.trim(),
       ssn: values.civilId.trim(),
       address: values.address.trim(),
     };

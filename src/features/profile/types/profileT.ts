@@ -5,10 +5,10 @@ export type UserProfileResponse = {
   phone: string | null;
   email: string | null;
   nationality: string | null;
-  country: string | null;
   ssn: string | null;
   address: string | null;
   photo: string | null;
+  password: string | null;
 };
 
 export type UpdateProfilePayload = {
@@ -16,8 +16,8 @@ export type UpdateProfilePayload = {
   email: string;
   phone: string;
   nationality: string;
-  country: string;
   ssn: string;
   address: string;
   password?: string;
+  
 };

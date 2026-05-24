@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface NotificationItemProps {
   notification: {
@@ -17,12 +18,14 @@ function NotificationItem({
   onMarkAsRead,
 }: NotificationItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     if (!notification.isRead) {
       onMarkAsRead(notification.id);
     }
     setIsExpanded(!isExpanded);
+    navigate(`/dashboard/user-tasks/${notification.id}`);
   };
 
   return (

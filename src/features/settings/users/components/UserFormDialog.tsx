@@ -85,6 +85,8 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
         {
           employeeId: user.id,
           userData: {
+            nationality: values.nationality,
+            address: values.address,
             first_name: values.first_name,
             email: values.email,
             phone: values.phone,
@@ -116,6 +118,8 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
     } else {
       addUser(
         {
+          nationality: values.nationality || "",
+          address: values.address || "",
           username: values.first_name,
           email: values.email,
           phone: values.phone,
@@ -213,7 +217,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                   name="address"
                   label="العنوان"
                   type="text"
-                  placeholder="أدخل الجنسية"
+                  placeholder="أدخل العنوان"
                 />
 
                 <InputForm

@@ -4,6 +4,8 @@ export interface AddUserRequest {
   phone: string;
   ssn: string;
   password: string;
+  nationality: string;
+  address: string;
   role: number;
   status: string;
   hire_date: string;

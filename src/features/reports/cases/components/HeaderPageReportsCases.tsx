@@ -4,6 +4,8 @@ import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { useExport } from "@/shared/hooks/useExport";
+import { useFetchCaseStatuses } from "@/features/settings/case-statuses/api/hooks/useGetCaseStatuses";
+import type { CaseStatusT } from "@/features/settings/case-statuses/types/caseStatuseTypes";
 import React from "react";
 import { exportReportCases } from "../api/service/exportReportCases";
 
@@ -20,8 +22,19 @@ export const HeaderPageReportsCases: React.FC<HeaderPageReportsCasesProps> = ({
   searchTerm,
   filter,
 }) => {
+  const { data: caseStatusesResponse } = useFetchCaseStatuses(1, 100);
+  const statuses: CaseStatusT[] = caseStatusesResponse?.data || [];
+
+  const filterOptions = [
+    { value: "all", label: "الكل" },
+    ...statuses.map((status) => ({
+      value: String(status.id),
+      label: status.name,
+    })),
+  ];
+
   const { handleExport: triggerExport } = useExport({
-    exportExcelFn: (params: { filter: string }) =>
+    exportExcelFn: (params: { searchTerm: string; filter: string }) =>
       exportReportCases("excel", params),
     exportPdfFn: (params: { searchTerm: string; filter: string }) =>
       exportReportCases("pdf", params),
@@ -68,13 +81,8 @@ export const HeaderPageReportsCases: React.FC<HeaderPageReportsCasesProps> = ({
           placeholder="الحالة"
           value={filter}
           onFilterChange={onFilterChange}
-          options={[
-            { value: "all", label: "الكل" },
-            { value: "open", label: "مفتوحة" },
-            { value: "closed", label: "مغلقة" },
-            { value: "in-progress", label: "قيد التنفيذ" },
-          ]}
-          className="md:w-[120px]"
+          options={filterOptions}
+          className="md:w-30"
         />
         <HeaderExportMenu onSelect={handleExport} />
       </div>
