@@ -62,9 +62,7 @@ const ProfileForm = ({
                   placeholder="أدخل البريد الإلكتروني"
                   readonly={!isEditing}
                 />
-              </div>
 
-              <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="grid grid-cols-12 gap-2">
                   <div className="col-span-8">
                     <InputForm
@@ -94,9 +92,7 @@ const ProfileForm = ({
                     />
                   </div>
                 </div>
-              </div>
 
-              <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                 <InputForm
                   label="الرقم المدني"
                   name="civilId"
@@ -111,9 +107,7 @@ const ProfileForm = ({
                   placeholder="أدخل الدولة"
                   readonly={!isEditing}
                 />
-              </div>
 
-              <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                 <InputForm
                   label="الجنسية"
                   name="nationality"
