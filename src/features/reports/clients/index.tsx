@@ -10,7 +10,7 @@ import { Error } from "@/shared/components/Error";
 import PageLayout from "@/shared/components/PageLayout";
 
 const ReportsClientsFeature = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const limit = 15;
@@ -20,13 +20,12 @@ const ReportsClientsFeature = () => {
     isPending,
     isError,
     error,
-  } = useGetClients(page, limit, statusFilter, searchTerm);
+  } = useGetClients(page, limit, statusFilter);
   const totalPages = clientsData?.meta?.total_pages ?? 1;
   const indexedData = useIndexedData(clientsData?.data, page, limit);
 
-  // Handlers reset page immediately when user changes search or filter
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
+  const handleSearch = () => {
+    // setSearchTerm(term);
     setPage(1);
   };
 
@@ -87,7 +86,7 @@ const ReportsClientsFeature = () => {
   return (
     <PageLayout>
       <HeaderPageReportsClients
-        searchTerm={searchTerm}
+        searchTerm={""}
         onSearch={handleSearch}
         onFilterChange={handleFilterChange}
         filter={statusFilter}

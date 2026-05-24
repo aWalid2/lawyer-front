@@ -44,8 +44,8 @@ export const HeaderPageReportsClients: React.FC<
   });
 
   const handleExport = (format: string) => {
-    if (format === "excel") {
-      triggerExport(format as "excel", { searchTerm, filter });
+    if (format === "excel" || format === "pdf") {
+      triggerExport(format as "excel" | "pdf", { searchTerm, filter });
     }
   };
   return (
