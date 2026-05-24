@@ -4,9 +4,9 @@ import type { HeaderExportType } from '@/shared/components/HeaderExportMenu';
 
 export const exportReportCases = async (
   format: HeaderExportType,
-  params: { expense_type?: string; date_from?: string; date_to?: string; page?: number; limit?: number; }
+  params: { filter?: string; page?: number; limit?: number; }
 ): Promise<Blob> => {
-  const response = await api.get(`/reports/allCaseExpenses/${format}`, {
+  const response = await api.get(`/reports/caseReports/${format}`, {
     params: params,
     responseType: 'blob',
   });
