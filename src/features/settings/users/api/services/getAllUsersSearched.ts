@@ -7,5 +7,6 @@ export const getAllUsersSearched = async (searchTerm: string) => {
     },
   });
 
-  return response.data;
+  const content = response.data?.data ?? response.data;
+  return Array.isArray(content) ? content : [];
 };

@@ -15,11 +15,6 @@ import { useGetAllUserReports } from "./api/hooks/useGetAllUserReports";
 import { HeaderPageReportsUsers } from "./components/HeaderPageReportsUsers";
 import type { ReportUser } from "./types";
 
-
-
-
-
-
 const mapUserToReportUser = (user: any, index: number): ReportUser => ({
   id: String(user.id),
   name: user.name ?? "",
@@ -37,10 +32,16 @@ const ReportsUsersFeature = () => {
   const debouncedSearchTerm = useDebounce(searchTerm.trim(), 400);
   const { data: roles = [] } = useGetAllRoles();
 
-
-  const { data: allUsers = [], isLoading, isError, error } = useGetAllUserReports({
+  const {
+    data: allUsersResponse,
+    isLoading,
+    isError,
+    error,
+  } = useGetAllUserReports({
     status: filters.status === "all" ? undefined : filters.status,
     role_id: filters.role === "all" ? undefined : filters.role,
+    page: currentPage,
+    limit: itemsPerPage,
   });
   const isSearching = debouncedSearchTerm.length > 0;
   const {
@@ -50,11 +51,21 @@ const ReportsUsersFeature = () => {
     error: searchError,
   } = useGetAllUsersSearched(debouncedSearchTerm);
 
-  const displayedUsers = isSearching ? searchedUsers : allUsers;
+  const allUsers = useMemo(() => {
+    return Array.isArray(allUsersResponse?.data) ? allUsersResponse.data : [];
+  }, [allUsersResponse]);
+
+  const displayedUsers = useMemo(() => {
+    const source = isSearching ? searchedUsers : allUsers;
+    return Array.isArray(source) ? source : [];
+  }, [isSearching, searchedUsers, allUsers]);
 
   const reportUsers = useMemo(
-    () => displayedUsers.map((u, i) => mapUserToReportUser(u, i)),
-    [displayedUsers],
+    () =>
+      displayedUsers.map((u, i) =>
+        mapUserToReportUser(u, i + (currentPage - 1) * itemsPerPage),
+      ),
+    [displayedUsers, currentPage, itemsPerPage],
   );
 
   const handleSearch = (term: string) => {
@@ -62,15 +73,12 @@ const ReportsUsersFeature = () => {
     setCurrentPage(1);
   };
 
-
   const roleOptions = useMemo(() => {
     return roles.map((role) => ({
-
       value: String(role.id),
       label: role.role_name,
     }));
   }, [roles]);
-
 
   const handleFilterChange = (key: string, value: string) => {
     setCurrentPage(1);
@@ -84,9 +92,12 @@ const ReportsUsersFeature = () => {
         u.name.toLowerCase().includes(searchStr) ||
         u.email.toLowerCase().includes(searchStr);
 
-      const selectedOption = roleOptions.find(opt => String(opt.value) === filters.role);
+      const selectedOption = roleOptions.find(
+        (opt) => String(opt.value) === filters.role,
+      );
       const matchesRole =
-        filters.role === "all" || (selectedOption && u.role === selectedOption.label);
+        filters.role === "all" ||
+        (selectedOption && u.role === selectedOption.label);
       const matchesStatus =
         filters.status === "all" || u.status === filters.status;
 
@@ -94,12 +105,18 @@ const ReportsUsersFeature = () => {
     });
   }, [reportUsers, searchTerm, filters, roleOptions]);
 
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const totalPages = isSearching
+    ? Math.max(1, Math.ceil(filteredUsers.length / itemsPerPage))
+    : (allUsersResponse?.meta?.total_pages ?? 1);
 
   const paginatedUsers = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredUsers.slice(start, start + itemsPerPage);
-  }, [filteredUsers, currentPage]);
+    if (isSearching) {
+      const start = (currentPage - 1) * itemsPerPage;
+      return filteredUsers.slice(start, start + itemsPerPage);
+    }
+
+    return filteredUsers;
+  }, [filteredUsers, currentPage, isSearching, itemsPerPage]);
 
   if (isLoading) return <LoadingPage />;
   if (isError)
