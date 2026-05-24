@@ -11,7 +11,7 @@ export const fetchClients = async (page: number, limit: number, status?: string,
       params.search = search;
     }
 
-    const { data } = await api.get(`/client-profile/all-Clients`, { params });
+    const { data } = await api.get(`reports/clientReports`, { params });
     return data;
 };
 

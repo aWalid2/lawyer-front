@@ -47,11 +47,11 @@ const ReportsClientsFeature = () => {
     },
     {
       header: "اسم الموكل",
-      accessor: (item: ReportClient) => item.user.first_name,
+      accessor: (item: ReportClient) => item.name,
     },
     {
       header: "رقم الهاتف",
-      accessor: (item: ReportClient) => item.user.phone,
+      accessor: (item: ReportClient) => item.phone,
     },
     {
       header: "عدد القضايا",
@@ -65,9 +65,9 @@ const ReportsClientsFeature = () => {
       header: "الحالة",
       accessor: (item) => (
         <span
-          className={`rounded-main px-3 py-1 text-xs font-medium whitespace-nowrap ${getStatusStyles(item.user.user_status)}`}
+          className={`rounded-main px-3 py-1 text-xs font-medium whitespace-nowrap ${getStatusStyles(item.status)}`}
         >
-          {item.user.user_status === "active" ? "نشط" : "غير نشط"}
+          {item.status === "active" ? "نشط" : "غير نشط"}
         </span>
       ),
     },
@@ -82,7 +82,7 @@ const ReportsClientsFeature = () => {
         filter={statusFilter}
       />
 
-      <DataTable columns={columns} data={indexedData} rowKey="user_id" />
+      <DataTable columns={columns} data={indexedData} />
 
       {totalPages > 1 && (
         <PaginationApi

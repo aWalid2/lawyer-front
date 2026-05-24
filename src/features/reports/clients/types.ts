@@ -1,12 +1,9 @@
 export interface ReportClient {
     id: string;
     user_id: string;
-    user: {
-        first_name: string;
-
-        phone: string;
-        user_status: string;
-    };
+    name: string;
+    phone: string;
+    status: string;
     case_count: number;
     rowNumber: number;
 
