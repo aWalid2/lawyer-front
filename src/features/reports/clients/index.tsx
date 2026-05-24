@@ -24,6 +24,17 @@ const ReportsClientsFeature = () => {
   const totalPages = clientsData?.meta?.total_pages ?? 1;
   const indexedData = useIndexedData(clientsData?.data, page, limit);
 
+  // Handlers reset page immediately when user changes search or filter
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setPage(1);
+  };
+
+  const handleFilterChange = (status: string) => {
+    setStatusFilter(status);
+    setPage(1);
+  };
+
   const getStatusStyles = (status: string) => {
     switch (status) {
       case "active":
@@ -77,8 +88,8 @@ const ReportsClientsFeature = () => {
     <PageLayout>
       <HeaderPageReportsClients
         searchTerm={searchTerm}
-        onSearch={setSearchTerm}
-        onFilterChange={setStatusFilter}
+        onSearch={handleSearch}
+        onFilterChange={handleFilterChange}
         filter={statusFilter}
       />
 
