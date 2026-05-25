@@ -8,7 +8,7 @@ import { DocumentsIcon } from "@/shared/icons/Documents";
 import { MainIcon } from "@/shared/icons/Main";
 import { ReportsIcon } from "@/shared/icons/Reports";
 import { RollIcon } from "@/shared/icons/Roll";
-import { RulingsIcon } from "@/shared/icons/Rulings";
+// import { RulingsIcon } from "@/shared/icons/Rulings";
 import { SettingsIcon } from "@/shared/icons/Settings";
 import { UsersIcon } from "@/shared/icons/Users";
 import { UserTasksIcon } from "@/shared/icons/UserTasks";
@@ -105,7 +105,7 @@ const NavDashboard = ({ onLinkClick }: { onLinkClick?: () => void }) => {
         </div>
       </NavLink>
 
-      <NavLink
+      {/* <NavLink
         to="/dashboard/legislation-rulings"
         className={linkClass}
         onClick={onLinkClick}
@@ -114,7 +114,7 @@ const NavDashboard = ({ onLinkClick }: { onLinkClick?: () => void }) => {
           <RulingsIcon />
           <p className="text-base font-normal">التشريعات والأحكام</p>
         </div>
-      </NavLink>
+      </NavLink> */}
       <NavLink
         to="/dashboard/calendar"
         className={linkClass}

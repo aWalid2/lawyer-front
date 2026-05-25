@@ -94,8 +94,6 @@ const mapUserToFormValues = (
   const name = splitName(user.first_name, user.last_name);
   const phone = splitPhone(user.phone);
 
-
-  
   return {
     firstName: name.firstName,
     email: user.email ?? "",

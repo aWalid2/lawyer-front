@@ -93,8 +93,8 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
             hire_date: values.hire_date,
             ssn: values.ssn,
             role: values.role_id || parseInt(values.role_name),
-            status: values.user_status,
-            password: values.password || undefined,
+            status: values.user_status === "active" ? "ACTIVE" : "INACTIVE",
+            // password: values.password || undefined,
           },
         },
         {

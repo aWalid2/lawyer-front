@@ -100,17 +100,6 @@ const ProfileForm = ({
               </div>
 
               {isEditing && (
-                <div className="mb-4">
-                  <InputForm
-                    label="كلمة المرور"
-                    name="password"
-                    type="password"
-                    placeholder="أدخل كلمة المرور"
-                  />
-                </div>
-              )}
-
-              {isEditing && (
                 <div className="mt-6 flex justify-start">
                   <button
                     type="submit"

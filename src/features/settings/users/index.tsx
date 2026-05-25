@@ -18,7 +18,9 @@ import { Pagination } from "@/shared/components/Pagination";
 export const UserManagementFeature: React.FC = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchTerm, setSearchTerm] = React.useState("");
-  const [selectedRole, setSelectedRole] = React.useState<string | undefined>("all");
+  const [selectedRole, setSelectedRole] = React.useState<string | undefined>(
+    "all",
+  );
   const {
     data: allUsers = [],
     isLoading,
