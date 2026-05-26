@@ -69,7 +69,7 @@ contract_based?: undefined;
 }
 
 export type CaseSituation =
-  | "POLICE_STATION"
+  | "POLICE_CASE"
   | "PUBLIC_PROSECUTION"
   | "AT_PROSECUTOR_OFFICE"
   | "UNDER_APPEAL"
@@ -161,7 +161,7 @@ const case_fees: CaseFees = {
     } as OtherPayload;
   }
 
-  if (values.case_situation === "POLICE_STATION") {
+  if (values.case_situation === "POLICE_CASE") {
     const { client_type, ...policeBase } = base;
     return {
       ...policeBase,

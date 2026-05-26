@@ -1,13 +1,13 @@
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
 import { TableEditButton } from "@/shared/components/TableEditButton";
+import { KeyRound } from "lucide-react";
 import React from "react";
+import { toast } from "sonner";
+import { useDeleteUser } from "../api/hooks/useDeleteUser";
 import type { UserT } from "../types/userT";
 import { UserFormDialog } from "./UserFormDialog";
-import { useDeleteUser } from "../api/hooks/useDeleteUser";
-import { toast } from "sonner";
 import { UserResetPSW } from "./UserResetPSW";
-import { KeyIcon, KeyRound } from "lucide-react";
 
 interface UsersActionProps {
   user: UserT;

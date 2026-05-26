@@ -97,7 +97,7 @@ const FormCase = () => {
       enableReinitialize
       validationSchema={validationSchema}
       onSubmit={async (values) => {
-        if (values.case_situation === "POLICE_STATION") {
+        if (values.case_situation === "POLICE_CASE") {
           await addPoliceCase(values);
         } else if (values.case_situation === "UNDER_APPEAL") {
           await addUnderAppealCase(values);
@@ -132,7 +132,7 @@ const FormCase = () => {
                 </div>
 
                 <div className={"grid grid-cols-1 gap-4 md:grid-cols-2"}>
-                  {values.case_situation === "POLICE_STATION" && (
+                  {values.case_situation === "POLICE_CASE" && (
                     <PoliceStationCase />
                   )}
                   {values.case_situation === "UNDER_APPEAL" && (
