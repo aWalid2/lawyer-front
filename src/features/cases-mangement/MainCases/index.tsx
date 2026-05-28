@@ -16,8 +16,6 @@ const getStatusStyles = (status: string) => {
       return "bg-[#937F12]/20 text-[#937F12]";
     case "تم الإغلاق":
       return "bg-[#5570F1]/20 text-[#5570F1]";
-    case "تم الإغلاق":
-      return "bg-[#5570F1]/20 text-[#5570F1]";
     default:
       return "bg-gray-100 text-gray-600";
   }
