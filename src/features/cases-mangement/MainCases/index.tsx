@@ -5,7 +5,6 @@ import { DataTable, type Column } from "@/shared/components/DataTable";
 import { TableCasesActions } from "./componnents/TableCasesActions";
 import { useGetCases, useSearchCases } from "./api/hooks/useGetCases";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
-import { useDebounce } from "@/shared/hooks/useDebounce";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 import { PaginationApi } from "@/shared/components/PaginationApi";
@@ -65,7 +64,6 @@ const MainCases = () => {
   ];
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState<number>(1);
-  const debouncedSearchTerm = useDebounce(searchTerm, 1000);
 
   const {
     data: allCases,
@@ -76,36 +74,43 @@ const MainCases = () => {
     data: searchResults,
     isPending: isSearchPending,
     isError: isSearchError,
-  } = useSearchCases(page, debouncedSearchTerm);
+  } = useSearchCases(page, searchTerm);
 
-  const cases = debouncedSearchTerm ? searchResults : allCases;
-  const isPending = debouncedSearchTerm ? isSearchPending : isAllPending;
-  const isError = debouncedSearchTerm ? isSearchError : isAllError;
+  const cases = searchTerm ? searchResults : allCases;
+  const isPending = searchTerm ? isSearchPending : isAllPending;
+  const isError = searchTerm ? isSearchError : isAllError;
   const totalPages = cases?.meta?.total_pages ?? 1;
   const limit = cases?.meta?.limit || 15;
   const indexedData = useIndexedData(cases?.data || [], page, limit);
 
-  if (isPending) return <LoadingPage />;
+  const handleSearch = (val: string) => {
+    setSearchTerm(val);
+  };
+
   if (isError) return <EmptyTable message="حدث خطأ في تحميل البيانات" />;
   return (
     <PageLayout>
       <HeaderPageCase
         searchTerm={searchTerm}
-        onSearch={setSearchTerm}
+        onSearch={handleSearch}
         onFilterChange={() => {}}
       />
 
-      {indexedData?.length === 0 ? (
+      {isPending ? (
+        <LoadingPage fullScreen={false} />
+      ) : indexedData?.length === 0 ? (
         <EmptyTable message="لا توجد بيانات حالية لادارة القضايا" />
       ) : (
-        <DataTable rowKey="id" data={indexedData} columns={columns} />
-      )}
-      {totalPages > 1 && (
-        <PaginationApi
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-        />
+        <>
+          <DataTable rowKey="id" data={indexedData} columns={columns} />
+          {totalPages > 1 && (
+            <PaginationApi
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          )}
+        </>
       )}
     </PageLayout>
   );

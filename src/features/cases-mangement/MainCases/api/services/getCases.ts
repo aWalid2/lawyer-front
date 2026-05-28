@@ -2,6 +2,7 @@ import api from "@/lib/api";
 
 interface SearchCaseResponse {
     case_sequence: string;
+    refernce_number?: string;
     client_name: string;
     case_title: string;
     case_Status: string;
@@ -38,7 +39,7 @@ export const searchCases = async (page?: number, searchTerm?: string) => {
     const transformedData = (searchData as SearchCaseResponse[]).map((item) => ({
         ...item,
         id: item.case_sequence,
-        reference_number: item.reference_number || item.case_sequence,
+        reference_number: item.reference_number ?? item.refernce_number ?? "",
         client: {
             first_name: item.client_name
         },
