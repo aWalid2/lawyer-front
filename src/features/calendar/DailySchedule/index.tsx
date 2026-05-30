@@ -1,4 +1,8 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import ProceduresSchedule from "./components/Procedurs";
 import UserTasksSchedule from "./components/UserTasksSchedule";
+import PageLayout from "@/shared/components/PageLayout";
 
 interface Event {
   id: string;
@@ -48,7 +52,34 @@ const mockEvents: Event[] = [
   },
 ];
 const DailySchedule = ({ selectedDate }: DailyScheduleProps) => {
-  return <UserTasksSchedule selectedDate={selectedDate!} events={mockEvents} />;
+  return (
+    <PageLayout>
+      <Tabs defaultValue={"userTasks"} className="w-full" dir="rtl">
+        <TabsList className="border-primary/50 mb-6 flex h-13! w-full items-center overflow-hidden rounded-full border bg-white p-0 sm:w-fit">
+          <TabsTrigger
+            value="procedures"
+            className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white sm:px-12 sm:text-base"
+          >
+            الإجراءات
+          </TabsTrigger>
+          <TabsTrigger
+            value="userTasks"
+            className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white sm:px-12 sm:text-base"
+          >
+            المهام
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="procedures" className="mt-0">
+          <ProceduresSchedule selectedDate={selectedDate!} />
+        </TabsContent>
+
+        <TabsContent value="userTasks" className="mt-0">
+          <UserTasksSchedule selectedDate={selectedDate!} events={mockEvents} />
+        </TabsContent>
+      </Tabs>
+    </PageLayout>
+  );
 };
 
 export default DailySchedule;

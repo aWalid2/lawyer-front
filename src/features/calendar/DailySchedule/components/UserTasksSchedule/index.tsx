@@ -1,11 +1,11 @@
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { DayCard } from "../DayCard";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
+import { EventsGrid } from "./components/EventsGrid";
+import { times } from "@/shared/constants/shcedule";
 
-const times = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
-const rowsCount = 12;
+const rowsCount = 18;
 
 interface Event {
   id: string;
@@ -27,12 +27,12 @@ const UserTasksSchedule = ({
     ? format(selectedDate, "eeee (dd/MM/yyyy)", { locale: ar })
     : "";
   return (
-    <Card className="shadow-primary mt-4 h-full border-none">
-      <CardHeader className="flex flex-row items-center justify-between px-6 pb-4">
+    <Card>
+      <CardHeader>
         <HeaderTitle title={`مواعيد يوم ${dateStr}`} />
       </CardHeader>
-      <CardContent className="custom-scrollbar overflow-x-auto p-0">
-        <div className="min-w-[800px] p-6">
+      <CardContent className="overflow-x-auto custom-scrollbar">
+        <div className="min-w-[2400px] p-6">
           {/* Time Headers */}
           <div
             className="mb-4 grid pb-4"
@@ -79,24 +79,7 @@ const UserTasksSchedule = ({
                   gridTemplateRows: `repeat(${rowsCount}, 1fr)`,
                 }}
               >
-                {events.map((event) => {
-                  const colIndex = times.indexOf(event.startTime);
-                  if (colIndex === -1) return null;
-
-                  // Find which row this event should occupy if multiple events start at the same time
-                  const rowIndex = events
-                    .filter((e) => e.startTime === event.startTime)
-                    .indexOf(event);
-
-                  return (
-                    <DayCard
-                      key={event.id}
-                      event={event}
-                      colIndex={colIndex}
-                      rowIndex={rowIndex}
-                    />
-                  );
-                })}
+                <EventsGrid events={events} times={times} />
               </div>
             </div>
           </div>
