@@ -1,19 +1,21 @@
-import PageLayout from "@/shared/components/PageLayout";
+import { buttonVariants } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { ar } from "date-fns/locale";
-import { format } from "date-fns";
-import { useNavigate } from "react-router-dom";
-import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import PageLayout from "@/shared/components/PageLayout";
+import { format } from "date-fns";
+import { ar } from "date-fns/locale";
 import { getDefaultClassNames } from "react-day-picker";
-
+import { Link, useNavigate } from "react-router-dom";
 
 interface CalendarPickerProps {
   selectedDate: Date | undefined;
   onDateSelect: (date: Date | undefined) => void;
 }
 
-const CalendarPicker = ({ selectedDate, onDateSelect }: CalendarPickerProps) => {
+const CalendarPicker = ({
+  selectedDate,
+  onDateSelect,
+}: CalendarPickerProps) => {
   const navigate = useNavigate();
   const defaultClassNames = getDefaultClassNames();
 
@@ -37,7 +39,7 @@ const CalendarPicker = ({ selectedDate, onDateSelect }: CalendarPickerProps) => 
 
   return (
     <PageLayout className="flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center overflow-x-auto w-full">
+      <div className="flex w-full flex-1 flex-col items-center justify-center overflow-x-auto">
         <Calendar
           mode="single"
           selected={selectedDate}
@@ -56,23 +58,29 @@ const CalendarPicker = ({ selectedDate, onDateSelect }: CalendarPickerProps) => 
             weekdays: "flex justify-between shadow-sm rounded-md py-6 w-full",
             month: "w-full max-w-7xl flex flex-col gap-8",
             day: "h-12 w-12 text-2xl font-medium flex items-center justify-center rounded-[12px] transition-all border border-transparent hover:bg-secondary/5 hover:border-secondary/20 text-secondary data-[today=true]:bg-primary data-[today=true]:text-white data-[selected-single=true]:bg-secondary! data-[selected-single=true]:text-white! data-[selected-single=true]:rounded-[12px]! m-auto mb-2",
-            caption: "relative flex items-center justify-center pt-2 mb-12 h-20 w-full",
-            caption_label: "text-2xl font-bold text-secondary flex items-center gap-3",
+            caption:
+              "relative flex items-center justify-center pt-2 mb-12 h-20 w-full",
+            caption_label:
+              "text-2xl font-bold text-secondary flex items-center gap-3",
             button_previous: cn(
               buttonVariants({ variant: "ghost" }),
               "size-(--cell-size) p-0 select-none aria-disabled:opacity-50 hover:bg-secondary/10 hover:text-secondary bg-[#A7B2BA]/10 rounded-full w-12 h-12",
-              defaultClassNames.button_previous
+              defaultClassNames.button_previous,
             ),
             button_next: cn(
               buttonVariants({ variant: "ghost" }),
               "size-(--cell-size) p-0 select-none aria-disabled:opacity-50 hover:bg-secondary/10 hover:text-secondary bg-[#A7B2BA]/10 rounded-full w-12 h-12",
-              defaultClassNames.button_next
+              defaultClassNames.button_next,
             ),
-
           }}
         />
       </div>
-      <Button className="w-full mt-4">عرض كافة المواعيد</Button>
+      <Link
+        to="/dashboard/all-schedule"
+        className={cn(buttonVariants(), "mt-4 w-full")}
+      >
+        عرض كافة المواعيد
+      </Link>
     </PageLayout>
   );
 };

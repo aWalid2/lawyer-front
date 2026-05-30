@@ -30,6 +30,7 @@ const ClientDetails = lazy(
 const Legislation = lazy(() => import("./pages/dashboard/Legislation"));
 const Calendar = lazy(() => import("./pages/dashboard/Calendar"));
 const DailySchedule = lazy(() => import("./pages/dashboard/DailySchedule"));
+const AllSchedule = lazy(() => import("./pages/dashboard/AllSchedule"));
 const Roll = lazy(() => import("./pages/dashboard/Roll"));
 const Documents = lazy(() => import("./pages/dashboard/Documents"));
 const DocumentDetails = lazy(() => import("./pages/dashboard/DocumentDetails"));
@@ -77,6 +78,7 @@ function App() {
             <Route path="legislations/:id" element={<LegislationDetails />} />
             <Route path="calendar" element={<Calendar />} />
             <Route path="daily-schedule" element={<DailySchedule />} />
+            <Route path="all-schedule" element={<AllSchedule />} />
             <Route path="roll" element={<Roll />} />
             <Route path="documents" element={<Documents />} />
             <Route path="documents/:id" element={<DocumentDetails />} />
