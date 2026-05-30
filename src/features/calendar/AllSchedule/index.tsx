@@ -1,24 +1,59 @@
-import { Button } from "@/components/ui/button";
-import { Filter, Search } from "lucide-react";
-import { Link } from "react-router-dom";
+import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import AllScheduleCard from "./components/AllScheduleCard";
+import HeaderActions from "./components/HeaderActions";
+
+const MOCK_SCHEDULES = [
+  {
+    id: 1,
+    title: "جلسة محكمة استئناف",
+    date: "15 مايو 2024",
+    time: "10:00 صباحاً",
+    location: "محكمة الرياض الكبرى",
+    client: "شركة الأفق للاستثمار",
+    type: "جلسة محكمة",
+  },
+  {
+    id: 2,
+    title: "اجتماع مع موكل",
+    date: "16 مايو 2024",
+    time: "01:30 ظهراً",
+    location: "مقر المكتب - قاعة الاجتماعات",
+    client: "محمد عبدالله",
+    type: "اجتماع",
+  },
+  {
+    id: 3,
+    title: "تقديم مذكرة دفاع",
+    date: "18 مايو 2024",
+    time: "09:00 صباحاً",
+    location: "المحكمة التجارية",
+    client: "مؤسسة التقنية العالية",
+    type: "إجراء قانوني",
+  },
+  {
+    id: 4,
+    title: "استشارة قانونية",
+    date: "20 مايو 2024",
+    time: "04:00 عصراً",
+    location: "عبر الهاتف",
+    client: "سعيد القحطاني",
+    type: "استشارة",
+  },
+];
 
 export const AllScheduleFeatures = () => {
   return (
-    <div className="mb-6 flex w-full items-center justify-between">
-      <h2 className="text-secondary text-2xl font-bold">جدول المواعيد</h2>
-      <div className="flex items-center gap-4">
-        <Button className="flex items-center gap-2">
-          <Filter />
-          تصفية حسب التاريخ
-        </Button>
-        <Button className="flex items-center gap-2">
-          <Search />
-          بحث
-        </Button>
-        <Link to="/dashboard/daily-schedule">
-          <Button className="bg-secondary text-white">جدول اليوم</Button>
-        </Link>
+    <>
+      <div className="mb-8 flex w-full items-center justify-between">
+        <HeaderTitle innerPage title="جدول المواعيد" />
+        <HeaderActions />
       </div>
-    </div>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {MOCK_SCHEDULES.map((schedule) => (
+          <AllScheduleCard key={schedule.id} schedule={schedule} />
+        ))}
+      </div>
+    </>
   );
 };
