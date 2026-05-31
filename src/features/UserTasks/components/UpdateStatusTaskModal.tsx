@@ -10,6 +10,7 @@ import { Form, Formik } from "formik";
 import { XIcon } from "lucide-react";
 import { useState } from "react";
 import * as Yup from "yup";
+import { useTaskUser } from "../api/hooks/useAddTask";
 import { useUpdateTask } from "../api/hooks/useUpdateTask";
 
 interface UpdateStatusTaskModalProps {
@@ -40,7 +41,9 @@ function UpdateStatusTaskModal({
   const [isModalOpen, setIsModalOpen] = useState(true);
   const isEditMode = !!taskId;
 
+  const { mutate: addTask, isPending: isAdding } = useTaskUser();
   const { mutate: updateTask, isPending: isUpdating } = useUpdateTask();
+  const isLoading = isAdding || isUpdating;
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -50,7 +53,7 @@ function UpdateStatusTaskModal({
   const handleSubmit = (values: TaskFormValues) => {
     const submitValues = { ...values };
 
-    const apiValues: any = {
+    const apiValues: { status: string } = {
       status: submitValues.status,
     };
 
@@ -67,10 +70,14 @@ function UpdateStatusTaskModal({
         },
       );
     } else {
-      // Handle create task logic here if needed
-      console.log("Create task with values:", apiValues);
-      setIsModalOpen(false);
-      onClose();
+      addTask(apiValues, {
+        onSuccess: () => {
+          if (onSave) onSave(submitValues);
+          setIsModalOpen(false);
+          onClose();
+        },
+        onError: (error) => console.error("خطأ في إضافة المهمة:", error),
+      });
     }
   };
 
@@ -116,10 +123,10 @@ function UpdateStatusTaskModal({
 
               <button
                 type="submit"
-                disabled={isUpdating}
+                disabled={isLoading}
                 className="bg-primary-gradient mt-4 w-full rounded-[12px] px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {isUpdating ? "جاري الحفظ..." : "حفظ التغييرات"}
+                {isLoading ? "جاري الحفظ..." : "حفظ التغييرات"}
               </button>
             </Form>
           )}

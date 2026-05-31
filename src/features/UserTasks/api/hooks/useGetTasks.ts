@@ -7,11 +7,12 @@ export const useFetchTasks = (
   page: number,
   limit: number,
   deliverDateFrom?: Date,
-  deliverDateTo?: Date
+  deliverDateTo?: Date,
+  searchTerm?: string,
 ) => {
   const query = useQuery({
-    queryKey: ["tasks", page, limit, deliverDateFrom, deliverDateTo],
-    queryFn: () => fetchTasks(page, limit, deliverDateFrom, deliverDateTo),
+    queryKey: ["tasks", page, limit, deliverDateFrom, deliverDateTo, searchTerm],
+    queryFn: () => fetchTasks(page, limit, deliverDateFrom, deliverDateTo, searchTerm),
     placeholderData: (previousData) => previousData,
     staleTime: 1000 * 60 * 2,
     retry: 2,

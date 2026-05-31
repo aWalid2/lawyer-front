@@ -3,13 +3,13 @@ export interface TaskRelatedT {
     rowNumber?: number;
     task_title: string;
     task_type: string;
-    assigned_to: number;
+    assigned_to: number | string;
     status: string;
     delivery_date: string;
     notes?: string;
     created_at?: string;
     updated_at?: string;
-    assignee: {
+    assignee?: {
         first_name: string;
     }
 }

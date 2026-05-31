@@ -10,6 +10,7 @@ import { UsersTaskActions } from "./components/UsersTaskActions";
 import type { TaskRelatedT } from "./types/types";
 import { getStatusStyle, statusMapping } from "./types/types";
 import UpdateStatusTaskModal from "./components/UpdateStatusTaskModal";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
 const StatusCell: React.FC<{ status: string }> = ({ status }) => {
   const cleanStatus = status?.trim() || "";
@@ -42,7 +43,7 @@ export const UsersTask: React.FC = () => {
     isError,
     error,
     isFetching,
-  } = useFetchTasks(page, limit, deliverDateFrom, deliverDateTo);
+  } = useFetchTasks(page, limit, deliverDateFrom, deliverDateTo, searchTerm);
   const tasks = tasksResponse?.data;
 
   const handleDateFilterChange = (
@@ -85,7 +86,8 @@ export const UsersTask: React.FC = () => {
     },
     {
       header: "المُكلف",
-      accessor: (item: TaskRelatedT) => item.assignee.first_name,
+      accessor: (item: TaskRelatedT) =>
+        item.assignee?.first_name || String(item.assigned_to || "-"),
       headerClassName: "w-35",
       className: "w-35",
     },
@@ -108,15 +110,8 @@ export const UsersTask: React.FC = () => {
     },
     {
       header: "تاريخ التسليم",
-      accessor: (item: TaskRelatedT) => {
-        if (!item.delivery_date) return "-";
-        const date = new Date(item.delivery_date);
-        return date.toLocaleDateString("ar-EG", {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-        });
-      },
+      accessor: (item: TaskRelatedT) =>
+        formatDateToYYYYMMDD(item.delivery_date) || "-",
       headerClassName: "w-35 text-center",
       className: "w-35 text-center font-medium",
     },

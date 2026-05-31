@@ -70,7 +70,12 @@ const defaultValues: TaskFormValues = {
   task_relation: "case",
 };
 
-function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }: AddTaskModalProps) {
+function AddTaskModal({
+  onClose,
+  onSave,
+  initialValues = defaultValues,
+  taskId,
+}: AddTaskModalProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const isEditMode = !!taskId;
 
@@ -90,7 +95,9 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
     const submitValues = { ...values };
 
     if (submitValues.delivery_date) {
-      submitValues.delivery_date = new Date(submitValues.delivery_date).toISOString();
+      submitValues.delivery_date = new Date(
+        submitValues.delivery_date,
+      ).toISOString();
     }
     if (submitValues.start_date) {
       submitValues.start_date = new Date(submitValues.start_date).toISOString();
@@ -125,8 +132,8 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
             setIsModalOpen(false);
             onClose();
           },
-          onError: (error) => console.error("خطأ في تعديل المهمة:", error)
-        }
+          onError: (error) => console.error("خطأ في تعديل المهمة:", error),
+        },
       );
     } else {
       addTask(apiValues, {
@@ -135,7 +142,7 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
           setIsModalOpen(false);
           onClose();
         },
-        onError: (error) => console.error("خطأ في إضافة المهمة:", error)
+        onError: (error) => console.error("خطأ في إضافة المهمة:", error),
       });
     }
   };
@@ -150,7 +157,8 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
     if (!cases?.data || cases.data.length === 0) return [];
     return cases.data.map((caseItem: any) => ({
       value: String(caseItem.id || caseItem.case_id),
-      label: caseItem.case_title || `قضية رقم ${caseItem.id || caseItem.case_id}`
+      label:
+        caseItem.case_title || `قضية رقم ${caseItem.id || caseItem.case_id}`,
     }));
   }, [cases]);
 
@@ -159,18 +167,18 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
   return (
     <Dialog open={true} onOpenChange={handleCloseModal}>
       <DialogContent
-        className="sm:max-w-[715px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-[12px] border-none"
+        className="flex max-h-[90vh] flex-col overflow-hidden rounded-[12px] border-none px-6 py-6 sm:max-w-[715px] sm:rounded-[24px] sm:px-20 sm:py-10"
         dir="rtl"
         showCloseButton={false}
       >
         <DialogClose asChild onClick={handleCloseModal}>
-          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-500 px-6 py-2.5 rounded-[12px] font-semibold flex items-center gap-2 h-12.5 transition-all">
+          <button className="absolute inset-e-6 top-8 flex h-12.5 items-center gap-2 rounded-[12px] px-6 py-2.5 font-semibold text-gray-500 transition-all sm:inset-e-15">
             <XIcon size={23} className="text-gray-500" />
           </button>
         </DialogClose>
 
-        <DialogHeader className="mb-2 mt-15">
-          <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
+        <DialogHeader className="mt-15 mb-2">
+          <DialogTitle className="text-center text-2xl font-bold text-[#153A4D]">
             {isEditMode ? "تعديل المهمة" : "إضافة مهمة جديدة"}
           </DialogTitle>
         </DialogHeader>
@@ -182,7 +190,7 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
           enableReinitialize
         >
           {({ values }) => (
-            <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
+            <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
               <div className="grid grid-cols-1 gap-4">
                 <SelectForm
                   name="task_relation"
@@ -207,7 +215,9 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
                   name="assigned_to"
                   label="المكلف"
                   options={employeeOptions}
-                  placeholder={isUsersLoading ? "جاري تحميل المستخدمين..." : "اختر المكلف"}
+                  placeholder={
+                    isUsersLoading ? "جاري تحميل المستخدمين..." : "اختر المكلف"
+                  }
                   disabled={isUsersLoading || employeeOptions.length === 0}
                 />
               </div>
@@ -218,7 +228,9 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
                     name="task_type"
                     label="القضية"
                     options={CaseOptions}
-                    placeholder={isCasesLoading ? "جاري تحميل القضايا..." : "اختر القضية"}
+                    placeholder={
+                      isCasesLoading ? "جاري تحميل القضايا..." : "اختر القضية"
+                    }
                     disabled={isCasesLoading || CaseOptions.length === 0}
                   />
                 ) : (
@@ -248,7 +260,7 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
                 placeholder="أدخل تفاصيل إضافية"
               />
 
-              <div className="grid grid-cols-1  gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <InputForm
                   name="start_date"
                   label="تاريخ بدء المهمة"
@@ -275,14 +287,13 @@ function AddTaskModal({ onClose, onSave, initialValues = defaultValues, taskId }
               <button
                 type="submit"
                 disabled={isLoading}
-                className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-primary-gradient mt-4 w-full rounded-[12px] px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isLoading
                   ? "جاري الحفظ..."
                   : isEditMode
                     ? "حفظ التغييرات"
-                    : "إضافة مهمة"
-                }
+                    : "إضافة مهمة"}
               </button>
             </Form>
           )}

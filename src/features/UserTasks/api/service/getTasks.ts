@@ -4,9 +4,14 @@ export const fetchTasks = async (
   page: number,
   limit: number,
   deliverDateFrom?: Date,
-  deliverDateTo?: Date
+  deliverDateTo?: Date,
+  searchTerm?: string,
 ) => {
-  const params: any = { page, limit };
+  const params: Record<string, string | number | undefined> = {
+    page,
+    limit,
+    q: searchTerm || undefined,
+  };
 
   const formatDateParam = (date?: Date) => {
     if (!date) return undefined;
@@ -26,6 +31,17 @@ export const fetchTasks = async (
     params.deliver_date_to = dateTo;
   }
 
-  const { data } = await api.get("task", { params });
-  return data;
+  const endpoint = searchTerm ? "task/search" : "task";
+  const { data } = await api.get(endpoint, { params });
+
+  const normalizedData = data?.data?.map((item: Record<string, unknown>) => ({
+    ...item,
+    assignee:
+      (item as Record<string, unknown>).assignee ||
+      ((item as Record<string, unknown>).assigned_to
+        ? { first_name: String((item as Record<string, unknown>).assigned_to) }
+        : { first_name: "" }),
+  }));
+
+  return { ...data, data: normalizedData };
 };
