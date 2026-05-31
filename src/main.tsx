@@ -16,13 +16,13 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="light">
             <AuthProvider>
               <App />
             </AuthProvider>
           </ThemeProvider>
         </QueryClientProvider>
-      </ErrorBoundary >
+      </ErrorBoundary>
     </BrowserRouter>
   </StrictMode>,
 );
