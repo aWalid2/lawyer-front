@@ -4,10 +4,10 @@ import { fetchClients} from '../services/getClients';
 import { toast } from "sonner";
 import { useEffect } from "react";
 
-export const useFetchClients = (page: number) => {
+export const useFetchClients = (page: number, search?: string) => {
   const query = useQuery({
-    queryKey: ["client-profile", page],
-    queryFn: () => fetchClients(page),
+    queryKey: ["client-profile", page, search],
+    queryFn: () => fetchClients(page, search),
     staleTime: 1000 * 60 * 2,
     retry: 2,
 

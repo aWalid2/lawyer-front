@@ -41,30 +41,38 @@ const validationFields = {
   notes: Yup.string(),
   has_contract: Yup.boolean(),
   add_clients: Yup.boolean(),
-  contract_start_date: Yup.string().when("has_contract", {
-    is: true,
-    then: (schema) => schema.required("تاريخ بداية العقد مطلوب"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  contract_value: Yup.string().when("has_contract", {
-    is: true,
-    then: (schema) => schema.required("القيمة المتفق عليها مطلوبة"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  contract_duration: Yup.string().when("has_contract", {
-    is: true,
-    then: (schema) => schema.required("مدة العقد مطلوبة"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  password: Yup.string().when("add_clients", {
-    is: true,
-    then: (schema) =>
-      schema
-        .required("كلمة المرور مطلوبة")
-        .min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  confirmation_password: Yup.string().when(["password", "add_clients"], {
+  contract_start_date: Yup.string()
+    .nullable()
+    .when("has_contract", {
+      is: true,
+      then: (schema) => schema.required("تاريخ بداية العقد مطلوب"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+  contract_value: Yup.string()
+    .nullable()
+    .when("has_contract", {
+      is: true,
+      then: (schema) => schema.required("القيمة المتفق عليها مطلوبة"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+  contract_duration: Yup.string()
+    .nullable()
+    .when("has_contract", {
+      is: true,
+      then: (schema) => schema.required("مدة العقد مطلوبة"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+  password: Yup.string()
+    .nullable()
+    .when("add_clients", {
+      is: true,
+      then: (schema) =>
+        schema
+          .required("كلمة المرور مطلوبة")
+          .min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+  confirmation_password: Yup.string().nullable().when(["password", "add_clients"], {
     is: (password: string | undefined, add_clients: boolean | undefined) =>
       add_clients === true && !!password && password.length > 0,
     then: (schema) =>
@@ -79,8 +87,8 @@ const validationFields = {
       "حالة المستخدم غير صالحة",
     )
     .required("حالة المستخدم مطلوبة"),
-  authorization_photo: Yup.string(),
-  contract_file: Yup.string(),
+  authorization_photo: Yup.string().nullable(),
+  contract_file: Yup.string().nullable(),
 } satisfies Record<keyof FormValues, Yup.AnySchema>;
 
 export const validationSchema = Yup.object(validationFields);

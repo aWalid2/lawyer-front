@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { CaseStatusesAction } from "./components/CaseStatusesAction";
 import { CaseStatusesHeader } from "./components/CaseStatusesHeader";
+import { Pagination } from "@/shared/components/Pagination";
 import { useFetchCaseStatuses } from "./api/hooks/useGetCaseStatuses";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { PaginationApi } from "@/shared/components/PaginationApi";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import type { CaseStatusT } from "./types/caseStatuseTypes";
 import PageLayout from "@/shared/components/PageLayout";
@@ -24,7 +24,7 @@ export const CaseStatusesFeature: React.FC = () => {
 
   const statuses = statusesResponse?.data || [];
   const totalPages = statusesResponse?.meta?.total_pages ?? 1;
-  const indexedData = useIndexedData(statuses || []);
+  const indexedData = useIndexedData(statuses || [], page, limit);
 
   const columns: Column<CaseStatusT>[] = [
     {
@@ -57,7 +57,7 @@ export const CaseStatusesFeature: React.FC = () => {
       <DataTable data={indexedData} columns={columns} rowIdField="id" />
 
       {totalPages > 1 && (
-        <PaginationApi
+        <Pagination
           currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}

@@ -1,13 +1,12 @@
-import React from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { Error } from "@/shared/components/Error";
 import { InputForm } from "@/shared/components/InputForm";
-import type { CaseStatusT } from "../types/caseStatuseTypes";
+import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { Form, Formik } from "formik";
+import React from "react";
+import * as Yup from "yup";
 import { useAddCaseStatus } from "../api/hooks/useAddCaseStatus";
 import { useUpdateCaseStatus } from "../api/hooks/useUpdateCaseStatus";
-import { Error } from "@/shared/components/Error";
-import Loading from "@/shared/Loading";
+import type { CaseStatusT } from "../types/caseStatuseTypes";
 
 interface CaseStatusFormDialogProps {
   status?: CaseStatusT;
@@ -67,7 +66,6 @@ export const CaseStatusFormDialog: React.FC<CaseStatusFormDialogProps> = ({
     }
   };
 
-  if (isPending) return <Loading />;
   if (isError)
     return <Error message="فشل في حفظ الحالة يرجى المحاولة لاحقاً" />;
 

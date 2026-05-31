@@ -10,7 +10,7 @@ export const useAddClient = () => {
     return useMutation({
         mutationFn: (data: any) => addClients(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["clients"] });
+            queryClient.invalidateQueries({ queryKey: ["client-profile"] });
             toast.success("تم إضافة الموكل بنجاح");
             navigate("/dashboard/clients");
         },

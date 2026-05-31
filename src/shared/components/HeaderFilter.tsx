@@ -23,6 +23,7 @@ interface HeaderFilterProps {
   showSearch?: boolean;
   onSearchChange?: (value: string) => void;
   onChange?: (value: string) => void;
+  onScrollEnd?: () => void;
 }
 
 export const HeaderFilter: React.FC<HeaderFilterProps> = ({
@@ -35,6 +36,7 @@ export const HeaderFilter: React.FC<HeaderFilterProps> = ({
   showSearch = false,
   onSearchChange,
   onChange,
+  onScrollEnd,
 }) => {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
@@ -82,6 +84,11 @@ export const HeaderFilter: React.FC<HeaderFilterProps> = ({
         <SelectContent
           className="w-(--radix-select-trigger-width) rounded-[18px] p-2"
           onCloseAutoFocus={(e) => e.preventDefault()}
+          onScroll={(e) => {
+            const el = e.currentTarget;
+            const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 40;
+            if (isAtBottom) onScrollEnd?.();
+          }}
         >
           {showSearch && (
             <input

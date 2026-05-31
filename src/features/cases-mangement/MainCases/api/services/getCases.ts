@@ -4,14 +4,18 @@ interface SearchCaseResponse {
     case_sequence: string;
     refernce_number?: string;
     client_name: string;
-    case_title: string;
+    case_type: string;
     case_Status: string;
     reference_number?: string;
 }
 
-export const getCases = async (page?: number) => {
-    const pageParam = page ? `?page=${page}` : "";
-    const response = await api.get(`cases/all-cases${pageParam}`);
+export const getCases = async (page?: number, case_status_id?: string | number) => {
+    const params = new URLSearchParams();
+    if (page) params.append("page", page.toString());
+    if (case_status_id) params.append("case_status_id", case_status_id.toString());
+    
+    const queryString = params.toString() ? `?${params.toString()}` : "";
+    const response = await api.get(`cases/all-cases${queryString}`);
     return response.data;
 };
 
@@ -44,7 +48,7 @@ export const searchCases = async (page?: number, searchTerm?: string) => {
             first_name: item.client_name
         },
         case_type: {
-            name: item.case_title
+            name: item.case_type 
         },
         caseStatus: {
             name: item.case_Status

@@ -21,6 +21,7 @@ export const HeaderPageCase: React.FC<HeaderPageCaseProps> = ({
       <HeaderSearch
         value={searchTerm}
         onSearch={onSearch}
+        placeholder="ابحث بكود القضية أو اسم الموكل أو نوع القضية"
         className="lg:ms-0"
       />
       <div className="flex w-full items-center justify-end gap-3 md:w-auto">

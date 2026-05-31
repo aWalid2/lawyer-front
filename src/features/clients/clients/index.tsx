@@ -14,7 +14,8 @@ import type { ClientRelatedT } from './types/clientT';
 
 export const ClientsFeature: React.FC = () => {
     const [page, setPage] = useState<number>(1);
-    const { data: clientsData, isPending, isError, error } = useFetchClients(page);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const { data: clientsData, isPending, isError, error } = useFetchClients(page, searchTerm);
     const totalPages = clientsData?.meta?.total_pages;
     const limit = clientsData?.meta?.limit || 15;
     const indexedData = useIndexedData(clientsData?.data, page, limit);
@@ -53,7 +54,7 @@ export const ClientsFeature: React.FC = () => {
             header: "رقم الهاتف",
             accessor: (item: ClientRelatedT) => (
                 <div className="flex items-center justify-center " dir="ltr">
-                    <span className="text-left">{item.user.phone}</span>
+                    <span className="text-left">{item.user?.phone}</span>
                 </div>
             ),
             headerClassName: "w-40",
@@ -75,8 +76,11 @@ export const ClientsFeature: React.FC = () => {
     return (
         <div className="space-y-6">
             <HeaderClient
-                searchTerm={""}
-                onSearch={() => { }}
+                searchTerm={searchTerm}
+                onSearch={(value) => {
+                    setSearchTerm(value);
+                    setPage(1);
+                }}
             />
 
 

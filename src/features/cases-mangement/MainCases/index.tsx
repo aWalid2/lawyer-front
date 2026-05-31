@@ -62,12 +62,13 @@ const MainCases = () => {
   ];
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState<number>(1);
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
   const {
     data: allCases,
     isPending: isAllPending,
     isError: isAllError,
-  } = useGetCases(page);
+  } = useGetCases(page, statusFilter === "all" ? undefined : statusFilter);
   const {
     data: searchResults,
     isPending: isSearchPending,
@@ -83,6 +84,12 @@ const MainCases = () => {
 
   const handleSearch = (val: string) => {
     setSearchTerm(val);
+    setPage(1);
+  };
+
+  const handleFilterChange = (status: string) => {
+    setStatusFilter(status);
+    setPage(1);
   };
 
   if (isError) return <EmptyTable message="حدث خطأ في تحميل البيانات" />;
@@ -91,7 +98,7 @@ const MainCases = () => {
       <HeaderPageCase
         searchTerm={searchTerm}
         onSearch={handleSearch}
-        onFilterChange={() => {}}
+        onFilterChange={handleFilterChange}
       />
 
       {isPending ? (

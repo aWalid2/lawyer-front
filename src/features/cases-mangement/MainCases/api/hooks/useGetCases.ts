@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCases, searchCases } from "../services/getCases";
 
-export const useGetCases = (page?: number) => {
+export const useGetCases = (page?: number, case_status_id?: string | number) => {
     return useQuery({
-        queryKey: ["cases", page],
-        queryFn: () => getCases(page),
+        queryKey: ["cases", page, case_status_id],
+        queryFn: () => getCases(page, case_status_id),
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 10,
         retry: 1,
