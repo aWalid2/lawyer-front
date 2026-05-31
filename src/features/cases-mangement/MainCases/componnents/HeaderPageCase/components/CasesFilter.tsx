@@ -42,12 +42,6 @@ export const CasesFilter: React.FC<CasesFilterProps> = ({ onFilterChange }) => {
   const { data, isFetching: isLoading } = useGetCaseStatus(true, page, 15);
 
   useEffect(() => {
-    console.log(
-      "Data effect triggered. Page:",
-      page,
-      "Data length:",
-      data?.data?.length,
-    );
     if (data?.data?.length) {
       const newItems = data.data.filter(
         (item: { id: string | number }) =>
@@ -59,7 +53,6 @@ export const CasesFilter: React.FC<CasesFilterProps> = ({ onFilterChange }) => {
       });
 
       if (newItems.length > 0) {
-        console.log("Dispatching new items:", newItems.length);
         dispatch({ type: "ADD_ITEMS", payload: newItems });
       }
 
@@ -70,20 +63,10 @@ export const CasesFilter: React.FC<CasesFilterProps> = ({ onFilterChange }) => {
   }, [data, page]);
 
   const handleScrollEnd = useCallback(() => {
-    console.log(
-      "Scroll end detected. hasMore:",
-      hasMore,
-      "isFetching:",
-      isFetching,
-      "isLoading:",
-      isLoading,
-    );
     if (!hasMore || isFetching || isLoading) {
-      console.log("Early return from scroll handler");
       return;
     }
     setIsFetching(true);
-    console.log("Setting page to:", page + 1);
     setPage((p) => p + 1);
   }, [hasMore, isFetching, isLoading, page]);
 
@@ -92,12 +75,10 @@ export const CasesFilter: React.FC<CasesFilterProps> = ({ onFilterChange }) => {
       label: item.name,
       value: String(item.id),
     }));
-    console.log("Options created:", mappedOptions.length);
     return mappedOptions;
   }, [itemsState.items]);
 
   const finalOptions = [{ label: "الكل", value: "all" }, ...options];
-  console.log("Final options passed to HeaderFilter:", finalOptions.length);
 
   return (
     <HeaderFilter
