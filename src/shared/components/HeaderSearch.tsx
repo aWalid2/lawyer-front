@@ -1,5 +1,6 @@
 import React from "react";
 import { SearchIcon } from "@/shared/icons/Search";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 interface HeaderSearchProps {
@@ -8,6 +9,8 @@ interface HeaderSearchProps {
   onSearch?: (value: string) => void;
   placeholder?: string;
   className?: string;
+  minSearchLength?: number;
+  invalidSearchMessage?: string;
 }
 
 export const HeaderSearch: React.FC<HeaderSearchProps> = ({
@@ -16,6 +19,8 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
   onSearch,
   placeholder = "بحث ...",
   className,
+  minSearchLength = 2,
+  invalidSearchMessage = "الرجاء إدخال أكثر من حرف واحد للبحث",
 }) => {
   const [localValue, setLocalValue] = React.useState(value);
 
@@ -46,6 +51,14 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
           if (e.key === "Enter") {
             e.preventDefault();
             e.stopPropagation();
+            const trimmedValue = localValue.trim();
+            if (
+              trimmedValue.length > 0 &&
+              trimmedValue.length < minSearchLength
+            ) {
+              toast.error(invalidSearchMessage);
+              return;
+            }
             onSearch?.(localValue);
             onChange?.(localValue);
           }

@@ -9,7 +9,10 @@ import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
 interface HeaderTasksUserProps {
   onSearch: (term: string) => void;
   onFilterChange: (status: string) => void;
-  onDateFilterChange: (key: "deliverDateFrom" | "deliverDateTo", value: Date | undefined) => void;
+  onDateFilterChange: (
+    key: "deliverDateFrom" | "deliverDateTo",
+    value: Date | undefined,
+  ) => void;
   searchTerm: string;
   statusFilter: string;
   deliverDateFrom?: Date;
@@ -31,9 +34,13 @@ export const HeaderTasksUser: React.FC<HeaderTasksUserProps> = ({
     <HeaderPageLayout>
       <HeaderTitle innerPage title="مهام المستخدم" />
 
-      <HeaderSearch value={searchTerm} onChange={onSearch} className="lg:ms-0" />
+      <HeaderSearch
+        value={searchTerm}
+        onChange={onSearch}
+        className="lg:ms-0"
+      />
 
-      <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
+      <div className="flex w-full flex-wrap items-center justify-end gap-3 md:w-auto">
         <HeaderDatePicker
           date={deliverDateFrom}
           onDateChange={(date) => onDateFilterChange("deliverDateFrom", date)}
