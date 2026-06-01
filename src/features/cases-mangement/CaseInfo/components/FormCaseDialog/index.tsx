@@ -7,10 +7,12 @@ import { SelectForm } from "../../../../../shared/components/SelectForm";
 import type { CaseFormValues } from "./components/typesCaseInfo";
 import { useGetCaseInfo } from "../../api/hooks/useGetCaseInfo";
 import { useParams } from "react-router-dom";
-import { useGetCaseStatus } from "@/features/cases-mangement/api/hooks/useGetCaseStatus";
+import { useFetchCaseStatuses } from "@/features/settings/case-statuses/api/hooks/useGetCaseStatuses";
 import { useFetchClients } from "@/shared/api/hooks/useGetClients";
 import { useGetClientStatuses } from "@/shared/api/hooks/useGetClientStatuses";
-import { useGetCaseType } from "@/features/cases-mangement/api/hooks/useGetCaseType";
+import { getCaseTypes } from "@/features/settings/case-types/api/services/getCaseTypes";
+import { usePaginatedOptions } from "@/shared/hooks/usePaginatedOptions";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 import { useUpdateCase } from "@/features/cases-mangement/MainCases/api/hooks/useUpdateCase";
 import { SubmitButton } from "@/shared/components/SubmitButton";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
@@ -34,14 +36,37 @@ export const FormCaseDialog: React.FC = () => {
   const { id } = useParams();
   const { data: caseInfo } = useGetCaseInfo(id!) || {};
   const [open, setOpen] = React.useState(false);
-  const { data: caseStatus } = useGetCaseStatus(open);
+  const { data: caseStatus } = useFetchCaseStatuses(1, 100);
   const { data: clients } = useFetchClients(
     undefined,
     undefined,
     undefined,
     open,
   );
-  const { data: caseTypes } = useGetCaseType(open);
+  const [caseTypeSearch, setCaseTypeSearch] = React.useState("");
+  const debouncedCaseTypeSearch = useDebounce(caseTypeSearch, 300);
+
+  const fetchCaseTypePage = React.useCallback(
+    async (page: number, search?: string) => {
+      const response = await getCaseTypes(page, 15, search);
+      return {
+        items: (response.data ?? []).map((caseType) => ({
+          label: caseType.name,
+          value: String(caseType.id),
+        })),
+        totalPages: response.meta?.total_pages ?? 1,
+      };
+    },
+    [],
+  );
+
+  const {
+    options: caseTypeOptions,
+    hasMoreOptions: caseTypeHasMoreOptions,
+    isFetchingMore: caseTypeIsFetchingMore,
+    loadNextPage: loadMoreCaseTypes,
+  } = usePaginatedOptions(fetchCaseTypePage, debouncedCaseTypeSearch);
+
   const { data: clientStatuses } = useGetClientStatuses(
     open ? 1 : undefined,
     100,
@@ -58,12 +83,6 @@ export const FormCaseDialog: React.FC = () => {
     clients?.data?.map((client: ClientOptionEntity) => ({
       label: client.name,
       value: String(client.user_id),
-    })) || [];
-
-  const caseTypeOptions =
-    caseTypes?.data?.map((type: SelectOptionEntity) => ({
-      label: type.name,
-      value: String(type.id),
     })) || [];
 
   const clientStatusOptions =
@@ -164,6 +183,12 @@ export const FormCaseDialog: React.FC = () => {
                 name="case_type_id"
                 label="نوع القضية"
                 options={caseTypeOptions}
+                placeholder="اختر نوع القضية"
+                showSearch={true}
+                onSearchChange={setCaseTypeSearch}
+                hasMoreOptions={caseTypeHasMoreOptions}
+                isFetchingMore={caseTypeIsFetchingMore}
+                onReachEnd={loadMoreCaseTypes}
               />
               <SelectForm
                 name="case_status_id"

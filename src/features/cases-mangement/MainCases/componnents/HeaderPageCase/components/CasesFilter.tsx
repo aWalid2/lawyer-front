@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useGetCaseStatus } from "../../../api/hooks/useGetCaseStatus";
+import { useFetchCaseStatuses } from "@/features/settings/case-statuses/api/hooks/useGetCaseStatuses";
 
 interface CasesFilterProps {
   onFilterChange: (status: string) => void;
@@ -39,7 +39,7 @@ export const CasesFilter: React.FC<CasesFilterProps> = ({ onFilterChange }) => {
 
   const seenIdsRef = useRef(new Set<string>());
 
-  const { data, isFetching: isLoading } = useGetCaseStatus(true, page, 15);
+  const { data, isFetching: isLoading } = useFetchCaseStatuses(page, 15);
 
   useEffect(() => {
     if (data?.data?.length) {

@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
-import { useFetchClients } from "@/shared/api/hooks/useGetClients";
-import { useGetCaseStatus } from "../../MainCases/api/hooks/useGetCaseStatus";
-import { useGetCaseType } from "../../MainCases/api/hooks/useGetCaseType";
-import { useGetClientStatuses } from "@/features/settings/client-statuses/api/hooks/useGetClientStatuses";
+import { fetchClients } from "@/shared/api/services/getClients";
+
+import { getClientStatuses } from "@/features/settings/client-statuses/api/services/getClientStatuses";
+import { getCaseTypes } from "@/features/settings/case-types/api/services/getCaseTypes";
+import { fetchCaseStatuses } from "@/features/settings/case-statuses/api/service/getCaseStatuses";
+import { usePaginatedOptions } from "@/shared/hooks/usePaginatedOptions";
 
 type SelectOptionEntity = {
   id: number | string;
@@ -21,38 +23,97 @@ export function SharedFormField() {
   const [clientSearch, setClientSearch] = useState("");
   const debouncedClientSearch = useDebounce(clientSearch, 500);
 
-  const { data: clients } = useFetchClients(
-    undefined,
-    undefined,
-    debouncedClientSearch,
+  const fetchClientPage = useCallback(async (page: number, search?: string) => {
+    const response = await fetchClients(page, 15, search);
+    return {
+      items: (response.data ?? []).map((client: ClientOptionEntity) => ({
+        label: client.name,
+        value: String(client.user_id),
+      })),
+      totalPages: response.meta?.total_pages ?? 1,
+    };
+  }, []);
+
+  const {
+    options: clientOptions,
+    hasMoreOptions: clientHasMoreOptions,
+    isFetchingMore: clientIsFetchingMore,
+    loadNextPage: loadMoreClients,
+  } = usePaginatedOptions(fetchClientPage, debouncedClientSearch);
+
+  const [caseStatusSearch, setCaseStatusSearch] = useState("");
+  const debouncedCaseStatusSearch = useDebounce(caseStatusSearch, 300);
+
+  const fetchCaseStatusPage = useCallback(
+    async (page: number, search?: string) => {
+      const response = await fetchCaseStatuses(page, 15, search);
+      return {
+        items: (response.data ?? []).map((caseStatus: SelectOptionEntity) => ({
+          label: caseStatus.name,
+          value: String(caseStatus.id),
+        })),
+        totalPages: response.meta?.total_pages ?? 1,
+      };
+    },
+    [],
   );
-  const { data: caseStatus } = useGetCaseStatus();
-  const { data: caseType } = useGetCaseType();
-  const { data: clientStatuses } = useGetClientStatuses(1, 100);
 
-  const options =
-    clients?.data?.map((client: ClientOptionEntity) => ({
-      label: client.name,
-      value: String(client.user_id),
-    })) || [];
+  const {
+    options: caseStatusOptions,
+    hasMoreOptions: caseStatusHasMoreOptions,
+    isFetchingMore: caseStatusIsFetchingMore,
+    loadNextPage: loadMoreCaseStatuses,
+  } = usePaginatedOptions(fetchCaseStatusPage, debouncedCaseStatusSearch);
 
-  const caseStatusOptions =
-    caseStatus?.data?.map((caseStatus: SelectOptionEntity) => ({
-      label: caseStatus.name,
-      value: String(caseStatus.id),
-    })) || [];
+  const [caseTypeSearch, setCaseTypeSearch] = useState("");
+  const debouncedCaseTypeSearch = useDebounce(caseTypeSearch, 300);
 
-  const caseTypeOptions =
-    caseType?.data?.map((caseType: SelectOptionEntity) => ({
-      label: caseType.name,
-      value: String(caseType.id),
-    })) || [];
+  const fetchCaseTypePage = useCallback(
+    async (page: number, search?: string) => {
+      const response = await getCaseTypes(page, 15, search);
+      return {
+        items: (response.data ?? []).map((caseType) => ({
+          label: caseType.name,
+          value: String(caseType.id),
+        })),
+        totalPages: response.meta?.total_pages ?? 1,
+      };
+    },
+    [],
+  );
 
-  const clientStatusOptions =
-    clientStatuses?.data?.map((clientStatus: SelectOptionEntity) => ({
-      label: clientStatus.name,
-      value: String(clientStatus.id),
-    })) || [];
+  const {
+    options: caseTypeOptions,
+    hasMoreOptions: caseTypeHasMoreOptions,
+    isFetchingMore: caseTypeIsFetchingMore,
+    loadNextPage: loadMoreCaseTypes,
+  } = usePaginatedOptions(fetchCaseTypePage, debouncedCaseTypeSearch);
+
+  const [clientStatusSearch, setClientStatusSearch] = useState("");
+  const debouncedClientStatusSearch = useDebounce(clientStatusSearch, 300);
+
+  const fetchClientStatusPage = useCallback(
+    async (page: number, search?: string) => {
+      const response = await getClientStatuses(page, 15, search);
+      return {
+        items: (response.data ?? []).map((clientStatus: SelectOptionEntity) => ({
+          label: clientStatus.name,
+          value: String(clientStatus.id),
+        })),
+        totalPages: response.meta?.total_pages ?? 1,
+      };
+    },
+    [],
+  );
+
+  const {
+    options: clientStatusOptions,
+    hasMoreOptions: clientStatusHasMoreOptions,
+    isFetchingMore: clientStatusIsFetchingMore,
+    loadNextPage: loadMoreClientStatuses,
+  } = usePaginatedOptions(fetchClientStatusPage, debouncedClientStatusSearch);
+
+  const options = clientOptions;
 
   return (
     <>
@@ -70,6 +131,9 @@ export function SharedFormField() {
         placeholder="اختر الموكل"
         showSearch={true}
         onSearchChange={setClientSearch}
+        hasMoreOptions={clientHasMoreOptions}
+        isFetchingMore={clientIsFetchingMore}
+        onReachEnd={loadMoreClients}
       />
 
       <SelectForm
@@ -78,6 +142,10 @@ export function SharedFormField() {
         name="case_status_id"
         options={caseStatusOptions}
         placeholder="اختر حالة القضية"
+        onSearchChange={setCaseStatusSearch}
+        hasMoreOptions={caseStatusHasMoreOptions}
+        isFetchingMore={caseStatusIsFetchingMore}
+        onReachEnd={loadMoreCaseStatuses}
       />
 
       <SelectForm
@@ -85,6 +153,11 @@ export function SharedFormField() {
         name="ClientStatus_id"
         options={clientStatusOptions}
         placeholder="اختر صفة الموكل"
+        showSearch={true}
+        onSearchChange={setClientStatusSearch}
+        hasMoreOptions={clientStatusHasMoreOptions}
+        isFetchingMore={clientStatusIsFetchingMore}
+        onReachEnd={loadMoreClientStatuses}
       />
 
       <SelectForm
@@ -93,6 +166,10 @@ export function SharedFormField() {
         name="case_type_id"
         options={caseTypeOptions}
         placeholder="اختر نوع القضية"
+        onSearchChange={setCaseTypeSearch}
+        hasMoreOptions={caseTypeHasMoreOptions}
+        isFetchingMore={caseTypeIsFetchingMore}
+        onReachEnd={loadMoreCaseTypes}
       />
     </>
   );

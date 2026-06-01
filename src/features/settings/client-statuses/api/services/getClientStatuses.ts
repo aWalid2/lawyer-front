@@ -17,12 +17,17 @@ type ClientStatusesApiResponse =
       };
     };
 
-export const getClientStatuses = async (page?: number, limit?: number) => {
+export const getClientStatuses = async (page?: number, limit?: number, search?: string) => {
   const currentPage = page ?? 1;
   const currentLimit = limit ?? 15;
 
+  const params: any = { page, limit };
+  if (search && search.trim()) {
+    params.search = search;
+  }
+
   const { data } = await api.get<ClientStatusesApiResponse>("/client-status", {
-    params: { page, limit },
+    params,
   });
 
   if (Array.isArray(data)) {

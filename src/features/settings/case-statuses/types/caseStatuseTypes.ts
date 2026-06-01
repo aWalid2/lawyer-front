@@ -1,6 +1,6 @@
 
 export interface CaseStatusT {
-    id: string;
+    id: string | number;
     name: string;
     rowNumber?: number; 
 }

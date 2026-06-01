@@ -15,7 +15,7 @@ import { SubmitButton } from "@/shared/components/SubmitButton";
 import { useFetchClients } from "@/shared/api/hooks/useGetClients";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
-import { useGetCaseType } from "../../../api/hooks/useGetCaseType";
+
 import { useGetCaseStatus } from "../../../api/hooks/useGetCaseStatus";
 import { useGetClientStatuses } from "@/features/settings/client-statuses/api/hooks/useGetClientStatuses";
 import type { EditableClientCase } from "../../../types/typesClientDetails";
@@ -23,6 +23,9 @@ import {
   CASE_SITUATION_OPTIONS,
   LITIGATION_LEVEL_OPTIONS,
 } from "@/shared/constants/caseOptions";
+import { usePaginatedOptions } from "@/shared/hooks/usePaginatedOptions";
+import { getCaseTypes } from "@/features/settings/case-types/api/services/getCaseTypes";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 
 interface EditCaseDialogProps {
   caseItem: EditableClientCase;
@@ -54,12 +57,36 @@ export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
     undefined,
     open,
   );
-  const { data: caseType } = useGetCaseType();
+
   const { data: caseStatus } = useGetCaseStatus();
   const { data: clientStatuses } = useGetClientStatuses(
     open ? 1 : undefined,
     100,
   );
+
+  const [caseTypeSearch, setCaseTypeSearch] = React.useState("");
+  const debouncedCaseTypeSearch = useDebounce(caseTypeSearch, 300);
+
+  const fetchCaseTypePage = React.useCallback(
+    async (page: number, search?: string) => {
+      const response = await getCaseTypes(page, 15, search);
+      return {
+        items: (response.data ?? []).map((caseType) => ({
+          label: caseType.name,
+          value: String(caseType.id),
+        })),
+        totalPages: response.meta?.total_pages ?? 1,
+      };
+    },
+    [],
+  );
+
+  const {
+    options: caseTypeOptions,
+    hasMoreOptions: caseTypeHasMoreOptions,
+    isFetchingMore: caseTypeIsFetchingMore,
+    loadNextPage: loadMoreCaseTypes,
+  } = usePaginatedOptions(fetchCaseTypePage, debouncedCaseTypeSearch);
 
   const initialValues = {
     ...caseItem,
@@ -94,11 +121,7 @@ export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
       label: client.name,
       value: String(client.user_id),
     })) || [];
-  const caseTypeOptions =
-    caseType?.data?.map((caseType: SelectOptionEntity) => ({
-      label: caseType.name,
-      value: String(caseType.id),
-    })) || [];
+
   const caseStatusOptions =
     caseStatus?.data?.map((caseStatus: SelectOptionEntity) => ({
       label: caseStatus.name,
@@ -190,6 +213,12 @@ export const EditClientCaseDialog: React.FC<EditCaseDialogProps> = ({
                   name="case_type_id"
                   label="نوع القضية"
                   options={caseTypeOptions}
+                  placeholder="اختر نوع القضية"
+                  showSearch={true}
+                  onSearchChange={setCaseTypeSearch}
+                  hasMoreOptions={caseTypeHasMoreOptions}
+                  isFetchingMore={caseTypeIsFetchingMore}
+                  onReachEnd={loadMoreCaseTypes}
                 />
                 <SelectForm
                   name="case_status_id"
