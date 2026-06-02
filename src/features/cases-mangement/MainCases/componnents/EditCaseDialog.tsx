@@ -300,7 +300,6 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
           </DialogTitle>
         </DialogHeader>
 
-        {/* Show retry banners on error (when no options loaded yet) */}
         {hasAnyError && !isLoadingAny && (
           <div className="mb-4 flex flex-col gap-3">
             {clientsError && (

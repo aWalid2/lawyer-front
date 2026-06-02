@@ -11,8 +11,8 @@ export const useCreateContract = () => {
       queryClient.invalidateQueries({ queryKey: ["contracts"] });
       toast.success("تمت إضافة العقد بنجاح");
     },
-    onError: () => {
-      toast.error("حدث خطأ أثناء إضافة العقد");
+    onError: (err:any) => {
+      toast.error(err?.response?.data?.message || "حدث خطأ أثناء إضافة العقد");
     },
   });
 };

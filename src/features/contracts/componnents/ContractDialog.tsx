@@ -9,13 +9,14 @@ import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { XIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Formik, Form } from "formik";
 import type { Contract, ContractFormValues } from "../types";
 import { EMPTY_CONTRACT_FORM_VALUES, toContractFormValues } from "../types";
 import * as Yup from "yup";
-import { useFetchClients } from "@/shared/api/hooks/useGetClients";
+import { fetchClients } from "@/shared/api/services/getClients";
 import { useDebounce } from "@/shared/hooks/useDebounce";
+import { usePaginatedOptions } from "@/shared/hooks/usePaginatedOptions";
 
 interface ContractDialogProps {
   onSave: (values: ContractFormValues) => Promise<void> | void;
@@ -40,37 +41,30 @@ export const ContractDialog: React.FC<ContractDialogProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [clientSearch, setClientSearch] = useState("");
+
   const debouncedClientSearch = useDebounce(clientSearch, 500);
-  const { data: clientsResponse } = useFetchClients(
-    1,
-    200,
-    debouncedClientSearch,
-    open,
-  );
+  const fetchClientPage = useCallback(async (page: number, search?: string) => {
+    const response = await fetchClients(page, 15, search || undefined);
+    return {
+      items: (response.data ?? []).map((client: any) => ({
+        label: client.name,
+        value: String(client.user_id),
+      })),
+      totalPages: response.meta?.total_pages ?? 1,
+    };
+  }, []);
+
+  const {
+    options: clientOptions,
+    hasMoreOptions: clientHasMoreOptions,
+    isFetchingMore: clientIsFetchingMore,
+    isLoading: clientsLoading,
+    loadNextPage: loadMoreClients,
+  } = usePaginatedOptions(fetchClientPage, debouncedClientSearch, 1, open);
 
   const defaultValues = initialValues
     ? toContractFormValues(initialValues)
     : EMPTY_CONTRACT_FORM_VALUES;
-
-  const clientOptions = [
-    ...(initialValues?.clientId
-      ? [
-          {
-            label: initialValues.clientName || `#${initialValues.clientId}`,
-            value: String(initialValues.clientId),
-          },
-        ]
-      : []),
-    ...((clientsResponse?.data?.map(
-      (client: { name?: string; user_id?: string | number }) => ({
-        label: client.name || `#${client.user_id}`,
-        value: String(client.user_id ?? ""),
-      }),
-    ) as Array<{ label: string; value: string }>) || []),
-  ].filter(
-    (option, index, options) =>
-      options.findIndex((item) => item.value === option.value) === index,
-  );
 
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
@@ -129,10 +123,11 @@ export const ContractDialog: React.FC<ContractDialogProps> = ({
                 name="clientId"
                 label="اسم الموكل"
                 options={clientOptions}
-                placeholder="اختر اسم الموكل"
-                showSearch
+                showSearch={true}
                 onSearchChange={setClientSearch}
-                disabled={Boolean(initialValues)}
+                hasMoreOptions={clientHasMoreOptions}
+                isFetchingMore={clientIsFetchingMore || clientsLoading}
+                onReachEnd={loadMoreClients}
               />
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
