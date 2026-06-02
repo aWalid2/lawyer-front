@@ -4,6 +4,7 @@ export interface ReportCase {
   client_id : number;
   case_situation: string;
   rowNumber?: number;
+  case_title: string;
   caseStatus?: {
     name: string;
     id: number;

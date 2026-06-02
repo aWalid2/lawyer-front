@@ -44,7 +44,7 @@ const ContractsFeature = () => {
     contractValueMax: string;
   }>({ contractValueMin: "", contractValueMax: "" });
   const itemsPerPage = 15;
-  const debouncedSearchTerm = useDebounce(searchTerm.trim(), 400);
+  const debouncedSearchTerm = useDebounce(searchTerm.trim(), 10000);
 
   const {
     data: contractsResponse,

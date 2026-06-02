@@ -10,17 +10,6 @@ import { EmptyTable } from "@/shared/components/EmptyTable";
 import { PaginationApi } from "@/shared/components/PaginationApi";
 import PageLayout from "@/shared/components/PageLayout";
 
-const getStatusStyles = (status: string) => {
-  switch (status) {
-    case "قيد التنفيذ":
-      return "bg-[#937F12]/20 text-[#937F12]";
-    case "تم الإغلاق":
-      return "bg-[#5570F1]/20 text-[#5570F1]";
-    default:
-      return "bg-gray-100 text-gray-600";
-  }
-};
-
 const MainCases = () => {
   const columns: Column<Case>[] = [
     {
@@ -42,14 +31,18 @@ const MainCases = () => {
       accessor: (item: any) => item.client?.first_name,
     },
     {
+      header: " عنوان القضية",
+      accessor: (item: any) => item.case_title,
+    },
+    {
       header: " نوع القضية",
-      accessor: (item: any) => item.case_type.name,
+      accessor: (item: any) => item.case_type?.name,
     },
     {
       header: "الحالة",
       accessor: (item) => (
         <span
-          className={`rounded-main px-3 py-1 text-xs font-medium whitespace-nowrap ${getStatusStyles(item?.caseStatus?.name || "")} `}
+          className={`rounded-main px-3 py-1 text-xs font-medium whitespace-nowrap ${item?.caseStatus?.name || ""} `}
         >
           {item?.caseStatus?.name}
         </span>
