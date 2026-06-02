@@ -102,6 +102,7 @@ export const ContractDialog: React.FC<ContractDialogProps> = ({
           enableReinitialize
           onSubmit={async (values, { resetForm, setSubmitting }) => {
             try {
+              console.log(values);
               await onSave(values);
 
               if (!initialValues) {

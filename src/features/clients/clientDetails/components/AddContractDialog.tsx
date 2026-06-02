@@ -14,6 +14,7 @@ import { InputForm } from "@/shared/components/InputForm";
 import { SubmitButton } from "@/shared/components/SubmitButton";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { useAddContract } from "../api/hooks/useAddContract";
+import { buildContractFormData } from "../api/services/buildContractFormData";
 
 interface AddContractFormValues {
   start_date: string;
@@ -42,7 +43,10 @@ export const AddContractDialog: React.FC<AddContractDialogProps> = ({
   const validationSchema = Yup.object().shape({
     start_date: Yup.string().required("تاريخ بداية العقد مطلوب"),
     contract_value: Yup.string().required("القيمة المتفق عليها مطلوبة"),
-    contract_duration: Yup.string().required("مدة العقد مطلوبة"),
+    contract_duration: Yup.number()
+      .required("مدة العقد مطلوبة")
+      .positive()
+      .max(120, "مدة العقد لا يمكن أن تتجاوز 120 شهرًا"),
     file: Yup.mixed().required("صورة العقد مطلوبة"),
   });
 
@@ -75,7 +79,10 @@ export const AddContractDialog: React.FC<AddContractDialogProps> = ({
           validationSchema={validationSchema}
           onSubmit={async (values, { setSubmitting, resetForm }) => {
             try {
-              await addContract({ clientId, data: values });
+              await addContract({
+                clientId,
+                data: buildContractFormData(values),
+              });
               resetForm();
               setOpen(false);
             } catch (error) {

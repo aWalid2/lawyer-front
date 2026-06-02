@@ -7,7 +7,9 @@ export const createContract = async ({
   clientId: string;
   data: FormData;
 }) => {
+
   const response = await api.post(`/contracts/${clientId}`, data, {
+    
     headers: {
       "Content-Type": "multipart/form-data",
     },

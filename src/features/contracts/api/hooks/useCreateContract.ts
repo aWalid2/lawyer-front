@@ -4,7 +4,6 @@ import { createContract } from "../services/createContract";
 
 export const useCreateContract = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: createContract,
     onSuccess: () => {
