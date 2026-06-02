@@ -1,16 +1,16 @@
 import type { Column } from "@/shared/components/DataTable";
 import { DataTable } from "@/shared/components/DataTable";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { PaginationApi } from "@/shared/components/PaginationApi";
+import { Pagination } from "@/shared/components/Pagination";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetClientCases } from "../../api/hooks/useGetClientCases";
 import type { ClientCase } from "../../types/typesClientDetails";
 import { TableCasesActions } from "./components/TableCasesActions";
-import { EmptyTable } from "@/shared/components/EmptyTable";
-import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
 export const ClientCases: React.FC = () => {
   const columns: Column<ClientCase>[] = [
@@ -63,7 +63,7 @@ export const ClientCases: React.FC = () => {
     page,
     limit,
   );
-  const totalPages = clientCases?.meta?.last_page ?? 1;
+  const totalPages = clientCases?.meta?.total_pages ?? 1;
 
   if (isClientCasesPending) {
     return <LoadingPage />;
@@ -79,7 +79,7 @@ export const ClientCases: React.FC = () => {
         <EmptyTable message="لا يوجد قضايا" />
       )}
       {totalPages > 1 && (
-        <PaginationApi
+        <Pagination
           currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}

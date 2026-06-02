@@ -9,6 +9,9 @@ export interface Contract {
   documentFile: string;
   createdAt: string;
   endDate: string;
+  client_profile?: {
+    name?: string;
+  };
 }
 
 export interface ContractFormValues {

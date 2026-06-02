@@ -18,6 +18,9 @@ export interface ContractApiItem {
   contract_duration?: string | number | null;
   document_file?: string | null;
   created_at?: string | null;
+  client_profile?: {
+    name?: string | null;
+  } | null;
 }
 
 export interface ContractsResponse {

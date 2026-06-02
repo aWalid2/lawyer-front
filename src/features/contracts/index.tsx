@@ -14,7 +14,7 @@ import { useUpdateContract } from "./api/hooks/useUpdateContract";
 import { useDeleteContract } from "./api/hooks/useDeleteContract";
 import { buildContractFormData } from "./api/services/buildContractFormData";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
-import { useFetchClients } from "@/shared/api/hooks/useGetClients";
+
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 
@@ -22,15 +22,10 @@ import type { ContractApiItem } from "./api/services/getContracts";
 
 const FALLBACK_TEXT = "-";
 
-const normalizeContract = (
-  item: ContractApiItem,
-  clientNameById: Map<string, string>,
-): Contract => ({
+const normalizeContract = (item: ContractApiItem): Contract => ({
   id: String(item.id ?? ""),
   clientId: item.client_id ? String(item.client_id) : "",
-  clientName: item.client_id
-    ? clientNameById.get(String(item.client_id)) || `#${item.client_id}`
-    : FALLBACK_TEXT,
+  clientName: item.client_profile?.name ?? "",
   startDate: item.start_date ? item.start_date.split("T")[0] : "",
   endDate: item.end_date ? item.end_date.split("T")[0] : "",
   contractValue: String(item.contract_value ?? ""),
@@ -64,28 +59,14 @@ const ContractsFeature = () => {
     contractValueMin: filters.contractValueMin,
     contractValueMax: filters.contractValueMax,
   });
-  const { data: clientsResponse } = useFetchClients(1, 500);
   const createContractMutation = useCreateContract();
   const updateContractMutation = useUpdateContract();
   const deleteContractMutation = useDeleteContract();
 
-  const clientNameById = useMemo(() => {
-    return new Map<string, string>(
-      (clientsResponse?.data ?? []).map(
-        (client: { name?: string; user_id?: string | number }) => [
-          String(client.user_id ?? ""),
-          client.name || `#${client.user_id}`,
-        ],
-      ),
-    );
-  }, [clientsResponse?.data]);
-
   const contracts = useMemo(
     () =>
-      (contractsResponse?.data ?? []).map((item) =>
-        normalizeContract(item, clientNameById),
-      ),
-    [contractsResponse?.data, clientNameById],
+      (contractsResponse?.data ?? []).map((item) => normalizeContract(item)),
+    [contractsResponse?.data],
   );
 
   const handleFilterChange = (
@@ -168,7 +149,7 @@ const ContractsFeature = () => {
     },
     {
       header: "اسم الموكل",
-      accessor: "clientName",
+      accessor: (item) => item.clientName || FALLBACK_TEXT,
     },
     {
       header: "قيمة العقد",
