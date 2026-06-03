@@ -5,15 +5,15 @@ import { ar } from "date-fns/locale";
 import { EventsGrid } from "./components/EventsGrid";
 import { times } from "@/shared/constants/shcedule";
 
-const rowsCount = 18;
+const rowsCount = 8;
 
 interface Event {
   id: string;
   title: string;
   lawyer: string;
   location: string;
-  startTime: string; // e.g. "10:00"
-  endTime: string; // e.g. "11:00"
+  startTime: string;
+  endTime: string;
 }
 
 const UserTasksSchedule = ({
@@ -31,7 +31,7 @@ const UserTasksSchedule = ({
       <CardHeader>
         <HeaderTitle title={`مواعيد يوم ${dateStr}`} />
       </CardHeader>
-      <CardContent className="overflow-x-auto custom-scrollbar">
+      <CardContent className="custom-scrollbar overflow-x-auto">
         <div className="min-w-[2400px] p-6">
           {/* Time Headers */}
           <div

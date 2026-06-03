@@ -38,7 +38,7 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
-        placeholder="بحث ..."
+        placeholder="ابحث في رول الجلسات..."
         className="lg:ms-0"
       />
 

@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 interface Event {
   id: string;
   title: string;
@@ -16,9 +18,16 @@ export const DayCard = ({
   colIndex: number;
   rowIndex: number;
 }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/dashboard/user-tasks/${event.id}`);
+  };
+
   return (
     <div
-      className="border-primary/10 pointer-events-auto flex h-full w-full flex-col items-center justify-center border bg-[#fdf8f0] p-2 text-center shadow-sm transition-all hover:brightness-95"
+      onClick={handleClick}
+      className="border-primary/10 pointer-events-auto flex h-full w-full cursor-pointer flex-col items-center justify-center border bg-[#fdf8f0] p-2 text-center shadow-sm transition-all hover:brightness-95"
       style={{
         gridColumnStart: colIndex + 1,
         gridRowStart: rowIndex + 1,

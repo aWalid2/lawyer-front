@@ -1,4 +1,4 @@
-// tasks/api/hooks/useGetOneTask.ts
+
 import { useQuery } from "@tanstack/react-query";
 import { getOneTask } from "../service/getTaskOne";
 

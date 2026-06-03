@@ -6,6 +6,8 @@ import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import { getDefaultClassNames } from "react-day-picker";
 import { Link, useNavigate } from "react-router-dom";
+import { useAgenda } from "./api/hooks/useAgenda";
+import { useMemo, useState } from "react";
 
 interface CalendarPickerProps {
   selectedDate: Date | undefined;
@@ -19,15 +21,28 @@ const CalendarPicker = ({
   const navigate = useNavigate();
   const defaultClassNames = getDefaultClassNames();
 
-  // Mock appointment dates matching the user's reference image (1, 11, 16, 21, 30)
   const today = new Date();
-  const mockAppointmentDates = [
-    new Date(today.getFullYear(), today.getMonth(), 1),
-    new Date(today.getFullYear(), today.getMonth(), 11),
-    new Date(today.getFullYear(), today.getMonth(), 16),
-    new Date(today.getFullYear(), today.getMonth(), 21),
-    new Date(today.getFullYear(), today.getMonth(), 30),
-  ];
+  const [currentMonth, setCurrentMonth] = useState(today);
+
+  const month = currentMonth.getMonth() + 1;
+  const year = currentMonth.getFullYear();
+
+  const { data: agendaData } = useAgenda({ month, year });
+  console.log("Agenda Data:", agendaData);
+
+  const appointmentDates = useMemo(() => {
+    if (!agendaData) return [];
+    const dates = new Set<string>();
+
+    for (const task of agendaData.tasks ?? []) {
+      if (task.delivery_date) dates.add(task.delivery_date.split("T")[0]);
+    }
+    for (const proc of agendaData.procedures ?? []) {
+      if (proc.session_date) dates.add(proc.session_date.split("T")[0]);
+    }
+
+    return Array.from(dates).map((d) => new Date(d));
+  }, [agendaData]);
 
   const handleSelect = (date: Date | undefined) => {
     onDateSelect(date);
@@ -44,9 +59,11 @@ const CalendarPicker = ({
           mode="single"
           selected={selectedDate}
           onSelect={handleSelect}
+          month={currentMonth}
+          onMonthChange={setCurrentMonth}
           locale={ar}
           modifiers={{
-            appointment: mockAppointmentDates,
+            appointment: appointmentDates,
           }}
           modifiersClassNames={{
             appointment: "!bg-secondary !text-white !rounded-[12px]",
