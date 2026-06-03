@@ -83,6 +83,8 @@ const DailySchedule = ({ selectedDate }: DailyScheduleProps) => {
     !!selectedDate,
   );
 
+  console.log("DailySchedule received agendaData:", agendaData);
+
   const tasks: TaskEvent[] = (agendaData?.tasks ?? []).map(mapTaskToEvent);
   const procedures: ProcedureItem[] = (agendaData?.procedures ?? []).map(
     mapProcedureToItem,

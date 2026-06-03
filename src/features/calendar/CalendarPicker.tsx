@@ -28,7 +28,6 @@ const CalendarPicker = ({
   const year = currentMonth.getFullYear();
 
   const { data: agendaData } = useAgenda({ month, year });
-  console.log("Agenda Data:", agendaData);
 
   const appointmentDates = useMemo(() => {
     if (!agendaData) return [];
@@ -93,7 +92,7 @@ const CalendarPicker = ({
         />
       </div>
       <Link
-        to="/dashboard/all-schedule"
+        to={`/dashboard/all-schedule?month=${month}&year=${year}`}
         className={cn(buttonVariants(), "mt-4 w-full")}
       >
         عرض كافة المواعيد

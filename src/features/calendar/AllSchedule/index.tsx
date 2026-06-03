@@ -2,10 +2,12 @@ import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import AllScheduleCard from "./components/AllScheduleCard";
 import HeaderActions from "./components/HeaderActions";
 import LoadingPage from "@/shared/components/LoadingPage";
+import { Pagination } from "@/shared/components/Pagination";
 import { useAgenda } from "../api/hooks/useAgenda";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
+import { useSearchParams } from "react-router-dom";
 
 interface ScheduleItem {
   id: number | string;
@@ -15,12 +17,17 @@ interface ScheduleItem {
   location: string;
   client: string;
   type: string;
+  kind: "task" | "procedure";
 }
 
+const ITEMS_PER_PAGE = 9;
+
 export const AllScheduleFeatures = () => {
+  const [searchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(1);
   const now = new Date();
-  const month = now.getMonth() + 1;
-  const year = now.getFullYear();
+  const month = Number(searchParams.get("month")) || now.getMonth() + 1;
+  const year = Number(searchParams.get("year")) || now.getFullYear();
 
   const { data: agendaData, isPending } = useAgenda({ month, year });
 
@@ -39,10 +46,11 @@ export const AllScheduleFeatures = () => {
       location: "",
       client: "",
       type: "مهمة",
+      kind: "task" as const,
     }));
 
     const procedures: ScheduleItem[] = (agendaData.procedures ?? []).map(
-      (proc: any) => ({
+      (proc) => ({
         id: proc.id ?? "",
         title: proc.actionType || proc.title || "إجراء",
         date: proc.session_date
@@ -54,11 +62,23 @@ export const AllScheduleFeatures = () => {
         location: proc.admin_authority || proc.location || "",
         client: proc.client_name || proc.clientName || "",
         type: "إجراء",
+        kind: "procedure" as const,
       }),
     );
 
     return [...tasks, ...procedures];
   }, [agendaData]);
+
+  const totalPages = Math.max(1, Math.ceil(schedules.length / ITEMS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedSchedules = useMemo(() => {
+    const start = (safePage - 1) * ITEMS_PER_PAGE;
+    return schedules.slice(start, start + ITEMS_PER_PAGE);
+  }, [schedules, safePage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   if (isPending) {
     return <LoadingPage />;
@@ -77,11 +97,22 @@ export const AllScheduleFeatures = () => {
             لا توجد مواعيد لهذا الشهر
           </p>
         ) : (
-          schedules.map((schedule) => (
-            <AllScheduleCard key={schedule.id} schedule={schedule} />
+          paginatedSchedules.map((schedule) => (
+            <AllScheduleCard
+              key={`${schedule.kind}-${schedule.id}`}
+              schedule={schedule}
+            />
           ))
         )}
       </div>
+
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={safePage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </>
   );
 };

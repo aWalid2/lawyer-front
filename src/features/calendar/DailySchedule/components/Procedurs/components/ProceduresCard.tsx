@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Clock, MapPin, User } from "lucide-react";
+import { Clock, MapPin } from "lucide-react";
 import { useState } from "react";
 import { ProcedureDetailsDialog } from "./ProcedureDetailsDialog";
 
@@ -16,6 +16,8 @@ interface IProcedure {
 export const ProceduresCard = ({ proc }: { proc: IProcedure }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  console.log("Rendering ProceduresCard for:", proc);
+
   return (
     <>
       <Card
@@ -23,7 +25,7 @@ export const ProceduresCard = ({ proc }: { proc: IProcedure }) => {
         className="border-border/50 cursor-pointer transition-all hover:shadow-md"
         onClick={() => setDialogOpen(true)}
       >
-        <CardHeader className="pb-3">
+        <CardHeader>
           <div className="flex items-start justify-between">
             <CardTitle className="text-secondary text-xl font-bold">
               {proc.title}
@@ -54,14 +56,7 @@ export const ProceduresCard = ({ proc }: { proc: IProcedure }) => {
                 {proc.time}
               </span>
             </div>
-            <div className="text-muted-foreground flex items-center gap-3 text-sm">
-              <div className="bg-secondary/5 rounded-md p-2">
-                <User className="text-primary h-4 w-4" />
-              </div>
-              <span className="text-foreground/80 font-medium">
-                {proc.client}
-              </span>
-            </div>
+
             <div className="text-muted-foreground flex items-center gap-3 text-sm">
               <div className="bg-secondary/5 rounded-md p-2">
                 <MapPin className="text-primary h-4 w-4" />
