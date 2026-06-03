@@ -9,6 +9,7 @@ import { PaginationApi } from "@/shared/components/PaginationApi";
 import { TableContractsActions } from "./componnents/TableContractsActions";
 import PageLayout from "@/shared/components/PageLayout";
 import { useGetContracts } from "./api/hooks/useGetContracts";
+import { useSearchContracts } from "./api/hooks/useSearchContracts";
 import { useCreateContract } from "./api/hooks/useCreateContract";
 import { useUpdateContract } from "./api/hooks/useUpdateContract";
 import { useDeleteContract } from "./api/hooks/useDeleteContract";
@@ -44,13 +45,14 @@ const ContractsFeature = () => {
     contractValueMax: string;
   }>({ contractValueMin: "", contractValueMax: "" });
   const itemsPerPage = 15;
-  const debouncedSearchTerm = useDebounce(searchTerm.trim(), 10000);
+  const debouncedSearchTerm = useDebounce(searchTerm.trim(), 500);
+  const isSearching = debouncedSearchTerm.length > 0;
 
   const {
     data: contractsResponse,
-    isPending,
-    isError,
-    error,
+    isPending: isContractsPending,
+    isError: isContractsError,
+    error: contractsError,
   } = useGetContracts({
     page: currentPage,
     limit: itemsPerPage,
@@ -59,14 +61,31 @@ const ContractsFeature = () => {
     contractValueMin: filters.contractValueMin,
     contractValueMax: filters.contractValueMax,
   });
+
+  const {
+    data: searchResponse,
+    isPending: isSearchPending,
+    isError: isSearchError,
+    error: searchError,
+  } = useSearchContracts({
+    q: debouncedSearchTerm,
+    page: currentPage,
+    limit: itemsPerPage,
+    enabled: isSearching,
+  });
+
+  const isPending = isSearching ? isSearchPending : isContractsPending;
+  const isError = isSearching ? isSearchError : isContractsError;
+  const error = isSearching ? searchError : contractsError;
+
+  const activeResponse = isSearching ? searchResponse : contractsResponse;
   const createContractMutation = useCreateContract();
   const updateContractMutation = useUpdateContract();
   const deleteContractMutation = useDeleteContract();
 
   const contracts = useMemo(
-    () =>
-      (contractsResponse?.data ?? []).map((item) => normalizeContract(item)),
-    [contractsResponse?.data],
+    () => (activeResponse?.data ?? []).map((item) => normalizeContract(item)),
+    [activeResponse?.data],
   );
 
   const handleFilterChange = (
@@ -77,31 +96,13 @@ const ContractsFeature = () => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  const filteredContracts = useMemo(() => {
-    return contracts.filter((contract) => {
-      const searchStr = debouncedSearchTerm.toLowerCase();
-
-      if (!searchStr) {
-        return true;
-      }
-
-      const matchesSearch =
-        contract.clientName.toLowerCase().includes(searchStr) ||
-        contract.contractValue.toLowerCase().includes(searchStr) ||
-        contract.contractDuration.toLowerCase().includes(searchStr) ||
-        contract.id.toLowerCase().includes(searchStr);
-
-      return matchesSearch;
-    });
-  }, [contracts, debouncedSearchTerm]);
-
-  const effectiveLimit = contractsResponse?.meta?.limit ?? itemsPerPage;
+  const effectiveLimit = activeResponse?.meta?.limit ?? itemsPerPage;
   const indexedContracts = useIndexedData(
-    filteredContracts,
+    contracts,
     currentPage,
     effectiveLimit,
   ) as Contract[];
-  const totalPages = contractsResponse?.meta?.totalPages ?? 1;
+  const totalPages = activeResponse?.meta?.totalPages ?? 1;
 
   const handleCreate = async (values: ContractFormValues) => {
     await createContractMutation.mutateAsync({

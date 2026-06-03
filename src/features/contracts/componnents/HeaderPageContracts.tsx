@@ -41,7 +41,7 @@ export const HeaderPageContracts: React.FC<HeaderPageContractsProps> = ({
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
-        placeholder="بحث  ..."
+        placeholder="ابحث باسم الموكل"
         className="lg:ms-0"
       />
 
