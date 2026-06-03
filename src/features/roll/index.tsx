@@ -1,20 +1,17 @@
-import { useMemo, useState } from "react";
-import { HeaderPageRoll } from "./components/HeaderPageRoll";
-import type {
-  RollSession,
-  RollSessionApiResponse,
-  RollSessionSourceKey,
-} from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { Pagination } from "@/shared/components/Pagination";
-import PageLayout from "@/shared/components/PageLayout";
-import { useGetAllRollSessions } from "./api/hooks/useGetAllSessions";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils";
-import { LITIGATION_LEVEL_OPTIONS } from "@/shared/constants/caseOptions";
+import PageLayout from "@/shared/components/PageLayout";
+import { Pagination } from "@/shared/components/Pagination";
 import { useExport } from "@/shared/hooks/useExport";
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils";
+import { useMemo, useState } from "react";
+import { useGetAllRollSessions } from "./api/hooks/useGetAllSessions";
+import { useSearchSessions } from "./api/hooks/useSearchSessions";
 import { exportRollSessionsExcel } from "./api/service/exportRollSessionsExcel";
 import { exportRollSessionsPdf } from "./api/service/exportRollSessionsPdf";
+import { HeaderPageRoll } from "./components/HeaderPageRoll";
+import { useRoll } from "./hooks/useRoll";
+import type { RollSession } from "./types";
 
 interface RollFilters {
   sessionSource: string;
@@ -22,87 +19,40 @@ interface RollFilters {
   toDate?: Date;
 }
 
-const FALLBACK_TEXT = "-";
-
-const LITIGATION_LEVEL_LABELS = Object.fromEntries(
-  LITIGATION_LEVEL_OPTIONS.map(({ value, label }) => [value, label]),
-);
-
-const formatSessionSourceLabel = (value: string | null) => {
-  if (value && value in LITIGATION_LEVEL_LABELS) {
-    return LITIGATION_LEVEL_LABELS[
-      value as keyof typeof LITIGATION_LEVEL_LABELS
-    ];
-  }
-
-  switch (value) {
-    case "court":
-      return "محكمة";
-    case "prosecution":
-      return "نيابة";
-    case "police":
-      return "مخفر";
-    case "procedure":
-      return "إجراءات";
-    default:
-      return value || FALLBACK_TEXT;
-  }
-};
-
-const mapRollSession = (
-  session: RollSessionApiResponse,
-  index: number,
-): RollSession => {
-  const sessionSourceKey = (session.session_source ||
-    "court") as RollSessionSourceKey;
-  const hallNumber =
-    session.hall_number === null ? FALLBACK_TEXT : String(session.hall_number);
-  const referenceNumber = session.reference_number || FALLBACK_TEXT;
-  const sessionDecision =
-    session.session_decision || session.decision || FALLBACK_TEXT;
-  const caseTypeName =
-    session.case_type_name || session.case_type?.name || FALLBACK_TEXT;
-
-  return {
-    id: `${session.case_id}-${session.session_date}-${session.session_source || "all"}-${index}`,
-    sessionId: session.session_id ?? null,
-    caseId: session.case_id,
-    caseSequence: session.case_sequence || FALLBACK_TEXT,
-    reference_number: referenceNumber,
-    sessionDate: session.session_date,
-    courtName: session.court_name || FALLBACK_TEXT,
-    police_station_name: session.police_station_name || undefined,
-    presecution_name: session.presecution_name || undefined,
-    sessionSource: formatSessionSourceLabel(session.session_source),
-    sessionSourceKey,
-    clientName: session.client_name || FALLBACK_TEXT,
-    client_status:
-      session.client_status || session.client_type || FALLBACK_TEXT,
-    opponents: session.opponents || [],
-    caseTitle: session.case_title || FALLBACK_TEXT,
-    caseTypeName,
-    hallNumber,
-    sessionDateTime: session.session_date,
-    hallFloor: FALLBACK_TEXT,
-    rollNumber: referenceNumber,
-    session_decision: sessionDecision,
-    decision: sessionDecision,
-  };
-};
-
 const RollFeature = () => {
+  const { mapRollSession, FALLBACK_TEXT } = useRoll();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<RollFilters>({
     sessionSource: "all",
   });
   const itemsPerPage = 15;
+  const isSearching = searchTerm.trim().length > 0;
 
-  const { data, isPending, isFetching } = useGetAllRollSessions({
+  const {
+    data: allSessionsData,
+    isPending: isAllPending,
+    isFetching: isAllFetching,
+  } = useGetAllRollSessions({
     sessionSource: filters.sessionSource,
     dateFrom: filters.fromDate,
     dateTo: filters.toDate,
   });
+
+  const {
+    data: searchData,
+    isPending: isSearchPending,
+    isFetching: isSearchFetching,
+  } = useSearchSessions({
+    q: searchTerm.trim(),
+    page: currentPage,
+    limit: itemsPerPage,
+    enabled: isSearching,
+  });
+
+  const isPending = isSearching ? isSearchPending : isAllPending;
+  const isFetching = isSearching ? isSearchFetching : isAllFetching;
+  const rawData = isSearching ? searchData : allSessionsData;
 
   const { handleExport: triggerExport } = useExport({
     exportExcelFn: exportRollSessionsExcel,
@@ -116,8 +66,10 @@ const RollFeature = () => {
       fileName += type === "excel" ? ".xlsx" : ".pdf";
       return fileName;
     },
-    loadingMessage: (type) => `جاري تحميل ملف رول الجلسات (${type === "excel" ? "Excel" : "PDF"})...`,
-    successMessage: (type) => `تم تحميل ملف رول الجلسات (${type === "excel" ? "Excel" : "PDF"}) بنجاح!`,
+    loadingMessage: (type) =>
+      `جاري تحميل ملف رول الجلسات (${type === "excel" ? "Excel" : "PDF"})...`,
+    successMessage: (type) =>
+      `تم تحميل ملف رول الجلسات (${type === "excel" ? "Excel" : "PDF"}) بنجاح!`,
   });
 
   const handleExport = (type: "pdf" | "excel") => {
@@ -129,8 +81,9 @@ const RollFeature = () => {
   };
 
   const sessions = useMemo(
-    () => (data || []).map((session, index) => mapRollSession(session, index)),
-    [data],
+    () =>
+      (rawData || []).map((session, index) => mapRollSession(session, index)),
+    [rawData, mapRollSession],
   );
 
   const handleSearch = (term: string) => {
@@ -146,41 +99,24 @@ const RollFeature = () => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  const filteredSessions = useMemo(() => {
-    return sessions.filter((s) => {
-      const searchStr = searchTerm.toLowerCase();
-
-      const matchesSearch =
-        s.caseSequence.toLowerCase().includes(searchStr) ||
-        s.reference_number.toLowerCase().includes(searchStr) ||
-        s.sessionDateTime.toLowerCase().includes(searchStr) ||
-        s.courtName.toLowerCase().includes(searchStr) ||
-        s.clientName.toLowerCase().includes(searchStr) ||
-        s.caseTitle.toLowerCase().includes(searchStr) ||
-        s.caseTypeName.toLowerCase().includes(searchStr) ||
-        s.hallNumber.includes(searchStr) ||
-        s.sessionSource.toLowerCase().includes(searchStr);
-
-      return matchesSearch;
-    });
-  }, [searchTerm, sessions]);
-
-  const totalPages = Math.ceil(filteredSessions.length / itemsPerPage);
+  const totalPages = isSearching
+    ? Math.ceil((searchData?.length ?? 0) / itemsPerPage) > 0
+      ? Math.ceil((searchData?.length ?? 0) / itemsPerPage)
+      : 1
+    : Math.ceil(sessions.length / itemsPerPage);
   const safeCurrentPage =
     totalPages === 0 ? 1 : Math.min(currentPage, totalPages);
 
   const paginatedSessions = useMemo(() => {
     const start = (safeCurrentPage - 1) * itemsPerPage;
-    return filteredSessions.slice(start, start + itemsPerPage);
-  }, [filteredSessions, safeCurrentPage]);
-
-
+    return sessions.slice(start, start + itemsPerPage);
+  }, [sessions, safeCurrentPage]);
 
   const columns: Column<RollSession>[] = [
     {
       header: "#",
-      accessor: (item) =>
-        filteredSessions.findIndex((d) => d.id === item.id) + 1,
+      accessor: (_item, index) =>
+        (safeCurrentPage - 1) * itemsPerPage + index + 1,
       headerClassName: "w-15",
     },
     {
@@ -246,7 +182,7 @@ const RollFeature = () => {
     },
   ];
 
-  if (isPending && !data) {
+  if (isPending && !rawData) {
     return <LoadingPage />;
   }
 
