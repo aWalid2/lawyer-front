@@ -4,10 +4,11 @@ import type { ReportCase } from "./types/reportCase";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { useReportCase } from "./api/hooks/useReportCase";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
-import { PaginationApi } from "@/shared/components/PaginationApi";
+
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
 import PageLayout from "@/shared/components/PageLayout";
+import { Pagination } from "@/shared/components/Pagination";
 
 const ReportsCasesFeature = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -96,7 +97,7 @@ const ReportsCasesFeature = () => {
       <DataTable columns={columns} data={indexedData} rowIdField="id" />
 
       {totalPages > 1 && (
-        <PaginationApi
+        <Pagination
           currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}

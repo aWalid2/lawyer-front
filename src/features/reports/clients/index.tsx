@@ -3,11 +3,12 @@ import { HeaderPageReportsClients } from "./components/HeaderPageReportsClients"
 import type { ReportClient } from "./types";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
-import { PaginationApi } from "@/shared/components/PaginationApi";
+
 import { useGetClients } from "./api/hooks/useGetClients";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
 import PageLayout from "@/shared/components/PageLayout";
+import { Pagination } from "@/shared/components/Pagination";
 
 const ReportsClientsFeature = () => {
   // const [searchTerm, setSearchTerm] = useState("");
@@ -95,7 +96,7 @@ const ReportsClientsFeature = () => {
       <DataTable columns={columns} data={indexedData} />
 
       {totalPages > 1 && (
-        <PaginationApi
+        <Pagination
           currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}

@@ -7,8 +7,9 @@ import { useFetchConsultations } from "../api/hooks/useGetConsultations";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
-import { PaginationApi } from "@/shared/components/PaginationApi";
+
 import PageLayout from "@/shared/components/PageLayout";
+import { Pagination } from "@/shared/components/Pagination";
 
 const formatDateToArabic = (dateString: string): string => {
   if (!dateString) return "-";
@@ -81,8 +82,8 @@ const ConsultationsFeature = () => {
       accessor: (item) => (
         <TableConsultationsActions
           consultation={item}
-          onEdit={() => { }}
-          onDelete={() => { }}
+          onEdit={() => {}}
+          onDelete={() => {}}
         />
       ),
     },
@@ -100,14 +101,14 @@ const ConsultationsFeature = () => {
       <HeaderPageConsultations
         searchTerm={searchTerm}
         onSearch={setSearchTerm}
-        onFilterChange={setStatusFilter} // Pass setStatusFilter directly
+        onFilterChange={setStatusFilter}
         filters={{ status: statusFilter }}
       />
 
       <DataTable columns={columns} data={indexedData} rowIdField="id" />
 
       {totalPages > 1 && (
-        <PaginationApi
+        <Pagination
           currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}

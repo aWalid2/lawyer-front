@@ -12,7 +12,7 @@ import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
 import PageLayout from "@/shared/components/PageLayout";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
-import { PaginationApi } from "@/shared/components/PaginationApi";
+import { Pagination } from "@/shared/components/Pagination";
 
 export const DocumentsFeature: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -146,7 +146,7 @@ export const DocumentsFeature: React.FC = () => {
       />
 
       {totalPages > 1 && (
-        <PaginationApi
+        <Pagination
           currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}

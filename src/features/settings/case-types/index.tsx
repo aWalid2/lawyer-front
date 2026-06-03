@@ -10,10 +10,9 @@ import { CaseTypesHeader } from "./components/CaseTypesHeader";
 import type { CaseTypeT } from "./types/casesT";
 
 import { useIndexedData } from "@/shared/utils/useIndexedData";
-import { PaginationApi } from "@/shared/components/PaginationApi";
+import { Pagination } from "@/shared/components/Pagination";
 
 export const CaseTypesFeature: React.FC = () => {
-
   const [page, setPage] = useState(1);
   const limit = 15;
   const { data, isPending, isError, error } = useGetCaseTypes(page, limit);
@@ -21,12 +20,10 @@ export const CaseTypesFeature: React.FC = () => {
   const indexedData = useIndexedData(types, page, limit);
   const totalPage = data?.meta?.total_pages || 1;
 
-
-
   const columns: Column<CaseTypeT>[] = [
     {
       header: "#",
-      accessor: (type: CaseTypeT) => type.rowNumber
+      accessor: (type: CaseTypeT) => type.rowNumber,
     },
     {
       header: "نوع القضية",
@@ -36,7 +33,7 @@ export const CaseTypesFeature: React.FC = () => {
       header: "عدد القضايا",
       accessor: (type: CaseTypeT) => (
         <div className="flex justify-center">
-          <span className="flex items-center justify-center size-8 bg-[#A6A6A6] text-white rounded-md text-xs font-bold leading-none">
+          <span className="flex size-8 items-center justify-center rounded-md bg-[#A6A6A6] text-xs leading-none font-bold text-white">
             {type._count?.cases ?? 0}
           </span>
         </div>
@@ -45,9 +42,7 @@ export const CaseTypesFeature: React.FC = () => {
     {
       header: "الحالة",
       accessor: (caseType: CaseTypeT) => (
-        <CaseTypesAction
-          caseType={caseType}
-        />
+        <CaseTypesAction caseType={caseType} />
       ),
     },
   ];
@@ -57,23 +52,15 @@ export const CaseTypesFeature: React.FC = () => {
 
   return (
     <PageLayout>
-      <CaseTypesHeader
-        searchTerm={''}
-        onSearch={() => { }}
-      />
+      <CaseTypesHeader searchTerm={""} onSearch={() => {}} />
 
       {indexedData ? (
-
         <DataTable data={indexedData} columns={columns} rowKey="id" />
-
       ) : (
-
         <EmptyTable message="لا توجد أنواع قضايا حالياً" />
-
-
       )}
       {totalPage > 1 && (
-        <PaginationApi
+        <Pagination
           currentPage={page}
           totalPages={totalPage}
           onPageChange={setPage}

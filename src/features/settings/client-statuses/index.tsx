@@ -11,7 +11,7 @@ import { ClientStatusesHeader } from "./components/ClientStatusesHeader";
 import type { ClientStatusT } from "./types/clientStatusT";
 
 import { useIndexedData } from "@/shared/utils/useIndexedData";
-import { PaginationApi } from "@/shared/components/PaginationApi";
+import { Pagination } from "@/shared/components/Pagination";
 
 export const ClientStatusesFeature: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -62,7 +62,7 @@ export const ClientStatusesFeature: React.FC = () => {
       )}
 
       {totalPage > 1 && (
-        <PaginationApi
+        <Pagination
           currentPage={page}
           totalPages={totalPage}
           onPageChange={setPage}

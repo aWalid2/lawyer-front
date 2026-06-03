@@ -7,8 +7,9 @@ import { useGetCases, useSearchCases } from "./api/hooks/useGetCases";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { EmptyTable } from "@/shared/components/EmptyTable";
-import { PaginationApi } from "@/shared/components/PaginationApi";
+
 import PageLayout from "@/shared/components/PageLayout";
+import { Pagination } from "@/shared/components/Pagination";
 
 const MainCases = () => {
   const columns: Column<Case>[] = [
@@ -102,7 +103,7 @@ const MainCases = () => {
         <>
           <DataTable rowKey="id" data={indexedData} columns={columns} />
           {totalPages > 1 && (
-            <PaginationApi
+            <Pagination
               currentPage={page}
               totalPages={totalPages}
               onPageChange={setPage}

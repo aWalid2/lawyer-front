@@ -20,7 +20,7 @@ const ROUTE_TITLES: Record<string, string> = {
   "/dashboard/legislation-rulings": "التشريعات والأحكام",
   "/dashboard/calendar": "التقويم",
   "/dashboard/daily-schedule": "الجدول اليومي",
-  "/dashboard/roll": "الرول",
+  "/dashboard/roll": "رول الجلسات",
   "/dashboard/documents": "المستندات",
   "/dashboard/user-tasks": "مهام المستخدم",
   "/dashboard/contracts": "العقود",
@@ -90,7 +90,6 @@ export default function NavbarHeader() {
   const { theme, setTheme } = useTheme();
   const { user, logout } = useAuth();
 
-
   const userId = (user?.sub as number | string) || 3;
   const { data: apiNotifications } = useGetNotifications(userId);
 
@@ -146,7 +145,7 @@ export default function NavbarHeader() {
             </button>
             <Link
               to={"notifications"}
-              className={`relative text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
+              className={`text-secondary relative dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
             >
               <AlertIcon className={ICON_CLASSES} />
               {unreadCount > 0 && (

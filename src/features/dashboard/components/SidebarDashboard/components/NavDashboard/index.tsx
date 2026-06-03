@@ -128,7 +128,7 @@ const NavDashboard = ({ onLinkClick }: { onLinkClick?: () => void }) => {
       <NavLink to="/dashboard/roll" className={linkClass} onClick={onLinkClick}>
         <div className="flex items-center gap-3">
           <RollIcon />
-          <p className="text-base font-normal">الرول</p>
+          <p className="text-base font-normal">رول الجلسات</p>
         </div>
       </NavLink>
       <NavLink

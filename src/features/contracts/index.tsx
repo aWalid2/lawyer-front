@@ -5,7 +5,7 @@ import { DataTable, type Column } from "@/shared/components/DataTable";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { PaginationApi } from "@/shared/components/PaginationApi";
+
 import { TableContractsActions } from "./componnents/TableContractsActions";
 import PageLayout from "@/shared/components/PageLayout";
 import { useGetContracts } from "./api/hooks/useGetContracts";
@@ -20,6 +20,7 @@ import { useDebounce } from "@/shared/hooks/useDebounce";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 
 import type { ContractApiItem } from "./api/services/getContracts";
+import { Pagination } from "@/shared/components/Pagination";
 
 const FALLBACK_TEXT = "-";
 
@@ -220,7 +221,7 @@ const ContractsFeature = () => {
       )}
 
       {totalPages > 1 && (
-        <PaginationApi
+        <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}

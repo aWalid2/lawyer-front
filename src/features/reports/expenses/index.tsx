@@ -2,7 +2,7 @@ import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
 import PageLayout from "@/shared/components/PageLayout";
-import { PaginationApi } from "@/shared/components/PaginationApi";
+
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { getExpenseTypeLabel } from "@/shared/utils/getExpenseTypeLabel";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
@@ -11,6 +11,7 @@ import { useGetAllCaseExpenses } from "./api/hooks/useGetAllCaseExpenses";
 import type { ReportExpenseApiItem } from "./api/service/getAllCaseExpenses";
 import { HeaderPageReportsExpenses } from "./components/HeaderPageReportsExpenses";
 import type { ReportExpense } from "./types";
+import { Pagination } from "@/shared/components/Pagination";
 
 const FALLBACK_TEXT = "-";
 
@@ -161,7 +162,7 @@ const ReportsExpensesFeature = () => {
       <DataTable columns={columns} data={indexedExpenses} rowIdField="id" />
 
       {totalPages > 1 && (
-        <PaginationApi
+        <Pagination
           currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}

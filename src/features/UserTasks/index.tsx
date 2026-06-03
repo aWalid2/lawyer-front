@@ -1,7 +1,7 @@
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { PaginationApi } from "@/shared/components/PaginationApi";
+
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import React, { useMemo, useState } from "react";
 import { useFetchTasks } from "./api/hooks/useGetTasks";
@@ -11,6 +11,7 @@ import type { TaskRelatedT } from "./types/types";
 import { getStatusStyle, statusMapping } from "./types/types";
 import UpdateStatusTaskModal from "./components/UpdateStatusTaskModal";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { Pagination } from "@/shared/components/Pagination";
 
 const StatusCell: React.FC<{ status: string }> = ({ status }) => {
   const cleanStatus = status?.trim() || "";
@@ -167,7 +168,7 @@ export const UsersTask: React.FC = () => {
       </div>
 
       {totalPages > 1 && (
-        <PaginationApi
+        <Pagination
           currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}

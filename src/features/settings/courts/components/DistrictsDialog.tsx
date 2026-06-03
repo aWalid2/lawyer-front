@@ -18,7 +18,8 @@ import { useUpdateCircle } from "../api/hooks/useUpdateCircle";
 import { useDeleteCircle } from "../api/hooks/useDeleteCircle";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
-import { PaginationApi } from "@/shared/components/PaginationApi";
+import { Pagination } from "@/shared/components/Pagination";
+
 
 // ---------- inner form dialog ----------
 interface DistrictFormDialogProps {
@@ -180,7 +181,7 @@ export const DistrictsDialog: React.FC<DistrictsDialogProps> = ({
         )}
 
         {indexedData?.length > 0 && totalPages > 1 && (
-          <PaginationApi
+          <Pagination
             currentPage={page}
             totalPages={totalPages}
             onPageChange={setPage}
