@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import { EventsGrid } from "./components/EventsGrid";
 import { times } from "@/shared/constants/shcedule";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 const rowsCount = 8;
 
@@ -26,6 +27,9 @@ const UserTasksSchedule = ({
   const dateStr = selectedDate
     ? format(selectedDate, "eeee (dd/MM/yyyy)", { locale: ar })
     : "";
+
+  if (events.length === 0)
+    return <EmptyTable message={`لا توجد مواعيد ليوم ${dateStr}`} />;
   return (
     <Card>
       <CardHeader>

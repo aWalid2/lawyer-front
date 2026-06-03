@@ -2,6 +2,7 @@ import { ar } from "date-fns/locale";
 import { format } from "date-fns";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { ProceduresCard } from "./components/ProceduresCard";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 interface IProcedure {
   id: number | string;
@@ -23,18 +24,17 @@ const ProceduresSchedule = ({
   const dateStr = selectedDate
     ? format(selectedDate, "eeee (dd/MM/yyyy)", { locale: ar })
     : "";
+
+  if (procedures.length === 0)
+    return <EmptyTable message={`لا توجد إجراءات ليوم ${dateStr}`} />;
   return (
     <div className="space-y-6">
       <HeaderTitle title={`إجراءات يوم ${dateStr}`} />
 
       <div className="mt-4 grid grid-cols-1 gap-6">
-        {procedures.length === 0 ? (
-          <p className="text-muted-foreground text-center">
-            لا توجد إجراءات لهذا اليوم
-          </p>
-        ) : (
-          procedures.map((proc) => <ProceduresCard proc={proc} key={proc.id} />)
-        )}
+        {procedures.map((proc) => (
+          <ProceduresCard proc={proc} key={proc.id} />
+        ))}
       </div>
     </div>
   );
