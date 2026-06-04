@@ -43,7 +43,7 @@ const settingsItems = [
     href: "/dashboard/settings/prosecutions",
   },
   {
-    title: "صفات الموكل",
+    title: "صفات الموكل/الخصم",
     description: "إدارة وتعديل صفات الموكل في النظام.",
     href: "/dashboard/settings/client-statuses",
   },

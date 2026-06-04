@@ -1,10 +1,9 @@
-import React from "react";
-import { UserTaskFilter } from "./UserTasksFilter";
-import { AddTask } from "./AddTask";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
+import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import React from "react";
+import { AddTask } from "./AddTask";
+import { UserTaskFilter } from "./UserTasksFilter";
 
 interface HeaderTasksUserProps {
   onSearch: (term: string) => void;
@@ -32,13 +31,7 @@ export const HeaderTasksUser: React.FC<HeaderTasksUserProps> = ({
 }) => {
   return (
     <HeaderPageLayout>
-      <HeaderTitle innerPage title="مهام المستخدم" />
-
-      <HeaderSearch
-        value={searchTerm}
-        onChange={onSearch}
-        className="lg:ms-0"
-      />
+      <HeaderSearch value={searchTerm} onChange={onSearch} />
 
       <div className="flex w-full flex-wrap items-center justify-end gap-3 md:w-auto">
         <HeaderDatePicker

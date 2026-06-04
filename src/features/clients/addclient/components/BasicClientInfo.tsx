@@ -23,7 +23,7 @@ export const BasicClientInfo = () => {
           <InputForm
             name="first_name"
             type="string"
-            placeholder="أحمد"
+            placeholder="ادخل اسم الموكل"
             label="اسم الموكل"
           />
         </div>
@@ -54,7 +54,7 @@ export const BasicClientInfo = () => {
           <InputForm
             name="ssn"
             type="string"
-            placeholder="019389384"
+            placeholder="ادخل الرقم المدني"
             label="الرقم المدني"
           />
         </div>
@@ -63,7 +63,7 @@ export const BasicClientInfo = () => {
             name="nationality"
             type="string"
             label="الجنسية"
-            placeholder="سعودي"
+            placeholder="ادخل الجنسية"
           />
         </div>
         <div className="flex-1">
@@ -71,7 +71,7 @@ export const BasicClientInfo = () => {
             name="country"
             type="string"
             label="الدولة"
-            placeholder="المملكة العربية السعودية"
+            placeholder="ادخل اسم الدولة"
           />
         </div>
       </div>
@@ -82,7 +82,7 @@ export const BasicClientInfo = () => {
             name="address"
             type="string"
             label="العنوان"
-            placeholder="عنوان1"
+            placeholder="ادخل العنوان"
           />
         </div>
         <div className="flex-1">
@@ -90,7 +90,7 @@ export const BasicClientInfo = () => {
             name="email"
             type="email"
             label="البريد الإلكتروني"
-            placeholder="example@gmail.com"
+            placeholder="ادخل البريد الإلكتروني"
           />
         </div>
       </div>

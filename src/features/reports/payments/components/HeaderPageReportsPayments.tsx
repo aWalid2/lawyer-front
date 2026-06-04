@@ -1,10 +1,9 @@
-import React from "react";
 import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
+import { HeaderFilter } from "@/shared/components/HeaderFilter";
+import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import React from "react";
 
 interface HeaderPageReportsPaymentsProps {
   onSearch: (term: string) => void;
@@ -16,24 +15,18 @@ interface HeaderPageReportsPaymentsProps {
   };
 }
 
-export const HeaderPageReportsPayments: React.FC<HeaderPageReportsPaymentsProps> = ({
-  onSearch,
-  onFilterChange,
-  searchTerm,
-  filters,
-}) => {
+export const HeaderPageReportsPayments: React.FC<
+  HeaderPageReportsPaymentsProps
+> = ({ onSearch, onFilterChange, searchTerm, filters }) => {
   return (
     <HeaderPageLayout>
-      <HeaderTitle innerPage title="تقارير المدفوعات" />
-
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
         placeholder="بحث ..."
-        className="lg:ms-0"
       />
 
-      <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+      <div className="flex w-full items-center justify-end gap-3 md:w-auto">
         <HeaderDatePicker
           date={filters.date}
           onDateChange={(date) => onFilterChange("date", date)}

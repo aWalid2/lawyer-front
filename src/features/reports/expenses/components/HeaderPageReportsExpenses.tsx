@@ -3,7 +3,6 @@ import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
 import { HeaderFilter } from "@/shared/components/HeaderFilter";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { REPORT_EXPENSE_TYPE_OPTIONS } from "@/shared/constants/ExpensesOptions";
 import { formatDateToYYYYMMDD } from "@/shared/utils";
 import React from "react";
@@ -27,18 +26,33 @@ interface HeaderPageReportsExpensesProps {
 export const HeaderPageReportsExpenses: React.FC<
   HeaderPageReportsExpensesProps
 > = ({ onSearch, onFilterChange, searchTerm, filters }) => {
-
   const handleExport = async (type: "pdf" | "excel") => {
     try {
-      const params: { expense_type?: string; date_from?: string; date_to?: string; page?: number; limit?: number; } = {};
-      if (filters.expenseType !== "all") params.expense_type = filters.expenseType;
-      if (filters.fromDate) params.date_from = formatDateToYYYYMMDD(
-        filters.fromDate instanceof Date ? filters.fromDate.toISOString() : filters.fromDate
-      );
-      if (filters.toDate) params.date_to = formatDateToYYYYMMDD(
-        filters.toDate instanceof Date ? filters.toDate.toISOString() : filters.toDate
-      );
-      const blob = type === "pdf" ? await exportCaseExpenses("pdf", params) : await exportCaseExpenses("excel", params);
+      const params: {
+        expense_type?: string;
+        date_from?: string;
+        date_to?: string;
+        page?: number;
+        limit?: number;
+      } = {};
+      if (filters.expenseType !== "all")
+        params.expense_type = filters.expenseType;
+      if (filters.fromDate)
+        params.date_from = formatDateToYYYYMMDD(
+          filters.fromDate instanceof Date
+            ? filters.fromDate.toISOString()
+            : filters.fromDate,
+        );
+      if (filters.toDate)
+        params.date_to = formatDateToYYYYMMDD(
+          filters.toDate instanceof Date
+            ? filters.toDate.toISOString()
+            : filters.toDate,
+        );
+      const blob =
+        type === "pdf"
+          ? await exportCaseExpenses("pdf", params)
+          : await exportCaseExpenses("excel", params);
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -52,19 +66,18 @@ export const HeaderPageReportsExpenses: React.FC<
     }
   };
 
-  const toDate = (value: string | Date | null | undefined): Date | undefined => {
+  const toDate = (
+    value: string | Date | null | undefined,
+  ): Date | undefined => {
     if (!value) return undefined;
     return value instanceof Date ? value : new Date(value);
   };
   return (
     <HeaderPageLayout>
-      <HeaderTitle innerPage title="تقارير المصروفات" />
-
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
         placeholder="بحث ..."
-        className="lg:ms-0"
       />
 
       <div className="flex w-full items-center justify-end gap-3 md:w-auto">

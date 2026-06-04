@@ -1,7 +1,6 @@
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { HeaderFilter } from "@/shared/components/HeaderFilter";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { AddDocumentDialog } from "../AddDocumentDialog";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
 
 interface HeaderPageDocumentsProps {
   onSearch?: (term: string) => void;
@@ -20,13 +19,7 @@ export const HeaderPageDocuments: React.FC<HeaderPageDocumentsProps> = ({
 }) => {
   return (
     <div className="flex w-full flex-col items-center justify-between gap-4 pb-6 md:flex-row md:gap-6">
-      <HeaderTitle innerPage title="المستندات" />
-
-      <HeaderSearch
-        value={searchTerm}
-        onChange={onSearch}
-        className="lg:ms-0"
-      />
+      <HeaderSearch value={searchTerm} onChange={onSearch} />
 
       <div className="flex w-full items-center justify-end gap-3 md:w-auto">
         <HeaderFilter

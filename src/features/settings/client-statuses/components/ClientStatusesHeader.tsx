@@ -15,8 +15,8 @@ export const ClientStatusesHeader: React.FC<ClientStatusesHeaderProps> = ({
   onSearch,
 }) => {
   return (
-    <div className="flex flex-1 items-center gap-4 mb-6">
-      <HeaderTitle title="صفات الموكل" />
+    <div className="mb-6 flex flex-1 items-center gap-4">
+      <HeaderTitle title="صفات الموكل/الخصم" />
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}

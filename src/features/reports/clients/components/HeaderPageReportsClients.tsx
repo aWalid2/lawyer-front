@@ -1,10 +1,9 @@
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
 import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { useExport } from "@/shared/hooks/useExport";
 import { exportReportsClients } from "../api/service/exportReportClients";
-import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
 
 interface HeaderPageReportsClientsProps {
   onSearch: (term: string) => void;
@@ -50,13 +49,10 @@ export const HeaderPageReportsClients: React.FC<
   };
   return (
     <HeaderPageLayout>
-      <HeaderTitle innerPage title="تقارير الموكلين" />
-
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
         placeholder="بحث باسم الموكل أو كود الموكل ..."
-        className="lg:ms-0"
       />
 
       <div className="flex w-full items-center justify-end gap-3 md:w-auto">

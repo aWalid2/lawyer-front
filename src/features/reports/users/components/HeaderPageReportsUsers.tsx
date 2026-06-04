@@ -1,11 +1,10 @@
-import React from "react";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
-import { exportUserReports } from "../api/services/exportUserReports";
+import { HeaderFilter } from "@/shared/components/HeaderFilter";
+import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import React from "react";
 import { toast } from "sonner";
+import { exportUserReports } from "../api/services/exportUserReports";
 
 interface HeaderPageReportsUsersProps {
   onSearch: (term: string) => void;
@@ -23,14 +22,17 @@ export const HeaderPageReportsUsers: React.FC<HeaderPageReportsUsersProps> = ({
   onFilterChange,
   searchTerm,
   filters,
-  roleOptions
+  roleOptions,
 }) => {
   const handleExport = async (type: "pdf" | "excel") => {
     try {
       const params: { status?: string; role_id?: string } = {};
       if (filters.status !== "all") params.status = filters.status;
       if (filters.role !== "all") params.role_id = filters.role;
-      const blob = type === "pdf" ? await exportUserReports("pdf", params) : await exportUserReports("excel", params);
+      const blob =
+        type === "pdf"
+          ? await exportUserReports("pdf", params)
+          : await exportUserReports("excel", params);
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -45,13 +47,10 @@ export const HeaderPageReportsUsers: React.FC<HeaderPageReportsUsersProps> = ({
   };
   return (
     <HeaderPageLayout>
-      <HeaderTitle innerPage title="تقارير المستخدمين" />
-
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
         placeholder="بحث ..."
-        className="lg:ms-0"
       />
 
       <div className="flex w-full items-center justify-end gap-3 md:w-auto">

@@ -1,13 +1,12 @@
-import React from "react";
-import { Plus } from "lucide-react";
 import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { Plus } from "lucide-react";
+import React from "react";
+import type { ContractFormValues } from "../types";
 import { ContractDialog } from "./ContractDialog";
 import { ContractValueFilters } from "./ContractValueFilters";
-import type { ContractFormValues } from "../types";
 
 interface HeaderPageContractsProps {
   onSearch: (term: string) => void;
@@ -36,13 +35,10 @@ export const HeaderPageContracts: React.FC<HeaderPageContractsProps> = ({
 }) => {
   return (
     <HeaderPageLayout>
-      <HeaderTitle innerPage title="العقود" />
-
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
         placeholder="ابحث باسم الموكل"
-        className="lg:ms-0"
       />
 
       <div className="flex w-full flex-wrap items-center justify-end gap-3 md:w-auto">

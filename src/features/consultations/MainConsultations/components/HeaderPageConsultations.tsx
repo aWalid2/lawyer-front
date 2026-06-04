@@ -1,9 +1,8 @@
-import { Plus } from "lucide-react";
 import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { Plus } from "lucide-react";
 import { ConsultationsDialog } from "./ConsultationsDialog";
 
 interface HeaderPageConsultationsProps {
@@ -15,29 +14,22 @@ interface HeaderPageConsultationsProps {
   };
 }
 
-export const HeaderPageConsultations: React.FC<HeaderPageConsultationsProps> = ({
-  onSearch,
-  onFilterChange,
-  searchTerm,
-  filters,
-}) => {
-
+export const HeaderPageConsultations: React.FC<
+  HeaderPageConsultationsProps
+> = ({ onSearch, onFilterChange, searchTerm, filters }) => {
   const handleFilterChange = (value: string) => {
     onFilterChange(value);
   };
 
   return (
     <HeaderPageLayout>
-      <HeaderTitle innerPage title="الاستشارات" />
-
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
         placeholder="بحث ..."
-        className="lg:ms-0"
       />
 
-      <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
+      <div className="flex w-full flex-wrap items-center justify-end gap-3 md:w-auto">
         <HeaderFilter
           placeholder="اختر الحالة"
           value={filters.status}
@@ -51,7 +43,7 @@ export const HeaderPageConsultations: React.FC<HeaderPageConsultationsProps> = (
         />
 
         <ConsultationsDialog
-          onSave={() => { }}
+          onSave={() => {}}
           trigger={
             <HeaderActionButton
               label="استشارة جديدة"

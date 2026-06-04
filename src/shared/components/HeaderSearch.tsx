@@ -31,7 +31,7 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
   return (
     <div
       className={cn(
-        "relative ms-0 w-full flex-1 px-0 md:max-w-2xl md:px-4 lg:ms-48",
+        "relative ms-0 w-full flex-1 px-0 md:max-w-2xl md:px-4",
         className,
       )}
     >

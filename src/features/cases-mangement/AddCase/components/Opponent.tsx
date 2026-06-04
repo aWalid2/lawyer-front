@@ -8,7 +8,7 @@ import type { FormValues } from "../utils/mapToApiPayload";
 const emptyOpponent = {
   name: "",
   legal_status: "",
-  country_code: "+20",
+  country_code: "+965",
   phone: "",
   ssn: "",
 };
@@ -87,7 +87,7 @@ export function OpponentForm() {
                       label="الاسم"
                       name={`opponents.${index}.name`}
                       type="text"
-                      placeholder="بدر"
+                      placeholder="ادخل اسم الخصم"
                       className="w-full"
                     />
 
@@ -95,17 +95,17 @@ export function OpponentForm() {
                       label="الصفة القانونية"
                       name={`opponents.${index}.legal_status`}
                       type="text"
-                      placeholder="صفة1"
+                      placeholder="ادخل الصفة القانونية للخصم"
                       className="w-full"
                     />
                   </div>
 
                   <div className="mt-6 flex flex-col gap-3 md:flex-row">
                     <InputForm
-                      label="الرقم القومي"
+                      label="الرقم المدني"
                       name={`opponents.${index}.ssn`}
                       type="text"
-                      placeholder=""
+                      placeholder="ادخل الرقم المدني"
                       className="h-full!"
                     />
                     <div className="flex h-full! w-full gap-2">
@@ -114,7 +114,7 @@ export function OpponentForm() {
                           label="رقم الهاتف"
                           name={`opponents.${index}.phone`}
                           type="text"
-                          placeholder="5xxxxxxxxxxxx"
+                          placeholder="ادخل رقم الهاتف"
                         />
                       </div>
                       <div className="h-full! w-1/3">

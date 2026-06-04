@@ -1,11 +1,10 @@
+import { useFetchCaseStatuses } from "@/features/settings/case-statuses/api/hooks/useGetCaseStatuses";
+import type { CaseStatusT } from "@/features/settings/case-statuses/types/caseStatuseTypes";
 import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
 import { HeaderFilter } from "@/shared/components/HeaderFilter";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { useExport } from "@/shared/hooks/useExport";
-import { useFetchCaseStatuses } from "@/features/settings/case-statuses/api/hooks/useGetCaseStatuses";
-import type { CaseStatusT } from "@/features/settings/case-statuses/types/caseStatuseTypes";
 import React from "react";
 import { exportReportCases } from "../api/service/exportReportCases";
 
@@ -67,13 +66,10 @@ export const HeaderPageReportsCases: React.FC<HeaderPageReportsCasesProps> = ({
   };
   return (
     <HeaderPageLayout>
-      <HeaderTitle innerPage title="تقارير القضايا" />
-
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
         placeholder="بحث ..."
-        className="lg:ms-0"
       />
 
       <div className="flex w-full items-center justify-end gap-3 md:w-auto">

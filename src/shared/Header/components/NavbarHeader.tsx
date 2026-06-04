@@ -143,16 +143,18 @@ export default function NavbarHeader() {
               )}
               <span className="sr-only">Toggle theme</span>
             </button>
+
             <Link
-              to={"notifications"}
-              className={`text-secondary relative dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
+              to={"global-search"}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
             >
-              <AlertIcon className={ICON_CLASSES} />
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow">
-                  {unreadCount > 9 ? "+9" : unreadCount}
-                </span>
-              )}
+              <SearchIcon className={ICON_CLASSES} />
+            </Link>
+            <Link
+              to={"settings"}
+              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
+            >
+              <SettingsIcon className={ICON_CLASSES} />
             </Link>
             <Link
               to={"chat-bot"}
@@ -168,16 +170,15 @@ export default function NavbarHeader() {
               <MessagesIcon className={ICON_CLASSES} />
             </Link>
             <Link
-              to={"settings"}
-              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
+              to={"notifications"}
+              className={`text-secondary relative dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
             >
-              <SettingsIcon className={ICON_CLASSES} />
-            </Link>
-            <Link
-              to={"global-search"}
-              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
-            >
-              <SearchIcon className={ICON_CLASSES} />
+              <AlertIcon className={ICON_CLASSES} />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow">
+                  {unreadCount > 9 ? "+9" : unreadCount}
+                </span>
+              )}
             </Link>
 
             <div className="flex items-center gap-2 md:gap-3">
@@ -185,6 +186,8 @@ export default function NavbarHeader() {
                 to={"profile"}
                 className="flex items-center gap-2 dark:text-white"
               >
+                <CheveronDownIcon className={`h-3 w-3 sm:h-5 sm:w-5`} />
+                <p className="max-w-32 truncate">{displayName}</p>
                 <div
                   className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 border-secondary flex items-center justify-center overflow-hidden rounded-full border dark:border-white/20 dark:bg-white/10`}
                 >
@@ -194,9 +197,6 @@ export default function NavbarHeader() {
                     className="block h-full w-full object-contain"
                   />
                 </div>
-                <p className="max-w-32 truncate">{displayName}</p>
-
-                <CheveronDownIcon className={`h-3 w-3 sm:h-5 sm:w-5`} />
               </Link>
 
               <button

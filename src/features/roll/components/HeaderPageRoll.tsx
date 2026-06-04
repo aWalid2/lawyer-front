@@ -1,13 +1,12 @@
 import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
+import { HeaderFilter } from "@/shared/components/HeaderFilter";
+import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import React from "react";
 import {
   HeaderExportMenu,
   type HeaderExportType,
 } from "../../../shared/components/HeaderExportMenu";
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import React from "react";
 
 interface HeaderPageRollProps {
   onSearch: (term: string) => void;
@@ -33,13 +32,10 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
 }) => {
   return (
     <HeaderPageLayout>
-      <HeaderTitle innerPage title="رول الجلسات" />
-
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
         placeholder="ابحث في رول الجلسات..."
-        className="lg:ms-0"
       />
 
       <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-4 lg:flex lg:w-auto lg:flex-row">
