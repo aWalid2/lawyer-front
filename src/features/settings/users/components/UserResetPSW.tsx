@@ -70,14 +70,7 @@ export const UserResetPSW: React.FC<UserResetPSWProps> = ({
               <div className="grid grid-cols-1 gap-4">
                 <InputForm
                   name="password"
-                  label={"كلمة المرور القديمة"}
-                  type="password"
-                  placeholder="أدخل كلمة المرور"
-                  dir="ltr"
-                />
-                <InputForm
-                  name="new_password"
-                  label={"كلمة المرور الجديدة"}
+                  label={"كلمة المرور الجديده"}
                   type="password"
                   placeholder="أدخل كلمة المرور"
                   dir="ltr"

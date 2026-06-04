@@ -5,7 +5,7 @@ export const initialValues = {
     {
       name: "",
       legal_status: "",
-      country_code: "+20",
+      country_code: "+965",
       phone: "",
       ssn: "",
     },

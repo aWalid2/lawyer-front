@@ -1,5 +1,5 @@
 import { Formik, Form } from "formik";
-import { useState, useMemo } from "react";
+import { useState, useCallback } from "react";
 import * as Yup from "yup";
 import {
   Dialog,
@@ -15,7 +15,9 @@ import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import type { UserT } from "@/features/settings/users/types/userT";
 import { useTaskUser } from "../api/hooks/useAddTask";
 import { useUpdateTask } from "../api/hooks/useUpdateTask";
-import { useFetchCases } from "../api/hooks/useGetCase";
+import { fetchCases } from "../api/service/getCases";
+import { useDebounce } from "@/shared/hooks/useDebounce";
+import { usePaginatedOptions } from "@/shared/hooks/usePaginatedOptions";
 import { useGetAllUsers } from "@/features/settings/users/api/hooks/useGetAllUsers";
 
 interface AddTaskModalProps {
@@ -77,10 +79,43 @@ function AddTaskModal({
 
   const { mutate: addTask, isPending: isAdding } = useTaskUser();
   const { mutate: updateTask, isPending: isUpdating } = useUpdateTask();
-  const { data: usersResponse, isPending: isUsersLoading } = useGetAllUsers();
-  const { data: cases, isPending: isCasesLoading } = useFetchCases();
 
   const isLoading = isEditMode ? isUpdating : isAdding;
+
+  // ── Users: load all (no API pagination), client-side filtered via showSearch ──
+  const { data: usersResponse } = useGetAllUsers();
+
+  const employeeOptions = (usersResponse ?? []).map((user: UserT) => ({
+    label: user?.first_name || user?.fullName || `#${user?.id}`,
+    value: String(user?.id),
+  }));
+
+  // ── Paginated, searchable case options ──
+  const [caseSearch, setCaseSearch] = useState("");
+  const debouncedCaseSearch = useDebounce(caseSearch, 500);
+
+  const fetchCasePage = useCallback(async (page: number, _search?: string) => {
+    const response = await fetchCases(page, 15);
+    const list = Array.isArray(response?.data)
+      ? response.data
+      : (response?.data?.data ?? []);
+    return {
+      items: list.map((caseItem: any) => ({
+        value: String(caseItem.id || caseItem.case_id),
+        label:
+          caseItem.case_title || `قضية رقم ${caseItem.id || caseItem.case_id}`,
+      })),
+      totalPages:
+        response?.meta?.total_pages ?? response?.data?.meta?.total_pages ?? 1,
+    };
+  }, []);
+
+  const {
+    options: caseOptions,
+    hasMoreOptions: caseHasMoreOptions,
+    isFetchingMore: caseIsFetchingMore,
+    loadNextPage: loadMoreCases,
+  } = usePaginatedOptions(fetchCasePage, debouncedCaseSearch);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -141,21 +176,6 @@ function AddTaskModal({
     }
   };
 
-  const employeeOptions =
-    usersResponse?.map((user: UserT) => ({
-      label: user?.first_name || user?.fullName || `#${user?.id}`,
-      value: String(user?.id),
-    })) || [];
-
-  const CaseOptions = useMemo(() => {
-    if (!cases?.data || cases.data.length === 0) return [];
-    return cases.data.map((caseItem: any) => ({
-      value: String(caseItem.id || caseItem.case_id),
-      label:
-        caseItem.case_title || `قضية رقم ${caseItem.id || caseItem.case_id}`,
-    }));
-  }, [cases]);
-
   if (!isModalOpen) return null;
 
   return (
@@ -209,10 +229,8 @@ function AddTaskModal({
                   name="assigned_to"
                   label="المكلف"
                   options={employeeOptions}
-                  placeholder={
-                    isUsersLoading ? "جاري تحميل المستخدمين..." : "اختر المكلف"
-                  }
-                  disabled={isUsersLoading || employeeOptions.length === 0}
+                  placeholder="اختر المكلف"
+                  showSearch={true}
                 />
               </div>
 
@@ -221,11 +239,13 @@ function AddTaskModal({
                   <SelectForm
                     name="task_type"
                     label="القضية"
-                    options={CaseOptions}
-                    placeholder={
-                      isCasesLoading ? "جاري تحميل القضايا..." : "اختر القضية"
-                    }
-                    disabled={isCasesLoading || CaseOptions.length === 0}
+                    options={caseOptions}
+                    placeholder="اختر القضية"
+                    showSearch={true}
+                    onSearchChange={setCaseSearch}
+                    hasMoreOptions={caseHasMoreOptions}
+                    isFetchingMore={caseIsFetchingMore}
+                    onReachEnd={loadMoreCases}
                   />
                 ) : (
                   <InputForm

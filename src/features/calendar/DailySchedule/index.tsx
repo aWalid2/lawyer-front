@@ -104,7 +104,7 @@ const DailySchedule = ({ selectedDate }: DailyScheduleProps) => {
             value="userTasks"
             className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white sm:px-12 sm:text-base"
           >
-            المهام
+            الجلسات
           </TabsTrigger>
         </TabsList>
 

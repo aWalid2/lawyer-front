@@ -92,10 +92,10 @@ export function OpponentForm() {
                     />
 
                     <InputForm
-                      label="الصفة القانونية"
+                      label="صفة الخصم "
                       name={`opponents.${index}.legal_status`}
                       type="text"
-                      placeholder="ادخل الصفة القانونية للخصم"
+                      placeholder="ادخل صفة الخصم"
                       className="w-full"
                     />
                   </div>

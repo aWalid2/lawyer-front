@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { LogOut, SearchIcon, Sun, Moon } from "lucide-react";
+import { LogOut, SearchIcon, Sun, Moon, User } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
@@ -10,6 +10,13 @@ import { MessagesIcon } from "../../icons/Messages";
 import { SettingsIcon } from "../../icons/Settings";
 import { useAuth } from "@/shared/context/AuthContext";
 import { useGetNotifications } from "@/features/Notifications/api/hooks/useGetNotifications";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const ROUTE_TITLES: Record<string, string> = {
   "/dashboard": "الرئيسية",
@@ -132,18 +139,6 @@ export default function NavbarHeader() {
             {currentTitle}
           </h1>
           <div className="flex flex-wrap gap-2 md:gap-3">
-            <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
-            >
-              {theme === "dark" ? (
-                <Sun className={ICON_CLASSES} />
-              ) : (
-                <Moon className={ICON_CLASSES} />
-              )}
-              <span className="sr-only">Toggle theme</span>
-            </button>
-
             <Link
               to={"global-search"}
               className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 hover:bg-secondary flex items-center justify-center rounded-full transition hover:text-white dark:bg-white/10 dark:hover:bg-white/20`}
@@ -181,33 +176,55 @@ export default function NavbarHeader() {
               )}
             </Link>
 
-            <div className="flex items-center gap-2 md:gap-3">
-              <Link
-                to={"profile"}
-                className="flex items-center gap-2 dark:text-white"
-              >
-                <CheveronDownIcon className={`h-3 w-3 sm:h-5 sm:w-5`} />
-                <p className="max-w-32 truncate">{displayName}</p>
-                <div
-                  className={`text-secondary dark:text-white ${LINK_SIZE} bg-secondary/8 border-secondary flex items-center justify-center overflow-hidden rounded-full border dark:border-white/20 dark:bg-white/10`}
+            <DropdownMenu dir="rtl">
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-2 outline-none md:gap-3">
+                  <CheveronDownIcon className="h-3 w-3 sm:h-5 sm:w-5" />
+                  <span className="flex items-center gap-2 dark:text-white">
+                    <p className="max-w-32 truncate">{displayName}</p>
+                    <div
+                      className={`text-secondary dark:text-white ${LINK_SIZE} bg-primary border-secondary flex items-center justify-center overflow-hidden rounded-full border dark:border-white/20 dark:bg-white/10`}
+                    >
+                      <img
+                        src="/images/user-placeholder.jpg"
+                        alt="User avatar"
+                        className="block h-full w-full object-contain"
+                      />
+                    </div>
+                  </span>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuItem
+                  onClick={() => navigate("profile")}
+                  className="gap-3"
                 >
-                  <img
-                    src="/images/user-placeholder.jpg"
-                    alt="User avatar"
-                    className="block h-full w-full object-contain"
-                  />
-                </div>
-              </Link>
-
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100 dark:border-red-400/30 dark:bg-red-500/10 dark:text-red-300 dark:hover:bg-red-500/20"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="hidden md:inline">تسجيل الخروج</span>
-              </button>
-            </div>
+                  <User className="h-4 w-4" />
+                  <span>الملف الشخصي</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="gap-3"
+                >
+                  {theme === "dark" ? (
+                    <Sun className="h-4 w-4" />
+                  ) : (
+                    <Moon className="h-4 w-4" />
+                  )}
+                  <span>
+                    {theme === "dark" ? "الوضع النهاري" : "الوضع الليلي"}
+                  </span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="gap-3 text-red-600 focus:text-red-600 dark:text-red-300 dark:focus:text-red-300"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>تسجيل الخروج</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
