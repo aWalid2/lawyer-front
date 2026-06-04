@@ -33,8 +33,8 @@ interface TaskFormValues {
   status: string;
   notes: string;
   details: string;
-  start_date: string;
-  end_date: string;
+  start_date?: string;
+  end_date?: string;
   task_relation?: string;
 }
 
@@ -51,8 +51,6 @@ const validationSchema = Yup.object({
   delivery_date: Yup.string().required("تاريخ التسليم مطلوب"),
   notes: Yup.string(),
   details: Yup.string().required("تفاصيل المهمة مطلوبة"),
-  start_date: Yup.string().required("تاريخ بدء المهمة مطلوب"),
-  end_date: Yup.string().required("تاريخ انتهاء المهمة مطلوب"),
   status: Yup.string().required("حالة المهمة مطلوبة"),
   task_relation: Yup.string().required("يرجى اختيار نوع المهمة"),
 });
@@ -65,8 +63,6 @@ const defaultValues: TaskFormValues = {
   notes: "",
   status: "",
   details: "",
-  start_date: "",
-  end_date: "",
   task_relation: "case",
 };
 
@@ -113,8 +109,6 @@ function AddTaskModal({
       status: submitValues.status,
       notes: submitValues.notes,
       details: submitValues.details,
-      start_date: submitValues.start_date,
-      end_date: submitValues.end_date,
     };
 
     if (values.task_relation === "case") {
@@ -259,19 +253,6 @@ function AddTaskModal({
                 label="تفاصيل المهمة"
                 placeholder="أدخل تفاصيل إضافية"
               />
-
-              <div className="grid grid-cols-1 gap-4">
-                <InputForm
-                  name="start_date"
-                  label="تاريخ بدء المهمة"
-                  type="date"
-                />
-                <InputForm
-                  name="end_date"
-                  label="تاريخ انتهاء المهمة"
-                  type="date"
-                />
-              </div>
 
               <SelectForm
                 name="status"
