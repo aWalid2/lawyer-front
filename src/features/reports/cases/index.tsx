@@ -62,16 +62,16 @@ const ReportsCasesFeature = () => {
       accessor: "reference_number",
     },
     {
+      header: "اسم الموكل",
+      accessor: (item: ReportCase) => item.client.first_name,
+    },
+    {
       header: "عنوان القضية",
       accessor: "case_title",
     },
     {
       header: "نوع القضية",
       accessor: (item: ReportCase) => item.case_type?.name || "-",
-    },
-    {
-      header: "اسم الموكل",
-      accessor: (item: ReportCase) => item.client.first_name,
     },
     {
       header: "الحالة",

@@ -9,9 +9,10 @@ import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
 import PageLayout from "@/shared/components/PageLayout";
 import { Pagination } from "@/shared/components/Pagination";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 const ReportsClientsFeature = () => {
-  // const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const limit = 15;
@@ -21,12 +22,12 @@ const ReportsClientsFeature = () => {
     isPending,
     isError,
     error,
-  } = useGetClients(page, limit, statusFilter);
+  } = useGetClients(page, limit, statusFilter, searchTerm);
   const totalPages = clientsData?.meta?.total_pages ?? 1;
   const indexedData = useIndexedData(clientsData?.data, page, limit);
 
-  const handleSearch = () => {
-    // setSearchTerm(term);
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
     setPage(1);
   };
 
@@ -87,14 +88,17 @@ const ReportsClientsFeature = () => {
   return (
     <PageLayout>
       <HeaderPageReportsClients
-        searchTerm={""}
+        searchTerm={searchTerm}
         onSearch={handleSearch}
         onFilterChange={handleFilterChange}
         filter={statusFilter}
       />
 
-      <DataTable columns={columns} data={indexedData} />
-
+      {indexedData.length === 0 ? (
+        <EmptyTable message="لا يوجد موكلين لعرضهم" />
+      ) : (
+        <DataTable columns={columns} data={indexedData} />
+      )}
       {totalPages > 1 && (
         <Pagination
           currentPage={page}

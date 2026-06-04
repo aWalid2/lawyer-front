@@ -52,7 +52,7 @@ export const HeaderPageReportsClients: React.FC<
       <HeaderSearch
         value={searchTerm}
         onChange={onSearch}
-        placeholder="بحث باسم الموكل أو كود الموكل ..."
+        placeholder="بحث باسم الموكل أو رقم الهاتف "
       />
 
       <div className="flex w-full items-center justify-end gap-3 md:w-auto">

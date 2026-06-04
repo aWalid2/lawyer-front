@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { COUNTRY_OPTIONS } from "@/shared/constants/countryOptions";
 import { FieldArray, useFormikContext } from "formik";
 import type { FormValues } from "../utils/mapToApiPayload";
+import { useDebounce } from "@/shared/hooks/useDebounce";
+import { usePaginatedOptions } from "@/shared/hooks/usePaginatedOptions";
+import { fetchCaseStatuses } from "@/features/settings/case-statuses/api/service/getCaseStatuses";
+
+type SelectOptionEntity = {
+  id: number | string;
+  name: string;
+};
 
 const emptyOpponent = {
   name: "",
@@ -27,6 +35,30 @@ export function OpponentForm() {
     }
     previousHasOpponent.current = values.has_opponent;
   }, [setFieldValue, values.has_opponent, values.opponents.length]);
+
+  const [caseStatusSearch, setCaseStatusSearch] = useState("");
+  const debouncedCaseStatusSearch = useDebounce(caseStatusSearch, 300);
+
+  const fetchCaseStatusPage = useCallback(
+    async (page: number, search?: string) => {
+      const response = await fetchCaseStatuses(page, 15, search);
+      return {
+        items: (response.data ?? []).map((caseStatus: SelectOptionEntity) => ({
+          label: caseStatus.name,
+          value: String(caseStatus.id),
+        })),
+        totalPages: response.meta?.total_pages ?? 1,
+      };
+    },
+    [],
+  );
+
+  const {
+    options: caseStatusOptions,
+    hasMoreOptions: caseStatusHasMoreOptions,
+    isFetchingMore: caseStatusIsFetchingMore,
+    loadNextPage: loadMoreCaseStatuses,
+  } = usePaginatedOptions(fetchCaseStatusPage, debouncedCaseStatusSearch);
 
   return (
     <FieldArray name="opponents">
@@ -90,13 +122,16 @@ export function OpponentForm() {
                       placeholder="ادخل اسم الخصم"
                       className="w-full"
                     />
-
-                    <InputForm
-                      label="صفة الخصم "
+                    <SelectForm
+                      showSearch={true}
+                      label="حالة القضية"
                       name={`opponents.${index}.legal_status`}
-                      type="text"
-                      placeholder="ادخل صفة الخصم"
-                      className="w-full"
+                      options={caseStatusOptions}
+                      placeholder="اختر حالة القضية"
+                      onSearchChange={setCaseStatusSearch}
+                      hasMoreOptions={caseStatusHasMoreOptions}
+                      isFetchingMore={caseStatusIsFetchingMore}
+                      onReachEnd={loadMoreCaseStatuses}
                     />
                   </div>
 
