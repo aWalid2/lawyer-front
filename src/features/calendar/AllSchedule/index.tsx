@@ -87,7 +87,7 @@ export const AllScheduleFeatures = () => {
   return (
     <>
       <div className="mb-8 flex w-full items-center justify-between">
-        <HeaderTitle innerPage title="جدول المواعيد" />
+        <HeaderTitle title="جدول المواعيد" />
         <HeaderActions />
       </div>
 
