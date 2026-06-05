@@ -12,6 +12,7 @@ import { exportRollSessionsPdf } from "./api/service/exportRollSessionsPdf";
 import { HeaderPageRoll } from "./components/HeaderPageRoll";
 import { useRoll } from "./hooks/useRoll";
 import type { RollSession } from "./types";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 interface RollFilters {
   sessionSource: string;
@@ -32,7 +33,7 @@ const RollFeature = () => {
   const {
     data: allSessionsData,
     isPending: isAllPending,
-    isFetching: isAllFetching,
+    // isFetching: isAllFetching,
   } = useGetAllRollSessions({
     sessionSource: filters.sessionSource,
     dateFrom: filters.fromDate,
@@ -42,7 +43,7 @@ const RollFeature = () => {
   const {
     data: searchData,
     isPending: isSearchPending,
-    isFetching: isSearchFetching,
+    // isFetching: isSearchFetching,
   } = useSearchSessions({
     q: searchTerm.trim(),
     page: currentPage,
@@ -51,8 +52,8 @@ const RollFeature = () => {
   });
 
   const isPending = isSearching ? isSearchPending : isAllPending;
-  const isFetching = isSearching ? isSearchFetching : isAllFetching;
-  const rawData = isSearching ? searchData : allSessionsData;
+  // const isFetching = isSearching ? isSearchFetching : isAllFetching;
+  const rawData = isSearching ? searchData?.data : allSessionsData;
 
   const { handleExport: triggerExport } = useExport({
     exportExcelFn: exportRollSessionsExcel,
@@ -100,9 +101,7 @@ const RollFeature = () => {
   };
 
   const totalPages = isSearching
-    ? Math.ceil((searchData?.length ?? 0) / itemsPerPage) > 0
-      ? Math.ceil((searchData?.length ?? 0) / itemsPerPage)
-      : 1
+    ? (searchData?.meta?.total_pages ?? 1)
     : Math.ceil(sessions.length / itemsPerPage);
   const safeCurrentPage =
     totalPages === 0 ? 1 : Math.min(currentPage, totalPages);
@@ -196,15 +195,15 @@ const RollFeature = () => {
         filters={filters}
       />
 
-      <div className="relative">
-        {isFetching ? (
-          <div className="dark:bg-backgroundDark/70 absolute inset-0 z-10 bg-white/70">
-            <LoadingPage fullScreen={false} />
-          </div>
-        ) : null}
-
+      {paginatedSessions.length === 0 ? (
+        <EmptyTable
+          message={
+            isSearching ? "لا توجد جلسات تطابق  البحث" : "لا توجد جلسات لعرضها"
+          }
+        />
+      ) : (
         <DataTable columns={columns} data={paginatedSessions} rowIdField="id" />
-      </div>
+      )}
 
       {totalPages > 1 && (
         <Pagination

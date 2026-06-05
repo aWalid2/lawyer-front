@@ -43,7 +43,7 @@ const ConsultationDetails = lazy(
   () => import("./pages/dashboard/ConsultationDetails"),
 );
 const Contracts = lazy(() => import("./pages/dashboard/Contracts"));
-const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
+// const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
 const GlobalSearch = lazy(() => import("./features/GlobalSearch"));
 
 function App() {
@@ -88,7 +88,7 @@ function App() {
             <Route path="consultations/:id" element={<ConsultationDetails />} />
             <Route path="contracts" element={<Contracts />} />
             <Route path="client-details/:id" element={<ClientDetails />} />
-            <Route path="about-office" element={<AboutOffice />} />
+            {/* <Route path="about-office" element={<AboutOffice />} /> */}
 
             <Route path="settings/*" element={<SettingRoutes />} />
 

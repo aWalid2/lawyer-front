@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { searchSessions } from "../service/searchSessions";
+import type { SearchSessionsResult } from "../service/searchSessions";
 
 interface UseSearchSessionsParams {
   q: string;
@@ -16,7 +17,7 @@ export const useSearchSessions = ({
   limit = 15,
   enabled = true,
 }: UseSearchSessionsParams) => {
-  const query = useQuery({
+  const query = useQuery<SearchSessionsResult>({
     queryKey: ["sessions-search", q, page, limit],
     queryFn: () => searchSessions({ q, page, limit }),
     enabled: enabled && q.trim().length > 0,

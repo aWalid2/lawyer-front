@@ -1,4 +1,4 @@
-import { AboutOfficeIcon } from "@/shared/icons/AboutOffice";
+// import { AboutOfficeIcon } from "@/shared/icons/AboutOffice";
 import { CalendarIcon } from "@/shared/icons/Calendar";
 import { CaseMangementIcon } from "@/shared/icons/CaseManagement";
 import { ConsultationsIcon } from "@/shared/icons/Consultations";
@@ -191,7 +191,7 @@ const NavDashboard = ({ onLinkClick }: { onLinkClick?: () => void }) => {
         icon={<FinanceIcon />}
         onLinkClick={onLinkClick}
       /> */}
-      <NavLink
+      {/* <NavLink
         to="/dashboard/about-office"
         className={linkClass}
         onClick={onLinkClick}
@@ -200,7 +200,7 @@ const NavDashboard = ({ onLinkClick }: { onLinkClick?: () => void }) => {
           <AboutOfficeIcon />
           <p className="text-base font-normal">عن المكتب</p>
         </div>
-      </NavLink>
+      </NavLink> */}
       <NavLink
         to="/dashboard/settings"
         className={linkClass}
