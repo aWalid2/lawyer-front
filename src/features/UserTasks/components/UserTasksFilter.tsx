@@ -46,7 +46,7 @@ export const UserTaskFilter: React.FC<UserTaskFilter> = ({
     <div className="relative" ref={dropdownRef}>
       <HeaderActionButton
         variant="outline"
-        label={getCurrentLabel()}
+        label={getCurrentLabel() as string}
         icon={
           <CheveronDownIcon
             className={`size-4 text-[#A0AEC0] transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
@@ -62,7 +62,7 @@ export const UserTaskFilter: React.FC<UserTaskFilter> = ({
           {filterOptions.map((option, index) => (
             <button
               key={option.value}
-              onClick={() => handleSelect(option.value)}
+              onClick={() => handleSelect(String(option.value))}
               className={`w-full px-4 py-2.5 text-right text-sm transition-colors duration-150 hover:bg-gray-50 ${currentFilter === option.value ? "bg-primary-50 text-primary-600 font-medium" : "text-gray-700"} ${index !== filterOptions.length - 1 ? "border-b border-gray-50" : ""} `}
             >
               {option.label}
