@@ -33,8 +33,8 @@ export const DayCollapsible = ({ group }: DayCollapsibleProps) => {
             <span className="inline-flex items-center rounded-full bg-[#BF9A61]/10 px-3 py-1 text-xs font-bold text-[#BF9A61]">
               {group.label}
             </span>
-            <span className="text-xs text-gray-500">{group.dateLabel}</span>
-            <span className="text-xs font-semibold text-gray-700">
+            <span className="text-base text-gray-500">{group.dateLabel}</span>
+            <span className="text-sm font-semibold text-gray-700">
               {sessionCountText(group.totalCount)}
             </span>
           </div>

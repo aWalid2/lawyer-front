@@ -1,22 +1,15 @@
 import Header from "@/shared/Header";
-import SidebarDashboard from "@/features/dashboard/components/SidebarDashboard";
+import SidebarDashboard from "@/features/SidebarDashboard";
 import { Outlet } from "react-router-dom";
 import { GlobalNotificationListener } from "@/shared/components/GlobalNotificationListener";
 
 const DashboardLayout = () => {
   return (
-
-    <div
-
-      className="flex p-0 gap-0 h-full min-h-screen relative
-             bg-[url('/images/background.png')] 
-             bg-cover bg-center bg-no-repeat
-             md:p-6 md:gap-6 container "
-    >
+    <div className="relative container flex h-full min-h-screen gap-0 bg-[url('/images/background.png')] bg-cover bg-center bg-no-repeat p-0 md:gap-6 md:p-6">
       <GlobalNotificationListener />
       <SidebarDashboard />
 
-      <main className="flex-1 flex flex-col min-w-0">
+      <main className="flex min-w-0 flex-1 flex-col">
         <Header />
         <Outlet />
       </main>
