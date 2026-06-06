@@ -6,7 +6,7 @@ import { FieldArray, useFormikContext } from "formik";
 import type { FormValues } from "../utils/mapToApiPayload";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { usePaginatedOptions } from "@/shared/hooks/usePaginatedOptions";
-import { fetchCaseStatuses } from "@/features/settings/case-statuses/api/service/getCaseStatuses";
+import { getClientStatuses } from "@/features/settings/client-statuses/api/services/getClientStatuses";
 
 type SelectOptionEntity = {
   id: number | string;
@@ -36,17 +36,19 @@ export function OpponentForm() {
     previousHasOpponent.current = values.has_opponent;
   }, [setFieldValue, values.has_opponent, values.opponents.length]);
 
-  const [caseStatusSearch, setCaseStatusSearch] = useState("");
-  const debouncedCaseStatusSearch = useDebounce(caseStatusSearch, 300);
+  const [clientStatusSearch, setClientStatusSearch] = useState("");
+  const debouncedClientStatusSearch = useDebounce(clientStatusSearch, 500);
 
-  const fetchCaseStatusPage = useCallback(
+  const fetchClientStatusPage = useCallback(
     async (page: number, search?: string) => {
-      const response = await fetchCaseStatuses(page, 15, search);
+      const response = await getClientStatuses(page, 15, search);
       return {
-        items: (response.data ?? []).map((caseStatus: SelectOptionEntity) => ({
-          label: caseStatus.name,
-          value: String(caseStatus.id),
-        })),
+        items: (response.data ?? []).map(
+          (clientStatus: SelectOptionEntity) => ({
+            label: clientStatus.name,
+            value: String(clientStatus.id),
+          }),
+        ),
         totalPages: response.meta?.total_pages ?? 1,
       };
     },
@@ -54,11 +56,11 @@ export function OpponentForm() {
   );
 
   const {
-    options: caseStatusOptions,
-    hasMoreOptions: caseStatusHasMoreOptions,
-    isFetchingMore: caseStatusIsFetchingMore,
-    loadNextPage: loadMoreCaseStatuses,
-  } = usePaginatedOptions(fetchCaseStatusPage, debouncedCaseStatusSearch);
+    options: clientStatusOptions,
+    hasMoreOptions: clientStatusHasMoreOptions,
+    isFetchingMore: clientStatusIsFetchingMore,
+    loadNextPage: loadMoreClientStatuses,
+  } = usePaginatedOptions(fetchClientStatusPage, debouncedClientStatusSearch);
 
   return (
     <FieldArray name="opponents">
@@ -123,15 +125,15 @@ export function OpponentForm() {
                       className="w-full"
                     />
                     <SelectForm
-                      showSearch={true}
-                      label="حالة القضية"
+                      label="صفة الخصم"
                       name={`opponents.${index}.legal_status`}
-                      options={caseStatusOptions}
-                      placeholder="اختر حالة القضية"
-                      onSearchChange={setCaseStatusSearch}
-                      hasMoreOptions={caseStatusHasMoreOptions}
-                      isFetchingMore={caseStatusIsFetchingMore}
-                      onReachEnd={loadMoreCaseStatuses}
+                      options={clientStatusOptions}
+                      placeholder="اختر صفة الخصم"
+                      showSearch={true}
+                      onSearchChange={setClientStatusSearch}
+                      hasMoreOptions={clientStatusHasMoreOptions}
+                      isFetchingMore={clientStatusIsFetchingMore}
+                      onReachEnd={loadMoreClientStatuses}
                     />
                   </div>
 

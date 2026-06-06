@@ -1,6 +1,7 @@
 import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
 import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import type { SelectOption } from "@/shared/hooks/useCachedPaginatedOptions";
 import React from "react";
 import { AddTask } from "./AddTask";
 import { UserTaskFilter } from "./UserTasksFilter";
@@ -16,7 +17,7 @@ interface HeaderTasksUserProps {
   statusFilter: string;
   deliverDateFrom?: Date;
   deliverDateTo?: Date;
-  filterOptions?: Array<{ value: string; label: string }>;
+  filterOptions?: SelectOption[];
 }
 
 export const HeaderTasksUser: React.FC<HeaderTasksUserProps> = ({

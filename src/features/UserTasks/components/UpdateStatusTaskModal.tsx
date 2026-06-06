@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as Yup from "yup";
 import { useTaskUser } from "../api/hooks/useAddTask";
 import { useUpdateTask } from "../api/hooks/useUpdateTask";
+import { decisionOptions } from "@/shared/constants/procedursOptions";
 
 interface UpdateStatusTaskModalProps {
   onClose: () => void;
@@ -113,12 +114,7 @@ function UpdateStatusTaskModal({
               <SelectForm
                 name="status"
                 label="حالة المهمة"
-                options={[
-                  { value: "in_progress", label: "قيد التنفيذ" },
-                  { value: "pending", label: "قيد الانتظار" },
-                  { value: "done", label: "مُنجزة" },
-                  { value: "late", label: "متأخرة" },
-                ]}
+                options={decisionOptions}
               />
 
               <button

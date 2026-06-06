@@ -19,6 +19,7 @@ import { fetchCases } from "../api/service/getCases";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { usePaginatedOptions } from "@/shared/hooks/usePaginatedOptions";
 import { useGetAllUsers } from "@/features/settings/users/api/hooks/useGetAllUsers";
+import { decisionOptions } from "@/shared/constants/procedursOptions";
 
 interface AddTaskModalProps {
   onClose: () => void;
@@ -277,12 +278,7 @@ function AddTaskModal({
               <SelectForm
                 name="status"
                 label="حالة المهمة"
-                options={[
-                  { value: "in_progress", label: "قيد التنفيذ" },
-                  { value: "pending", label: "قيد الانتظار" },
-                  { value: "done", label: "مُنجزة" },
-                  { value: "late", label: "متأخرة" },
-                ]}
+                options={decisionOptions}
               />
 
               <button

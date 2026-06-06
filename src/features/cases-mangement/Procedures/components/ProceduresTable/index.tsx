@@ -14,6 +14,7 @@ import { ProcedureActions } from "./components/ProcedureActions";
 import { ProcedureDetailsDialog } from "./components/ProcedureDetailsDialog";
 import { useProceduresTable } from "./hooks/useProceduresTable";
 import { getProcedureLawyerName, type Procedure } from "../../types";
+import { getStatusArabic } from "@/shared/utils/getProceduresDescionsArabic";
 
 export const ProceduresTable: React.FC = () => {
   const {
@@ -67,7 +68,7 @@ export const ProceduresTable: React.FC = () => {
     },
     {
       header: "حالة الإجراء",
-      accessor: "session_decision",
+      accessor: (item) => getStatusArabic(item.session_decision),
     },
     {
       header: "إجراء",

@@ -6,6 +6,7 @@ import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import React from "react";
 import * as Yup from "yup";
 import type { ProcedureFormValues } from "../../../../../types";
+import { decisionOptions } from "@/shared/constants/procedursOptions";
 
 interface SelectOption {
   label: string;
@@ -29,14 +30,6 @@ const validationSchema = Yup.object({
   session_decision: Yup.string().required("قرار الإجراء مطلوب"),
   notes: Yup.string(),
 });
-
-const decisionOptions: SelectOption[] = [
-  { label: "تم التأجيل", value: "تم التأجيل" },
-  { label: "تم الحضور", value: "تم الحضور" },
-  { label: "انتظار القرار", value: "انتظار القرار" },
-  { label: "تم الصلح", value: "تم الصلح" },
-  { label: "مؤجلة", value: "Postponed" },
-];
 
 export const AddProcedureDialogForm: React.FC<AddProcedureDialogFormProps> = ({
   defaultValues,

@@ -1,6 +1,5 @@
 import api from "@/lib/api";
 import type { RollSessionApiResponse } from "../../types";
-import { enrichSearchResults } from "./enrichSearchResults";
 
 interface SearchSessionsParams {
   q: string;
@@ -29,15 +28,15 @@ export const searchSessions = async (
   if (params.page) queryParams.page = params.page;
   if (params.limit) queryParams.limit = params.limit;
 
-  const { data: response } = await api.get("/cases/search", {
+  const { data: response } = await api.get("/sessions/search", {
     params: queryParams,
   });
 
-  const rawResults = Array.isArray(response)
+  const data = Array.isArray(response)
     ? response
     : response?.data ?? [];
   const meta = response?.meta ?? {
-    total: rawResults.length,
+    total: data.length,
     page: params.page ?? 1,
     limit: params.limit ?? 15,
     total_pages: 1,
@@ -45,8 +44,5 @@ export const searchSessions = async (
     has_prev: false,
   };
 
-  
-  const enriched = await enrichSearchResults(rawResults);
-
-  return { data: enriched, meta };
+  return { data, meta };
 };

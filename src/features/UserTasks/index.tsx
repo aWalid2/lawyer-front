@@ -12,6 +12,7 @@ import { getStatusStyle, statusMapping } from "./types/types";
 import UpdateStatusTaskModal from "./components/UpdateStatusTaskModal";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { Pagination } from "@/shared/components/Pagination";
+import { decisionOptions } from "@/shared/constants/procedursOptions";
 
 const StatusCell: React.FC<{ status: string }> = ({ status }) => {
   const cleanStatus = status?.trim() || "";
@@ -125,13 +126,7 @@ export const UsersTask: React.FC = () => {
   ];
 
   const filterOptions = useMemo(() => {
-    return [
-      { value: "all", label: "الكل" },
-      { value: "in_progress", label: "قيد التنفيذ" },
-      { value: "pending", label: "قيد الانتظار" },
-      { value: "done", label: "مُنجزة" },
-      { value: "late", label: "متأخرة" },
-    ];
+    return [{ value: "all", label: "الكل" }, ...decisionOptions];
   }, []);
 
   if (isPending && !tasks) return <LoadingPage />;
