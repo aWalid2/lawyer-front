@@ -241,8 +241,8 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
   // Merge selected case-type into options (critical fix for items on page 2+)
   const mergedCaseTypeOptions = useMergedOptions(
     caseTypeOptions,
-    caseItem.case_type?.id,
-    caseItem.case_type?.name,
+    (caseItem.case_type as any)?.id,
+    (caseItem.case_type as any)?.name,
   );
 
   // Merge selected case-status into options
@@ -273,7 +273,9 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
     case_status_id: caseItem.case_status_id
       ? String(caseItem.case_status_id)
       : "",
-    case_type_id: caseItem.case_type?.id ? String(caseItem.case_type.id) : "",
+    case_type_id: (caseItem.case_type as any)?.id
+      ? String((caseItem.case_type as any).id)
+      : "",
     case_situation: caseItem.case_situation || "",
   };
 

@@ -39,10 +39,10 @@ export const searchCases = async (page?: number, searchTerm?: string) => {
     
 
     const searchData = Array.isArray(response.data) ? response.data : response.data?.data || [];
+    const apiMeta = !Array.isArray(response.data) ? response.data?.meta : undefined;
     
     const transformedData = (searchData as SearchCaseResponse[]).map((item) => ({
         ...item,
-        id: item.case_sequence,
         reference_number: item.reference_number ?? item.refernce_number ?? "",
         client: {
             first_name: item.client_name
@@ -57,9 +57,13 @@ export const searchCases = async (page?: number, searchTerm?: string) => {
     
     return {
         data: transformedData,
-        meta: {
+        meta: apiMeta ?? {
+            total: transformedData.length,
+            page: page ?? 1,
+            limit: transformedData.length,
             total_pages: 1,
-            limit: transformedData.length
+            has_next: false,
+            has_prev: false
         }
     };
 };

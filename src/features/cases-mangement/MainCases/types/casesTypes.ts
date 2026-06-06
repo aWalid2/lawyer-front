@@ -9,6 +9,8 @@ export interface Case {
   case_type_id?: string;
   case_status_id?: string;
   client_id?: string;
+
+
   reference_number?: string;
   client?: {
     first_name: string;
@@ -17,7 +19,7 @@ export interface Case {
   case_type?: {
     name: string;
     id: string;
-  };
+  } | string | null;
   caseStatus?: {
     name: string;
     id: string;

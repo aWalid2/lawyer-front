@@ -1,109 +1,101 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePagination } from "@/shared/hooks/usePagination";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Pagination } from "@/shared/components/Pagination";
 import { TableCasesActions } from "@/features/cases-mangement/MainCases/componnents/TableCasesActions";
+import { useSearchCases } from "@/features/cases-mangement/MainCases/api/hooks/useGetCases";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
+import LoadingPage from "@/shared/components/LoadingPage";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 import type { Case } from "@/features/cases-mangement/MainCases/types/casesTypes";
 
-const MOCK_CASES: any[] = Array.from({ length: 19 }, (_, i) => ({
-  id: `${i + 1}`,
-  rowNumber: i + 1,
-  case_number: `#634${(i % 5) + 1}`,
-  case_number_at_prosecution: `P-${i + 1}`,
-  detective_name: "محقق افتراضي",
-  case_type: "سرقة",
-  case_situation: i % 2 === 0 ? "متداولة" : "تحت الرفع",
-}));
+interface TableCasesProps {
+  searchTerm: string;
+}
 
-const TableCases = () => {
+const TableCases: React.FC<TableCasesProps> = ({ searchTerm }) => {
   const navigate = useNavigate();
-
+  const [page, setPage] = useState(1);
+  const hasSearched = searchTerm.length > 0;
 
   const handleCaseClick = (caseItem: Case) => {
     navigate(`/dashboard/case-management/${caseItem.id}`);
   };
 
-  const {
-    currentData,
-    currentPage,
-    setCurrentPage,
-    totalPages,
-  } = usePagination<Case>(MOCK_CASES, 15);
-
-  const getStatusStyles = (situation: string) => {
-    switch (situation) {
-      case "متداولة":
-        return "bg-[#5570F1]/20 text-[#5570F1]";
-      case "تحت الرفع":
-        return "bg-[#937F12]/20 text-[#937F12]";
-      default:
-        return "bg-gray-100 text-gray-600";
-    }
-  };
+  const { data: casesData, isPending } = useSearchCases(page, searchTerm);
+  const totalPages = casesData?.meta?.total_pages ?? 1;
+  const limit = casesData?.meta?.limit || 15;
+  const indexedData = useIndexedData(casesData?.data || [], page, limit);
 
   const columns: Column<Case>[] = [
     {
       header: "#",
-      accessor: (item) => MOCK_CASES.findIndex((c) => c.id === item.id) + 1,
+      accessor: (item: Case) => item.rowNumber,
       headerClassName: "w-16",
     },
     {
       header: "كود القضية",
-      accessor: "case_number",
+      accessor: (item) => item.case_sequence,
       className: "font-medium text-black",
     },
     {
-      header: "رقم القضية بالنيابة",
-      accessor: "case_number_at_prosecution",
+      header: "الرقم الآلي للقضية",
+      accessor: (item) => item.reference_number,
     },
     {
-      header: "اسم المحقق",
-      accessor: "detective_name",
-      className: "font-medium text-black",
+      header: "اسم الموكل",
+      accessor: (item: any) =>
+        item.client_name || item.client?.first_name || "-",
+    },
+    {
+      header: "عنوان القضية",
+      accessor: (item: any) => item.case_title || "-",
     },
     {
       header: "نوع القضية",
-      accessor: "case_type",
+      accessor: (item: any) => item.case_type?.name || "-",
     },
     {
       header: "الحالة",
-      accessor: (item) => (
-        <span
-          className={`px-3 py-1 rounded-main text-xs font-medium whitespace-nowrap ${getStatusStyles(
-            item.case_situation || ""
-          )}`}
-        >
-          {item.case_situation}
+      accessor: (item: any) => (
+        <span className="rounded-main px-3 py-1 text-xs font-medium whitespace-nowrap">
+          {item?.caseStatus?.name || item?.case_Status}
         </span>
       ),
     },
     {
       header: "إجراء",
-      accessor: (item) => (
-        <TableCasesActions
-          caseItem={item}
-          onEdit={() => { }}
-        />
-      ),
+      accessor: (item) => <TableCasesActions caseItem={item} />,
     },
   ];
 
   return (
-    <div className="w-full pt-6 space-y-6">
-      <div className="border rounded-main border-gray-200 p-4">
-        <h1 className="text-xl font-semibold mb-8 mt-4 ">قائمة القضايا</h1>
-        <DataTable
-          data={currentData}
-          columns={columns}
-          rowKey={'id'}
-          onRowClick={handleCaseClick}
-        />
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
+    <div className="w-full space-y-6 pt-6">
+      <div className="rounded-main border border-gray-200 p-4">
+        <h1 className="mt-4 mb-8 text-xl font-semibold">قائمة القضايا</h1>
+
+        {!hasSearched ? (
+          <EmptyTable message="ابحث عن قضية لعرض النتائج" />
+        ) : isPending ? (
+          <LoadingPage fullScreen={false} />
+        ) : indexedData.length === 0 ? (
+          <EmptyTable message="لا توجد نتائج تطابق بحثك" />
+        ) : (
+          <>
+            <DataTable
+              data={indexedData}
+              columns={columns}
+              rowKey={"id"}
+              onRowClick={handleCaseClick}
+            />
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+              />
+            )}
+          </>
         )}
       </div>
     </div>
