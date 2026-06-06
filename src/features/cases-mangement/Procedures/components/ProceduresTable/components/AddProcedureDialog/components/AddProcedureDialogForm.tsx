@@ -45,7 +45,10 @@ export const AddProcedureDialogForm: React.FC<AddProcedureDialogFormProps> = ({
       enableReinitialize
       onSubmit={async (values, { setSubmitting }) => {
         try {
-          await onSubmit(values);
+          await onSubmit({
+            ...values,
+            session_date: values.session_date + "T" + "00:00",
+          });
         } catch (error) {
           console.error(error);
         } finally {
@@ -65,8 +68,8 @@ export const AddProcedureDialogForm: React.FC<AddProcedureDialogFormProps> = ({
             />
             <InputForm
               name="session_date"
-              label="موعد الإجراء"
-              type="datetime-local"
+              label="موعد النهائي للتنفيذ"
+              type="date"
             />
             <SelectForm
               name="lawyer_id"
@@ -76,7 +79,7 @@ export const AddProcedureDialogForm: React.FC<AddProcedureDialogFormProps> = ({
             />
             <SelectForm
               name="session_decision"
-              label="قرار الإجراء"
+              label="حالة الإجراء"
               options={decisionOptions}
             />
             <TextAreaForm

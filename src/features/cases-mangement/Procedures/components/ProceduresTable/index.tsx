@@ -5,10 +5,7 @@ import { EmptyTable } from "@/shared/components/EmptyTable";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Pagination } from "@/shared/components/Pagination";
-import {
-  formatDateToTime,
-  formatDateToYYYYMMDD,
-} from "@/shared/utils/convertDate";
+import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { AddProcedureDialog } from "./components/AddProcedureDialog";
 import { ProcedureActions } from "./components/ProcedureActions";
 import { ProcedureDetailsDialog } from "./components/ProcedureDetailsDialog";
@@ -55,12 +52,8 @@ export const ProceduresTable: React.FC = () => {
       accessor: "actionType",
     },
     {
-      header: "تاريخ الاحالة",
-      accessor: (item) => formatDateToYYYYMMDD(item.session_date),
-    },
-    {
-      header: "وقت الاحالة",
-      accessor: (item) => formatDateToTime(item.session_date),
+      header: "تاريخ الانشاء",
+      accessor: (item) => formatDateToYYYYMMDD(item.created_at),
     },
     {
       header: "الموظف المسؤول",
