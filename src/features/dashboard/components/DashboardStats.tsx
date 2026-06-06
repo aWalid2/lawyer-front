@@ -7,15 +7,15 @@ import { Users2 } from "lucide-react";
 const stats = [
   {
     title: "850",
-    label: "اجمالي عدد قضايا المكتب",
+    label: " عدد قضايا المكتب",
     icon: <ActiveCaseIcon className="text-[#11B324]" />,
     bg: "bg-[#11B324]/20",
   },
   {
     title: "45",
-    label: "الموكلين المسجلين",
-    icon: <Users2 className="text-[#BD4453]" />,
-    bg: "bg-[#BD4453]/20",
+    label: "عدد الموكلين  ",
+    icon: <Users2 className="text-secondary" />,
+    bg: "bg-secondary/10",
   },
   {
     title: "32",
