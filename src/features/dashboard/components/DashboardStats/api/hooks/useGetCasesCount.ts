@@ -3,10 +3,10 @@ import { getCasesCount } from "../services/getCasesCount";
 
 export const useGetCasesCount = () => {
 
-  const { data } = useQuery({
+  const { data,isPending } = useQuery({
     queryKey: ["casesCount"],
     queryFn: getCasesCount,
   });
 
-  return { data };
+  return { data ,isPending};
 };

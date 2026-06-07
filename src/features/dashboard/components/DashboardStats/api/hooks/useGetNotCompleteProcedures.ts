@@ -3,10 +3,10 @@ import { getNotCompleteProcedures } from "../services/getNotCompleteProcedures";
 
 export const useGetNotCompleteProcedures = () => {
 
-  const { data } = useQuery({
+  const { data,isPending } = useQuery({
     queryKey: ["notCompleteProcedures"],
     queryFn: getNotCompleteProcedures,
   });
 
-  return { data };
+  return { data,isPending };
 };

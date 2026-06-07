@@ -7,13 +7,27 @@ import { useGetCasesCount } from "./api/hooks/useGetCasesCount";
 import { useGetNotCompleteProcedures } from "./api/hooks/useGetNotCompleteProcedures";
 import { useGetNotCompleteTasks } from "./api/hooks/useGetNotCompleteTasks";
 import { useGetClientCounts } from "./api/hooks/useGetClientCounts";
+import LoadingPage from "@/shared/components/LoadingPage";
 
 const DashboardStats = () => {
-  const { data: casesCount } = useGetCasesCount();
-  const { data: clientCounts } = useGetClientCounts();
-  const { data: notCompleteTasks } = useGetNotCompleteTasks();
-  const { data: notCompleteProcedures } = useGetNotCompleteProcedures();
+  const { data: casesCount, isPending: isPendingCasesCount } =
+    useGetCasesCount();
+  const { data: clientCounts, isPending: isPendingClientCounts } =
+    useGetClientCounts();
+  const { data: notCompleteTasks, isPending: isPendingNoCompleteTasks } =
+    useGetNotCompleteTasks();
+  const {
+    data: notCompleteProcedures,
+    isPending: isPendingNotCompleteProceduers,
+  } = useGetNotCompleteProcedures();
 
+  if (
+    isPendingCasesCount ||
+    isPendingClientCounts ||
+    isPendingNotCompleteProceduers ||
+    isPendingNoCompleteTasks
+  )
+    return <LoadingPage />;
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       <DashboardStatsCard

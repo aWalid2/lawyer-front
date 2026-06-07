@@ -8,6 +8,7 @@ import type { ApiSession, DayGroup, SessionItem } from "./components/types";
 import { useGetSessionsToday } from "./components/api/hooks/useGetSessionsToday";
 import { useGetSessionsTomorrow } from "./components/api/hooks/useGetSessionsTomorrow";
 import { useGetSessionsAfterTomorrow } from "./components/api/hooks/useGetSessionsAfterTomorrow";
+import LoadingPage from "@/shared/components/LoadingPage";
 
 const mapApiSession = (s: ApiSession): SessionItem => ({
   time: format(new Date(s.session_date), "hh:mm a", { locale: ar }),
@@ -34,9 +35,14 @@ const buildDayGroup = (
 };
 
 const DashboardLatestSessions = () => {
-  const { data: sessionsToday } = useGetSessionsToday();
-  const { data: sessionsTomorrow } = useGetSessionsTomorrow();
-  const { data: sessionsAfterTomorrow } = useGetSessionsAfterTomorrow();
+  const { data: sessionsToday, isPending: isPendingSessionsToday } =
+    useGetSessionsToday();
+  const { data: sessionsTomorrow, isPending: ispendingSessionsTomorrow } =
+    useGetSessionsTomorrow();
+  const {
+    data: sessionsAfterTomorrow,
+    isPending: isPendingSessionsAfterTomorrow,
+  } = useGetSessionsAfterTomorrow();
 
   const groups: DayGroup[] = useMemo(() => {
     const now = new Date();
@@ -60,6 +66,12 @@ const DashboardLatestSessions = () => {
     ];
   }, [sessionsToday, sessionsTomorrow, sessionsAfterTomorrow]);
 
+  if (
+    isPendingSessionsToday ||
+    ispendingSessionsTomorrow ||
+    isPendingSessionsAfterTomorrow
+  )
+    return <LoadingPage />;
   return (
     <Card className="dark:bg-backgroundDark col-span-1 flex h-full w-full flex-col border-0 px-6 pb-6 shadow-sm lg:col-span-2">
       <div className="mt-4 flex items-center gap-2">

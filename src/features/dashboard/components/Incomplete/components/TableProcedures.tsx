@@ -1,14 +1,13 @@
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
-import { format } from "date-fns";
-import { ar } from "date-fns/locale";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { Error } from "@/shared/components/Error";
-import { useGetActiveProcedures } from "./api/hooks/useGetActiveProcedures";
-import type { ActiveProcedure } from "./api/services/getActiveProcedures";
+import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
 import { decisionOptions } from "@/shared/constants/procedursOptions";
 import { getDecisionStyles } from "@/shared/utils/getDescionStyle";
 import { getOptionLabel } from "@/shared/utils/getOptionLabel";
+import { format } from "date-fns";
+import { ar } from "date-fns/locale";
+import { useGetActiveProcedures } from "../api/hooks/useGetActiveProcedures";
+import type { ActiveProcedure } from "../api/services/getActiveProcedures";
 
 const columns: Column<ActiveProcedure>[] = [
   {
@@ -45,17 +44,17 @@ const columns: Column<ActiveProcedure>[] = [
   {
     header: "إجراء",
     accessor: (item) => (
-      <ViewLinkTablePageDetails to={`/dashboard/user-tasks/${item.id}`} />
+      <div className="flex justify-center">
+        <ViewLinkTablePageDetails to={`/dashboard/user-tasks/${item.id}`} />
+      </div>
     ),
   },
 ];
 
 export const TableProcedures = () => {
-  const { data, isPending, isError, error } = useGetActiveProcedures();
+  const { data, isPending } = useGetActiveProcedures();
 
-  if (isPending) return <LoadingPage />;
-  if (isError)
-    return <Error message="حدث خطأ أثناء جلب الإجراءات." error={error} />;
+  if (isPending) return <LoadingPage fullScreen={false} />;
 
   const procedures = data ?? [];
 

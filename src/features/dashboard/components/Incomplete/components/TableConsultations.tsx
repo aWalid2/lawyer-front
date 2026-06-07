@@ -1,15 +1,14 @@
 import { DataTable, type Column } from "@/shared/components/DataTable";
+import LoadingPage from "@/shared/components/LoadingPage";
 import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
+import {
+  CONSULTATION_STATUS_FALLBACK,
+  CONSULTATION_STATUS_LABELS,
+} from "@/shared/constants/consultationStatus";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
-import LoadingPage from "@/shared/components/LoadingPage";
-import { Error } from "@/shared/components/Error";
-import { useGetUpcomingConsultations } from "./api/hooks/useGetUpcomingConsultations";
-import type { UpcomingConsultation } from "./api/services/getUpcomingConsultations";
-import {
-  CONSULTATION_STATUS_LABELS,
-  CONSULTATION_STATUS_FALLBACK,
-} from "@/shared/constants/consultationStatus";
+import { useGetUpcomingConsultations } from "../api/hooks/useGetUpcomingConsultations";
+import type { UpcomingConsultation } from "../api/services/getUpcomingConsultations";
 
 const typeLabels: Record<string, string> = {
   legal_advice: "استشارة قانونية",
@@ -82,17 +81,17 @@ const columns: Column<UpcomingConsultation>[] = [
   {
     header: "إجراء",
     accessor: (item) => (
-      <ViewLinkTablePageDetails to={`/dashboard/consultations/${item.id}`} />
+      <div className="flex justify-center">
+        <ViewLinkTablePageDetails to={`/dashboard/consultations/${item.id}`} />
+      </div>
     ),
   },
 ];
 
 export const TableConsultations = () => {
-  const { data, isPending, isError, error } = useGetUpcomingConsultations();
+  const { data, isPending } = useGetUpcomingConsultations();
 
-  if (isPending) return <LoadingPage />;
-  if (isError)
-    return <Error message="حدث خطأ أثناء جلب الاستشارات." error={error} />;
+  if (isPending) return <LoadingPage fullScreen={false} />;
 
   const consultations = data ?? [];
 

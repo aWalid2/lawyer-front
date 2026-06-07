@@ -3,9 +3,8 @@ import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageD
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { Error } from "@/shared/components/Error";
-import { useGetUpcomingTasks } from "./api/hooks/useGetUpcomingTasks";
-import type { UpcomingTask } from "./api/services/getUpcomingTasks";
+import { useGetUpcomingTasks } from "../api/hooks/useGetUpcomingTasks";
+import type { UpcomingTask } from "../api/services/getUpcomingTasks";
 import { getDecisionStyles } from "@/shared/utils/getDescionStyle";
 import { decisionOptions } from "@/shared/constants/procedursOptions";
 import { getOptionLabel } from "@/shared/utils/getOptionLabel";
@@ -41,17 +40,17 @@ const columns: Column<UpcomingTask>[] = [
   {
     header: "إجراء",
     accessor: (item) => (
-      <ViewLinkTablePageDetails to={`/dashboard/user-tasks/${item.id}`} />
+      <div className="flex justify-center">
+        <ViewLinkTablePageDetails to={`/dashboard/user-tasks/${item.id}`} />
+      </div>
     ),
   },
 ];
 
 export const TableTasks = () => {
-  const { data, isPending, isError, error } = useGetUpcomingTasks();
+  const { data, isPending } = useGetUpcomingTasks();
 
-  if (isPending) return <LoadingPage />;
-  if (isError)
-    return <Error message="حدث خطأ أثناء جلب المهام." error={error} />;
+  if (isPending) return <LoadingPage fullScreen={false} />;
 
   const tasks = data ?? [];
 
