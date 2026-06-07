@@ -1,10 +1,10 @@
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
 import { useFetchClients } from "@/shared/api/hooks/useGetClients";
@@ -42,6 +42,7 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
     consultation_type: initialValues?.consultation_type || "",
     contact_method: initialValues?.contact_method || "",
     consultation_details: initialValues?.consultation_details || "",
+    consultation_date: initialValues?.consultation_date || "",
     request_date:
       initialValues?.request_date || new Date().toISOString().split("T")[0],
   };
@@ -178,6 +179,13 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
                   />
                 </div>
 
+                <div className="md:col-span-2">
+                  <InputForm
+                    name="consultation_date"
+                    label="تاريخ وموعد الاستشارة"
+                    type="datetime-local"
+                  />
+                </div>
                 <div className="md:col-span-2">
                   <InputForm
                     type="date"

@@ -11,6 +11,7 @@ export interface Consultation {
   status?: string;
   request_date: string;
   created_at?: string;
+  consultation_date?:string;
   client?: {
     id: number;
     first_name: string;
