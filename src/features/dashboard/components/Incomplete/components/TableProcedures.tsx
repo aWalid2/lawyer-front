@@ -1,6 +1,5 @@
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { ViewIcon } from "@/shared/icons/View";
-import { Button } from "@/components/ui/button";
+import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import LoadingPage from "@/shared/components/LoadingPage";
@@ -12,7 +11,11 @@ import { getDecisionStyles } from "@/shared/utils/getDescionStyle";
 import { getOptionLabel } from "@/shared/utils/getOptionLabel";
 
 const columns: Column<ActiveProcedure>[] = [
-  { header: "#", accessor: "id", headerClassName: "w-[60px]" },
+  {
+    header: "#",
+    accessor: (_item, index) => index + 1,
+    headerClassName: "w-[60px]",
+  },
   { header: "المحامي", accessor: (item) => item.lawyer?.name || "-" },
   {
     header: "تاريخ الجلسة",
@@ -41,14 +44,8 @@ const columns: Column<ActiveProcedure>[] = [
   },
   {
     header: "إجراء",
-    accessor: () => (
-      <Button
-        variant="ghost"
-        size="icon"
-        className="h-8 w-8 rounded-md bg-blue-50 text-blue-500 hover:bg-blue-100"
-      >
-        <ViewIcon className="h-4 w-4" />
-      </Button>
+    accessor: (item) => (
+      <ViewLinkTablePageDetails to={`/dashboard/user-tasks/${item.id}`} />
     ),
   },
 ];

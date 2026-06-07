@@ -11,11 +11,10 @@ import { useIndexedData } from "@/shared/utils/useIndexedData";
 import PageLayout from "@/shared/components/PageLayout";
 import { Pagination } from "@/shared/components/Pagination";
 import { formatDateToYYYYMMDD } from "@/shared/utils";
-
-const statusLabels: Record<string, { text: string; className: string }> = {
-  pending: { text: "قيد الانتظار", className: "bg-yellow-100 text-yellow-800" },
-  completed: { text: "مكتملة", className: "bg-green-100 text-green-800" },
-};
+import {
+  CONSULTATION_STATUS_LABELS,
+  CONSULTATION_STATUS_FALLBACK,
+} from "@/shared/constants/consultationStatus";
 
 const ConsultationsFeature = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -55,9 +54,14 @@ const ConsultationsFeature = () => {
       header: "الحالة",
       accessor: (item) => (
         <span
-          className={`rounded-full px-3 py-1 text-xs font-medium ${statusLabels[item.status ?? ""]?.className || "bg-gray-100 text-gray-800"}`}
+          className={`rounded-full px-3 py-1 text-xs font-medium ${(CONSULTATION_STATUS_LABELS[item.status ?? ""] ?? CONSULTATION_STATUS_FALLBACK).className}`}
         >
-          {statusLabels[item.status ?? ""]?.text || item.status || "-"}
+          {
+            (
+              CONSULTATION_STATUS_LABELS[item.status ?? ""] ??
+              CONSULTATION_STATUS_FALLBACK
+            ).text
+          }
         </span>
       ),
     },

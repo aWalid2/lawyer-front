@@ -1,34 +1,15 @@
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { ViewIcon } from "@/shared/icons/View";
-import { Button } from "@/components/ui/button";
+import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
 import { useGetUpcomingConsultations } from "./api/hooks/useGetUpcomingConsultations";
 import type { UpcomingConsultation } from "./api/services/getUpcomingConsultations";
-
-const statusLabels: Record<string, string> = {
-  pending: "معلق",
-  in_progress: "قيد التنفيذ",
-  completed: "مكتمل",
-  cancelled: "ملغي",
-};
-
-const getStatusStyles = (status: string) => {
-  switch (status) {
-    case "pending":
-      return "bg-[#937F12]/20 text-[#937F12]";
-    case "in_progress":
-      return "bg-[#5570F1]/20 text-[#5570F1]";
-    case "completed":
-      return "bg-[#519C66]/20 text-[#519C66]";
-    case "cancelled":
-      return "bg-[#C60000]/20 text-[#C60000]";
-    default:
-      return "bg-gray-100 text-gray-500";
-  }
-};
+import {
+  CONSULTATION_STATUS_LABELS,
+  CONSULTATION_STATUS_FALLBACK,
+} from "@/shared/constants/consultationStatus";
 
 const typeLabels: Record<string, string> = {
   legal_advice: "استشارة قانونية",
@@ -44,7 +25,11 @@ const methodLabels: Record<string, string> = {
 };
 
 const columns: Column<UpcomingConsultation>[] = [
-  { header: "#", accessor: "id", headerClassName: "w-[60px]" },
+  {
+    header: "#",
+    accessor: (_item, index) => index + 1,
+    headerClassName: "w-[60px]",
+  },
   { header: "عنوان الاستشارة", accessor: "consultation_title" },
   {
     header: "العميل",
@@ -81,24 +66,23 @@ const columns: Column<UpcomingConsultation>[] = [
   },
   {
     header: "الحالة",
-    accessor: (item) => (
-      <span
-        className={`rounded-main px-3.5 py-1.5 text-xs font-medium whitespace-nowrap ${getStatusStyles(item.status)}`}
-      >
-        {statusLabels[item.status] || item.status}
-      </span>
-    ),
+    accessor: (item) => {
+      const label =
+        CONSULTATION_STATUS_LABELS[item.status ?? ""] ??
+        CONSULTATION_STATUS_FALLBACK;
+      return (
+        <span
+          className={`rounded-main px-3.5 py-1.5 text-xs font-medium whitespace-nowrap ${label.className}`}
+        >
+          {label.text}
+        </span>
+      );
+    },
   },
   {
     header: "إجراء",
-    accessor: () => (
-      <Button
-        variant="ghost"
-        size="icon"
-        className="h-8 w-8 rounded-md bg-blue-50 text-blue-500 hover:bg-blue-100"
-      >
-        <ViewIcon className="h-4 w-4" />
-      </Button>
+    accessor: (item) => (
+      <ViewLinkTablePageDetails to={`/dashboard/consultations/${item.id}`} />
     ),
   },
 ];
