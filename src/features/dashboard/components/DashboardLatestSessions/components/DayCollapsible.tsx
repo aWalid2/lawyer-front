@@ -22,6 +22,13 @@ export const DayCollapsible = ({ group }: DayCollapsibleProps) => {
   const [open, setOpen] = useState(false);
   const hasSessions = group.sessions.length > 0;
 
+  console.log(
+    "Rendering DayCollapsible for",
+    group.label,
+    "with sessions:",
+    group.sessions,
+  );
+
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>
@@ -66,7 +73,7 @@ export const DayCollapsible = ({ group }: DayCollapsibleProps) => {
               group.sessions.map((session, idx) => (
                 <TableRow key={idx}>
                   <TableCell className="px-6 py-5 text-start text-sm text-gray-600">
-                    {session.court}
+                    {session?.court || session?.presecution_name}
                   </TableCell>
                   <TableCell className="px-6 py-5 text-center text-sm font-medium text-gray-800">
                     قضية رقم {session.caseNumber}

@@ -4,19 +4,61 @@ import { Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import { DayCollapsible } from "./components/DayCollapsible";
-import { MOCK_SESSIONS } from "./components/mockData";
+import type { ApiSession, DayGroup, SessionItem } from "./components/types";
+import { useGetSessionsToday } from "./components/api/hooks/useGetSessionsToday";
+import { useGetSessionsTomorrow } from "./components/api/hooks/useGetSessionsTomorrow";
+import { useGetSessionsAfterTomorrow } from "./components/api/hooks/useGetSessionsAfterTomorrow";
+
+const mapApiSession = (s: ApiSession): SessionItem => ({
+  time: format(new Date(s.session_date), "hh:mm a", { locale: ar }),
+  caseNumber: s.case_sequence,
+  court: s.court_name || s.presecution_name || s.police_station_name,
+});
+
+const buildDayGroup = (
+  label: string,
+  date: Date,
+  sessions: ApiSession[] | undefined,
+): DayGroup => {
+  const dayName = format(date, "EEEE", { locale: ar });
+  const fullDate = format(date, "d MMMM yyyy", { locale: ar });
+  const mapped = (sessions ?? []).map(mapApiSession);
+
+  return {
+    label,
+    date,
+    dateLabel: `${dayName} ${fullDate}`,
+    sessions: mapped,
+    totalCount: mapped.length,
+  };
+};
 
 const DashboardLatestSessions = () => {
-  const groups = useMemo(() => {
-    return MOCK_SESSIONS.map((group) => {
-      const dayName = format(group.date, "EEEE", { locale: ar });
-      const fullDate = format(group.date, "d MMMM yyyy", { locale: ar });
-      return {
-        ...group,
-        dateLabel: `${dayName} ${fullDate}`,
-      };
-    });
-  }, []);
+  const { data: sessionsToday } = useGetSessionsToday();
+  const { data: sessionsTomorrow } = useGetSessionsTomorrow();
+  const { data: sessionsAfterTomorrow } = useGetSessionsAfterTomorrow();
+
+  const groups: DayGroup[] = useMemo(() => {
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const afterTomorrow = new Date(now);
+    afterTomorrow.setDate(afterTomorrow.getDate() + 2);
+
+    return [
+      buildDayGroup("اليوم", now, sessionsToday as ApiSession[] | undefined),
+      buildDayGroup(
+        "غداً",
+        tomorrow,
+        sessionsTomorrow as ApiSession[] | undefined,
+      ),
+      buildDayGroup(
+        "بعد غد",
+        afterTomorrow,
+        sessionsAfterTomorrow as ApiSession[] | undefined,
+      ),
+    ];
+  }, [sessionsToday, sessionsTomorrow, sessionsAfterTomorrow]);
 
   return (
     <Card className="dark:bg-backgroundDark col-span-1 flex h-full w-full flex-col border-0 px-6 pb-6 shadow-sm lg:col-span-2">
