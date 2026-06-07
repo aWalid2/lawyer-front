@@ -1,9 +1,9 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PageLayout from "@/shared/components/PageLayout.tsx";
-import { TableIncompleteProcedures } from "./components/TableIncompleteProcedures";
+import { TableIncomplete } from "./components/TableIncomplete";
 import React from "react";
 
-const IncompleteProcedures = () => {
+const Incomplete = () => {
   const [activeTab, setActiveTab] = React.useState("proceduresIncomplete");
 
   const handleTabChange = (value: string) => {
@@ -45,18 +45,18 @@ const IncompleteProcedures = () => {
         </div>
 
         <TabsContent value="proceduresIncomplete" className="mt-0">
-          <TableIncompleteProcedures />
+          <TableIncomplete />
         </TabsContent>
 
         <TabsContent value="tasksIncomplete" className="mt-0">
-          <TableIncompleteProcedures />
+          <TableIncomplete />
         </TabsContent>
         <TabsContent value="consultationsIncomplete" className="mt-0">
-          <TableIncompleteProcedures />
+          <TableIncomplete />
         </TabsContent>
       </Tabs>
     </PageLayout>
   );
 };
 
-export default IncompleteProcedures;
+export default Incomplete;

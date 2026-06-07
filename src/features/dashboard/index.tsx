@@ -1,7 +1,7 @@
 import DashboardStats from "./components/DashboardStats";
 import DashboardLatestSessions from "./components/DashboardLatestSessions";
 import CalendarPicker from "./components/CalendarPicker";
-import IncompleteProcedures from "./components/IncompleteProcedures";
+import Incomplete from "./components/Incomplete";
 
 export const DashboardFeature = () => {
   return (
@@ -9,7 +9,7 @@ export const DashboardFeature = () => {
       <DashboardStats />
       <DashboardLatestSessions />
       <CalendarPicker selectedDate={undefined} onDateSelect={() => {}} />
-      <IncompleteProcedures />
+      <Incomplete />
     </div>
   );
 };
