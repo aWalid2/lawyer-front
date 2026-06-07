@@ -22,13 +22,6 @@ export const DayCollapsible = ({ group }: DayCollapsibleProps) => {
   const [open, setOpen] = useState(false);
   const hasSessions = group.sessions.length > 0;
 
-  console.log(
-    "Rendering DayCollapsible for",
-    group.label,
-    "with sessions:",
-    group.sessions,
-  );
-
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>
