@@ -8,7 +8,7 @@ export interface Consultation {
   consultation_type: string;
   contact_method: string;
   consultation_details: string;
-  status: string;
+  status?: string;
   request_date: string;
   created_at?: string;
   client?: {

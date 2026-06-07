@@ -87,7 +87,14 @@ export const UsersTask: React.FC = () => {
       className: "w-35",
     },
     {
-      header: "المُكلف",
+      header: "مُسند المهمة",
+      accessor: (item: TaskRelatedT) =>
+        item.assigner?.first_name || item.assigner?.name || "-",
+      headerClassName: "w-35",
+      className: "w-35",
+    },
+    {
+      header: "المكلف بالمهمة",
       accessor: (item: TaskRelatedT) =>
         item.assignee?.first_name || String(item.assigned_to || "-"),
       headerClassName: "w-35",

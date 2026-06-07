@@ -12,6 +12,11 @@ export interface TaskRelatedT {
     assignee?: {
         first_name: string;
     }
+    assigner?:{
+        first_name?:string;
+        name?:string
+    }
+    
 }
 
 export const statusMapping: Record<string, string> = {

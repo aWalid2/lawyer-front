@@ -1,6 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PageLayout from "@/shared/components/PageLayout.tsx";
-import { TableIncomplete } from "./components/TableIncomplete";
+import { TableProcedures } from "./components/TableProcedures";
+import { TableTasks } from "./components/TableTasks";
+import { TableConsultations } from "./components/TableConsultations";
 import React from "react";
 
 const Incomplete = () => {
@@ -45,14 +47,14 @@ const Incomplete = () => {
         </div>
 
         <TabsContent value="proceduresIncomplete" className="mt-0">
-          <TableIncomplete />
+          <TableProcedures />
         </TabsContent>
 
         <TabsContent value="tasksIncomplete" className="mt-0">
-          <TableIncomplete />
+          <TableTasks />
         </TabsContent>
         <TabsContent value="consultationsIncomplete" className="mt-0">
-          <TableIncomplete />
+          <TableConsultations />
         </TabsContent>
       </Tabs>
     </PageLayout>

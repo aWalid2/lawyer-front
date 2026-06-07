@@ -10,19 +10,7 @@ import { useIndexedData } from "@/shared/utils/useIndexedData";
 
 import PageLayout from "@/shared/components/PageLayout";
 import { Pagination } from "@/shared/components/Pagination";
-
-const formatDateToArabic = (dateString: string): string => {
-  if (!dateString) return "-";
-
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return "-";
-
-  return new Intl.DateTimeFormat("ar-EG", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(date);
-};
+import { formatDateToYYYYMMDD } from "@/shared/utils";
 
 const statusLabels: Record<string, { text: string; className: string }> = {
   pending: { text: "قيد الانتظار", className: "bg-yellow-100 text-yellow-800" },
@@ -67,15 +55,15 @@ const ConsultationsFeature = () => {
       header: "الحالة",
       accessor: (item) => (
         <span
-          className={`rounded-full px-3 py-1 text-xs font-medium ${statusLabels[item.status]?.className || "bg-gray-100 text-gray-800"}`}
+          className={`rounded-full px-3 py-1 text-xs font-medium ${statusLabels[item.status ?? ""]?.className || "bg-gray-100 text-gray-800"}`}
         >
-          {statusLabels[item.status]?.text || item.status}
+          {statusLabels[item.status ?? ""]?.text || item.status || "-"}
         </span>
       ),
     },
     {
       header: "تاريخ الطلب",
-      accessor: (item) => formatDateToArabic(item.request_date),
+      accessor: (item) => formatDateToYYYYMMDD(item.request_date),
     },
     {
       header: "الإجراءات",

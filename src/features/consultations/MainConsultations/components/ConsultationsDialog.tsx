@@ -1,25 +1,23 @@
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose,
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from "@/components/ui/dialog";
+import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
+import { useFetchClients } from "@/shared/api/hooks/useGetClients";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
+import { useDebounce } from "@/shared/hooks/useDebounce";
+import { Form, Formik } from "formik";
 import { XIcon } from "lucide-react";
 import React, { useState } from "react";
-import { Formik, Form } from "formik";
-import type { Consultation } from "../types";
 import { useAddConsultation } from "../../api/hooks/useAddConsultations";
 import { useUpdateConsultation } from "../../api/hooks/useUpdateConsultations";
-import { Error } from "@/shared/components/Error";
-import LoadingPage from "@/shared/components/LoadingPage";
-import { useFetchClients } from "@/shared/api/hooks/useGetClients";
-import { useDebounce } from "@/shared/hooks/useDebounce";
-import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
+import type { Consultation } from "../types";
 
 interface ConsultationsDialogProps {
   onSave?: (values: Consultation) => void;
@@ -44,97 +42,97 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
     consultation_type: initialValues?.consultation_type || "",
     contact_method: initialValues?.contact_method || "",
     consultation_details: initialValues?.consultation_details || "",
-    status: initialValues?.status || "",
-    request_date: initialValues?.request_date || new Date().toISOString().split('T')[0],
+    request_date:
+      initialValues?.request_date || new Date().toISOString().split("T")[0],
   };
 
-  const { mutate: addConsultation, isPending: isAddPending, isError: isAddError, error: addError } = useAddConsultation();
-  const { mutate: updateConsultation, isPending: isUpdatePending, isError: isUpdateError, error: updateError } = useUpdateConsultation();
-  
+  const { mutate: addConsultation } = useAddConsultation();
+  const { mutate: updateConsultation } = useUpdateConsultation();
+
   const [clientSearch, setClientSearch] = useState("");
   const debouncedClientSearch = useDebounce(clientSearch, 500);
-  const { data: clients } = useFetchClients(undefined, undefined, debouncedClientSearch);
+  const { data: clients } = useFetchClients(
+    undefined,
+    undefined,
+    debouncedClientSearch,
+  );
   const { data: lawyers } = useFetchLawyers();
 
-const handleSubmit = async (values: Consultation) => {
-  try {
-    if (isEdit && initialValues?.id) {
-      // تمرير الـ ID والبيانات معاً
-      updateConsultation({
-        id: values.id,
-        data: values
-      }, {
-        onSuccess: () => {
-          if (onUpdate) {
-            onUpdate(values);
-          }
-        }
-      });
-    } else {
-      // للإضافة
-      addConsultation(values, {
-        onSuccess: () => {
-          if (onSave) {
-            onSave(values);
-          }
-        },
-      });
+  const handleSubmit = async (values: Consultation) => {
+    try {
+      if (isEdit && initialValues?.id) {
+        updateConsultation(
+          {
+            id: values.id,
+            data: values,
+          },
+          {
+            onSuccess: () => {
+              if (onUpdate) {
+                onUpdate(values);
+              }
+            },
+          },
+        );
+      } else {
+        addConsultation(values, {
+          onSuccess: () => {
+            if (onSave) {
+              onSave(values);
+            }
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
     }
-  } catch (error) {
-    console.error("Error submitting form:", error);
-  }
-};
+  };
 
-  const options = clients?.data?.map((client: any) => ({
-    label: client.name,
-    value: String(client.user_id)
-  })) || [];
+  const options =
+    clients?.data?.map((client: any) => ({
+      label: client.name,
+      value: String(client.user_id),
+    })) || [];
 
-  const lawyerOptions = lawyers?.map((lawyer: any) => ({
-    label: lawyer.user?.first_name || `محامي ${lawyer.user_id}`,
-    value: lawyer.user_id,
-  })) || [];
-
-  const isPending = isAddPending || isUpdatePending;
-  const isError = isAddError || isUpdateError;
-  const error = addError || updateError;
-
-  if (isPending) return <LoadingPage />;
-  if (isError) return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
+  const lawyerOptions =
+    lawyers?.map((lawyer: any) => ({
+      label: lawyer.user?.first_name || `محامي ${lawyer.user_id}`,
+      value: lawyer.user_id,
+    })) || [];
 
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
-        className="sm:max-w-[772px] max-h-[90vh] flex flex-col overflow-hidden sm:px-20 px-6 sm:py-10 py-6 sm:rounded-[24px] rounded-main border-none"
+        className="rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-[772px] sm:rounded-[24px] sm:px-20 sm:py-10"
         dir="rtl"
         showCloseButton={false}
       >
         <DialogClose asChild>
-          <button className="absolute top-8 sm:inset-e-15 inset-e-6 text-gray-400 px-6 py-2.5 rounded-main font-semibold flex items-center gap-2 h-12.5 transition-all outline-none">
+          <button className="rounded-main absolute inset-e-6 top-8 flex h-12.5 items-center gap-2 px-6 py-2.5 font-semibold text-gray-400 transition-all outline-none sm:inset-e-15">
             <XIcon size={23} />
           </button>
         </DialogClose>
-        <DialogHeader className="mb-2 mt-15">
-          <DialogTitle className="text-2xl font-bold text-center text-[#153A4D]">
+        <DialogHeader className="mt-15 mb-2">
+          <DialogTitle className="text-center text-2xl font-bold text-[#153A4D]">
             {isEdit ? "تعديل الاستشارة" : "اضافة استشارة جديدة"}
           </DialogTitle>
         </DialogHeader>
-        <Formik 
-          key={isEdit ? initialValues?.id : 'add'}
-          initialValues={defaultValues} 
+        <Formik
+          key={isEdit ? initialValues?.id : "add"}
+          initialValues={defaultValues}
           onSubmit={handleSubmit}
           enableReinitialize={true}
         >
           {({ isSubmitting }) => (
-            <Form className="space-y-4 overflow-y-auto custom-scrollbar flex-1 pl-2 pb-2">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+            <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
+              <div className="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2">
                 <div className="md:col-span-2">
                   <InputForm
                     type="text"
                     name="consultation_title"
                     label="عنوان الاستشارة"
-                    placeholder="دعوي طلاق"
+                    placeholder="اكتب عنوان الاستشارة"
                   />
                 </div>
 
@@ -155,14 +153,11 @@ const handleSubmit = async (values: Consultation) => {
                   showSearch={true}
                 />
 
-                <SelectForm
+                <InputForm
                   name="consultation_type"
                   label="نوع الاستشارة"
-                  options={[
-                    { value: "أحوال شخصية", label: "أحوال شخصية" },
-                    { value: "جنائي", label: "جنائي" },
-                    { value: "عقاري", label: "عقاري" },
-                  ]}
+                  type={"string"}
+                  placeholder="اكتب نوع الاستشارة"
                 />
 
                 <SelectForm
@@ -182,23 +177,12 @@ const handleSubmit = async (values: Consultation) => {
                     placeholder="..."
                   />
                 </div>
-                
+
                 <div className="md:col-span-2">
                   <InputForm
                     type="date"
                     name="request_date"
                     label="تاريخ طلب الاستشارة"
-                  />
-                </div>
-                
-                <div className="md:col-span-2">
-                  <SelectForm
-                    name="status"
-                    label="حالة الاستشارة"
-                    options={[
-                      { value: "pending", label: "قيد الانتظار" },
-                      { value: "completed", label: "مكتملة" },
-                    ]}
                   />
                 </div>
               </div>
@@ -207,14 +191,13 @@ const handleSubmit = async (values: Consultation) => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-primary-gradient text-white px-8 py-2.5 w-full mt-4 rounded-main font-bold shadow-lg hover:opacity-90 transition-opacity font-cairo h-12.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-primary-gradient rounded-main font-cairo mt-4 h-12.5 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {isSubmitting 
-                    ? "جاري الحفظ..." 
-                    : isEdit 
-                      ? "حفظ التغييرات" 
-                      : "إضافة استشارة"
-                  }
+                  {isSubmitting
+                    ? "جاري الحفظ..."
+                    : isEdit
+                      ? "حفظ التغييرات"
+                      : "إضافة استشارة"}
                 </button>
               </DialogClose>
             </Form>
