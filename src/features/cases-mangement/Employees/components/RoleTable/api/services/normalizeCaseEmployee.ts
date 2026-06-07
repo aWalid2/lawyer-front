@@ -1,6 +1,6 @@
-import type { CaseEmployee } from "../../types";
 
-export const normalizeCaseEmployee = (employee: any): CaseEmployee => ({
+
+export const normalizeCaseEmployee = (employee: any) => ({
   id: Number(employee?.id ?? 0),
   case_id: Number(employee?.case_id ?? 0),
   phone: employee?.phone ?? "",

@@ -2,21 +2,21 @@ import React from "react";
 import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { CaseRoleDialog } from "../CaseRoleDialog";
-import type { CaseEmployeeFormValues } from "../../types";
+import type { CaseRoleFormValues } from "../../types";
 
-interface HeaderEmployeeProps {
+interface HeaderRoleProps {
   title: string;
   buttonText: string;
-  employeeOptions: Array<{ label: React.ReactNode; value: string | number }>;
-  onSave: (values: CaseEmployeeFormValues, id?: number) => Promise<void> | void;
+  roleOptions: Array<{ label: React.ReactNode; value: string | number }>;
+  onSave: (values: CaseRoleFormValues, id?: number) => Promise<void> | void;
   isPending?: boolean;
   isOptionsPending?: boolean;
 }
 
-export const HeaderRole: React.FC<HeaderEmployeeProps> = ({
+export const HeaderRole: React.FC<HeaderRoleProps> = ({
   title,
   buttonText,
-  employeeOptions,
+  roleOptions,
   onSave,
   isPending = false,
   isOptionsPending = false,
@@ -26,7 +26,7 @@ export const HeaderRole: React.FC<HeaderEmployeeProps> = ({
       <HeaderTitle title={title} />
       <CaseRoleDialog
         onSave={onSave}
-        employeeOptions={employeeOptions}
+        roleOptions={roleOptions}
         isOptionsPending={isOptionsPending}
         isPending={isPending}
         trigger={<ButtonUpdateInfo type="add" text={buttonText} />}

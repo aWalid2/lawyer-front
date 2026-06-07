@@ -2,15 +2,16 @@ import { ButtonViewTable } from "@/shared/components/ButtonViewTable";
 import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
 import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
 import React from "react";
+import type { CaseRole } from "../types";
 
-interface EmployeesActionsProps {
-  employee: any;
-  onDelete?: (employee: any) => void;
-  onView?: (employee: any) => void;
+interface RolesActionsProps {
+  role: CaseRole;
+  onDelete?: (role: CaseRole) => void;
+  onView?: (role: CaseRole) => void;
 }
 
-export const RolesActions: React.FC<EmployeesActionsProps> = ({
-  employee,
+export const RolesActions: React.FC<RolesActionsProps> = ({
+  role,
   onDelete,
   onView,
 }) => {
@@ -19,13 +20,13 @@ export const RolesActions: React.FC<EmployeesActionsProps> = ({
       <ButtonViewTable
         onClick={(event) => {
           event.stopPropagation();
-          onView?.(employee);
+          onView?.(role);
         }}
       />
 
       <ConfirmDeleteDialog
         onConfirm={() => {
-          onDelete?.(employee);
+          onDelete?.(role);
         }}
         trigger={
           <TableDeleteButton

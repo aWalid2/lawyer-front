@@ -10,22 +10,22 @@ import { CaseRoleDialog } from "./components/CaseRoleDialog";
 import { RolesActions } from "./components/RoleActions";
 import { HeaderRole } from "./components/HeaderRole";
 import { useRolesTable } from "./hooks/useRolesTable";
-import type { CaseEmployee } from "./types";
-import { getCaseEmployeeName } from "./types";
+import type { CaseRole } from "./types";
+import { getCaseRoleName, getCaseRoleEmployeeCount } from "./types";
 
 export const RoleTable: React.FC = () => {
   const {
     page,
     setPage,
-    selectedEmployee,
+    selectedRole,
     isFormOpen,
     isViewOpen,
     isPending,
     isError,
     error,
-    indexedEmployeesData,
+    indexedRolesData,
     totalPages,
-    employeeOptions,
+    roleOptions,
     handleSave,
     handleDelete,
     handleOpenView,
@@ -39,32 +39,28 @@ export const RoleTable: React.FC = () => {
 
   if (isPending) return <LoadingPage />;
   if (isError) {
-    return <Error message="حدث خطأ أثناء جلب موظفي القضية." error={error} />;
+    return <Error message="حدث خطأ أثناء جلب الأدوار." error={error} />;
   }
 
-  const columns: Column<CaseEmployee>[] = [
+  const columns: Column<CaseRole>[] = [
     {
       header: "#",
       accessor: (item) => item.rowNumber,
       headerClassName: "w-[60px]",
     },
     {
-      header: "اسم الموظف",
-      accessor: (item) => getCaseEmployeeName(item),
+      header: "اسم الدور",
+      accessor: (item) => getCaseRoleName(item),
     },
     {
-      header: "رقم الهاتف",
-      accessor: "phone",
-    },
-    {
-      header: "الوظيفة",
-      accessor: "job",
+      header: "عدد الموظفين داخل الدور",
+      accessor: (item) => getCaseRoleEmployeeCount(item),
     },
     {
       header: "إجراء",
       accessor: (item) => (
         <RolesActions
-          employee={item}
+          role={item}
           onView={() => handleOpenView(item.id)}
           onDelete={() => handleDelete(item.id)}
         />
@@ -77,19 +73,19 @@ export const RoleTable: React.FC = () => {
       <HeaderRole
         title="الدور"
         buttonText="تعيين دور"
-        employeeOptions={employeeOptions}
+        roleOptions={roleOptions}
         onSave={handleSave}
         isOptionsPending={isOptionsPending}
         isPending={isCreatePending}
       />
 
       <div className="overflow-hidden">
-        {indexedEmployeesData.length === 0 ? (
-          <EmptyTable message="لا يوجد أدور مرتبطين بهذه القضية" />
+        {indexedRolesData.length === 0 ? (
+          <EmptyTable message="لا يوجد أدوار مرتبطين بهذه القضية" />
         ) : (
           <>
             <DataTable
-              data={indexedEmployeesData}
+              data={indexedRolesData}
               columns={columns}
               rowIdField="id"
             />
@@ -108,19 +104,18 @@ export const RoleTable: React.FC = () => {
         <CaseRoleDialog
           open={isFormOpen}
           onOpenChange={handleFormOpenChange}
-          employee={selectedEmployee}
-          employeeOptions={employeeOptions}
+          roleOptions={roleOptions}
           isOptionsPending={isOptionsPending}
           onSave={handleSave}
           isPending={isSubmitting}
         />
       )}
 
-      {selectedEmployee && (
+      {selectedRole && (
         <CaseRoleDetailsDialog
           open={isViewOpen}
           onOpenChange={handleViewOpenChange}
-          employee={selectedEmployee}
+          role={selectedRole}
           onEdit={handleEditFromView}
         />
       )}

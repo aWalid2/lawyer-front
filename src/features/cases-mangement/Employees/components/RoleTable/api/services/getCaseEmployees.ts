@@ -1,10 +1,10 @@
 import api from "@/lib/api";
-import type { CaseEmployeeListResponse } from "../../types";
+
 import { normalizeCaseEmployee } from "./normalizeCaseEmployee";
 
 export const getCaseEmployees = async (
   caseId: string | number,
-): Promise<CaseEmployeeListResponse> => {
+): Promise<any> => {
   const response = await api.get(`/case-employee/${caseId}`);
 
   if (Array.isArray(response.data)) {

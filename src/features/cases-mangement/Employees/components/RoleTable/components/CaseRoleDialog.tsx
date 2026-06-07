@@ -5,16 +5,12 @@ import { SelectForm } from "@/shared/components/SelectForm";
 import { Form, Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
-import type { CaseEmployee, CaseEmployeeFormValues } from "../types";
-import {
-  EMPTY_CASE_EMPLOYEE_FORM_VALUES,
-  toCaseEmployeeFormValues,
-} from "../types";
+import type { CaseRoleFormValues } from "../types";
+import { EMPTY_CASE_ROLE_FORM_VALUES } from "../types";
 
-interface CaseEmployeeDialogProps {
-  onSave: (values: CaseEmployeeFormValues, id?: number) => Promise<void> | void;
-  employee?: CaseEmployee | null;
-  employeeOptions: Array<{ label: React.ReactNode; value: string | number }>;
+interface CaseRoleDialogProps {
+  onSave: (values: CaseRoleFormValues, id?: number) => Promise<void> | void;
+  roleOptions: Array<{ label: React.ReactNode; value: string | number }>;
   trigger?: React.ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -23,16 +19,15 @@ interface CaseEmployeeDialogProps {
 }
 
 const validationSchema = Yup.object({
-  Employee_id: Yup.number()
+  role_id: Yup.number()
     .typeError("اسم الدور مطلوب")
     .required("اسم الدور مطلوب"),
 });
 
-export const CaseRoleDialog: React.FC<CaseEmployeeDialogProps> = ({
+export const CaseRoleDialog: React.FC<CaseRoleDialogProps> = ({
   trigger,
   onSave,
-  employee,
-  employeeOptions,
+  roleOptions,
   open,
   onOpenChange,
   isPending = false,
@@ -49,38 +44,33 @@ export const CaseRoleDialog: React.FC<CaseEmployeeDialogProps> = ({
     onOpenChange?.(nextOpen);
   };
 
-  const defaultValues = employee
-    ? toCaseEmployeeFormValues(employee)
-    : EMPTY_CASE_EMPLOYEE_FORM_VALUES;
-  const isEditMode = !!employee?.id;
-
   return (
     <LayoutDialog
-      title={isEditMode ? "تعديل الدور" : "تعيين دور"}
+      title="تعيين دور"
       trigger={trigger}
       open={dialogOpen}
       onOpenChange={handleOpenChange}
       size="sm"
       padding="sm"
     >
-      {isOptionsPending && employeeOptions.length === 0 ? (
+      {isOptionsPending && roleOptions.length === 0 ? (
         <LoadingPage />
       ) : (
         <Formik
-          initialValues={defaultValues}
+          initialValues={EMPTY_CASE_ROLE_FORM_VALUES}
           validationSchema={validationSchema}
           enableReinitialize
           onSubmit={async (values) => {
-            await onSave(values, employee?.id);
+            await onSave(values);
             handleOpenChange(false);
           }}
         >
           {() => (
             <Form className="space-y-4">
               <SelectForm
-                name="Employee_id"
+                name="role_id"
                 label="اسم الدور"
-                options={employeeOptions}
+                options={roleOptions}
                 placeholder="اختر الدور"
                 showSearch
               />
@@ -90,11 +80,7 @@ export const CaseRoleDialog: React.FC<CaseEmployeeDialogProps> = ({
                 disabled={isPending}
                 className="bg-primary-gradient h-12.5 w-full rounded-[12px] text-base font-bold text-white hover:opacity-90"
               >
-                {isPending
-                  ? "جارٍ الحفظ..."
-                  : isEditMode
-                    ? "حفظ التغييرات"
-                    : "إضافة"}
+                {isPending ? "جارٍ الحفظ..." : "إضافة"}
               </Button>
             </Form>
           )}

@@ -1,112 +1,95 @@
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useIndexedApiPagination } from "@/shared/hooks/useIndexedApiPagination";
-import { useCreateCaseEmployee } from "../api/hooks/useCreateCaseEmployee";
-import { useDeleteCaseEmployee } from "../api/hooks/useDeleteCaseEmployee";
-import { useGetCaseEmployees } from "../api/hooks/useGetCaseEmployees";
-import { useUpdateCaseEmployee } from "../api/hooks/useUpdateCaseEmployee";
-import type { CaseEmployeeFormValues } from "../types";
-import { toCaseEmployeeRequest } from "../types";
-import { useGetAllUsers } from "@/features/settings/users/api/hooks/useGetAllUsers";
+import { useGetAllRoles } from "@/features/settings/permissions/api";
+import { MOCK_CASE_ROLES } from "../components/mockCaseRoles";
+import type { CaseRole, CaseRoleFormValues } from "../types";
+import { toast } from "sonner";
 
 const ITEMS_PER_PAGE = 15;
 
 export const useRolesTable = () => {
   const { id: caseId } = useParams<{ id: string }>();
   const [page, setPage] = useState(1);
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(
-    null,
-  );
+  const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isViewOpen, setIsViewOpen] = useState(false);
 
-  const {
-    data: caseEmployeesResponse,
-    isPending,
-    isError,
-    error,
-  } = useGetCaseEmployees(caseId);
+  // ── Fake data: replace with real API later ──
+  const [caseRoles, setCaseRoles] = useState<CaseRole[]>(MOCK_CASE_ROLES);
+  const isPending = false;
+  const isError = false;
+  const error = null;
 
+  // ── Roles from settings (real API) ──
+  const { data: rolesResponse, isLoading: isRolesLoading } = useGetAllRoles();
 
+  const roleOptions = useMemo(() => {
+    if (!Array.isArray(rolesResponse)) return [];
+    return rolesResponse.map((role) => ({
+      value: role.id,
+      label: role.role_name,
+    }));
+  }, [rolesResponse]);
 
-  const { data: employeesOptionsResponse, isPending: isEmployeesPending } =
-    useGetAllUsers();
-
-  const caseEmployees = useMemo(
-    () => caseEmployeesResponse?.data ?? [],
-    [caseEmployeesResponse?.data],
-  );
-
-  const { indexedData: indexedEmployeesData, totalPages } =
+  const { indexedData: indexedRolesData, totalPages } =
     useIndexedApiPagination({
-      data: caseEmployees,
+      data: caseRoles,
       page,
       itemsPerPage: ITEMS_PER_PAGE,
-      meta: caseEmployeesResponse?.meta,
     });
 
-  const employeeOptions = useMemo(() => {
-    if (!Array.isArray(employeesOptionsResponse)) return [];
-    return employeesOptionsResponse.map((user) => ({
-      value: user.id,
-      label: user.first_name || `#${user.id}`,
-    }));
-  }, [employeesOptionsResponse]);
-
-  const selectedEmployee = useMemo(
-    () =>
-      caseEmployees.find((employee) => employee.id === selectedEmployeeId) ??
-      null,
-    [caseEmployees, selectedEmployeeId],
+  const selectedRole = useMemo(
+    () => caseRoles.find((r) => r.id === selectedRoleId) ?? null,
+    [caseRoles, selectedRoleId],
   );
 
-  const createMutation = useCreateCaseEmployee(caseId!);
-  const updateMutation = useUpdateCaseEmployee(caseId!);
-  const deleteMutation = useDeleteCaseEmployee(caseId!);
+  // ── Fake mutations (replace with real API later) ──
+  const isSubmitting = false;
 
-  const handleSave = async (values: CaseEmployeeFormValues, id?: number) => {
-    const payload = toCaseEmployeeRequest(values);
+  const handleSave = async (values: CaseRoleFormValues, _id?: number) => {
+    const selectedOption = roleOptions.find(
+      (o) => o.value === Number(values.role_id),
+    );
+    if (!selectedOption) return;
 
-    if (id) {
-      await updateMutation.mutateAsync({ id, data: payload });
-      return;
-    }
+    const newRole: CaseRole = {
+      id: Date.now(),
+      case_id: Number(caseId),
+      role_id: Number(values.role_id),
+      role_name: String(selectedOption.label),
+      employee_count: 0,
+    };
 
-    await createMutation.mutateAsync({ caseId: caseId!, data: payload });
+    setCaseRoles((prev) => [...prev, newRole]);
+    toast.success("تم تعيين الدور بنجاح");
   };
 
   const handleDelete = async (id: number) => {
-    await deleteMutation.mutateAsync(id);
+    setCaseRoles((prev) => prev.filter((r) => r.id !== id));
 
-    if (selectedEmployeeId === id) {
-      setSelectedEmployeeId(null);
+    if (selectedRoleId === id) {
+      setSelectedRoleId(null);
       setIsViewOpen(false);
       setIsFormOpen(false);
     }
-  };
 
-  const handleOpenEdit = (id: number) => {
-    setSelectedEmployeeId(id);
-    setIsFormOpen(true);
+    toast.success("تم حذف الدور من القضية");
   };
 
   const handleOpenView = (id: number) => {
-    setSelectedEmployeeId(id);
+    setSelectedRoleId(id);
     setIsViewOpen(true);
   };
 
   const handleFormOpenChange = (open: boolean) => {
     setIsFormOpen(open);
-    if (!open) {
-      setSelectedEmployeeId(null);
-    }
+    if (!open) setSelectedRoleId(null);
   };
 
   const handleViewOpenChange = (open: boolean) => {
     setIsViewOpen(open);
-    if (!open) {
-      setSelectedEmployeeId(null);
-    }
+    if (!open) setSelectedRoleId(null);
   };
 
   const handleEditFromView = () => {
@@ -117,24 +100,23 @@ export const useRolesTable = () => {
   return {
     page,
     setPage,
-    selectedEmployee,
+    selectedRole,
     isFormOpen,
     isViewOpen,
     isPending,
     isError,
     error,
-    indexedEmployeesData,
+    indexedRolesData,
     totalPages,
-    employeeOptions,
+    roleOptions,
     handleSave,
     handleDelete,
-    handleOpenEdit,
     handleOpenView,
     handleFormOpenChange,
     handleViewOpenChange,
     handleEditFromView,
-    isOptionsPending: isEmployeesPending,
-    isCreatePending: createMutation.isPending,
-    isSubmitting: createMutation.isPending || updateMutation.isPending,
+    isOptionsPending: isRolesLoading,
+    isCreatePending: false,
+    isSubmitting,
   };
 };

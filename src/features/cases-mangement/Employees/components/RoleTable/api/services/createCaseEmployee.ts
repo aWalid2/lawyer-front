@@ -1,9 +1,9 @@
 import api from "@/lib/api";
-import type { CaseEmployeeRequest } from "../../types";
+
 
 interface CreateCaseEmployeePayload {
   caseId: string | number;
-  data: CaseEmployeeRequest;
+  data: any;
 }
 
 export const createCaseEmployee = async ({
