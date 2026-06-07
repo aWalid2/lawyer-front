@@ -1,4 +1,4 @@
-import type { CaseEmployee } from "../../types";
+import type { CaseEmployee } from "../../components/EmployeeTable/types";
 
 export const normalizeCaseEmployee = (employee: any): CaseEmployee => ({
   id: Number(employee?.id ?? 0),

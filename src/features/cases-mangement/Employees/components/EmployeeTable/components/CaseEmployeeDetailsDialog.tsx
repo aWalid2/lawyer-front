@@ -6,9 +6,7 @@ import LoadingPage from "@/shared/components/LoadingPage";
 import React from "react";
 import { useGetEmployee } from "../api/hooks/useGetOneEmployee";
 import type { CaseEmployee } from "../types";
-import {
-  getCaseEmployeeName
-} from "../types";
+import { getCaseEmployeeName } from "../types";
 
 interface CaseEmployeeDetailsDialogProps {
   employee: CaseEmployee | null;
@@ -53,7 +51,9 @@ export const CaseEmployeeDetailsDialog: React.FC<
         <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
           <InputBox
             label="اسم الموظف"
-            text={apiEmployee?.user?.first_name || getCaseEmployeeName(employee)}
+            text={
+              apiEmployee?.user?.first_name || getCaseEmployeeName(employee)
+            }
           />
           <InputBox label="رقم الهاتف" text={employee.phone || "-"} />
           <InputBox label="الوظيفة" text={employee.job || "-"} />
@@ -61,12 +61,9 @@ export const CaseEmployeeDetailsDialog: React.FC<
           <InputBox
             label="البريد الإلكتروني"
             text={
-              apiEmployee?.user?.email ||
-              employee.Employee?.user?.email ||
-              "-"
+              apiEmployee?.user?.email || employee.Employee?.user?.email || "-"
             }
           />
-
         </div>
       )}
     </LayoutDialog>

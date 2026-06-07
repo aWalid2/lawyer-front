@@ -1,6 +1,5 @@
 import api from "@/lib/api";
 import type { CaseEmployeeRequest } from "../../types";
-
 interface UpdateCaseEmployeePayload {
   id: number;
   data: CaseEmployeeRequest;
