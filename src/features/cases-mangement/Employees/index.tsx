@@ -3,9 +3,9 @@ import { RoleTable } from "./components/RoleTable/indext";
 
 export const Employees: React.FC = () => {
   return (
-    <>
-      <EmployeesTable />;
-      <RoleTable />;
-    </>
+    <div className="space-y-6">
+      <EmployeesTable />
+      <RoleTable />
+    </div>
   );
 };
