@@ -10,7 +10,7 @@ import { useIndexedData } from "@/shared/utils/useIndexedData";
 
 import PageLayout from "@/shared/components/PageLayout";
 import { Pagination } from "@/shared/components/Pagination";
-import { formatDateToYYYYMMDD } from "@/shared/utils";
+import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils";
 import {
   CONSULTATION_STATUS_LABELS,
   CONSULTATION_STATUS_FALLBACK,
@@ -54,6 +54,21 @@ const ConsultationsFeature = () => {
       accessor: (item) => item.contact_method || "-",
     },
     {
+      header: "تاريخ الطلب",
+      accessor: (item) => formatDateToYYYYMMDD(item.request_date),
+    },
+    {
+      header: "تاريخ وموعد الاستشارة",
+      accessor: (item) => (
+        <div className="flex justify-center gap-2">
+          <span>{formatDateToYYYYMMDD(item.consultation_date)}</span>
+          <span className="text-sm text-gray-500">
+            {formatDateToTime(item.consultation_date)}
+          </span>
+        </div>
+      ),
+    },
+    {
       header: "الحالة",
       accessor: (item) => (
         <button
@@ -76,10 +91,6 @@ const ConsultationsFeature = () => {
           </span>
         </button>
       ),
-    },
-    {
-      header: "تاريخ الطلب",
-      accessor: (item) => formatDateToYYYYMMDD(item.request_date),
     },
     {
       header: "الإجراءات",

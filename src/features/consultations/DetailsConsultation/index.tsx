@@ -13,7 +13,8 @@ const DetailsConsultation = () => {
   const { data, isLoading, isError, error } = useGetOneConsultation(id || "");
 
   if (isLoading) return <LoadingPage />;
-  if (isError) return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
+  if (isError)
+    return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
   if (!data) return null;
 
   const consultation = data;
@@ -23,7 +24,9 @@ const DetailsConsultation = () => {
       <div className="space-y-6">
         <HeaderTitle title="تفاصيل الاستشارة" />
         <ConsultationHeaderCard consultation={consultation} />
-        <ConsultationDescriptionCard description={consultation.consultation_details} />
+        <ConsultationDescriptionCard
+          description={consultation.consultation_details}
+        />
         <ClientDetailsCard consultation={consultation} />
       </div>
     </PageLayout>

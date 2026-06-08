@@ -7,16 +7,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
-import { useFetchClients } from "@/shared/api/hooks/useGetClients";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useDebounce } from "@/shared/hooks/useDebounce";
+import { usePaginatedOptions } from "@/shared/hooks/usePaginatedOptions";
+import { fetchClients } from "@/shared/api/services/getClients";
 import { Form, Formik } from "formik";
 import { User, UserRound, XIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useAddConsultation } from "../../api/hooks/useAddConsultations";
 import { useUpdateConsultation } from "../../api/hooks/useUpdateConsultations";
 import type { Consultation } from "../types";
@@ -36,13 +37,17 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
   initialValues,
   isEdit = false,
 }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isClient, setIsClient] = useState(
     isEdit
       ? Boolean(initialValues?.client_id && initialValues?.client_id > 0)
       : true,
   );
   const [showDate, setShowDate] = useState(
-    isEdit ? Boolean(initialValues?.consultation_date) : false,
+    isEdit
+      ? initialValues?.consultation_date != null &&
+          initialValues.consultation_date !== ""
+      : false,
   );
 
   const defaultValues: Consultation & { non_client: string } = {
@@ -54,7 +59,11 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
     consultation_type: initialValues?.consultation_type || "",
     contact_method: initialValues?.contact_method || "",
     consultation_details: initialValues?.consultation_details || "",
-    consultation_date: initialValues?.consultation_date || "",
+    consultation_date: initialValues?.consultation_date
+      ? initialValues.consultation_date.slice(0, 16)
+      : new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
+          .toISOString()
+          .slice(0, 16),
     request_date:
       initialValues?.request_date || new Date().toISOString().split("T")[0],
   };
@@ -64,12 +73,30 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
 
   const [clientSearch, setClientSearch] = useState("");
   const debouncedClientSearch = useDebounce(clientSearch, 500);
-  const { data: clients } = useFetchClients(
-    undefined,
-    undefined,
+  const { data: lawyers } = useFetchLawyers(isDialogOpen);
+
+  const fetchClientPage = useCallback(async (page: number, search?: string) => {
+    const response = await fetchClients(page, 15, search);
+    return {
+      items: (response.data ?? []).map((client: any) => ({
+        label: client.name,
+        value: String(client.user_id),
+      })),
+      totalPages: response.meta?.total_pages ?? 1,
+    };
+  }, []);
+
+  const {
+    options: clientOptions,
+    hasMoreOptions: clientHasMoreOptions,
+    isFetchingMore: clientIsFetchingMore,
+    loadNextPage: loadMoreClients,
+  } = usePaginatedOptions(
+    fetchClientPage,
     debouncedClientSearch,
+    1,
+    isDialogOpen,
   );
-  const { data: lawyers } = useFetchLawyers();
 
   const handleSubmit = async (values: Consultation) => {
     try {
@@ -81,6 +108,7 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
           },
           {
             onSuccess: () => {
+              setIsDialogOpen(false);
               if (onUpdate) {
                 onUpdate(values);
               }
@@ -90,6 +118,7 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
       } else {
         addConsultation(values, {
           onSuccess: () => {
+            setIsDialogOpen(false);
             if (onSave) {
               onSave(values);
             }
@@ -101,12 +130,6 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
     }
   };
 
-  const options =
-    clients?.data?.map((client: any) => ({
-      label: client.name,
-      value: String(client.user_id),
-    })) || [];
-
   const lawyerOptions =
     lawyers?.map((lawyer: any) => ({
       label: lawyer.user?.first_name || `محامي ${lawyer.user_id}`,
@@ -114,7 +137,7 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
     })) || [];
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
         className="rounded-main flex max-h-[90vh] flex-col overflow-hidden border-none px-6 py-6 sm:max-w-[772px] sm:rounded-[24px] sm:px-20 sm:py-10"
@@ -201,10 +224,13 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
                   <SelectForm
                     label="اسم الموكل"
                     name="client_id"
-                    options={options}
+                    options={clientOptions}
                     placeholder="اختر الموكل"
                     showSearch={true}
                     onSearchChange={setClientSearch}
+                    hasMoreOptions={clientHasMoreOptions}
+                    isFetchingMore={clientIsFetchingMore}
+                    onReachEnd={loadMoreClients}
                   />
                 ) : (
                   <InputForm
@@ -289,19 +315,17 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
                 />
               </div>
 
-              <DialogClose asChild>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-primary-gradient rounded-main font-cairo mt-4 h-12.5 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {isSubmitting
-                    ? "جاري الحفظ..."
-                    : isEdit
-                      ? "حفظ التغييرات"
-                      : "إضافة استشارة"}
-                </button>
-              </DialogClose>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-primary-gradient rounded-main font-cairo mt-4 h-12.5 w-full px-8 py-2.5 font-bold text-white shadow-lg transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isSubmitting
+                  ? "جاري الحفظ..."
+                  : isEdit
+                    ? "حفظ التغييرات"
+                    : "إضافة استشارة"}
+              </button>
             </Form>
           )}
         </Formik>

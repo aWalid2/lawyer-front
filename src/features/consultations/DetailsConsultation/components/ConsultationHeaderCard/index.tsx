@@ -4,15 +4,21 @@ import { StatusInfo } from "./components/StatusInfo";
 import { PersonalDetails } from "./components/PersonalDetails";
 
 interface ConsultationHeaderCardProps {
-  consultation: any; // Use the API response type
+  consultation: any;
 }
 
-export const ConsultationHeaderCard: React.FC<ConsultationHeaderCardProps> = ({ consultation }) => {
+export const ConsultationHeaderCard: React.FC<ConsultationHeaderCardProps> = ({
+  consultation,
+}) => {
   return (
     <CardLayout>
-      <div className="flex flex-col md:flex-row items-center gap-6">
-        <img src="/images/consultaions.png" className="w-40 h-40 object-contain" alt="consultation" />
-        <div className="flex flex-1 justify-between items-center sm:flex-row flex-col gap-6">
+      <div className="flex flex-col items-center gap-6 md:flex-row">
+        <img
+          src="/images/consultaions.png"
+          className="h-40 w-40 object-contain"
+          alt="consultation"
+        />
+        <div className="flex flex-1 flex-col items-center justify-between gap-6 sm:flex-row">
           <PersonalDetails consultation={consultation} />
           <StatusInfo consultation={consultation} />
         </div>

@@ -59,12 +59,13 @@ export const AddProcedureDialogForm: React.FC<AddProcedureDialogFormProps> = ({
       {() => (
         <Form className="custom-scrollbar min-h-0 flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
           <div className="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2">
-            <InputForm name="actionType" label="نوع الإجراء" type="text" />
+            <InputForm name="actionType" label="نوع الإجراء" type="string" />
             <InputForm name="referral_date" label="تاريخ الإحالة" type="date" />
             <InputForm
               name="admin_authority"
               label="الجهة الإدارية"
               type="text"
+              placeholder="اكتب نوع الاجراء"
             />
             <InputForm
               name="session_date"

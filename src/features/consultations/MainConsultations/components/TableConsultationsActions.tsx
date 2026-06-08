@@ -14,13 +14,10 @@ interface TableConsultationsActionsProps {
   onDelete?: (consultation: Consultation) => void;
 }
 
-export const TableConsultationsActions: React.FC<TableConsultationsActionsProps> = ({
-  consultation,
-  onEdit,
-  onDelete,
-}) => {
-
-  const {mutate }= useDeleteConsultation() 
+export const TableConsultationsActions: React.FC<
+  TableConsultationsActionsProps
+> = ({ consultation, onEdit, onDelete }) => {
+  const { mutate } = useDeleteConsultation();
 
   const handleDelete = () => {
     mutate(consultation.id, {
@@ -38,7 +35,7 @@ export const TableConsultationsActions: React.FC<TableConsultationsActionsProps>
         to={`/dashboard/consultations/${consultation?.id}`}
         onClick={(e) => e.stopPropagation()}
         title="عرض التفاصيل"
-        className="h-9 w-9 flex items-center justify-center rounded-lg bg-[#F0F6FF]"
+        className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F0F6FF]"
       >
         <ViewIcon className="size-[16px] text-[#63A4F9]" />
       </Link>
@@ -50,7 +47,7 @@ export const TableConsultationsActions: React.FC<TableConsultationsActionsProps>
         trigger={
           <button
             title="تعديل"
-            className="h-9 w-9 flex items-center justify-center rounded-main bg-[#F1F1F3] hover:bg-gray-200 transition-colors outline-none"
+            className="rounded-main flex h-9 w-9 items-center justify-center bg-[#F1F1F3] transition-colors outline-none hover:bg-gray-200"
           >
             <EditIcon className="size-[14px] text-[#3D3C48]" />
           </button>
@@ -64,7 +61,7 @@ export const TableConsultationsActions: React.FC<TableConsultationsActionsProps>
         trigger={
           <button
             title="حذف"
-            className="h-9 w-9 flex items-center justify-center rounded-main bg-[#C60000]/8 hover:bg-red-100 transition-colors outline-none"
+            className="rounded-main flex h-9 w-9 items-center justify-center bg-[#C60000]/8 transition-colors outline-none hover:bg-red-100"
           >
             <TrashIcon className="size-[16px] text-[#C60000]" />
           </button>
