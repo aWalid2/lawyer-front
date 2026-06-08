@@ -50,11 +50,11 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
       : false,
   );
 
-  const defaultValues: Consultation & { non_client: string } = {
+  const defaultValues: Consultation & { consultation_request_name: string } = {
     id: initialValues?.id || "",
     consultation_title: initialValues?.consultation_title || "",
     client_id: initialValues?.client_id || 0,
-    non_client: initialValues?.non_client || "",
+    consultation_request_name: initialValues?.consultation_request_name || "",
     lawyer_id: initialValues?.lawyer_id || 0,
     consultation_type: initialValues?.consultation_type || "",
     contact_method: initialValues?.contact_method || "",
@@ -100,11 +100,17 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
 
   const handleSubmit = async (values: Consultation) => {
     try {
+      const payload = {
+        ...values,
+        client_id: values.consultation_request_name?.trim()
+          ? undefined
+          : Number(values.client_id),
+      };
       if (isEdit && initialValues?.id) {
         updateConsultation(
           {
             id: values.id,
-            data: values,
+            data: payload,
           },
           {
             onSuccess: () => {
@@ -116,7 +122,7 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
           },
         );
       } else {
-        addConsultation(values, {
+        addConsultation(payload, {
           onSuccess: () => {
             setIsDialogOpen(false);
             if (onSave) {
@@ -166,8 +172,9 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
                 errors.client_id = "يجب اختيار موكل";
               }
             } else {
-              if (!values.non_client?.trim()) {
-                errors.non_client = "يجب إدخال اسم طالب الاستشارة";
+              if (!values.consultation_request_name?.trim()) {
+                errors.consultation_request_name =
+                  "يجب إدخال اسم طالب الاستشارة";
               }
             }
             return errors;
@@ -204,7 +211,7 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
                         if (checked) {
                           setFieldValue("client_id", 0);
                         } else {
-                          setFieldValue("non_client", "");
+                          setFieldValue("consultation_request_name", "");
                         }
                       }}
                     />
@@ -235,7 +242,7 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
                 ) : (
                   <InputForm
                     label="اسم طالب الاستشارة"
-                    name="non_client"
+                    name="consultation_request_name"
                     type="string"
                     placeholder="ادخل اسم طالب الاستشارة"
                   />

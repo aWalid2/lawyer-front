@@ -33,7 +33,7 @@ const ConsultationsFeature = () => {
   } = useFetchConsultations(page, limit, statusFilter, searchTerm);
 
   const consultations = consultationsData?.data ?? [];
-  const totalPages = consultationsData?.meta?.total_pages ?? 1;
+  const totalPages = consultationsData?.meta?.lastPage ?? 1;
   const indexedData = useIndexedData(consultations, page, limit);
   const columns: Column<Consultation>[] = [
     {
