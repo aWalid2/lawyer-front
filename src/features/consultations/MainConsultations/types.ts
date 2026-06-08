@@ -4,6 +4,7 @@ export interface Consultation {
   rowNumber?: number; 
   consultation_title: string;
   client_id: number;
+  non_client?: string;
   lawyer_id: number;
   consultation_type: string;
   contact_method: string;

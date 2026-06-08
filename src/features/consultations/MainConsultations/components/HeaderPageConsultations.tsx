@@ -37,6 +37,7 @@ export const HeaderPageConsultations: React.FC<
           options={[
             { value: "all", label: "جميع الحالات" },
             { value: "pending", label: "قيد الانتظار" },
+            { value: "dated", label: "تم تحديد موعد" },
             { value: "completed", label: "مكتملة" },
           ]}
           className="md:w-[150px]"

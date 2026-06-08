@@ -15,11 +15,14 @@ import {
   CONSULTATION_STATUS_LABELS,
   CONSULTATION_STATUS_FALLBACK,
 } from "@/shared/constants/consultationStatus";
+import UpdateStatusConsultationModal from "./components/UpdateStatusConsultationModal";
 
 const ConsultationsFeature = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
+  const [selectedConsultation, setSelectedConsultation] =
+    useState<Consultation | null>(null);
   const limit = 15;
 
   const {
@@ -53,16 +56,25 @@ const ConsultationsFeature = () => {
     {
       header: "الحالة",
       accessor: (item) => (
-        <span
-          className={`rounded-full px-3 py-1 text-xs font-medium ${(CONSULTATION_STATUS_LABELS[item.status ?? ""] ?? CONSULTATION_STATUS_FALLBACK).className}`}
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            setSelectedConsultation(item);
+          }}
+          className="text-primary underline-offset-4 hover:underline"
         >
-          {
-            (
-              CONSULTATION_STATUS_LABELS[item.status ?? ""] ??
-              CONSULTATION_STATUS_FALLBACK
-            ).text
-          }
-        </span>
+          <span
+            className={`rounded-full px-3 py-1 text-xs font-medium ${(CONSULTATION_STATUS_LABELS[item.status ?? ""] ?? CONSULTATION_STATUS_FALLBACK).className}`}
+          >
+            {
+              (
+                CONSULTATION_STATUS_LABELS[item.status ?? ""] ??
+                CONSULTATION_STATUS_FALLBACK
+              ).text
+            }
+          </span>
+        </button>
       ),
     },
     {
@@ -104,6 +116,13 @@ const ConsultationsFeature = () => {
           currentPage={page}
           totalPages={totalPages}
           onPageChange={setPage}
+        />
+      )}
+
+      {selectedConsultation && (
+        <UpdateStatusConsultationModal
+          consultation={selectedConsultation}
+          onClose={() => setSelectedConsultation(null)}
         />
       )}
     </PageLayout>

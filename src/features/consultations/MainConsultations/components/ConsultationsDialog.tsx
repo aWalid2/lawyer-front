@@ -11,9 +11,11 @@ import { useFetchClients } from "@/shared/api/hooks/useGetClients";
 import { InputForm } from "@/shared/components/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { Form, Formik } from "formik";
-import { XIcon } from "lucide-react";
+import { User, UserRound, XIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useAddConsultation } from "../../api/hooks/useAddConsultations";
 import { useUpdateConsultation } from "../../api/hooks/useUpdateConsultations";
@@ -34,10 +36,20 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
   initialValues,
   isEdit = false,
 }) => {
-  const defaultValues: Consultation = {
+  const [isClient, setIsClient] = useState(
+    isEdit
+      ? Boolean(initialValues?.client_id && initialValues?.client_id > 0)
+      : true,
+  );
+  const [showDate, setShowDate] = useState(
+    isEdit ? Boolean(initialValues?.consultation_date) : false,
+  );
+
+  const defaultValues: Consultation & { non_client: string } = {
     id: initialValues?.id || "",
     consultation_title: initialValues?.consultation_title || "",
     client_id: initialValues?.client_id || 0,
+    non_client: initialValues?.non_client || "",
     lawyer_id: initialValues?.lawyer_id || 0,
     consultation_type: initialValues?.consultation_type || "",
     contact_method: initialValues?.contact_method || "",
@@ -124,8 +136,21 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
           initialValues={defaultValues}
           onSubmit={handleSubmit}
           enableReinitialize={true}
+          validate={(values) => {
+            const errors: Record<string, string> = {};
+            if (isClient) {
+              if (!values.client_id || Number(values.client_id) <= 0) {
+                errors.client_id = "يجب اختيار موكل";
+              }
+            } else {
+              if (!values.non_client?.trim()) {
+                errors.non_client = "يجب إدخال اسم طالب الاستشارة";
+              }
+            }
+            return errors;
+          }}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, setFieldValue }) => (
             <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
               <div className="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2">
                 <div className="md:col-span-2">
@@ -137,14 +162,58 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
                   />
                 </div>
 
-                <SelectForm
-                  label="اسم الموكل"
-                  name="client_id"
-                  options={options}
-                  placeholder="اختر الموكل"
-                  showSearch={true}
-                  onSearchChange={setClientSearch}
-                />
+                <div className="md:col-span-2">
+                  <div className="flex items-center justify-center gap-4 rounded-xl bg-gray-50 p-3 dark:bg-white/5">
+                    <Label
+                      htmlFor="client-toggle"
+                      className={`flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors ${
+                        isClient ? "text-[#153A4D]" : "text-gray-400"
+                      }`}
+                    >
+                      <UserRound size={18} />
+                      موكل
+                    </Label>
+                    <Switch
+                      id="client-toggle"
+                      checked={!isClient}
+                      onCheckedChange={(checked) => {
+                        setIsClient(!checked);
+                        if (checked) {
+                          setFieldValue("client_id", 0);
+                        } else {
+                          setFieldValue("non_client", "");
+                        }
+                      }}
+                    />
+                    <Label
+                      htmlFor="client-toggle"
+                      className={`flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors ${
+                        !isClient ? "text-[#153A4D]" : "text-gray-400"
+                      }`}
+                    >
+                      <User size={18} />
+                      غير موكل
+                    </Label>
+                  </div>
+                </div>
+
+                {isClient ? (
+                  <SelectForm
+                    label="اسم الموكل"
+                    name="client_id"
+                    options={options}
+                    placeholder="اختر الموكل"
+                    showSearch={true}
+                    onSearchChange={setClientSearch}
+                  />
+                ) : (
+                  <InputForm
+                    label="اسم طالب الاستشارة"
+                    name="non_client"
+                    type="string"
+                    placeholder="ادخل اسم طالب الاستشارة"
+                  />
+                )}
 
                 <SelectForm
                   label="اسم المحامي"
@@ -180,19 +249,44 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
                 </div>
 
                 <div className="md:col-span-2">
+                  <div className="flex items-center justify-center gap-4 rounded-xl bg-gray-50 p-3 dark:bg-white/5">
+                    <Label
+                      htmlFor="date-toggle"
+                      className={`flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors ${
+                        showDate ? "text-[#153A4D]" : "text-gray-400"
+                      }`}
+                    >
+                      تحديد موعد الاستشارة
+                    </Label>
+                    <Switch
+                      id="date-toggle"
+                      checked={showDate}
+                      onCheckedChange={setShowDate}
+                    />
+                    <Label
+                      htmlFor="date-toggle"
+                      className={`flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors ${
+                        !showDate ? "text-[#153A4D]" : "text-gray-400"
+                      }`}
+                    >
+                      بدون تحديد موعد الاستشارة
+                    </Label>
+                  </div>
+                </div>
+
+                {showDate && (
                   <InputForm
                     name="consultation_date"
                     label="تاريخ وموعد الاستشارة"
                     type="datetime-local"
                   />
-                </div>
-                <div className="md:col-span-2">
-                  <InputForm
-                    type="date"
-                    name="request_date"
-                    label="تاريخ طلب الاستشارة"
-                  />
-                </div>
+                )}
+
+                <InputForm
+                  type="date"
+                  name="request_date"
+                  label="تاريخ طلب الاستشارة"
+                />
               </div>
 
               <DialogClose asChild>
