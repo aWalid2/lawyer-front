@@ -60,7 +60,7 @@ export const UsersTask: React.FC = () => {
     }
   };
   const totalPages = tasksResponse?.meta?.total_pages ?? 1;
-  const indexedData = useIndexedData(tasks || []);
+  const indexedData = useIndexedData(tasks || [], page, limit);
 
   const getTaskTypeDisplay = (taskType: string): string => {
     if (!taskType) return "-";

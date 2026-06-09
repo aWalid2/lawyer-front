@@ -38,7 +38,7 @@ const ConsultationsFeature = () => {
   const columns: Column<Consultation>[] = [
     {
       header: "#",
-      accessor: (_item: Consultation, index: number) => index + 1,
+      accessor: (item) => item.rowNumber,
       headerClassName: "w-16",
     },
     {

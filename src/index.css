@@ -38,10 +38,10 @@ body {
     width: 100% !important;
     max-width: 1480px !important;
     margin: 0 auto;
-    /* min-width: 100%; */
-    /* padding-inline: 15px !important; */
+    min-width: 100%;
+    padding-inline: 15px !important;
   }
-  /* 
+
   @media (min-width: 640px) {
     .container {
       padding: 0 2rem;
@@ -52,7 +52,7 @@ body {
     .container {
       padding: 0 3rem;
     }
-  } */
+  }
 
   /* Spinner */
 
