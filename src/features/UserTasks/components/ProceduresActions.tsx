@@ -12,12 +12,9 @@ export const ProceduresActions: React.FC<ProceduresActionsProps> = ({
 }) => {
   return (
     <div className="flex items-center justify-center gap-2">
-      <ViewLinkTablePageDetails
-        to={`/procedures/${procedure.id}`}
-        tooltip="عرض"
-      />
-      <ButtonUpdateTable onClick={() => {}} tooltip="تعديل" />
-      <ButtonDeleteTable onClick={() => {}} tooltip="حذف" />
+      <ViewLinkTablePageDetails to={`/procedures/${procedure.id}`} />
+      <ButtonUpdateTable onClick={() => {}} />
+      <ButtonDeleteTable onClick={() => {}} />
     </div>
   );
 };

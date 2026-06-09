@@ -26,6 +26,7 @@ interface AddTaskModalProps {
   onSave?: (values: TaskFormValues) => void;
   initialValues?: TaskFormValues;
   taskId?: string;
+  context?: "tasks" | "procedures";
 }
 
 interface TaskFormValues {
@@ -38,7 +39,6 @@ interface TaskFormValues {
   details: string;
   start_date?: string;
   end_date?: string;
-  task_relation?: string;
 }
 
 const validationSchema = Yup.object({
@@ -46,16 +46,11 @@ const validationSchema = Yup.object({
   assigned_to: Yup.number()
     .required("المكلف مطلوب")
     .min(1, "يرجى اختيار المكلف"),
-  task_type: Yup.string().when("task_relation", {
-    is: "case",
-    then: (schema) => schema.required("نوع المهمة مطلوب"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
+  task_type: Yup.string(),
   delivery_date: Yup.string().required("تاريخ التسليم مطلوب"),
   notes: Yup.string(),
   details: Yup.string().required("تفاصيل المهمة مطلوبة"),
   status: Yup.string().required("حالة المهمة مطلوبة"),
-  task_relation: Yup.string().required("يرجى اختيار نوع المهمة"),
 });
 
 const defaultValues: TaskFormValues = {
@@ -66,7 +61,6 @@ const defaultValues: TaskFormValues = {
   notes: "",
   status: "",
   details: "",
-  task_relation: "case",
 };
 
 function AddTaskModal({
@@ -74,6 +68,7 @@ function AddTaskModal({
   onSave,
   initialValues = defaultValues,
   taskId,
+  context = "tasks",
 }: AddTaskModalProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const isEditMode = !!taskId;
@@ -147,9 +142,7 @@ function AddTaskModal({
       details: submitValues.details,
     };
 
-    if (values.task_relation === "case") {
-      apiValues.task_type = submitValues.task_type;
-    } else {
+    if (context === "procedures") {
       apiValues.task_type = submitValues.task_type;
     }
 
@@ -204,20 +197,8 @@ function AddTaskModal({
           onSubmit={handleSubmit}
           enableReinitialize
         >
-          {({ values }) => (
+          {() => (
             <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
-              <div className="grid grid-cols-1 gap-4">
-                <SelectForm
-                  name="task_relation"
-                  label="نوع المهمة"
-                  options={[
-                    { value: "case", label: "المهمة تابعة للقضايا" },
-                    { value: "non_case", label: "المهمة غير تابعة للقضايا" },
-                  ]}
-                  placeholder="اختر نوع المهمة"
-                />
-              </div>
-
               <div className="grid grid-cols-1 gap-4">
                 <InputForm
                   name="task_title"
@@ -236,7 +217,7 @@ function AddTaskModal({
               </div>
 
               <div className="grid grid-cols-1 gap-4">
-                {values.task_relation === "case" ? (
+                {context === "procedures" && (
                   <SelectForm
                     name="task_type"
                     label="القضية"
@@ -247,13 +228,6 @@ function AddTaskModal({
                     hasMoreOptions={caseHasMoreOptions}
                     isFetchingMore={caseIsFetchingMore}
                     onReachEnd={loadMoreCases}
-                  />
-                ) : (
-                  <InputForm
-                    name="task_type"
-                    label="نوع المهمة"
-                    type="text"
-                    placeholder="أدخل نوع المهمة"
                   />
                 )}
 

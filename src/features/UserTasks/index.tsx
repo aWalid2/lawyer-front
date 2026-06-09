@@ -11,6 +11,7 @@ import { TasksTable } from "./components/TasksTable";
 import { ProceduresTable } from "./components/ProceduresTable";
 
 export const UsersTask: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("tasks");
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [deliverDateFrom, setDeliverDateFrom] = useState<Date | undefined>(
@@ -69,9 +70,15 @@ export const UsersTask: React.FC = () => {
         deliverDateFrom={deliverDateFrom}
         deliverDateTo={deliverDateTo}
         onDateFilterChange={handleDateFilterChange}
+        context={activeTab as "tasks" | "procedures"}
       />
 
-      <Tabs defaultValue="tasks" className="w-full" dir="rtl">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="w-full"
+        dir="rtl"
+      >
         <div className="mb-6 flex flex-wrap items-center justify-between gap-x-2 gap-y-3">
           <TabsList className="border-primary/50 flex h-13! w-full items-center overflow-hidden rounded-full border bg-white p-0 max-[786px]:h-auto! max-[786px]:w-full! max-[786px]:flex-col! max-[786px]:rounded-2xl! sm:w-fit">
             <TabsTrigger

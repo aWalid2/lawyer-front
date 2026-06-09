@@ -18,6 +18,7 @@ interface HeaderTasksUserProps {
   deliverDateFrom?: Date;
   deliverDateTo?: Date;
   filterOptions?: SelectOption[];
+  context?: "tasks" | "procedures";
 }
 
 export const HeaderTasksUser: React.FC<HeaderTasksUserProps> = ({
@@ -29,6 +30,7 @@ export const HeaderTasksUser: React.FC<HeaderTasksUserProps> = ({
   deliverDateFrom,
   deliverDateTo,
   filterOptions,
+  context = "tasks",
 }) => {
   return (
     <HeaderPageLayout>
@@ -52,7 +54,7 @@ export const HeaderTasksUser: React.FC<HeaderTasksUserProps> = ({
           currentFilter={statusFilter}
           filterOptions={filterOptions}
         />
-        <AddTask />
+        <AddTask context={context} />
       </div>
     </HeaderPageLayout>
   );
