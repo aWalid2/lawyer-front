@@ -15,6 +15,9 @@ export interface ProcedureLawyer {
 
 export interface Procedure {
   id: number;
+  sequence_number?: string;
+    reference_number?:number;
+case_title?:string;
   rowNumber?: number;
   case_id?: number;
   actionType: string;

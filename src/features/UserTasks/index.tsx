@@ -1,4 +1,3 @@
-import { DataTable, type Column } from "@/shared/components/DataTable";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
 
@@ -6,25 +5,10 @@ import { useIndexedData } from "@/shared/utils/useIndexedData";
 import React, { useMemo, useState } from "react";
 import { useFetchTasks } from "./api/hooks/useGetTasks";
 import { HeaderTasksUser } from "./components/HeaderTasksUser";
-import { UsersTaskActions } from "./components/UsersTaskActions";
-import type { TaskRelatedT } from "./types/types";
-import { getStatusStyle, statusMapping } from "./types/types";
-import UpdateStatusTaskModal from "./components/UpdateStatusTaskModal";
-import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
-import { Pagination } from "@/shared/components/Pagination";
 import { decisionOptions } from "@/shared/constants/procedursOptions";
-
-const StatusCell: React.FC<{ status: string }> = ({ status }) => {
-  const cleanStatus = status?.trim() || "";
-  const arabicStatus = statusMapping[cleanStatus] || cleanStatus;
-  return (
-    <span
-      className={`inline-block rounded-full px-3 py-1.5 text-sm font-medium underline-offset-4 hover:underline ${getStatusStyle(cleanStatus)}`}
-    >
-      {arabicStatus}
-    </span>
-  );
-};
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TasksTable } from "./components/TasksTable";
+import { ProceduresTable } from "./components/ProceduresTable";
 
 export const UsersTask: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,8 +19,6 @@ export const UsersTask: React.FC = () => {
   const [deliverDateTo, setDeliverDateTo] = useState<Date | undefined>(
     undefined,
   );
-  const [selectedTaskForStatusUpdate, setSelectedTaskForStatusUpdate] =
-    useState<TaskRelatedT | null>(null);
   const [page, setPage] = useState(1);
   const limit = 15;
   const {
@@ -61,76 +43,6 @@ export const UsersTask: React.FC = () => {
   };
   const totalPages = tasksResponse?.meta?.total_pages ?? 1;
   const indexedData = useIndexedData(tasks || [], page, limit);
-
-  const getTaskTypeDisplay = (taskType: string): string => {
-    if (!taskType) return "-";
-    return taskType;
-  };
-
-  const columns: Column<TaskRelatedT>[] = [
-    {
-      header: "#",
-      accessor: (item: TaskRelatedT) => item.rowNumber,
-      headerClassName: "w-13",
-      className: "w-13 text-center",
-    },
-    {
-      header: "عنوان المهمة",
-      accessor: "task_title",
-      headerClassName: "w-35",
-      className: "w-35",
-    },
-    {
-      header: "نوع المهمة",
-      accessor: (item: TaskRelatedT) => getTaskTypeDisplay(item.task_type),
-      headerClassName: "w-35",
-      className: "w-35",
-    },
-    {
-      header: "مُسند المهمة",
-      accessor: (item: TaskRelatedT) =>
-        item.assigner?.first_name || item.assigner?.name || "-",
-      headerClassName: "w-35",
-      className: "w-35",
-    },
-    {
-      header: "المكلف بالمهمة",
-      accessor: (item: TaskRelatedT) =>
-        item.assignee?.first_name || String(item.assigned_to || "-"),
-      headerClassName: "w-35",
-      className: "w-35",
-    },
-    {
-      header: "الحالة",
-      accessor: (item: TaskRelatedT) => (
-        <button
-          type="button"
-          className="text-primary underline-offset-4 hover:underline"
-          onClick={(event) => {
-            event.stopPropagation();
-            setSelectedTaskForStatusUpdate(item);
-          }}
-        >
-          <StatusCell status={item.status} />
-        </button>
-      ),
-      headerClassName: "w-35",
-      className: "w-35",
-    },
-    {
-      header: "تاريخ التسليم",
-      accessor: (item: TaskRelatedT) =>
-        formatDateToYYYYMMDD(item.delivery_date) || "-",
-      headerClassName: "w-35 text-center",
-      className: "w-35 text-center font-medium",
-    },
-    {
-      header: "إجراء",
-      accessor: (item: TaskRelatedT) => <UsersTaskActions caseItem={item} />,
-      headerClassName: "w-35",
-      className: "w-35",
-    },
-  ];
 
   const filterOptions = useMemo(() => {
     return [{ value: "all", label: "الكل" }, ...decisionOptions];
@@ -159,38 +71,38 @@ export const UsersTask: React.FC = () => {
         onDateFilterChange={handleDateFilterChange}
       />
 
-      <div className="relative">
-        {isFetching ? (
-          <div className="dark:bg-backgroundDark/70 absolute inset-0 z-10 flex items-center justify-center bg-white/70">
-            <LoadingPage fullScreen={false} />
-          </div>
-        ) : null}
-
-        <DataTable data={indexedData} columns={columns} rowIdField="id" />
-      </div>
-
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-        />
-      )}
-
-      {indexedData.length === 0 && (
-        <div className="py-8 text-center text-gray-500">
-          لا توجد مهام تطابق معايير البحث
+      <Tabs defaultValue="tasks" className="w-full" dir="rtl">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-x-2 gap-y-3">
+          <TabsList className="border-primary/50 flex h-13! w-full items-center overflow-hidden rounded-full border bg-white p-0 max-[786px]:h-auto! max-[786px]:w-full! max-[786px]:flex-col! max-[786px]:rounded-2xl! sm:w-fit">
+            <TabsTrigger
+              value="tasks"
+              className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white max-[786px]:h-auto! max-[786px]:w-full! max-[786px]:flex-none! max-[786px]:rounded-2xl! max-[786px]:py-3 sm:px-12 sm:text-base"
+            >
+              المهام
+            </TabsTrigger>
+            <TabsTrigger
+              value="procedures"
+              className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white max-[786px]:h-auto! max-[786px]:w-full! max-[786px]:flex-none! max-[786px]:rounded-2xl! max-[786px]:py-3 sm:px-12 sm:text-base"
+            >
+              الاجراءات
+            </TabsTrigger>
+          </TabsList>
         </div>
-      )}
 
-      {selectedTaskForStatusUpdate && (
-        <UpdateStatusTaskModal
-          taskId={selectedTaskForStatusUpdate.id}
-          initialValues={{ status: selectedTaskForStatusUpdate.status }}
-          onClose={() => setSelectedTaskForStatusUpdate(null)}
-          onSave={() => setSelectedTaskForStatusUpdate(null)}
-        />
-      )}
+        <TabsContent value="tasks">
+          <TasksTable
+            data={indexedData}
+            isFetching={isFetching}
+            totalPages={totalPages}
+            page={page}
+            onPageChange={setPage}
+          />
+        </TabsContent>
+
+        <TabsContent value="procedures">
+          <ProceduresTable />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
