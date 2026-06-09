@@ -243,11 +243,6 @@ function AddTaskModal({
                 label="ملاحظات"
                 placeholder="أدخل ملاحظات إضافية"
               />
-              <TextAreaForm
-                name="details"
-                label="تفاصيل المهمة"
-                placeholder="أدخل تفاصيل إضافية"
-              />
 
               <SelectForm
                 name="status"
