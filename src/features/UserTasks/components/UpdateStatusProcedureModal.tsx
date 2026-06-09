@@ -26,10 +26,6 @@ const validationSchema = Yup.object({
   status: Yup.string().required("حالة الإجراء مطلوبة"),
 });
 
-const defaultValues: FormValues = {
-  status: "",
-};
-
 export const UpdateStatusProcedureModal: React.FC<
   UpdateStatusProcedureModalProps
 > = ({ onClose, onSave, initialStatus }) => {
