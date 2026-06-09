@@ -48,7 +48,7 @@ export const ProceduresTable: React.FC = () => {
       headerClassName: "w-[60px]",
     },
     {
-      header: "نوع الإجراء",
+      header: "عنوان الإجراء",
       accessor: "actionType",
     },
     {

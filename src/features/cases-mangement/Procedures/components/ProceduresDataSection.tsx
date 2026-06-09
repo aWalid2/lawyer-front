@@ -41,7 +41,7 @@ export const ProceduresDataSection: React.FC = () => {
 
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
         <InputBox
-          label="نوع الإجراء"
+          label="عنوان الإجراء"
           text={latestProcedure.actionType || "-"}
         />
         <InputBox

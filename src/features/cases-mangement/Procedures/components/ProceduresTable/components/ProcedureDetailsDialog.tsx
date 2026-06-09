@@ -59,7 +59,7 @@ export const ProcedureDetailsDialog: React.FC<ProcedureDetailsDialogProps> = ({
         <Error message="حدث خطأ أثناء جلب تفاصيل الإجراء." error={error} />
       ) : (
         <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-          <InputBox label="نوع الإجراء" text={procedure.actionType || "-"} />
+          <InputBox label="عنوان الإجراء" text={procedure.actionType || "-"} />
           <InputBox
             label="تاريخ الإحالة"
             text={formatDateToYYYYMMDD(procedure.referral_date) || "-"}
