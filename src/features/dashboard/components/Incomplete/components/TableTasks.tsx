@@ -8,6 +8,9 @@ import type { UpcomingTask } from "../api/services/getUpcomingTasks";
 import { getDecisionStyles } from "@/shared/utils/getDescionStyle";
 import { decisionOptions } from "@/shared/constants/procedursOptions";
 import { getOptionLabel } from "@/shared/utils/getOptionLabel";
+import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 const columns: Column<UpcomingTask>[] = [
   {
@@ -62,5 +65,15 @@ export const TableTasks = () => {
     );
   }
 
-  return <DataTable data={tasks} columns={columns} rowIdField="id" />;
+  return (
+    <>
+      <DataTable data={tasks} columns={columns} rowIdField="id" />
+      <Link
+        to={"/dashboard/user-tasks"}
+        className={cn(buttonVariants(), "mt-4 w-full")}
+      >
+        عرض جميع المهام
+      </Link>
+    </>
+  );
 };

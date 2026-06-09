@@ -9,6 +9,10 @@ import { ar } from "date-fns/locale";
 import { useGetActiveProcedures } from "../api/hooks/useGetActiveProcedures";
 import type { ActiveProcedure } from "../api/services/getActiveProcedures";
 
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+
 const columns: Column<ActiveProcedure>[] = [
   {
     header: "#",
@@ -66,5 +70,15 @@ export const TableProcedures = () => {
     );
   }
 
-  return <DataTable data={procedures} columns={columns} rowIdField="id" />;
+  return (
+    <>
+      <DataTable data={procedures} columns={columns} rowIdField="id" />
+      <Link
+        to={"/dashboard/user-tasks"}
+        className={cn(buttonVariants(), "mt-4 w-full")}
+      >
+        عرض جميع الاجراءات
+      </Link>
+    </>
+  );
 };

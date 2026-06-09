@@ -9,6 +9,9 @@ import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import { useGetUpcomingConsultations } from "../api/hooks/useGetUpcomingConsultations";
 import type { UpcomingConsultation } from "../api/services/getUpcomingConsultations";
+import { Link } from "react-router-dom";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const typeLabels: Record<string, string> = {
   legal_advice: "استشارة قانونية",
@@ -103,5 +106,15 @@ export const TableConsultations = () => {
     );
   }
 
-  return <DataTable data={consultations} columns={columns} rowIdField="id" />;
+  return (
+    <>
+      <DataTable data={consultations} columns={columns} rowIdField="id" />
+      <Link
+        to={"/dashboard/consultations"}
+        className={cn(buttonVariants(), "mt-4 w-full")}
+      >
+        عرض جميع الاستشارات
+      </Link>
+    </>
+  );
 };
