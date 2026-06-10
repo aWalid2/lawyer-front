@@ -33,6 +33,7 @@ interface TaskFormValues {
   task_title: string;
   assigned_to: number;
   task_type: string;
+  case_id?: string;
   delivery_date: string;
   status: string;
   notes: string;
@@ -56,6 +57,7 @@ const defaultValues: TaskFormValues = {
   task_title: "",
   assigned_to: 0,
   task_type: "",
+  case_id: "",
   delivery_date: "",
   notes: "",
   status: "",
@@ -72,7 +74,7 @@ function AddTaskModal({
   const [isModalOpen, setIsModalOpen] = useState(true);
   const isEditMode = !!taskId;
 
-  const { mutate: addTask, isPending: isAdding } = useTaskUser();
+  const { mutate: addTask, isPending: isAdding } = useTaskUser(context);
   const { mutate: updateTask, isPending: isUpdating } = useUpdateTask();
 
   const isLoading = isEditMode ? isUpdating : isAdding;
@@ -140,9 +142,8 @@ function AddTaskModal({
       notes: submitValues.notes,
       details: submitValues.details,
     };
-
-    if (context === "procedures") {
-      apiValues.task_type = submitValues.task_type;
+    if (context === "procedures" && submitValues.case_id) {
+      apiValues.case_id = Number(submitValues.case_id);
     }
 
     if (isEditMode && taskId) {
@@ -218,7 +219,7 @@ function AddTaskModal({
               <div className="grid grid-cols-1 gap-4">
                 {context === "procedures" && (
                   <SelectForm
-                    name="task_type"
+                    name="case_id"
                     label="القضية"
                     options={caseOptions}
                     placeholder="اختر القضية"
