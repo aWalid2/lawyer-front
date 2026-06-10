@@ -4,6 +4,7 @@ import LoadingPage from "@/shared/components/LoadingPage";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import React, { useMemo, useState } from "react";
 import { useFetchTasks } from "./api/hooks/useGetTasks";
+import { useGetAllProcedures } from "./api/hooks/useGetAllProcedures";
 import { HeaderTasksUser } from "./components/HeaderTasksUser";
 import { decisionOptions } from "@/shared/constants/procedursOptions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -31,6 +32,22 @@ export const UsersTask: React.FC = () => {
   } = useFetchTasks(page, limit, deliverDateFrom, deliverDateTo, searchTerm);
   const tasks = tasksResponse?.data;
 
+  const {
+    data: proceduresResponse,
+    isFetching: isProceduresFetching,
+    isPending: isProceduresPending,
+    isError: isProceduresError,
+    error: proceduresError,
+  } = useGetAllProcedures(
+    page,
+    limit,
+    deliverDateFrom,
+    deliverDateTo,
+    searchTerm,
+  );
+  const procedures = proceduresResponse?.data ?? [];
+  const proceduresTotalPages = proceduresResponse?.meta?.total_pages ?? 1;
+
   const handleDateFilterChange = (
     key: "deliverDateFrom" | "deliverDateTo",
     value: Date | undefined,
@@ -55,24 +72,6 @@ export const UsersTask: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <HeaderTasksUser
-        searchTerm={searchTerm}
-        onSearch={(term) => {
-          setSearchTerm(term);
-          setPage(1);
-        }}
-        onFilterChange={(status) => {
-          setStatusFilter(status);
-          setPage(1);
-        }}
-        statusFilter={statusFilter}
-        filterOptions={filterOptions}
-        deliverDateFrom={deliverDateFrom}
-        deliverDateTo={deliverDateTo}
-        onDateFilterChange={handleDateFilterChange}
-        context={activeTab as "tasks" | "procedures"}
-      />
-
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
@@ -95,7 +94,23 @@ export const UsersTask: React.FC = () => {
             </TabsTrigger>
           </TabsList>
         </div>
-
+        <HeaderTasksUser
+          searchTerm={searchTerm}
+          onSearch={(term) => {
+            setSearchTerm(term);
+            setPage(1);
+          }}
+          onFilterChange={(status) => {
+            setStatusFilter(status);
+            setPage(1);
+          }}
+          statusFilter={statusFilter}
+          filterOptions={filterOptions}
+          deliverDateFrom={deliverDateFrom}
+          deliverDateTo={deliverDateTo}
+          onDateFilterChange={handleDateFilterChange}
+          context={activeTab as "tasks" | "procedures"}
+        />
         <TabsContent value="tasks">
           <TasksTable
             data={indexedData}
@@ -107,7 +122,22 @@ export const UsersTask: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="procedures">
-          <ProceduresTable />
+          {isProceduresPending && procedures.length === 0 ? (
+            <LoadingPage />
+          ) : isProceduresError ? (
+            <Error
+              message="حدث خطأ في تحميل البيانات"
+              error={proceduresError}
+            />
+          ) : (
+            <ProceduresTable
+              data={procedures}
+              isFetching={isProceduresFetching}
+              totalPages={proceduresTotalPages}
+              page={page}
+              onPageChange={setPage}
+            />
+          )}
         </TabsContent>
       </Tabs>
     </div>

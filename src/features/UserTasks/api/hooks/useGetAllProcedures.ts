@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useEffect } from "react";
-import { getTasks } from "../service/getTasks";
+import { getAllProcedures } from "../service/getAllProcedures";
 
-export const useFetchTasks = (
+export const useGetAllProcedures = (
   page: number,
   limit: number,
   deliverDateFrom?: Date,
@@ -11,8 +11,8 @@ export const useFetchTasks = (
   searchTerm?: string,
 ) => {
   const query = useQuery({
-    queryKey: ["tasks", page, limit, deliverDateFrom, deliverDateTo, searchTerm],
-    queryFn: () => getTasks(page, limit, deliverDateFrom, deliverDateTo, searchTerm),
+    queryKey: ["tasks-with-case", page, limit, deliverDateFrom, deliverDateTo, searchTerm],
+    queryFn: () => getAllProcedures(page, limit, deliverDateFrom, deliverDateTo, searchTerm),
     placeholderData: (previousData) => previousData,
     staleTime: 1000 * 60 * 2,
     retry: 2,
@@ -20,7 +20,7 @@ export const useFetchTasks = (
 
   useEffect(() => {
     if (query.error) {
-      toast.error(query.error.message || "Failed to fetch tasks");
+      toast.error(query.error.message || "Failed to fetch procedures");
     }
   }, [query.error]);
 

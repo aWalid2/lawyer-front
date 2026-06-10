@@ -16,7 +16,41 @@ export interface TaskRelatedT {
         first_name?:string;
         name?:string
     }
-    
+}
+
+export interface TaskWithCase {
+  id: number;
+  rowNumber?: number;
+  task_title: string;
+  assigned_to: number;
+  Document_url: string | null;
+  task_type: string | null;
+  case_Id: number;
+  assigned_by: number;
+  delivery_date: string;
+  status: string;
+  notes: string;
+  created_at: string;
+  details: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  assignee?: {
+    id: number;
+    first_name: string;
+    last_name: string | null;
+  } | null;
+  assigner?: {
+    id: number;
+    first_name: string;
+    last_name: string | null;
+  } | null;
+  case?: {
+    id: number;
+    case_title: string;
+    case_sequence: string;
+    reference_number: string;
+    [key: string]: unknown;
+  } | null;
 }
 
 export const statusMapping: Record<string, string> = {

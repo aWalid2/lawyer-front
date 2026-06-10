@@ -1,6 +1,6 @@
 import api from "@/lib/api";
 
-export const getTasks = async (
+export const getAllProcedures = async (
   page: number,
   limit: number,
   deliverDateFrom?: Date,
@@ -31,7 +31,7 @@ export const getTasks = async (
     params.deliver_date_to = dateTo;
   }
 
-  const endpoint = searchTerm ? "task/without-case/search" : "task/without-case";
+  const endpoint = searchTerm ? "task/with-case/search" : "task/with-case";
   const { data } = await api.get(endpoint, { params });
 
   const normalizedData = data?.data?.map((item: Record<string, unknown>) => ({
