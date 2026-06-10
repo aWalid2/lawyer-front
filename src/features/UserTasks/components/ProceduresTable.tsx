@@ -1,19 +1,19 @@
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
-import { ProceduresActions } from "./ProceduresActions";
-import { UpdateStatusProcedureModal } from "./UpdateStatusProcedureModal";
+import { UsersTaskActions } from "./UsersTaskActions";
+import UpdateStatusTaskModal from "./UpdateStatusTaskModal";
 import { useState } from "react";
 import { getStatusStyle, statusMapping } from "../types/types";
 import type { TaskWithCase } from "../types/types";
+import { useGetAllProcedures } from "../api/hooks/useGetAllProcedures";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Pagination } from "@/shared/components/Pagination";
+import { Error } from "@/shared/components/Error";
 
 interface ProceduresTableProps {
-  data: TaskWithCase[];
-  isFetching: boolean;
-  totalPages: number;
-  page: number;
-  onPageChange: (page: number) => void;
+  searchTerm: string;
+  deliverDateFrom?: Date;
+  deliverDateTo?: Date;
 }
 
 const ProcedureStatusCell: React.FC<{ status: string }> = ({ status }) => {
@@ -29,20 +29,38 @@ const ProcedureStatusCell: React.FC<{ status: string }> = ({ status }) => {
 };
 
 export const ProceduresTable: React.FC<ProceduresTableProps> = ({
-  data,
-  isFetching,
-  totalPages,
-  page,
-  onPageChange,
+  searchTerm,
+  deliverDateFrom,
+  deliverDateTo,
 }) => {
+  const [page, setPage] = useState(1);
+  const limit = 15;
+  const {
+    data: proceduresResponse,
+    isFetching,
+    isPending,
+    isError,
+    error,
+  } = useGetAllProcedures(
+    page,
+    limit,
+    deliverDateFrom,
+    deliverDateTo,
+    searchTerm,
+  );
+  const procedures = proceduresResponse?.data ?? [];
+  const totalPages = proceduresResponse?.meta?.total_pages ?? 1;
+
   const [
     selectedProcedureForStatusUpdate,
     setSelectedProcedureForStatusUpdate,
   ] = useState<TaskWithCase | null>(null);
 
-  const handleStatusSave = (_status: string) => {
-    if (!selectedProcedureForStatusUpdate) return;
-    // Status update handled by the modal mutation - will refetch data
+  if (isPending && procedures.length === 0) return <LoadingPage />;
+  if (isError)
+    return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
+
+  const handleStatusSave = () => {
     setSelectedProcedureForStatusUpdate(null);
   };
 
@@ -99,7 +117,7 @@ export const ProceduresTable: React.FC<ProceduresTableProps> = ({
     },
     {
       header: "إجراء",
-      accessor: (item) => <ProceduresActions procedure={item} />,
+      accessor: (item) => <UsersTaskActions caseItem={item} />,
       headerClassName: "w-35",
       className: "w-35",
     },
@@ -114,26 +132,27 @@ export const ProceduresTable: React.FC<ProceduresTableProps> = ({
           </div>
         ) : null}
 
-        <DataTable data={data} columns={columns} rowIdField="id" />
+        <DataTable data={procedures} columns={columns} rowIdField="id" />
       </div>
 
       {totalPages > 1 && (
         <Pagination
           currentPage={page}
           totalPages={totalPages}
-          onPageChange={onPageChange}
+          onPageChange={setPage}
         />
       )}
 
-      {data.length === 0 && (
+      {procedures.length === 0 && (
         <div className="py-8 text-center text-gray-500">
           لا توجد إجراءات تطابق معايير البحث
         </div>
       )}
 
       {selectedProcedureForStatusUpdate && (
-        <UpdateStatusProcedureModal
-          initialStatus={selectedProcedureForStatusUpdate.status}
+        <UpdateStatusTaskModal
+          taskId={String(selectedProcedureForStatusUpdate.id)}
+          initialValues={{ status: selectedProcedureForStatusUpdate.status }}
           onClose={() => setSelectedProcedureForStatusUpdate(null)}
           onSave={handleStatusSave}
         />

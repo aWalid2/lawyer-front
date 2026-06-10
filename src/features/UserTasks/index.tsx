@@ -1,10 +1,4 @@
-import { Error } from "@/shared/components/Error";
-import LoadingPage from "@/shared/components/LoadingPage";
-
-import { useIndexedData } from "@/shared/utils/useIndexedData";
 import React, { useMemo, useState } from "react";
-import { useFetchTasks } from "./api/hooks/useGetTasks";
-import { useGetAllProcedures } from "./api/hooks/useGetAllProcedures";
 import { HeaderTasksUser } from "./components/HeaderTasksUser";
 import { decisionOptions } from "@/shared/constants/procedursOptions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,54 +15,21 @@ export const UsersTask: React.FC = () => {
   const [deliverDateTo, setDeliverDateTo] = useState<Date | undefined>(
     undefined,
   );
-  const [page, setPage] = useState(1);
-  const limit = 15;
-  const {
-    data: tasksResponse,
-    isPending,
-    isError,
-    error,
-    isFetching,
-  } = useFetchTasks(page, limit, deliverDateFrom, deliverDateTo, searchTerm);
-  const tasks = tasksResponse?.data;
-
-  const {
-    data: proceduresResponse,
-    isFetching: isProceduresFetching,
-    isPending: isProceduresPending,
-    isError: isProceduresError,
-    error: proceduresError,
-  } = useGetAllProcedures(
-    page,
-    limit,
-    deliverDateFrom,
-    deliverDateTo,
-    searchTerm,
-  );
-  const procedures = proceduresResponse?.data ?? [];
-  const proceduresTotalPages = proceduresResponse?.meta?.total_pages ?? 1;
 
   const handleDateFilterChange = (
     key: "deliverDateFrom" | "deliverDateTo",
     value: Date | undefined,
   ) => {
-    setPage(1);
     if (key === "deliverDateFrom") {
       setDeliverDateFrom(value);
     } else {
       setDeliverDateTo(value);
     }
   };
-  const totalPages = tasksResponse?.meta?.total_pages ?? 1;
-  const indexedData = useIndexedData(tasks || [], page, limit);
 
   const filterOptions = useMemo(() => {
     return [{ value: "all", label: "الكل" }, ...decisionOptions];
   }, []);
-
-  if (isPending && !tasks) return <LoadingPage />;
-  if (isError)
-    return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
 
   return (
     <div className="space-y-4">
@@ -98,11 +59,9 @@ export const UsersTask: React.FC = () => {
           searchTerm={searchTerm}
           onSearch={(term) => {
             setSearchTerm(term);
-            setPage(1);
           }}
           onFilterChange={(status) => {
             setStatusFilter(status);
-            setPage(1);
           }}
           statusFilter={statusFilter}
           filterOptions={filterOptions}
@@ -113,31 +72,18 @@ export const UsersTask: React.FC = () => {
         />
         <TabsContent value="tasks">
           <TasksTable
-            data={indexedData}
-            isFetching={isFetching}
-            totalPages={totalPages}
-            page={page}
-            onPageChange={setPage}
+            searchTerm={searchTerm}
+            deliverDateFrom={deliverDateFrom}
+            deliverDateTo={deliverDateTo}
           />
         </TabsContent>
 
         <TabsContent value="procedures">
-          {isProceduresPending && procedures.length === 0 ? (
-            <LoadingPage />
-          ) : isProceduresError ? (
-            <Error
-              message="حدث خطأ في تحميل البيانات"
-              error={proceduresError}
-            />
-          ) : (
-            <ProceduresTable
-              data={procedures}
-              isFetching={isProceduresFetching}
-              totalPages={proceduresTotalPages}
-              page={page}
-              onPageChange={setPage}
-            />
-          )}
+          <ProceduresTable
+            searchTerm={searchTerm}
+            deliverDateFrom={deliverDateFrom}
+            deliverDateTo={deliverDateTo}
+          />
         </TabsContent>
       </Tabs>
     </div>

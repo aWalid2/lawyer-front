@@ -9,6 +9,7 @@ export const useDeleteTask = () => {
         
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["tasks"] });
+            queryClient.invalidateQueries({ queryKey: ["tasks-with-case"] });
             toast.success("تم حذف المهمة بنجاح")
         },
         onError: (error: any) => {

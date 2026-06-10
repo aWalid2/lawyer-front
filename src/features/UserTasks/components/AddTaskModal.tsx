@@ -49,7 +49,6 @@ const validationSchema = Yup.object({
   task_type: Yup.string(),
   delivery_date: Yup.string().required("تاريخ التسليم مطلوب"),
   notes: Yup.string(),
-  details: Yup.string().required("تفاصيل المهمة مطلوبة"),
   status: Yup.string().required("حالة المهمة مطلوبة"),
 });
 

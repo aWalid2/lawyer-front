@@ -2,11 +2,14 @@ import { DataTable, type Column } from "@/shared/components/DataTable";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Pagination } from "@/shared/components/Pagination";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
+import { useIndexedData } from "@/shared/utils/useIndexedData";
 import { useState } from "react";
 import { UsersTaskActions } from "./UsersTaskActions";
 import UpdateStatusTaskModal from "./UpdateStatusTaskModal";
+import { useFetchTasks } from "../api/hooks/useGetTasks";
 import type { TaskRelatedT } from "../types/types";
 import { getStatusStyle, statusMapping } from "../types/types";
+import { Error } from "@/shared/components/Error";
 
 const StatusCell: React.FC<{ status: string }> = ({ status }) => {
   const cleanStatus = status?.trim() || "";
@@ -21,22 +24,35 @@ const StatusCell: React.FC<{ status: string }> = ({ status }) => {
 };
 
 interface TasksTableProps {
-  data: TaskRelatedT[];
-  isFetching: boolean;
-  totalPages: number;
-  page: number;
-  onPageChange: (page: number) => void;
+  searchTerm: string;
+  deliverDateFrom?: Date;
+  deliverDateTo?: Date;
 }
 
 export const TasksTable: React.FC<TasksTableProps> = ({
-  data,
-  isFetching,
-  totalPages,
-  page,
-  onPageChange,
+  searchTerm,
+  deliverDateFrom,
+  deliverDateTo,
 }) => {
+  const [page, setPage] = useState(1);
+  const limit = 15;
+  const {
+    data: tasksResponse,
+    isPending,
+    isError,
+    error,
+    isFetching,
+  } = useFetchTasks(page, limit, deliverDateFrom, deliverDateTo, searchTerm);
+  const tasks = tasksResponse?.data;
+  const totalPages = tasksResponse?.meta?.total_pages ?? 1;
+  const indexedData = useIndexedData(tasks || [], page, limit);
+
   const [selectedTaskForStatusUpdate, setSelectedTaskForStatusUpdate] =
     useState<TaskRelatedT | null>(null);
+
+  if (isPending && !tasks) return <LoadingPage />;
+  if (isError)
+    return <Error message="حدث خطأ في تحميل البيانات" error={error} />;
 
   const columns: Column<TaskRelatedT>[] = [
     {
@@ -106,18 +122,18 @@ export const TasksTable: React.FC<TasksTableProps> = ({
           </div>
         ) : null}
 
-        <DataTable data={data} columns={columns} rowIdField="id" />
+        <DataTable data={indexedData} columns={columns} rowIdField="id" />
       </div>
 
       {totalPages > 1 && (
         <Pagination
           currentPage={page}
           totalPages={totalPages}
-          onPageChange={onPageChange}
+          onPageChange={setPage}
         />
       )}
 
-      {data.length === 0 && (
+      {indexedData.length === 0 && (
         <div className="py-8 text-center text-gray-500">
           لا توجد مهام تطابق معايير البحث
         </div>

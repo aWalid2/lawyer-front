@@ -11,6 +11,7 @@ export const useUpdateTask = () => {
             updateTask(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["tasks"] });
+            queryClient.invalidateQueries({ queryKey: ["tasks-with-case"] });
             toast.success("تم تحديث المهمة بنجاح");
         },
         onError: (error: any) => {
