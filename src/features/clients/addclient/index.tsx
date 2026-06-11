@@ -18,7 +18,6 @@ const FormDetails = () => {
     first_name: "",
     email: "",
     password: "",
-    contract_file: null,
     authorization_photo: null,
     nationality: "",
     country: "",
@@ -30,9 +29,7 @@ const FormDetails = () => {
     add_clients: false,
     client_type: "individual",
     notes: "",
-    contract_start_date: "",
-    contract_value: "",
-    contract_duration: "",
+    contracts: [],
     confirmation_password: "",
     user_status: "",
   };
@@ -53,17 +50,14 @@ const FormDetails = () => {
       countryCode: countryCode,
       notes: values.notes,
       has_contract: values.has_contract,
-      ...(values.has_contract ? {
-        contract_start_date: values.contract_start_date,
-        contract_value: values.contract_value,
-        contract_duration: values.contract_duration,
-        contract_file: values.contract_file,
-      } : {}),
+      contracts: values.has_contract ? values.contracts : [],
       add_clients: values.add_clients,
-      ...(values.add_clients ? {
-        password: values.password,
-        confirmation_password: values.confirmation_password,
-      } : {}),
+      ...(values.add_clients
+        ? {
+            password: values.password,
+            confirmation_password: values.confirmation_password,
+          }
+        : {}),
       authorization_photo: values.authorization_photo,
       client_type: values.client_type,
       user_status: values.user_status,
