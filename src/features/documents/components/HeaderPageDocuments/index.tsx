@@ -1,6 +1,7 @@
 import { HeaderFilter } from "@/shared/components/HeaderFilter";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { AddDocumentDialog } from "../AddDocumentDialog";
+import { ButtonShowAll } from "@/shared/components/ButtonShowAll";
 
 interface HeaderPageDocumentsProps {
   onSearch?: (term: string) => void;
@@ -33,6 +34,7 @@ export const HeaderPageDocuments: React.FC<HeaderPageDocumentsProps> = ({
           ]}
         />
         <AddDocumentDialog filter={filter} onDocumentAdded={onDocumentAdded} />
+        <ButtonShowAll text={"عرض جميع المستندات"} />
       </div>
     </div>
   );

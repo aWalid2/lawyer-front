@@ -5,6 +5,7 @@ import type { SelectOption } from "@/shared/hooks/useCachedPaginatedOptions";
 import React from "react";
 import { AddTask } from "./AddTask";
 import { UserTaskFilter } from "./UserTasksFilter";
+import { ButtonShowAll } from "@/shared/components/ButtonShowAll";
 
 interface HeaderTasksUserProps {
   onSearch: (term: string) => void;
@@ -56,6 +57,7 @@ export const HeaderTasksUser: React.FC<HeaderTasksUserProps> = ({
         />
         <AddTask context={context} />
       </div>
+      <ButtonShowAll text={"عرض جميع المهمام"} />
     </HeaderPageLayout>
   );
 };

@@ -4,6 +4,7 @@ import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { Plus } from "lucide-react";
 import { ConsultationsDialog } from "./ConsultationsDialog";
+import { ButtonShowAll } from "@/shared/components/ButtonShowAll";
 
 interface HeaderPageConsultationsProps {
   onSearch: (term: string) => void;
@@ -54,6 +55,7 @@ export const HeaderPageConsultations: React.FC<
             />
           }
         />
+        <ButtonShowAll text={"عرض جميع الاستشارات"} />
       </div>
     </HeaderPageLayout>
   );

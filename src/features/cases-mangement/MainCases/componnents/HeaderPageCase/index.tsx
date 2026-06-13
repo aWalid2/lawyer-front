@@ -2,6 +2,7 @@ import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
 import { HeaderSearch } from "@/shared/components/HeaderSearch";
 import { CasesFilter } from "./components/CasesFilter";
 import { NewCaseLink } from "./components/NewCaseLink";
+import { ButtonShowAll } from "@/shared/components/ButtonShowAll";
 
 interface HeaderPageCaseProps {
   onSearch: (term: string) => void;
@@ -24,6 +25,7 @@ export const HeaderPageCase: React.FC<HeaderPageCaseProps> = ({
       <div className="flex w-full items-center justify-end gap-3 md:w-auto">
         <CasesFilter onFilterChange={onFilterChange} />
         <NewCaseLink />
+        <ButtonShowAll text={"عرض جميع القضايا"} />
       </div>
     </HeaderPageLayout>
   );

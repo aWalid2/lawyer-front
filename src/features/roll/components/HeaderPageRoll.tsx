@@ -7,6 +7,7 @@ import {
   HeaderExportMenu,
   type HeaderExportType,
 } from "../../../shared/components/HeaderExportMenu";
+import { ButtonShowAll } from "@/shared/components/ButtonShowAll";
 
 interface HeaderPageRollProps {
   onSearch: (term: string) => void;
@@ -65,6 +66,7 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
           className="md:w-27.5"
         />
         <HeaderExportMenu onSelect={onExport} />
+        <ButtonShowAll text={"عرض جميع الجلسات"} />
       </div>
     </HeaderPageLayout>
   );
