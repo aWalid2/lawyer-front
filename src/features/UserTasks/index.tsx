@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { HeaderTasksUser } from "./components/HeaderTasksUser";
 import { decisionOptions } from "@/shared/constants/procedursOptions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,7 +7,10 @@ import { TasksTable } from "./components/TasksTable";
 import { ProceduresTable } from "./components/ProceduresTable";
 
 export const UsersTask: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("tasks");
+  const [searchParams] = useSearchParams();
+  const initialTab =
+    searchParams.get("tab") === "procedures" ? "procedures" : "tasks";
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [deliverDateFrom, setDeliverDateFrom] = useState<Date | undefined>(

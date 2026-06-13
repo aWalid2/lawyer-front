@@ -31,9 +31,9 @@ const columns: Column<ActiveProcedure>[] = [
     header: "حالة الإجراء",
     accessor: (item) => (
       <span
-        className={`rounded-main px-3.5 py-1.5 text-xs font-medium whitespace-nowrap ${getDecisionStyles(item.session_decision)}`}
+        className={`rounded-main px-3.5 py-1.5 text-xs font-medium whitespace-nowrap ${getDecisionStyles(item.actionType)}`}
       >
-        {getOptionLabel(item.session_decision, decisionOptions)}
+        {getOptionLabel(item.actionType, decisionOptions)}
       </span>
     ),
   },
@@ -74,7 +74,7 @@ export const TableProcedures = () => {
     <>
       <DataTable data={procedures} columns={columns} rowIdField="id" />
       <Link
-        to={"/dashboard/user-tasks"}
+        to={"/dashboard/user-tasks?tab=procedures"}
         className={cn(buttonVariants(), "mt-4 w-full")}
       >
         عرض جميع الاجراءات

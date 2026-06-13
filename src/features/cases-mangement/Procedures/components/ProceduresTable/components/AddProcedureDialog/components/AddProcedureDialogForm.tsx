@@ -22,12 +22,12 @@ interface AddProcedureDialogFormProps {
 }
 
 const validationSchema = Yup.object({
-  actionType: Yup.string().required("عنوان الإجراء مطلوب"),
+  procedure_title: Yup.string().required("عنوان الإجراء مطلوب"),
   referral_date: Yup.string().required("تاريخ الإحالة مطلوب"),
   admin_authority: Yup.string().required("الجهة الإدارية مطلوبة"),
   session_date: Yup.string().required("موعد الإجراء مطلوب"),
   lawyer_id: Yup.string().required("المحامي المسؤول مطلوب"),
-  session_decision: Yup.string().required("قرار الإجراء مطلوب"),
+  actionType: Yup.string().required("قرار الإجراء مطلوب"),
   notes: Yup.string(),
 });
 
@@ -48,6 +48,7 @@ export const AddProcedureDialogForm: React.FC<AddProcedureDialogFormProps> = ({
           await onSubmit({
             ...values,
             session_date: values.session_date + "T" + "00:00",
+            referral_date: values.referral_date + "T" + "00:00",
           });
         } catch (error) {
           console.error(error);
@@ -60,7 +61,7 @@ export const AddProcedureDialogForm: React.FC<AddProcedureDialogFormProps> = ({
         <Form className="custom-scrollbar min-h-0 flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
           <div className="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2">
             <InputForm
-              name="actionType"
+              name="procedure_title"
               label="عنوان الإجراء"
               type="string"
               placeholder="اكتب عنوان الاجراء"
@@ -84,7 +85,7 @@ export const AddProcedureDialogForm: React.FC<AddProcedureDialogFormProps> = ({
               showSearch={true}
             />
             <SelectForm
-              name="session_decision"
+              name="actionType"
               label="حالة الإجراء"
               options={decisionOptions}
             />

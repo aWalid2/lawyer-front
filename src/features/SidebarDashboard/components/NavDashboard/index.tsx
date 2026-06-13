@@ -104,6 +104,12 @@ const NavDashboard = ({ onLinkClick }: { onLinkClick?: () => void }) => {
           <p className="text-base font-normal">إدارة القضايا</p>
         </div>
       </NavLink>
+      <NavLink to="/dashboard/roll" className={linkClass} onClick={onLinkClick}>
+        <div className="flex items-center gap-3">
+          <RollIcon />
+          <p className="text-base font-normal">رول الجلسات</p>
+        </div>
+      </NavLink>
 
       {/* <NavLink
         to="/dashboard/legislation-rulings"
@@ -125,12 +131,7 @@ const NavDashboard = ({ onLinkClick }: { onLinkClick?: () => void }) => {
           <p className="text-base font-normal">التقويم</p>
         </div>
       </NavLink>
-      <NavLink to="/dashboard/roll" className={linkClass} onClick={onLinkClick}>
-        <div className="flex items-center gap-3">
-          <RollIcon />
-          <p className="text-base font-normal">رول الجلسات</p>
-        </div>
-      </NavLink>
+
       <NavLink
         to="/dashboard/documents"
         className={linkClass}
@@ -139,6 +140,16 @@ const NavDashboard = ({ onLinkClick }: { onLinkClick?: () => void }) => {
         <div className="flex items-center gap-3">
           <DocumentsIcon />
           <p className="text-base font-normal">المستندات</p>
+        </div>
+      </NavLink>
+      <NavLink
+        to="/dashboard/contracts"
+        className={linkClass}
+        onClick={onLinkClick}
+      >
+        <div className="flex items-center gap-3">
+          <ContractsIcon />
+          <p className="text-base font-normal">العقود</p>
         </div>
       </NavLink>
 
@@ -175,16 +186,7 @@ const NavDashboard = ({ onLinkClick }: { onLinkClick?: () => void }) => {
           <p className="text-base font-normal">الاستشارات</p>
         </div>
       </NavLink>
-      <NavLink
-        to="/dashboard/contracts"
-        className={linkClass}
-        onClick={onLinkClick}
-      >
-        <div className="flex items-center gap-3">
-          <ContractsIcon />
-          <p className="text-base font-normal">العقود</p>
-        </div>
-      </NavLink>
+
       {/* <CollapsibleNavDashboard
         data={financeLinks}
         title={"المالية"}

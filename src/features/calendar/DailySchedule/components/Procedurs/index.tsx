@@ -26,7 +26,12 @@ const ProceduresSchedule = ({
     : "";
 
   if (procedures.length === 0)
-    return <EmptyTable message={`لا توجد إجراءات ليوم ${dateStr}`} />;
+    return (
+      <div>
+        <HeaderTitle title={`إجراءات يوم ${dateStr}`} />
+        <EmptyTable message={`لا توجد إجراءات ليوم ${dateStr}`} />;
+      </div>
+    );
   return (
     <div className="space-y-6">
       <HeaderTitle title={`إجراءات يوم ${dateStr}`} />

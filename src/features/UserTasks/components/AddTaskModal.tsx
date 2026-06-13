@@ -206,17 +206,6 @@ function AddTaskModal({
                   type="text"
                   placeholder="أدخل عنوان المهمة"
                 />
-
-                <SelectForm
-                  name="assigned_to"
-                  label="المكلف"
-                  options={employeeOptions}
-                  placeholder="اختر المكلف"
-                  showSearch={true}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 gap-4">
                 {context === "procedures" && (
                   <SelectForm
                     name="case_id"
@@ -230,6 +219,16 @@ function AddTaskModal({
                     onReachEnd={loadMoreCases}
                   />
                 )}
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                <SelectForm
+                  name="assigned_to"
+                  label="المكلف"
+                  options={employeeOptions}
+                  placeholder="اختر المكلف"
+                  showSearch={true}
+                />
 
                 <InputForm
                   name="delivery_date"

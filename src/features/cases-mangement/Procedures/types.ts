@@ -1,4 +1,5 @@
 export interface ProcedureRequest {
+  procedure_title: string;
   actionType: string;
   referral_date: string;
   admin_authority: string;
@@ -18,6 +19,7 @@ export interface Procedure {
   sequence_number?: string;
     reference_number?:number;
 case_title?:string;
+procedure_title?:string;
   rowNumber?: number;
   case_id?: number;
   actionType: string;
@@ -43,6 +45,7 @@ export interface ProcedureListResponse {
 }
 
 export interface ProcedureFormValues {
+  procedure_title: string;
   actionType: string;
   referral_date: string;
   admin_authority: string;
@@ -53,6 +56,7 @@ export interface ProcedureFormValues {
 }
 
 export const EMPTY_PROCEDURE_FORM_VALUES: ProcedureFormValues = {
+  procedure_title: "",
   actionType: "",
   referral_date: "",
   admin_authority: "",
@@ -65,6 +69,7 @@ export const EMPTY_PROCEDURE_FORM_VALUES: ProcedureFormValues = {
 export const toProcedureFormValues = (
   procedure?: Partial<Procedure> | null,
 ): ProcedureFormValues => ({
+  procedure_title: procedure?.procedure_title || "",
   actionType: procedure?.actionType || "",
   referral_date: procedure?.referral_date || "",
   admin_authority: procedure?.admin_authority || "",
@@ -77,6 +82,7 @@ export const toProcedureFormValues = (
 export const toProcedureRequest = (
   values: ProcedureFormValues,
 ): ProcedureRequest => ({
+  procedure_title: values.procedure_title,
   actionType: values.actionType,
   referral_date: values.referral_date,
   admin_authority: values.admin_authority,

@@ -29,7 +29,12 @@ const UserTasksSchedule = ({
     : "";
 
   if (events.length === 0)
-    return <EmptyTable message={`لا توجد مواعيد ليوم ${dateStr}`} />;
+    return (
+      <div>
+        <HeaderTitle title={`مواعيد يوم ${dateStr}`} />
+        <EmptyTable message={`لا توجد مواعيد ليوم ${dateStr}`} />;
+      </div>
+    );
   return (
     <Card>
       <CardHeader>

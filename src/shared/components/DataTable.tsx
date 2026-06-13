@@ -40,7 +40,7 @@ export const DataTable = <T,>({
         containerClassName="custom-scrollbar overflow-y-hidden"
         className="border-collapse ring-0 outline-none"
       >
-        <TableHeader className="dark:bg-primary/23 sticky top-0 z-20 bg-[#FCFCFC]">
+        <TableHeader className="dark:bg-primary/23 bg-primary sticky top-0 z-20">
           <TableRow className="border-border border-b hover:bg-transparent">
             {columns.map((column, index) => {
               if (column.hideHeader) return null;
@@ -48,7 +48,7 @@ export const DataTable = <T,>({
                 <TableHead
                   key={index}
                   colSpan={column.colSpan}
-                  className={`text-muted-foreground border-border h-[37px] border-r p-2 text-center text-sm font-semibold ${column.headerClassName || ""}`}
+                  className={`border-border h-[37px] border-r p-2 text-center text-sm font-semibold text-white ${column.headerClassName || ""}`}
                 >
                   {column.header}
                 </TableHead>

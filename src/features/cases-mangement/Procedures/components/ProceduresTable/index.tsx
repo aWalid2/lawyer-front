@@ -49,7 +49,7 @@ export const ProceduresTable: React.FC = () => {
     },
     {
       header: "عنوان الإجراء",
-      accessor: "actionType",
+      accessor: "procedure_title",
     },
     {
       header: "تاريخ الانشاء",
@@ -61,7 +61,7 @@ export const ProceduresTable: React.FC = () => {
     },
     {
       header: "حالة الإجراء",
-      accessor: (item) => getStatusArabic(item.session_decision),
+      accessor: (item) => getStatusArabic(item.actionType),
     },
     {
       header: "إجراء",
