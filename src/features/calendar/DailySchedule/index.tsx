@@ -5,20 +5,11 @@ import UserTasksSchedule from "./components/UserTasksSchedule";
 import PageLayout from "@/shared/components/PageLayout";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { useAgenda } from "../api/hooks/useAgenda";
-import type { AgendaProcedure } from "../api/services/agendaTypes";
+import type { AgendaProcedure, AgendaTask } from "../api/services/agendaTypes";
 import { format } from "date-fns";
 
 interface DailyScheduleProps {
   selectedDate: Date | undefined;
-}
-
-interface TaskEvent {
-  id: string;
-  title: string;
-  lawyer: string;
-  location: string;
-  startTime: string;
-  endTime: string;
 }
 
 interface ProcedureItem {
@@ -29,36 +20,6 @@ interface ProcedureItem {
   location: string;
   status: string;
 }
-
-const parseTime = (dateStr: string): string => {
-  try {
-    const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return "00:00";
-    const hours = String(d.getUTCHours()).padStart(2, "0");
-    const minutes = String(d.getUTCMinutes()).padStart(2, "0");
-    return `${hours}:${minutes}`;
-  } catch {
-    return "00:00";
-  }
-};
-
-const mapTaskToEvent = (task: {
-  id: number;
-  task_title: string;
-  delivery_date: string;
-  start_date: string;
-  end_date: string;
-}): TaskEvent => {
-  const time = parseTime(task.delivery_date || task.start_date);
-  return {
-    id: String(task.id),
-    title: task.task_title,
-    lawyer: "",
-    location: "",
-    startTime: time,
-    endTime: time,
-  };
-};
 
 const mapProcedureToItem = (proc: AgendaProcedure): ProcedureItem => ({
   id: proc.id ?? "",
@@ -79,7 +40,7 @@ const DailySchedule = ({ selectedDate }: DailyScheduleProps) => {
     !!selectedDate,
   );
 
-  const tasks: TaskEvent[] = (agendaData?.tasks ?? []).map(mapTaskToEvent);
+  const tasks: AgendaTask[] = agendaData?.tasks ?? [];
   const procedures: ProcedureItem[] = (agendaData?.procedures ?? []).map(
     mapProcedureToItem,
   );
@@ -117,7 +78,7 @@ const DailySchedule = ({ selectedDate }: DailyScheduleProps) => {
           {isPending ? (
             <LoadingPage />
           ) : (
-            <UserTasksSchedule selectedDate={selectedDate!} events={tasks} />
+            <UserTasksSchedule selectedDate={selectedDate!} tasks={tasks} />
           )}
         </TabsContent>
       </Tabs>

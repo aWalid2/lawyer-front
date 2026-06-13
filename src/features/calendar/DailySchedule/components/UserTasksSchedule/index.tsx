@@ -1,100 +1,38 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
-import { EventsGrid } from "./components/EventsGrid";
-import { times } from "@/shared/constants/shcedule";
+import { TasksCard } from "./components/TasksCard";
 import { EmptyTable } from "@/shared/components/EmptyTable";
-
-const rowsCount = 8;
-
-interface Event {
-  id: string;
-  title: string;
-  lawyer: string;
-  location: string;
-  startTime: string;
-  endTime: string;
-}
+import type { AgendaTask } from "@/features/calendar/api/services/agendaTypes";
 
 const UserTasksSchedule = ({
   selectedDate,
-  events,
+  tasks,
 }: {
   selectedDate: Date;
-  events: Event[];
+  tasks: AgendaTask[];
 }) => {
   const dateStr = selectedDate
     ? format(selectedDate, "eeee (dd/MM/yyyy)", { locale: ar })
     : "";
 
-  if (events.length === 0)
+  if (tasks.length === 0)
     return (
       <div>
-        <HeaderTitle title={`مواعيد يوم ${dateStr}`} />
-        <EmptyTable message={`لا توجد مواعيد ليوم ${dateStr}`} />
+        <HeaderTitle title={`مهام يوم ${dateStr}`} />
+        <EmptyTable message={`لا توجد مهام ليوم ${dateStr}`} />
       </div>
     );
   return (
-    <Card>
-      <CardHeader>
-        <HeaderTitle title={`مواعيد يوم ${dateStr}`} />
-      </CardHeader>
-      <CardContent className="custom-scrollbar overflow-x-auto">
-        <div className="min-w-[2400px] p-6">
-          {/* Time Headers */}
-          <div
-            className="mb-4 grid pb-4"
-            style={{ gridTemplateColumns: `repeat(${times.length}, 1fr)` }}
-          >
-            {times.map((time) => (
-              <div
-                key={time}
-                className="text-paragraph text-center text-sm font-medium"
-              >
-                {time}
-              </div>
-            ))}
-          </div>
+    <div className="space-y-6">
+      <HeaderTitle title={`مهام يوم ${dateStr}`} />
 
-          {/* Grid Rows (Time Slots) */}
-          <div className="relative">
-            <div
-              className="grid border-l"
-              style={{
-                gridTemplateColumns: `repeat(${times.length}, 1fr)`,
-                gridTemplateRows: `repeat(${rowsCount}, minmax(80px, 1fr))`,
-              }}
-            >
-              {Array.from({ length: rowsCount * times.length }).map((_, i) => {
-                const rowIndex = Math.floor(i / times.length);
-                const isLastRow = rowIndex === rowsCount - 1;
-
-                return (
-                  <div
-                    key={i}
-                    className={`border-r bg-white ${!isLastRow ? "border-b" : ""} `}
-                  ></div>
-                );
-              })}
-            </div>
-
-            {/* Events overlay */}
-            <div className="pointer-events-none absolute inset-0 p-0">
-              <div
-                className="relative grid h-full w-full"
-                style={{
-                  gridTemplateColumns: `repeat(${times.length}, 1fr)`,
-                  gridTemplateRows: `repeat(${rowsCount}, 1fr)`,
-                }}
-              >
-                <EventsGrid events={events} times={times} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+      <div className="mt-4 grid grid-cols-1 gap-6">
+        {tasks.map((task) => (
+          <TasksCard task={task} key={task.id} />
+        ))}
+      </div>
+    </div>
   );
 };
 

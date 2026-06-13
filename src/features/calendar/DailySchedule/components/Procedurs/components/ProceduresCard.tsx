@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getStatusArabic } from "@/shared/utils/getProceduresDescionsArabic";
-import { MapPin } from "lucide-react";
+import { Circle, MapPin } from "lucide-react";
 import { useState } from "react";
+import { useStyleStatus } from "../../../hooks/useStyleStatus";
 import { ProcedureDetailsDialog } from "./ProcedureDetailsDialog";
 
 interface IProcedure {
@@ -15,7 +15,10 @@ interface IProcedure {
 
 export const ProceduresCard = ({ proc }: { proc: IProcedure }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
-
+  const { taskStatusStyles, taskStatusLabels } = useStyleStatus();
+  const statusClass =
+    taskStatusStyles[proc.status] || "bg-gray-50 text-gray-700 border-gray-200";
+  const statusLabel = taskStatusLabels[proc.status] || proc.status;
   return (
     <>
       <Card
@@ -42,10 +45,12 @@ export const ProceduresCard = ({ proc }: { proc: IProcedure }) => {
             </div>
             <div className="text-muted-foreground flex items-center gap-3 text-sm">
               <div className="bg-secondary/5 rounded-md p-2">
-                <MapPin className="text-primary h-4 w-4" />
+                <Circle className="text-primary h-4 w-4" />
               </div>
-              <span className="text-foreground/80 font-medium">
-                {getStatusArabic(proc.status)}
+              <span
+                className={`shrink-0 rounded-full border px-3 py-1 text-xs font-medium ${statusClass}`}
+              >
+                {statusLabel}
               </span>
             </div>
           </div>
