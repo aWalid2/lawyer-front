@@ -32,7 +32,7 @@ const UserTasksSchedule = ({
     return (
       <div>
         <HeaderTitle title={`مواعيد يوم ${dateStr}`} />
-        <EmptyTable message={`لا توجد مواعيد ليوم ${dateStr}`} />;
+        <EmptyTable message={`لا توجد مواعيد ليوم ${dateStr}`} />
       </div>
     );
   return (

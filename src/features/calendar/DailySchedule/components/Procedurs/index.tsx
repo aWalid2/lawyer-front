@@ -8,7 +8,6 @@ interface IProcedure {
   id: number | string;
   title: string;
   type: string;
-  time: string;
   client: string;
   location: string;
   status: string;
@@ -29,7 +28,7 @@ const ProceduresSchedule = ({
     return (
       <div>
         <HeaderTitle title={`إجراءات يوم ${dateStr}`} />
-        <EmptyTable message={`لا توجد إجراءات ليوم ${dateStr}`} />;
+        <EmptyTable message={`لا توجد إجراءات ليوم ${dateStr}`} />
       </div>
     );
   return (

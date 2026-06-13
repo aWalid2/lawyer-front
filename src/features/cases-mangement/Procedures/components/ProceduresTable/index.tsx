@@ -41,7 +41,6 @@ export const ProceduresTable: React.FC = () => {
     return <Error message="حدث خطأ أثناء جلب الإجراءات." error={error} />;
   }
 
-  console.log(indexedProceduresData);
   const columns: Column<Procedure>[] = [
     {
       header: "#",

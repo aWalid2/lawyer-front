@@ -32,7 +32,7 @@ export const useProceduresTable = () => {
       itemsPerPage: ITEMS_PER_PAGE,
       meta: proceduresResponse?.meta,
     });
-    console.log(proceduresData)
+
 
   const createMutation = useCreateProcedure(caseId!);
   const updateMutation = useUpdateProcedure(caseId!);

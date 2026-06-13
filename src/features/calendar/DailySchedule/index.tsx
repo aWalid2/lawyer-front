@@ -25,7 +25,6 @@ interface ProcedureItem {
   id: number | string;
   title: string;
   type: string;
-  time: string;
   client: string;
   location: string;
   status: string;
@@ -63,14 +62,11 @@ const mapTaskToEvent = (task: {
 
 const mapProcedureToItem = (proc: AgendaProcedure): ProcedureItem => ({
   id: proc.id ?? "",
-  title: proc.actionType || proc.title || "إجراء",
+  title: proc.procedure_title || "إجراء",
   type: proc.type || "إجراء",
-  time: proc.session_date
-    ? format(new Date(proc.session_date), "hh:mm aaa")
-    : "",
   client: proc.client_name || proc.clientName || "",
   location: proc.admin_authority || proc.location || "",
-  status: proc.status || "قادم",
+  status: proc.actionType || "-",
 });
 
 const DailySchedule = ({ selectedDate }: DailyScheduleProps) => {
@@ -82,8 +78,6 @@ const DailySchedule = ({ selectedDate }: DailyScheduleProps) => {
     { month, year, date: dateStr },
     !!selectedDate,
   );
-
-  console.log("DailySchedule received agendaData:", agendaData);
 
   const tasks: TaskEvent[] = (agendaData?.tasks ?? []).map(mapTaskToEvent);
   const procedures: ProcedureItem[] = (agendaData?.procedures ?? []).map(
