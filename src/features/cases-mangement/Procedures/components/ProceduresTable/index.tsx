@@ -41,6 +41,7 @@ export const ProceduresTable: React.FC = () => {
     return <Error message="حدث خطأ أثناء جلب الإجراءات." error={error} />;
   }
 
+  console.log(indexedProceduresData);
   const columns: Column<Procedure>[] = [
     {
       header: "#",
@@ -49,7 +50,7 @@ export const ProceduresTable: React.FC = () => {
     },
     {
       header: "عنوان الإجراء",
-      accessor: "procedure_title",
+      accessor: (item) => item.procedure_title,
     },
     {
       header: "تاريخ الانشاء",

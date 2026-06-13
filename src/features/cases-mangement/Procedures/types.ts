@@ -19,7 +19,7 @@ export interface Procedure {
   sequence_number?: string;
     reference_number?:number;
 case_title?:string;
-procedure_title?:string;
+procedure_title:string;
   rowNumber?: number;
   case_id?: number;
   actionType: string;

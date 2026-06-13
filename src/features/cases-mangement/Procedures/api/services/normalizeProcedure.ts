@@ -23,6 +23,7 @@ export const normalizeProcedure = (procedure: any): Procedure => {
           ? Number(normalizedLawyer.user_id)
           : null,
     session_decision: procedure?.session_decision || procedure?.decision || "",
+    procedure_title: procedure?.procedure_title ||"",
     notes: procedure?.notes || "",
     lawyer: normalizedLawyer,
     lawyer_name:
