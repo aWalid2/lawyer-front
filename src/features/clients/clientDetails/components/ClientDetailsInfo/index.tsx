@@ -15,7 +15,12 @@ const ClientDetailsInfo: React.FC = () => {
   return (
     <div className="space-y-6">
       <BasicClientDetails client={client} />
-      <ContractDetails contract={client?.contract} />
+      <ContractDetails
+        clientId={client?.user_id}
+        contracts={
+          client?.contracts ?? (client?.contract ? [client.contract] : null)
+        }
+      />
     </div>
   );
 };

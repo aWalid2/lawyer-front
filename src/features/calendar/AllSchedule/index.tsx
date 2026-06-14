@@ -63,6 +63,12 @@ export const AllScheduleFeatures = () => {
           >
             الإجراءات
           </TabsTrigger>
+          <TabsTrigger
+            value="consultation"
+            className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white sm:px-12 sm:text-base"
+          >
+            الاستشارات
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="tasks" className="mt-0">

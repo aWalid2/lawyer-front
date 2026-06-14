@@ -155,6 +155,23 @@ export const useCaseInfoDetails = (id?: string) => {
         authorityArrivalDate: formatDateToYYYYMMDD(
           caseInfoQuery.data?.Case_Arrival_Date_at_the_Authority,
         ),
+        caseFeesType: caseInfoQuery.data?.case_fees?.case_fees_type || "",
+        contractNumber:
+          caseInfoQuery.data?.contract?.contract_number ||
+          caseInfoQuery.data?.case_fees?.contract_based?.toString() ||
+          "",
+        contractStartDate:
+          caseInfoQuery.data?.contract?.start_date ||
+          caseInfoQuery.data?.contract_start_date ||
+          "",
+        contractValue:
+          caseInfoQuery.data?.contract?.contract_value ||
+          caseInfoQuery.data?.contract_value ||
+          "",
+        contractDuration:
+          caseInfoQuery.data?.contract?.contract_duration ||
+          caseInfoQuery.data?.contract_duration ||
+          "",
       }
     : undefined;
 

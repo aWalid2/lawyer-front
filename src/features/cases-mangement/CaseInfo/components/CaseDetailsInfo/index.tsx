@@ -66,6 +66,14 @@ export const CaseDetailsInfo: React.FC<FormCaseDetailsProps> = ({
     },
   ];
 
+  const contractFields: DetailField[] = [
+    { label: "نوع الأتعاب", text: caseData?.caseFeesType },
+    { label: "رقم العقد", text: caseData?.contractNumber },
+    { label: "قيمة العقد", text: caseData?.contractValue },
+    { label: "مدة العقد", text: caseData?.contractDuration },
+    { label: "تاريخ بداية العقد", text: caseData?.contractStartDate },
+  ];
+
   const administrativeFields: DetailField[] = [
     { label: "تاريخ إنشاء القضية", text: caseData?.creationDate },
     { label: "تاريخ ورود القضية في المكتب", text: caseData?.receiptDate },
@@ -101,6 +109,11 @@ export const CaseDetailsInfo: React.FC<FormCaseDetailsProps> = ({
       <CaseDetailsCollapsibleSection
         title="معلومات عن الخبراء"
         fields={expertFields}
+      />
+      <CaseDetailsCollapsibleSection
+        title="معلومات العقد المرتبط بالقضية"
+        fields={contractFields}
+        defaultOpen
       />
       <CaseDetailsCollapsibleSection
         title="معلومات ادارية اخري"

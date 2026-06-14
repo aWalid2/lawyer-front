@@ -27,6 +27,11 @@ export interface CaseFormValues {
   subjectOfExpertise?: string;
   finalOpinion?: string;
   authorityArrivalDate?: string;
+  caseFeesType?: string;
+  contractNumber?: string;
+  contractStartDate?: string;
+  contractValue?: string;
+  contractDuration?: string;
 }
 
 export interface DetailField {

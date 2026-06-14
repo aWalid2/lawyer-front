@@ -25,4 +25,5 @@ export interface ClientDetailsData {
   authorization_photo?: string | null;
   user?: ClientUserDetails | null;
   contract?: ClientContract | null;
+  contracts?: ClientContract[] | null;
 }
