@@ -12,8 +12,18 @@ export const getAgenda = async (
 
   const { data } = await api.get("/agenda", { params: queryParams });
 
+  const normalizedTasks = (data?.tasks ?? []).map(
+    (task: Record<string, unknown>) => ({
+      ...task,
+      assigner:
+        typeof task.assigner === "object" && task.assigner !== null
+          ? (task.assigner as { first_name?: string }).first_name || null
+          : task.assigner,
+    }),
+  );
+
   return {
-    tasks: data?.tasks ?? [],
+    tasks: normalizedTasks,
     procedures: data?.procedures ?? [],
     meta: data?.meta ?? {
       startDate: "",
