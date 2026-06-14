@@ -8,22 +8,15 @@ import { CopyButton } from "@/components/ui/copy-button";
 const SHIKI_LANGUAGES = {
   bash: () => import("@shikijs/langs/bash"),
   css: () => import("@shikijs/langs/css"),
-  diff: () => import("@shikijs/langs/diff"),
   html: () => import("@shikijs/langs/html"),
-  javascript: () => import("@shikijs/langs/javascript"),
   js: () => import("@shikijs/langs/js"),
   json: () => import("@shikijs/langs/json"),
   markdown: () => import("@shikijs/langs/markdown"),
-  mdx: () => import("@shikijs/langs/mdx"),
-  python: () => import("@shikijs/langs/python"),
-  sh: () => import("@shikijs/langs/bash"),
-  shell: () => import("@shikijs/langs/bash"),
   sql: () => import("@shikijs/langs/sql"),
   ts: () => import("@shikijs/langs/ts"),
   tsx: () => import("@shikijs/langs/tsx"),
-  typescript: () => import("@shikijs/langs/typescript"),
   yaml: () => import("@shikijs/langs/yaml"),
-  yml: () => import("@shikijs/langs/yml"),
+  sh: () => import("@shikijs/langs/bash"),
 } as const;
 
 const SHIKI_THEMES = {
