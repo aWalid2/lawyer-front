@@ -1,84 +1,42 @@
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import AllScheduleCard from "./components/AllScheduleCard";
 import HeaderActions from "./components/HeaderActions";
+import AllScheduleTasks from "./components/AllScheduleTasks";
+import AllScheduleProcedures from "./components/AllScheduleProcedures";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { Pagination } from "@/shared/components/Pagination";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAgenda } from "../api/hooks/useAgenda";
-import { useMemo, useState } from "react";
-import { format } from "date-fns";
-import { ar } from "date-fns/locale";
+import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
-interface ScheduleItem {
+interface ProcedureItem {
   id: number | string;
   title: string;
-  date: string;
-  time: string;
   location: string;
-  client: string;
-  type: string;
-  kind: "task" | "procedure";
+  status: string;
+  date: string;
 }
-
-const ITEMS_PER_PAGE = 9;
 
 export const AllScheduleFeatures = () => {
   const [searchParams] = useSearchParams();
-  const [currentPage, setCurrentPage] = useState(1);
   const now = new Date();
   const month = Number(searchParams.get("month")) || now.getMonth() + 1;
   const year = Number(searchParams.get("year")) || now.getFullYear();
 
-  const { data: agendaData, isPending } = useAgenda({ month, year });
+  const { data: agendaData, isPending } = useAgenda({
+    month,
+    year,
+  });
 
-  const schedules: ScheduleItem[] = useMemo(() => {
-    if (!agendaData) return [];
-
-    const tasks: ScheduleItem[] = (agendaData.tasks ?? []).map((task) => ({
-      id: task.id,
-      title: task.task_title,
-      date: task.start_date
-        ? format(new Date(task.start_date), "dd MMMM yyyy", { locale: ar })
-        : "",
-      time: task.start_date
-        ? format(new Date(task.start_date), "hh:mm aaa")
-        : "",
-      location: "",
-      client: "",
-      type: "مهمة",
-      kind: "task" as const,
+  const tasks = agendaData?.tasks ?? [];
+  const procedures: ProcedureItem[] = useMemo(() => {
+    return (agendaData?.procedures ?? []).map((proc) => ({
+      id: proc.id ?? "",
+      title: proc.procedure_title || proc.title || "إجراء",
+      location: proc.admin_authority || proc.location || "",
+      status: proc.actionType || "-",
+      date: proc.session_date || "-",
     }));
-
-    const procedures: ScheduleItem[] = (agendaData.procedures ?? []).map(
-      (proc) => ({
-        id: proc.id ?? "",
-        title: proc.actionType || proc.title || "إجراء",
-        date: proc.session_date
-          ? format(new Date(proc.session_date), "dd MMMM yyyy", { locale: ar })
-          : "",
-        time: proc.session_date
-          ? format(new Date(proc.session_date), "hh:mm aaa")
-          : "",
-        location: proc.admin_authority || proc.location || "",
-        client: proc.client_name || proc.clientName || "",
-        type: "إجراء",
-        kind: "procedure" as const,
-      }),
-    );
-
-    return [...tasks, ...procedures];
   }, [agendaData]);
-
-  const totalPages = Math.max(1, Math.ceil(schedules.length / ITEMS_PER_PAGE));
-  const safePage = Math.min(currentPage, totalPages);
-  const paginatedSchedules = useMemo(() => {
-    const start = (safePage - 1) * ITEMS_PER_PAGE;
-    return schedules.slice(start, start + ITEMS_PER_PAGE);
-  }, [schedules, safePage]);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
 
   if (isPending) {
     return <LoadingPage />;
@@ -91,28 +49,30 @@ export const AllScheduleFeatures = () => {
         <HeaderActions />
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {schedules.length === 0 ? (
-          <p className="text-muted-foreground col-span-full text-center">
-            لا توجد مواعيد لهذا الشهر
-          </p>
-        ) : (
-          paginatedSchedules.map((schedule) => (
-            <AllScheduleCard
-              key={`${schedule.kind}-${schedule.id}`}
-              schedule={schedule}
-            />
-          ))
-        )}
-      </div>
+      <Tabs defaultValue="tasks" className="w-full" dir="rtl">
+        <TabsList className="border-primary/50 mb-6 flex h-13! w-full items-center overflow-hidden rounded-full border bg-white p-0 sm:w-fit">
+          <TabsTrigger
+            value="tasks"
+            className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white sm:px-12 sm:text-base"
+          >
+            المهام
+          </TabsTrigger>
+          <TabsTrigger
+            value="procedures"
+            className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white sm:px-12 sm:text-base"
+          >
+            الإجراءات
+          </TabsTrigger>
+        </TabsList>
 
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={safePage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      )}
+        <TabsContent value="tasks" className="mt-0">
+          <AllScheduleTasks tasks={tasks} />
+        </TabsContent>
+
+        <TabsContent value="procedures" className="mt-0">
+          <AllScheduleProcedures procedures={procedures} />
+        </TabsContent>
+      </Tabs>
     </>
   );
 };
