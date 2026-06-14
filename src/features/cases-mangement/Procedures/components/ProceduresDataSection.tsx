@@ -11,6 +11,8 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useGetLastProcedure } from "../api/hooks/useGetLastProcedure";
 import { getProcedureLawyerName } from "../types";
+import { decisionOptions } from "@/shared/constants/procedursOptions";
+import { getOptionLabel } from "@/shared/utils/getOptionLabel";
 
 export const ProceduresDataSection: React.FC = () => {
   const { id: caseId } = useParams<{ id: string }>();
@@ -42,7 +44,7 @@ export const ProceduresDataSection: React.FC = () => {
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
         <InputBox
           label="عنوان الإجراء"
-          text={latestProcedure.actionType || "-"}
+          text={latestProcedure.procedure_title || "-"}
         />
         <InputBox
           label="تاريخ الاحالة"
@@ -76,7 +78,9 @@ export const ProceduresDataSection: React.FC = () => {
         />
         <InputBox
           label="حالة الاجراء"
-          text={latestProcedure.session_decision || "-"}
+          text={
+            getOptionLabel(latestProcedure.actionType, decisionOptions) || "-"
+          }
         />
 
         <div className="col-span-1 md:col-span-2">
