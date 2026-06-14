@@ -2,10 +2,10 @@ import React from "react";
 import { HeaderTitle } from "@/shared/components/HeaderTitle";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
-import HeaderSection from "./HeaderSection";
-import TaskDetails from "./TaskDetails";
-import TimelineForm from "./TimelineForm";
-import CommentsSection from "./CommentsSection";
+import HeaderSection from "./components/HeaderSection";
+import TaskMainDetails from "./components/TaskMainDetails";
+import Timeline from "./components/Timeline";
+import CommentsSection from "./components/CommentsSection";
 import { useGetOneTask } from "../api/hooks/useGetOne";
 import { useFetchCases } from "../api/hooks/useGetCase";
 import { getStatusArabic } from "@/shared/utils/getProceduresDescionsArabic";
@@ -14,7 +14,7 @@ interface TaskDetailProps {
   id?: string;
 }
 
-const TaskDetail: React.FC<TaskDetailProps> = ({ id: propId }) => {
+const TaskDetails: React.FC<TaskDetailProps> = ({ id: propId }) => {
   const taskId = propId;
 
   const { data, isPending, isError, error } = useGetOneTask(taskId || "");
@@ -30,14 +30,14 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ id: propId }) => {
     );
   }, [cases]);
 
-  const getTaskTypeDisplay = (taskType: string): string => {
-    if (!taskType) return "-";
+  const getTaskTypeDisplay = (TaskTitle: string): string => {
+    if (!TaskTitle) return "-";
 
-    if (casesMap.has(String(taskType))) {
-      return casesMap.get(String(taskType));
+    if (casesMap.has(String(TaskTitle))) {
+      return casesMap.get(String(TaskTitle));
     }
 
-    return taskType;
+    return TaskTitle;
   };
 
   if (isPending) {
@@ -65,8 +65,8 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ id: propId }) => {
     return d.toISOString().split("T")[0];
   };
 
-  const taskDetails = {
-    TaskType: getTaskTypeDisplay(task.task_type),
+  const tasksMainDetailsData = {
+    TaskTitle: getTaskTypeDisplay(task.task_title),
     PersonInCharge:
       task.assignee?.first_name || task.assigned_to?.toString() || "",
     DeliveryDate: cleanDate(task.delivery_date),
@@ -74,34 +74,27 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ id: propId }) => {
   };
 
   const timeline = {
-    startDate: cleanDate(task.start_date),
-    endDate: cleanDate(task.end_date),
+    startDate: cleanDate(task.created_at),
+    endDate: cleanDate(task.delivery_date),
   };
 
   const commentsData = {
     description: task.details || task.notes || "لا يوجد وصف",
-    comments: [],
   };
 
   return (
     <>
       <HeaderTitle title="تفاصيل المهمة" />
 
-      <HeaderSection
-        title={task.task_title || "بدون عنوان"}
-        status={getStatusArabic(task.status)}
-      />
+      <HeaderSection status={getStatusArabic(task.status)} />
 
-      <TaskDetails task={taskDetails} />
+      <TaskMainDetails task={tasksMainDetailsData} />
 
-      <TimelineForm startDate={timeline.startDate} endDate={timeline.endDate} />
+      <Timeline startdate={timeline.startDate} endDate={timeline.endDate} />
 
-      <CommentsSection
-        description={commentsData.description}
-        comments={commentsData.comments}
-      />
+      <CommentsSection description={commentsData.description} />
     </>
   );
 };
 
-export default TaskDetail;
+export default TaskDetails;

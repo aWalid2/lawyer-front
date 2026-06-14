@@ -1,7 +1,7 @@
 
 import api from "@/lib/api";
 
-const normalizeAssigner = (task: Record<string, unknown>) => {
+const normalizeAssigner = <T extends Record<string, unknown>>(task: T): T => {
   if (!task) return task;
   return {
     ...task,
