@@ -63,7 +63,7 @@ jobs:
             cd /lawyer/lawyer-front
 
             echo "Pulling latest code"
-            git pull origin main
+            git pull origin test/lawyer-test
 
             echo "Installing dependencies"
             npm ci
