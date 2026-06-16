@@ -70,7 +70,7 @@ export const useRolesTable = () => {
     };
 
     if (id) {
-      await updateMutation.mutateAsync({ id, ...payload });
+      await updateMutation.mutateAsync(payload);
       return;
     }
 

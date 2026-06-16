@@ -1,12 +1,11 @@
 import api from "@/lib/api";
 
 interface UpdateCaseRolePayload {
-  id: number;
-  role_id: number;
   case_id: number;
+  role_id: number;
 }
 
-export const updateCaseRole = async ({ id, role_id, case_id }: UpdateCaseRolePayload) => {
-  const response = await api.patch(`/employee-roles/${id}`, { role_id, case_id });
+export const updateCaseRole = async ({ case_id, role_id }: UpdateCaseRolePayload) => {
+  const response = await api.patch(`/employee-roles/case/${case_id}/role/${role_id}`);
   return response.data;
 };
