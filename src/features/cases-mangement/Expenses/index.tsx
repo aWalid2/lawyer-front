@@ -74,7 +74,7 @@ export const ExpensesCaseFeature = () => {
     },
     {
       header: "قيمة المصروف",
-      accessor: (item) => `${item.amount.toLocaleString("en-US")} ج.م`,
+      accessor: (item) => `${item.amount.toLocaleString("en-US")} د.ك`,
     },
     {
       header: "تاريخ المصروف",

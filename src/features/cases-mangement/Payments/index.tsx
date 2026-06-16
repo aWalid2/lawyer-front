@@ -53,11 +53,23 @@ const PaymentsCaseFeature = () => {
       headerClassName: "w-[60px]",
     },
 
-    { header: "اسم الموظف المسئول", accessor: "employee_name", className: "text-right" },
-    { header: "نوع الدفعة", accessor: (item) => PAYMENT_TYPE_OPTIONS.find((opt) => opt.value === item.payment_type)?.label || item.payment_type || "-", className: "text-right" },
+    {
+      header: "اسم الموظف المسئول",
+      accessor: "employee_name",
+      className: "text-right",
+    },
+    {
+      header: "نوع الدفعة",
+      accessor: (item) =>
+        PAYMENT_TYPE_OPTIONS.find((opt) => opt.value === item.payment_type)
+          ?.label ||
+        item.payment_type ||
+        "-",
+      className: "text-right",
+    },
     {
       header: "المبلغ",
-      accessor: (item) => `${item.amount}`,
+      accessor: (item) => `${item.amount.toLocaleString("en-US")} د.ك`,
     },
     {
       header: "تاريخ الدفعة",

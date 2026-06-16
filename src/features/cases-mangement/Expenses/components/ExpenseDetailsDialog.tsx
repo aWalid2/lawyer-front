@@ -57,7 +57,7 @@ export const ExpenseDetailsDialog: React.FC<ExpenseDetailsDialogProps> = ({
         <InputBox label="وصف المصروف" text={expense?.description || "-"} />
         <InputBox
           label="قيمة المصروف"
-          text={expense ? `${expense.amount.toLocaleString("en-US")} ج.م` : "-"}
+          text={expense ? `${expense.amount.toLocaleString("en-US")} د.ك` : "-"}
         />
         <div className="col-span-1 md:col-span-2">
           <InputBox

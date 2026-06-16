@@ -25,7 +25,7 @@ export const ExpensesSummary = ({ caseId }: ExpensesSummaryProps) => {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <InputBox
           label="إجمالي المصروفات"
-          text={`${summary.totalAmount.toLocaleString("en-US")} ج.م`}
+          text={`${summary.totalAmount.toLocaleString("en-US")} د.ك`}
         />
         <InputBox
           label="تاريخ آخر مصروف"
