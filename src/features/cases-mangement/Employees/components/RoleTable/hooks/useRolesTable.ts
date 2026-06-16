@@ -62,7 +62,7 @@ export const useRolesTable = () => {
     const selectedOption = roleOptions.find(
       (o) => o.value === Number(values.role_id),
     );
-    if (!selectedOption) return;
+    // if (!selectedOption) return;
 
     const payload = {
       role_id: Number(values.role_id),
