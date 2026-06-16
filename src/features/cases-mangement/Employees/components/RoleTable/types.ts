@@ -1,10 +1,25 @@
 
+export interface RoleInfo {
+  id: number;
+  role_name: string;
+  permission: any[];
+}
+
+export interface CaseInfo {
+  id: number;
+  case_title: string;
+  case_sequence: string;
+  case_situation: string;
+}
+
 export interface CaseRole {
   id: number;
   case_id: number;
   role_id: number;
   role_name: string;
   employee_count: number;
+  role?: RoleInfo;
+  case?: CaseInfo;
   rowNumber?: number;
 }
 

@@ -80,7 +80,7 @@ export const AddProcedureDialogForm: React.FC<AddProcedureDialogFormProps> = ({
             />
             <SelectForm
               name="lawyer_id"
-              label="المحامي المسؤول"
+              label="الموظف المسئول"
               options={lawyersOptions}
               showSearch={true}
             />

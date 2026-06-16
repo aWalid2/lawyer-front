@@ -1,10 +1,12 @@
+import { useGetAllRoles } from "@/features/settings/permissions/api";
+import { useIndexedApiPagination } from "@/shared/hooks/useIndexedApiPagination";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useIndexedApiPagination } from "@/shared/hooks/useIndexedApiPagination";
-import { useGetAllRoles } from "@/features/settings/permissions/api";
-import { MOCK_CASE_ROLES } from "../components/mockCaseRoles";
-import type { CaseRole, CaseRoleFormValues } from "../types";
-import { toast } from "sonner";
+import { useCreateCaseRole } from "../api/hooks/useCreateCaseRole";
+import { useDeleteCaseRole } from "../api/hooks/useDeleteCaseRole";
+import { useGetCaseRoles } from "../api/hooks/useGetCaseRoles";
+import { useUpdateCaseRole } from "../api/hooks/useUpdateCaseRole";
+import type { CaseRoleFormValues } from "../types";
 
 const ITEMS_PER_PAGE = 15;
 
@@ -15,14 +17,21 @@ export const useRolesTable = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isViewOpen, setIsViewOpen] = useState(false);
 
-  // ── Fake data: replace with real API later ──
-  const [caseRoles, setCaseRoles] = useState<CaseRole[]>(MOCK_CASE_ROLES);
-  const isPending = false;
-  const isError = false;
-  const error = null;
+  // ── Real API ──
+  const {
+    data: caseRolesResponse,
+    isPending,
+    isError,
+    error,
+  } = useGetCaseRoles(caseId);
 
   // ── Roles from settings (real API) ──
   const { data: rolesResponse, isLoading: isRolesLoading } = useGetAllRoles();
+
+  const caseRoles = useMemo(
+    () => caseRolesResponse?.data ?? [],
+    [caseRolesResponse?.data],
+  );
 
   const roleOptions = useMemo(() => {
     if (!Array.isArray(rolesResponse)) return [];
@@ -37,44 +46,45 @@ export const useRolesTable = () => {
       data: caseRoles,
       page,
       itemsPerPage: ITEMS_PER_PAGE,
+      meta: caseRolesResponse?.meta,
     });
 
   const selectedRole = useMemo(
-    () => caseRoles.find((r) => r.id === selectedRoleId) ?? null,
+    () => caseRoles.find((r:any) => r.id === selectedRoleId) ?? null,
     [caseRoles, selectedRoleId],
   );
 
-  // ── Fake mutations (replace with real API later) ──
-  const isSubmitting = false;
+  const createMutation = useCreateCaseRole(caseId!);
+  const updateMutation = useUpdateCaseRole(caseId!);
+  const deleteMutation = useDeleteCaseRole(caseId!);
 
-  const handleSave = async (values: CaseRoleFormValues, _id?: number) => {
+  const handleSave = async (values: CaseRoleFormValues, id?: number) => {
     const selectedOption = roleOptions.find(
       (o) => o.value === Number(values.role_id),
     );
     if (!selectedOption) return;
 
-    const newRole: CaseRole = {
-      id: Date.now(),
-      case_id: Number(caseId),
+    const payload = {
       role_id: Number(values.role_id),
-      role_name: String(selectedOption.label),
-      employee_count: 0,
+      case_id: Number(caseId),
     };
 
-    setCaseRoles((prev) => [...prev, newRole]);
-    toast.success("تم تعيين الدور بنجاح");
+    if (id) {
+      await updateMutation.mutateAsync({ id, ...payload });
+      return;
+    }
+
+    await createMutation.mutateAsync(payload);
   };
 
   const handleDelete = async (id: number) => {
-    setCaseRoles((prev) => prev.filter((r) => r.id !== id));
+    await deleteMutation.mutateAsync(id);
 
     if (selectedRoleId === id) {
       setSelectedRoleId(null);
       setIsViewOpen(false);
       setIsFormOpen(false);
     }
-
-    toast.success("تم حذف الدور من القضية");
   };
 
   const handleOpenView = (id: number) => {
@@ -116,7 +126,7 @@ export const useRolesTable = () => {
     handleViewOpenChange,
     handleEditFromView,
     isOptionsPending: isRolesLoading,
-    isCreatePending: false,
-    isSubmitting,
+    isCreatePending: createMutation.isPending,
+    isSubmitting: createMutation.isPending || updateMutation.isPending,
   };
 };
