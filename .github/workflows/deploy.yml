@@ -61,10 +61,10 @@ jobs:
 
             echo "Starting deploy..."
 
-            cd /lawyer/lawyer-front-test
+            cd /lawyer/lawyer-front
 
             echo "Pulling latest code"
-            git pull origin test/lawyer-test
+            git pull origin main
 
             echo "Installing dependencies"
             npm ci
