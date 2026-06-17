@@ -27,6 +27,7 @@ export const sseNotification: SSEManager = {
     const url = `${VITE_API_URL}/notify/stream?token=${encodeURIComponent(token)}`;
     let eventSource: EventSource | null = null;
     let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+    let retryDelay = 1000;
     let isManuallyDisconnected = false;
 
     const connect = () => {
@@ -35,6 +36,7 @@ export const sseNotification: SSEManager = {
       eventSource = new EventSource(url);
 
       eventSource.onopen = () => {
+        retryDelay = 1000;
         onStatusChange?.(true);
       };
 
@@ -56,7 +58,9 @@ export const sseNotification: SSEManager = {
         eventSource?.close();
 
         if (!isManuallyDisconnected) {
-          reconnectTimer = setTimeout(connect, 5000);
+          // Exponential backoff: 1s → 2s → 4s → 8s → max 30s
+          reconnectTimer = setTimeout(connect, retryDelay);
+          retryDelay = Math.min(retryDelay * 2, 30000);
         }
       };
     };
