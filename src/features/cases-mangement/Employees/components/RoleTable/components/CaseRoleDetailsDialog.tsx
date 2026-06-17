@@ -20,7 +20,6 @@ export const CaseRoleDetailsDialog: React.FC<CaseRoleDetailsDialogProps> = ({
   onOpenChange,
   onEdit,
 }) => {
-  // Fetch users that belong to this role from the real settings API
   const {
     data: usersInRole,
     isPending: isUsersPending,
@@ -56,7 +55,6 @@ export const CaseRoleDetailsDialog: React.FC<CaseRoleDetailsDialogProps> = ({
             <InputBox label="عدد الموظفين" text={String(role.employee_count)} />
           </div>
 
-          {/* Employees inside this role */}
           <div className="mt-6">
             <h3 className="mb-4 text-base font-bold text-[#153A4D] dark:text-white">
               الموظفين داخل الدور

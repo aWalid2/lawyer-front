@@ -12,9 +12,10 @@ export const getCaseRoles = async (
       meta: { total: response.data.length },
     };
   }
-
+  
   const data = Array.isArray(response.data?.data) ? response.data.data : [];
-
+  
+  console.log(data)
   return {
     data: data.map(normalizeCaseRole),
     meta: {

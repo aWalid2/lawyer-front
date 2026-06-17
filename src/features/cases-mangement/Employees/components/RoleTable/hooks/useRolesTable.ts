@@ -69,8 +69,12 @@ export const useRolesTable = () => {
       case_id: Number(caseId),
     };
 
-    if (id) {
-      await updateMutation.mutateAsync(payload);
+    if (id !== undefined) {
+      await updateMutation.mutateAsync({
+        case_id: Number(caseId),
+        role_id: Number(values.role_id),
+        original_role_id: selectedRole?.role_id ?? Number(values.role_id),
+      });
       return;
     }
 

@@ -108,6 +108,7 @@ export const RoleTable: React.FC = () => {
           isOptionsPending={isOptionsPending}
           onSave={handleSave}
           isPending={isSubmitting}
+          editRole={selectedRole}
         />
       )}
 

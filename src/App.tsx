@@ -45,12 +45,14 @@ const ConsultationDetails = lazy(
 const Contracts = lazy(() => import("./pages/dashboard/Contracts"));
 // const AboutOffice = lazy(() => import("./pages/dashboard/AboutOffice"));
 const GlobalSearch = lazy(() => import("./features/GlobalSearch"));
+import { SSENotificationListener } from "./features/Notifications/components/SSENotificationListener";
 
 function App() {
   return (
     <Suspense fallback={<Loading />}>
       <Toaster position="top-right" richColors />
 
+      <SSENotificationListener />
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Navigate to="/auth/login" replace />} />

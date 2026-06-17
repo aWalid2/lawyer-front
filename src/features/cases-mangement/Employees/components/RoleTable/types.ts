@@ -2,6 +2,7 @@
 export interface RoleInfo {
   id: number;
   role_name: string;
+    user_counts: number;
   permission: any[];
 }
 
@@ -21,6 +22,10 @@ export interface CaseRole {
   role?: RoleInfo;
   case?: CaseInfo;
   rowNumber?: number;
+  _count?:{
+    users:number;
+  }
+  user_counts?:number
 }
 
 export interface CaseRoleFormValues {
@@ -33,4 +38,4 @@ export const EMPTY_CASE_ROLE_FORM_VALUES: CaseRoleFormValues = {
 
 export const getCaseRoleName = (role: CaseRole) => role.role_name;
 
-export const getCaseRoleEmployeeCount = (role: CaseRole) => role.employee_count;
+export const getCaseRoleEmployeeCount = (role: CaseRole) => role.user_counts ?? role.role?.user_counts ?? 0;
