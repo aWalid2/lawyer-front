@@ -14,7 +14,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://law.j-one.in",
+        target: "https://app.j-one.in",
         changeOrigin: true,
         secure: true,
       },
