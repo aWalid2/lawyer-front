@@ -39,17 +39,15 @@ const buildClientFormData = (data: AddClientPayload) => {
     formData.append("user_status", data.user_status);
     formData.append("clientId", "");
 
-    if (data.has_contract && data.contracts.length > 0) {
-        data.contracts.forEach((contract, index) => {
-            appendIfPresent(formData, `profile[contracts][${index}][start_date]`, contract.contract_start_date);
-            appendIfPresent(formData, `profile[contracts][${index}][contract_value]`, contract.contract_value);
-            appendIfPresent(formData, `profile[contracts][${index}][contract_duration]`, contract.contract_duration);
+    if (data.has_contract && data.contract) {
+        appendIfPresent(formData, "profile[contract][start_date]", data.contract.contract_start_date);
+        appendIfPresent(formData, "profile[contract][contract_value]", data.contract.contract_value);
+        appendIfPresent(formData, "profile[contract][contract_duration]", data.contract.contract_duration);
 
-            const contractFile = getFileFromInput(contract.contract_file);
-            if (contractFile) {
-                formData.append(`contract_file_${index}`, contractFile);
-            }
-        });
+        const contractFile = getFileFromInput(data.contract.contract_file);
+        if (contractFile) {
+            formData.append("contract_file", contractFile);
+        }
     }
 
     if (data.add_clients && data.password) {

@@ -21,7 +21,7 @@ export interface FormValues {
   add_clients: boolean;
   client_type: "individual" | "company" | "government";
   notes: string;
-  contracts: ContractItem[];
+  contract: ContractItem | null;
   confirmation_password: string;
   user_status: string;
 }

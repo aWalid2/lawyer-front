@@ -40,18 +40,20 @@ const validationFields = {
     .required("نوع الموكل مطلوب"),
   notes: Yup.string(),
   has_contract: Yup.boolean(),
-  contracts: Yup.array()
-    .of(
-      Yup.object({
-        contract_start_date: Yup.string().required("تاريخ بداية العقد مطلوب"),
-        contract_value: Yup.string().required("القيمة المتفق عليها مطلوبة"),
-        contract_duration: Yup.string().required("مدة العقد مطلوبة"),
-        contract_file: Yup.mixed().nullable(),
+  contract: Yup.object()
+    .nullable()
+    .shape({
+      contract_start_date: Yup.string().when([], {
+        is: () => true,
+        then: (schema) => schema.required("تاريخ بداية العقد مطلوب"),
       }),
-    )
+      contract_value: Yup.string().required("القيمة المتفق عليها مطلوبة"),
+      contract_duration: Yup.string().required("مدة العقد مطلوبة"),
+      contract_file: Yup.mixed().nullable(),
+    })
     .when("has_contract", {
       is: true,
-      then: (schema) => schema.min(1, "يجب إضافة عقد واحد على الأقل"),
+      then: (schema) => schema.required("بيانات العقد مطلوبة"),
       otherwise: (schema) => schema.notRequired(),
     }),
   add_clients: Yup.boolean(),

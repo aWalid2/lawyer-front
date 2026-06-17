@@ -29,7 +29,7 @@ const FormDetails = () => {
     add_clients: false,
     client_type: "individual",
     notes: "",
-    contracts: [],
+    contract: null,
     confirmation_password: "",
     user_status: "",
   };
@@ -50,7 +50,7 @@ const FormDetails = () => {
       countryCode: countryCode,
       notes: values.notes,
       has_contract: values.has_contract,
-      contracts: values.has_contract ? values.contracts : [],
+      contract: values.has_contract ? values.contract : null,
       add_clients: values.add_clients,
       ...(values.add_clients
         ? {
