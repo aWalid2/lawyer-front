@@ -1,4 +1,4 @@
-import { InputBox } from "@/shared/components/InputBox";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 import { ImagePreviewCard } from "./ImagePreviewCard";

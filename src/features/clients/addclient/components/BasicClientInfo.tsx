@@ -1,4 +1,4 @@
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { COUNTRY_OPTIONS } from "@/shared/constants/countryOptions";
 import {

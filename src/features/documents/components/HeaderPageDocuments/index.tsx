@@ -1,7 +1,7 @@
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderFilter } from "@/shared/components/Header/HeaderFilter";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
 import { AddDocumentDialog } from "../AddDocumentDialog";
-import { ButtonShowAll } from "@/shared/components/ButtonShowAll";
+import { ButtonShowAll } from "@/shared/components/buttons/ButtonShowAll";
 
 interface HeaderPageDocumentsProps {
   onSearch?: (term: string) => void;

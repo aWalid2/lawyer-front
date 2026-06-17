@@ -1,5 +1,5 @@
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
-import { InputBox } from "@/shared/components/InputBox";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { useGetCasePaymentsSummary } from "@/features/cases-mangement/Payments/api/hooks/useGetCasePaymentsSummary";
 

@@ -1,7 +1,7 @@
 import React from "react";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
+import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
 import { Plus } from "lucide-react";
 import { CaseTypeFormDialog } from "./CaseTypeFormDialog";
 
@@ -16,9 +16,7 @@ export const CaseTypesHeader: React.FC<CaseTypesHeaderProps> = ({
   onSearch,
 }) => {
   return (
-
-
-    <div className="flex flex-1 items-center gap-4 mb-6">
+    <div className="mb-6 flex flex-1 items-center gap-4">
       <HeaderTitle title="أنواع القضايا" />
       <HeaderSearch
         value={searchTerm}
@@ -35,7 +33,6 @@ export const CaseTypesHeader: React.FC<CaseTypesHeaderProps> = ({
           />
         }
       />
-
     </div>
   );
 };

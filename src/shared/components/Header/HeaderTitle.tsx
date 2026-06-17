@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRightIcon } from "../icons/ArrowRight";
+import { ArrowRightIcon } from "../../icons/ArrowRight";
 import { useNavigate } from "react-router-dom";
 
 interface HeaderTitleProps {

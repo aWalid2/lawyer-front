@@ -1,9 +1,9 @@
 import React from "react";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
-import { InputBox } from "@/shared/components/InputBox";
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
+import { InputBox } from "@/shared/components/inputs/InputBox";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 import { DateIcon } from "@/shared/icons/Date";
 import {
@@ -64,17 +64,13 @@ export const PoliceSessionDetailsDialog: React.FC<
             />
             <InputBox
               label="وقت الجلسة"
-              text={
-                formatDateToTime(session.session_date) ||
-                "-"
-              }
+              text={formatDateToTime(session.session_date) || "-"}
             />
             <InputBox label="المحامي المتابع" text={lawyerName || "-"} />
             <InputBox
               label="قرار الجلسة"
               text={session.session_decision || "-"}
             />
-
           </div>
         </CustomLayoutBorder>
       )}

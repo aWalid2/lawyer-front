@@ -4,7 +4,7 @@ import { DataTable, type Column } from "@/shared/components/DataTable";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
 import { usePaymentsCaseFeature } from "./hooks/usePaymentsCaseFeature";
 import { PaymentsActions } from "./components/PaymentsActions";
 import { EditModelPayments } from "./components/EditModelPayments";

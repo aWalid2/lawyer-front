@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
-import { EditIcon } from "../icons/Edit";
+import { EditIcon } from "../../icons/Edit";
 
 interface ButtonUpdateInfoProps extends Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,

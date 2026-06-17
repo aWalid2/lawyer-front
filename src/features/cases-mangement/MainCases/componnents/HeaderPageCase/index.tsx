@@ -1,8 +1,8 @@
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
 import { CasesFilter } from "./components/CasesFilter";
 import { NewCaseLink } from "./components/NewCaseLink";
-import { ButtonShowAll } from "@/shared/components/ButtonShowAll";
+import { ButtonShowAll } from "@/shared/components/buttons/ButtonShowAll";
 
 interface HeaderPageCaseProps {
   onSearch: (term: string) => void;

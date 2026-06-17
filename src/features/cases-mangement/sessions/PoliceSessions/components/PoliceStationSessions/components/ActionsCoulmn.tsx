@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
-import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { ButtonDeleteTable } from "@/shared/components/buttons/ButtonDeleteTable";
+import { ButtonUpdateTable } from "@/shared/components/buttons/ButtonUpdateTable";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
 import { ViewIcon } from "@/shared/icons/View";
 import { useRemovePoliceSessions } from "../../../api/hooks/useRemovePoliceSessions";
 import type { PoliceSession } from "../../../types/typsePolice";

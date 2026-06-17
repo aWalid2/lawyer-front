@@ -1,5 +1,5 @@
 import React from "react";
-import { ViewIcon } from "../icons/View";
+import { ViewIcon } from "../../icons/View";
 
 type ButtonViewTableProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 

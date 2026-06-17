@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { SelectForm } from "@/shared/components/SelectForm";
 import {

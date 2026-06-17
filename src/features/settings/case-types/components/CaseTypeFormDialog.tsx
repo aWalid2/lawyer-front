@@ -1,6 +1,6 @@
-import { InputForm } from "@/shared/components/InputForm";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
-import { SubmitButton } from "@/shared/components/SubmitButton";
+import { InputForm } from "@/shared/components/inputs/InputForm";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
+import { SubmitButton } from "@/shared/components/buttons/SubmitButton";
 import { Form, Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";

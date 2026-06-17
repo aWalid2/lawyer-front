@@ -1,6 +1,6 @@
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
-import { SubmitButton } from "@/shared/components/SubmitButton";
+import { SubmitButton } from "@/shared/components/buttons/SubmitButton";
 import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
 import { Form, Formik } from "formik";
 import React from "react";

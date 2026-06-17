@@ -1,8 +1,8 @@
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
-import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
+import { HeaderDatePicker } from "@/shared/components/Header/HeaderDatePicker";
+import { HeaderFilter } from "@/shared/components/Header/HeaderFilter";
+import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
 import React from "react";
 
 interface HeaderPageReportsPaymentsProps {

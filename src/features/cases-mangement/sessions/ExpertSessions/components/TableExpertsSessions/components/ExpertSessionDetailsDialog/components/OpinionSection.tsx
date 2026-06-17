@@ -1,6 +1,6 @@
 import React from "react";
 import { ExpertSectionCard } from "./ExpertSectionCard";
-import { InputBox } from "@/shared/components/InputBox";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 
 interface OpinionSectionProps {
   subjectOfExpertise: string;

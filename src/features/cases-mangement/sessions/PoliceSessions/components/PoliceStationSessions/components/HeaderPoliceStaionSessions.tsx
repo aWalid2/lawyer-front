@@ -1,4 +1,4 @@
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 
 interface HeaderPoliceStaionSessionsProps {
   onAdd: () => void;

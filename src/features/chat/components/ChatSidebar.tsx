@@ -2,7 +2,7 @@ import { Grid2X2, Phone, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import type { Conversation } from "../types/chatT";
 import { ChatSidebarItem } from "./ChatSidebarItem";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 
 interface ChatSidebarProps {
   conversations: Conversation[];

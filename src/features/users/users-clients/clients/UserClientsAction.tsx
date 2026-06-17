@@ -1,47 +1,44 @@
-import { useDeleteClient } from '@/features/clients/api/hooks/useDeleteClient';
-import { ButtonDeleteTable } from '@/shared/components/ButtonDeleteTable';
-import { ButtonUpdateTable } from '@/shared/components/ButtonUpdateTable';
-import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
-import { ViewLinkTablePageDetails } from '@/shared/components/ViewLinkTablePageDetails';
-import React from 'react';
-import type { ClientRelatedT } from '../types/types';
-import { EditClientDialog } from './EditClientDialog';
-
+import { useDeleteClient } from "@/features/clients/api/hooks/useDeleteClient";
+import { ButtonDeleteTable } from "@/shared/components/buttons/ButtonDeleteTable";
+import { ButtonUpdateTable } from "@/shared/components/buttons/ButtonUpdateTable";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
+import { ViewLinkTablePageDetails } from "@/shared/components/links/ViewLinkTablePageDetails";
+import React from "react";
+import type { ClientRelatedT } from "../types/types";
+import { EditClientDialog } from "./EditClientDialog";
 
 interface UserClientsActionProps {
-
-    client: ClientRelatedT;
-    onClientUpdated?: (client: any) => void;
+  client: ClientRelatedT;
+  onClientUpdated?: (client: any) => void;
 }
 
-export const UserClientsAction: React.FC<UserClientsActionProps> = ({ client, onClientUpdated }) => {
+export const UserClientsAction: React.FC<UserClientsActionProps> = ({
+  client,
+  onClientUpdated,
+}) => {
+  const { mutateAsync: deleteClient } = useDeleteClient();
 
+  return (
+    <div
+      className="flex items-center justify-center gap-2"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <ViewLinkTablePageDetails to={`/dashboard/clients/${client.user_id}`} />
 
-    const { mutateAsync: deleteClient } = useDeleteClient();
+      <EditClientDialog
+        client={client}
+        onSave={(values) => onClientUpdated?.(values)}
+        trigger={<ButtonUpdateTable />}
+      />
 
-    return (
-        <div className="flex items-center justify-center gap-2" onClick={(e) => e.stopPropagation()}>
-
-            <ViewLinkTablePageDetails to={`/dashboard/clients/${client.user_id}`} />
-
-            <EditClientDialog
-                client={client}
-                onSave={(values) => onClientUpdated?.(values)}
-                trigger={
-                    <ButtonUpdateTable />
-                }
-            />
-
-            <ConfirmDeleteDialog
-                title="حذف الموكل"
-                description={`هل أنت متأكد من حذف الموكل ${client.user.first_name} ؟`}
-                onConfirm={() => {
-                    deleteClient({ id: client.user_id });
-                }}
-                trigger={
-                    <ButtonDeleteTable />
-                }
-            />
-        </div>
-    );
+      <ConfirmDeleteDialog
+        title="حذف الموكل"
+        description={`هل أنت متأكد من حذف الموكل ${client.user.first_name} ؟`}
+        onConfirm={() => {
+          deleteClient({ id: client.user_id });
+        }}
+        trigger={<ButtonDeleteTable />}
+      />
+    </div>
+  );
 };

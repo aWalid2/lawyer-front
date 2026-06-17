@@ -1,4 +1,4 @@
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import { TasksCard } from "./components/TasksCard";

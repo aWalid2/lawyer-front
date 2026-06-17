@@ -1,7 +1,7 @@
 import React from "react";
-import { TableEditButton } from "@/shared/components/TableEditButton";
-import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { TableEditButton } from "@/shared/components/buttons/TableEditButton";
+import { TableDeleteButton } from "@/shared/components/buttons/TableDeleteButton";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
 import { CaseTypeFormDialog } from "./CaseTypeFormDialog";
 import type { CaseTypeT } from "../types/casesT";
 import { useDeleteCaseType } from "../api/hooks/useDeleteCaseType";
@@ -19,7 +19,7 @@ export const CaseTypesAction: React.FC<CaseTypesActionProps> = ({
     <div className="flex items-center justify-center gap-2">
       <CaseTypeFormDialog
         caseType={caseType}
-        trigger={<TableEditButton onClick={() => { }} />}
+        trigger={<TableEditButton onClick={() => {}} />}
       />
 
       <ConfirmDeleteDialog
@@ -28,7 +28,7 @@ export const CaseTypesAction: React.FC<CaseTypesActionProps> = ({
         onConfirm={async () => {
           await deleteCaseType(caseType.id);
         }}
-        trigger={<TableDeleteButton onClick={() => { }} />}
+        trigger={<TableDeleteButton onClick={() => {}} />}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { useDebounce } from "@/shared/hooks/useDebounce";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { fetchClients } from "@/shared/api/services/getClients";
 
@@ -96,10 +96,12 @@ export function SharedFormField() {
     async (page: number, search?: string) => {
       const response = await getClientStatuses(page, 15, search);
       return {
-        items: (response.data ?? []).map((clientStatus: SelectOptionEntity) => ({
-          label: clientStatus.name,
-          value: String(clientStatus.id),
-        })),
+        items: (response.data ?? []).map(
+          (clientStatus: SelectOptionEntity) => ({
+            label: clientStatus.name,
+            value: String(clientStatus.id),
+          }),
+        ),
         totalPages: response.meta?.total_pages ?? 1,
       };
     },

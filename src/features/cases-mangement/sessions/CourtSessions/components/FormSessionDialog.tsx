@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import { EditIcon } from "@/shared/icons/Edit";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
@@ -10,7 +10,7 @@ import { useGetCircles } from "@/shared/api/hooks/useGetCircles";
 import { useGetCourts } from "@/shared/api/hooks/useGetCourts";
 
 import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 
 export const FormSessionDialog: React.FC<{
@@ -52,7 +52,6 @@ export const FormSessionDialog: React.FC<{
       onOpenChange={setOpen}
       showCloseButton={true}
     >
-
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
@@ -62,11 +61,15 @@ export const FormSessionDialog: React.FC<{
       >
         {({ values }) => {
           const selectedCourtId = Number(values.court_id) || undefined;
-          const { data: circles } = useGetCircles(selectedCourtId, open && !!selectedCourtId);
-          const circlesOptions = circles?.map((circle: any) => ({
-            value: String(circle.id),
-            label: circle.name,
-          })) || [];
+          const { data: circles } = useGetCircles(
+            selectedCourtId,
+            open && !!selectedCourtId,
+          );
+          const circlesOptions =
+            circles?.map((circle: any) => ({
+              value: String(circle.id),
+              label: circle.name,
+            })) || [];
           return (
             <Form>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -80,7 +83,11 @@ export const FormSessionDialog: React.FC<{
                   label="المحامي المسؤول"
                   options={lawyersOptions}
                 />
-                <InputForm name="district_type" label="نوع الدائرة" type="text" />
+                <InputForm
+                  name="district_type"
+                  label="نوع الدائرة"
+                  type="text"
+                />
                 <SelectForm
                   name="district_number"
                   label=" الدائرة بالمحكمة"

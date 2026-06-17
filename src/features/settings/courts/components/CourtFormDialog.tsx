@@ -1,10 +1,10 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
-import { InputForm } from "@/shared/components/InputForm";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import type { CourtT } from "../types/courtTypes";
-import { SubmitButton } from "@/shared/components/SubmitButton";
+import { SubmitButton } from "@/shared/components/buttons/SubmitButton";
 import { useCreateCourt } from "../api/hooks/useCreateCourt";
 import { useUpdateCourt } from "../api/hooks/useUpdateCourt";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { HeaderActionButton } from "../../../../../../shared/components/HeaderActionButton";
+import { HeaderActionButton } from "../../../../../../shared/components/Header/HeaderActionButton";
 
 export const NewCaseButton: React.FC = () => {
   return (
@@ -10,7 +10,7 @@ export const NewCaseButton: React.FC = () => {
       label="قضية جديدة"
       icon={<span className="text-xl">+</span>}
       iconPosition="right"
-      className="flex-1 md:flex-none px-8 h-12.5 rounded-[12px]"
+      className="h-12.5 flex-1 rounded-[12px] px-8 md:flex-none"
     >
       <Link to="/dashboard/case-management/new" />
     </HeaderActionButton>

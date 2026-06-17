@@ -1,9 +1,9 @@
 import React from "react";
 import { Plus } from "lucide-react";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
+import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
+import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
 import { LitigationDegreeFormDialog } from "./LitigationDegreeFormDialog";
 
 interface LitigationDegreesHeaderProps {
@@ -12,11 +12,9 @@ interface LitigationDegreesHeaderProps {
   onTypeAdded?: () => void;
 }
 
-export const LitigationDegreesHeader: React.FC<LitigationDegreesHeaderProps> = ({
-  onSearch,
-  searchTerm,
-  onTypeAdded,
-}) => {
+export const LitigationDegreesHeader: React.FC<
+  LitigationDegreesHeaderProps
+> = ({ onSearch, searchTerm, onTypeAdded }) => {
   return (
     <HeaderPageLayout>
       <HeaderTitle title="أنواع درجات التقاضي" />

@@ -1,7 +1,7 @@
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { InputForm } from "@/shared/components/InputForm";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
-import { SubmitButton } from "@/shared/components/SubmitButton";
+import { SubmitButton } from "@/shared/components/buttons/SubmitButton";
 import { SwitchForm } from "@/shared/components/SwitchForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { Form, Formik, useFormikContext, type FormikErrors } from "formik";

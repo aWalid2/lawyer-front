@@ -1,5 +1,5 @@
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
+import { ViewLinkTablePageDetails } from "@/shared/components/links/ViewLinkTablePageDetails";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import LoadingPage from "@/shared/components/LoadingPage";

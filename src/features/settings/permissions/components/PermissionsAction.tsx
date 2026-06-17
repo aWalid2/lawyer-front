@@ -1,7 +1,7 @@
 import React from "react";
-import { TableEditButton } from "@/shared/components/TableEditButton";
-import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { TableEditButton } from "@/shared/components/buttons/TableEditButton";
+import { TableDeleteButton } from "@/shared/components/buttons/TableDeleteButton";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
 
 import type { RoleT } from "../types";
 import { useNavigate } from "react-router-dom";
@@ -18,12 +18,14 @@ export const PermissionsAction: React.FC<PermissionsActionProps> = ({
   const navigate = useNavigate();
   return (
     <div className="flex items-center justify-center gap-2">
-      <TableEditButton onClick={() => navigate(`/dashboard/settings/permissions/${role.id}`)} />
+      <TableEditButton
+        onClick={() => navigate(`/dashboard/settings/permissions/${role.id}`)}
+      />
       <ConfirmDeleteDialog
         title="حذف الدور"
         description={`هل أنت متأكد من حذف الدور "${role.name}"؟ لا يمكن التراجع عن هذا الإجراء.`}
         onConfirm={() => onDelete(role.id)}
-        trigger={<TableDeleteButton onClick={() => { }} />}
+        trigger={<TableDeleteButton onClick={() => {}} />}
       />
     </div>
   );

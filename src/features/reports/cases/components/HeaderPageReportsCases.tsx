@@ -1,9 +1,9 @@
 import { useFetchCaseStatuses } from "@/features/settings/case-statuses/api/hooks/useGetCaseStatuses";
 import type { CaseStatusT } from "@/features/settings/case-statuses/types/caseStatuseTypes";
-import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderExportMenu } from "@/shared/components/Header/HeaderExportMenu";
+import { HeaderFilter } from "@/shared/components/Header/HeaderFilter";
+import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
 import { useExport } from "@/shared/hooks/useExport";
 import React from "react";
 import { exportReportCases } from "../api/service/exportReportCases";

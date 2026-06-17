@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { Form, Formik } from "formik";

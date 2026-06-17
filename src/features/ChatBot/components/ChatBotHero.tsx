@@ -1,5 +1,5 @@
 import { Bot, Scale, Sparkles } from "lucide-react";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 
 const cards = [
   {

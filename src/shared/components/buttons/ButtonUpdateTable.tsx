@@ -1,5 +1,5 @@
 import React from "react";
-import { EditIcon } from "../icons/Edit";
+import { EditIcon } from "../../icons/Edit";
 
 type ButtonUpdateTableProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 

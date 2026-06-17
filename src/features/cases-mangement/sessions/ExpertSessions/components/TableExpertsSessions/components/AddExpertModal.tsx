@@ -1,5 +1,5 @@
 import React from "react";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import type {
   ExpertSessionRequest,
   ExpertSessionStatus,

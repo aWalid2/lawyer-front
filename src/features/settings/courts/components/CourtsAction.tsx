@@ -1,23 +1,22 @@
-import { TableEditButton } from "@/shared/components/TableEditButton";
-import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { TableEditButton } from "@/shared/components/buttons/TableEditButton";
+import { TableDeleteButton } from "@/shared/components/buttons/TableDeleteButton";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
 import { CourtFormDialog } from "./CourtFormDialog";
 import type { CourtT } from "../types/courtTypes";
 import { useDeleteCourt } from "../api/hooks/useDeleteCourt";
 
 interface CourtsActionProps {
   court: CourtT;
-  onUpdate?: (id: number, values: { name: string, address: string }) => void;
+  onUpdate?: (id: number, values: { name: string; address: string }) => void;
 }
 
 export const CourtsAction: React.FC<CourtsActionProps> = ({
   court,
   onUpdate,
-
 }) => {
   const { mutateAsync: deleteCourt } = useDeleteCourt();
   return (
-    <div className="flex items-center gap-2 justify-center">
+    <div className="flex items-center justify-center gap-2">
       <CourtFormDialog
         court={court}
         onSave={(values) => onUpdate?.(Number(court.id), values)}

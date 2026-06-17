@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { InputBox } from "@/shared/components/InputBox";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { useGetLastExpertSession } from "../../api/hooks/useGetLastExpertSession";

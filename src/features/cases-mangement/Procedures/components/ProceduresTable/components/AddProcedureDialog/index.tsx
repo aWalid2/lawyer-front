@@ -1,5 +1,5 @@
 import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLawyersGet";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import LoadingPage from "@/shared/components/LoadingPage";
 import React from "react";
 import { useGetProcedure } from "../../../../api/hooks/useGetProcedure";

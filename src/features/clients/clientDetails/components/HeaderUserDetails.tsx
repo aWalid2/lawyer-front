@@ -1,12 +1,12 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import { EditIcon } from "@/shared/icons/Edit";
 import { TrashIcon } from "@/shared/icons/Trash";
 import { AddContractDialog } from "./AddContractDialog";
 import { EditClientDialog } from "../../clients/components/EditClientDialog";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
 import { useDeleteClient } from "../../api/hooks/useDeleteClient";
 
 interface HeaderUserDetailsProps {

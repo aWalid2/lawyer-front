@@ -1,9 +1,9 @@
 import React from "react";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
-import { InputForm } from "@/shared/components/InputForm";
+import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { useCreateCaseDocument } from "../api/hooks/useCreateCaseDocument";
 import type { CaseDocumentFormValues } from "../types/CaseDocumentT";

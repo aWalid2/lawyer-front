@@ -50,7 +50,7 @@ export const useRolesTable = () => {
     });
 
   const selectedRole = useMemo(
-    () => caseRoles.find((r:any) => r.id === selectedRoleId) ?? null,
+    () => caseRoles.find((r: any) => r.role_id === selectedRoleId) ?? null,
     [caseRoles, selectedRoleId],
   );
 
@@ -81,18 +81,18 @@ export const useRolesTable = () => {
     await createMutation.mutateAsync(payload);
   };
 
-  const handleDelete = async (id: number) => {
-    await deleteMutation.mutateAsync(id);
+  const handleDelete = async (roleId: number) => {
+    await deleteMutation.mutateAsync({ role_id: roleId, case_id: Number(caseId) });
 
-    if (selectedRoleId === id) {
+    if (selectedRoleId === roleId) {
       setSelectedRoleId(null);
       setIsViewOpen(false);
       setIsFormOpen(false);
     }
   };
 
-  const handleOpenView = (id: number) => {
-    setSelectedRoleId(id);
+  const handleOpenView = (roleId: number) => {
+    setSelectedRoleId(roleId);
     setIsViewOpen(true);
   };
 

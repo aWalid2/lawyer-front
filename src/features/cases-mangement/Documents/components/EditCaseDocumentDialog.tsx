@@ -1,9 +1,9 @@
 import React from "react";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { FileUpload } from "@/shared/components/FileUpload";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import { useUpdateCaseDocument } from "../api/hooks/useUpdateCaseDocument";
 import type {
   CaseDocument,

@@ -1,5 +1,5 @@
 import React from "react";
-import { TrashIcon } from "../icons/Trash";
+import { TrashIcon } from "../../icons/Trash";
 
 type ButtonDeleteTableProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 

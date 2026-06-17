@@ -6,13 +6,13 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { XIcon, AlertCircle, RefreshCw } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
 import { Formik, Form } from "formik";
 import type { Case } from "../types/casesTypes";
 import { useUpdateCase } from "../api/hooks/useUpdateCase";
-import { SubmitButton } from "@/shared/components/SubmitButton";
+import { SubmitButton } from "@/shared/components/buttons/SubmitButton";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import {

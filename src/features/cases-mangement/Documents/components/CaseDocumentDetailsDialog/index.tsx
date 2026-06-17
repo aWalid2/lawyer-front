@@ -1,6 +1,6 @@
-import { ButtonViewTable } from "@/shared/components/ButtonViewTable";
+import { ButtonViewTable } from "@/shared/components/buttons/ButtonViewTable";
 import { Error } from "@/shared/components/Error";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { isImageDocument, isPdfDocument } from "@/shared/utils/document";
 import React from "react";

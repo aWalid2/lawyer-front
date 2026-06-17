@@ -10,8 +10,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus, XIcon } from "lucide-react";
-import { InputForm } from "@/shared/components/InputForm";
-import { SubmitButton } from "@/shared/components/SubmitButton";
+import { InputForm } from "@/shared/components/inputs/InputForm";
+import { SubmitButton } from "@/shared/components/buttons/SubmitButton";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { useAddContract } from "../api/hooks/useAddContract";
 import { buildContractFormData } from "../api/services/buildContractFormData";

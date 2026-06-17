@@ -1,5 +1,5 @@
 import { Formik, Form } from "formik";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { validationSchema } from "./ProfileValidation";
 
 type ProfileFormValues = {

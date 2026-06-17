@@ -1,5 +1,5 @@
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
-import { InputBox } from "@/shared/components/InputBox";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 
 export const BodyProsecutionInf = ({ data }: { data: any }) => {
   return (

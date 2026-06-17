@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PageLayout from "@/shared/components/PageLayout";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PoliceSessions from "@/features/cases-mangement/sessions/PoliceSessions";
 import CourtSessions from "@/features/cases-mangement/sessions/CourtSessions";
@@ -22,7 +22,7 @@ const Sessions: React.FC = () => {
 
   return (
     <PageLayout innerPage>
-      <div className="flex  items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <HeaderTitle title="إدارة الجلسات" />
       </div>
 
@@ -32,34 +32,34 @@ const Sessions: React.FC = () => {
         orientation={orientation}
         className="flex-col"
       >
-        <TabsList className="bg-transparent gap-4 p-0 h-auto  flex-wrap justify-start">
+        <TabsList className="h-auto flex-wrap justify-start gap-4 bg-transparent p-0">
           <TabsTrigger
             value="police"
-            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-main px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
+            className="border-primary/40 text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:border-primary-gradient rounded-main h-auto max-w-34 border px-4 py-2.5 text-base font-semibold transition-all data-[state=active]:text-white"
           >
             جلسات المخفر
           </TabsTrigger>
           <TabsTrigger
             value="prosecution"
-            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-main px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
+            className="border-primary/40 text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:border-primary-gradient rounded-main h-auto max-w-34 border px-4 py-2.5 text-base font-semibold transition-all data-[state=active]:text-white"
           >
             جلسات النيابة
           </TabsTrigger>
           <TabsTrigger
             value="court"
-            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-main px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
+            className="border-primary/40 text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:border-primary-gradient rounded-main h-auto max-w-34 border px-4 py-2.5 text-base font-semibold transition-all data-[state=active]:text-white"
           >
             جلسات المحكمة
           </TabsTrigger>
           <TabsTrigger
             value="experts"
-            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-main px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
+            className="border-primary/40 text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:border-primary-gradient rounded-main h-auto max-w-34 border px-4 py-2.5 text-base font-semibold transition-all data-[state=active]:text-white"
           >
             الخبراء
           </TabsTrigger>
           <TabsTrigger
             value="other"
-            className="border-primary/40 border text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:text-white data-[state=active]:border-primary-gradient rounded-main px-4 max-w-34 py-2.5 h-auto text-base font-semibold transition-all"
+            className="border-primary/40 text-primary/70 data-[state=active]:bg-primary-gradient data-[state=active]:border-primary-gradient rounded-main h-auto max-w-34 border px-4 py-2.5 text-base font-semibold transition-all data-[state=active]:text-white"
           >
             إدارية أخرى
           </TabsTrigger>

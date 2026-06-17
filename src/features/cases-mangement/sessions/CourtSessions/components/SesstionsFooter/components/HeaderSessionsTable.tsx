@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { SessionDialog } from "./SessionDialog";
 import { useState } from "react";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 
 export const HeaderSessionsTable = ({
   title,

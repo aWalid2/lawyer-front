@@ -1,6 +1,6 @@
 import React from "react";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
+import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
 
 interface HeaderCaseDocumentsProps {
   title: string;

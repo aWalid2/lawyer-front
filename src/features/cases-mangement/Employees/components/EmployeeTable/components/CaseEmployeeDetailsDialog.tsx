@@ -1,7 +1,7 @@
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
 import { Error } from "@/shared/components/Error";
-import { InputBox } from "@/shared/components/InputBox";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { InputBox } from "@/shared/components/inputs/InputBox";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import LoadingPage from "@/shared/components/LoadingPage";
 import React from "react";
 import { useGetEmployee } from "../api/hooks/useGetOneEmployee";

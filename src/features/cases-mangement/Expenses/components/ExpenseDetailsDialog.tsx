@@ -1,6 +1,6 @@
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
-import { InputBox } from "@/shared/components/InputBox";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 import { DateIcon } from "@/shared/icons/Date";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { getExpenseTypeLabel } from "@/shared/utils/getExpenseTypeLabel";

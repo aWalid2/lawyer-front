@@ -1,4 +1,4 @@
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { useFormikContext } from "formik";
 import type { FormValues } from "../utils/mapToApiPayload";

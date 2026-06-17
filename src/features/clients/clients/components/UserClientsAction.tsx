@@ -1,7 +1,7 @@
-import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
-import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
-import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
+import { ButtonDeleteTable } from "@/shared/components/buttons/ButtonDeleteTable";
+import { ButtonUpdateTable } from "@/shared/components/buttons/ButtonUpdateTable";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
+import { ViewLinkTablePageDetails } from "@/shared/components/links/ViewLinkTablePageDetails";
 import React from "react";
 import { useDeleteClient } from "../../api/hooks/useDeleteClient";
 import type { ClientRelatedT } from "../types/clientT";

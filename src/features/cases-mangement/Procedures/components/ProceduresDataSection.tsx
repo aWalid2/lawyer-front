@@ -1,6 +1,6 @@
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 import { Error } from "@/shared/components/Error";
-import { InputBox } from "@/shared/components/InputBox";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 import { DateIcon } from "@/shared/icons/Date";
 import {
   formatDateToTime,

@@ -1,5 +1,5 @@
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { InputForm } from "@/shared/components/InputForm";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import PageLayout from "@/shared/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";

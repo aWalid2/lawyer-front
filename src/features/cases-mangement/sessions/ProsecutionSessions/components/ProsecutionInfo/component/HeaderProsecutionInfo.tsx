@@ -1,5 +1,5 @@
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 
 export const HeaderProsecutionInfo = ({
   handleAddClick,

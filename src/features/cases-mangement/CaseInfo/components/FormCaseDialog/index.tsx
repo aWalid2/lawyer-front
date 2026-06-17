@@ -1,8 +1,8 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import { EditIcon } from "@/shared/icons/Edit";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
-import { InputForm } from "../../../../../shared/components/InputForm";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
+import { InputForm } from "../../../../../shared/components/inputs/InputForm";
 import { SelectForm } from "../../../../../shared/components/SelectForm";
 import type { CaseFormValues } from "./components/typesCaseInfo";
 import { useGetCaseInfo } from "../../api/hooks/useGetCaseInfo";
@@ -14,7 +14,7 @@ import { getCaseTypes } from "@/features/settings/case-types/api/services/getCas
 import { usePaginatedOptions } from "@/shared/hooks/usePaginatedOptions";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { useUpdateCase } from "@/features/cases-mangement/MainCases/api/hooks/useUpdateCase";
-import { SubmitButton } from "@/shared/components/SubmitButton";
+import { SubmitButton } from "@/shared/components/buttons/SubmitButton";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 
 import {

@@ -1,4 +1,4 @@
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import HeaderActions from "./components/HeaderActions";
 import AllScheduleTasks from "./components/AllScheduleTasks";
 import AllScheduleProcedures from "./components/AllScheduleProcedures";

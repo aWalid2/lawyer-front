@@ -6,7 +6,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { XIcon } from "lucide-react";
 import React from "react";
 import { Formik, Form } from "formik";
@@ -153,11 +153,7 @@ export const SessionDialog: React.FC<SessionDialogProps> = ({
                   label="تاريخ الجلسة"
                   type="date"
                 />
-                <InputForm
-                  name="time_date"
-                  label="وقت الجلسة"
-                  type="time"
-                />
+                <InputForm name="time_date" label="وقت الجلسة" type="time" />
                 <SelectForm
                   name="court_id"
                   label="المحكمة"

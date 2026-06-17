@@ -1,6 +1,6 @@
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
-import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
-import { TableEditButton } from "@/shared/components/TableEditButton";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
+import { TableDeleteButton } from "@/shared/components/buttons/TableDeleteButton";
+import { TableEditButton } from "@/shared/components/buttons/TableEditButton";
 import { KeyRound } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";

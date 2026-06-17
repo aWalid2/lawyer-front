@@ -1,5 +1,5 @@
 import api from '@/lib/api';
-import type { HeaderExportType } from '@/shared/components/HeaderExportMenu';
+import type { HeaderExportType } from '@/shared/components/Header/HeaderExportMenu';
 
 
 export const exportUserReports = async (

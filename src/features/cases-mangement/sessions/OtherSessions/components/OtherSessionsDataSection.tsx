@@ -1,5 +1,5 @@
 import { Error } from "@/shared/components/Error";
-import { InputBox } from "@/shared/components/InputBox";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 import { DateIcon } from "@/shared/icons/Date";
 import type { AxiosError } from "axios";
 import React from "react";
@@ -8,7 +8,7 @@ import { useGetLastOtherSession } from "../api/hooks/useGetLastOtherSession";
 import { getOtherSessionLawyerName } from "../types/typesOther";
 
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 
 export const OtherSessionsDataSection: React.FC = () => {
