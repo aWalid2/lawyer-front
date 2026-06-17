@@ -3,7 +3,6 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - test/lawyer-test
       - main
 
 jobs:
