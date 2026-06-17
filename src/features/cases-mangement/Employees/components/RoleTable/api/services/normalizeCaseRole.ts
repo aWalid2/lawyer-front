@@ -6,6 +6,7 @@ export const normalizeCaseRole = (item: any): CaseRole => ({
   case_id: Number(item?.case_id ?? 0),
   role_id: Number(item?.role?.id ?? item?.role_id ?? 0),
   role_name: item?.role?.role_name ?? "",
+  _count: item?.role?._count ? { users: Number(item.role._count.users ?? 0) } : undefined,
   user_counts: item?.role?._count.users ?? "",
   role: item?.role
     ? {
