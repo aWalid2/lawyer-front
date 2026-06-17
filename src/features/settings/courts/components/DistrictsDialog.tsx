@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Plus } from "lucide-react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import { DataTable, type Column } from "@/shared/components/DataTable";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
-import { TableEditButton } from "@/shared/components/TableEditButton";
-import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
-import { InputForm } from "@/shared/components/InputForm";
+import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
+import { TableEditButton } from "@/shared/components/buttons/TableEditButton";
+import { TableDeleteButton } from "@/shared/components/buttons/TableDeleteButton";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import type { CourtT, court_circle } from "../types/courtTypes";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
@@ -19,7 +19,6 @@ import { useDeleteCircle } from "../api/hooks/useDeleteCircle";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
 import { Pagination } from "@/shared/components/Pagination";
-
 
 // ---------- inner form dialog ----------
 interface DistrictFormDialogProps {
@@ -93,7 +92,6 @@ export const DistrictsDialog: React.FC<DistrictsDialogProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
-
 
   const {
     data: districts,

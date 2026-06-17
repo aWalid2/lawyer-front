@@ -1,9 +1,9 @@
 import React from "react";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
+import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
+import { HeaderFilter } from "@/shared/components/Header/HeaderFilter";
+import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
 import { UserFormDialog } from "./UserFormDialog";
 import { Plus } from "lucide-react";
 import { useGetAllRoles } from "../../permissions/api";

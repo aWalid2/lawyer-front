@@ -1,6 +1,6 @@
-import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
-import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { ButtonDeleteTable } from "@/shared/components/buttons/ButtonDeleteTable";
+import { ButtonUpdateTable } from "@/shared/components/buttons/ButtonUpdateTable";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
 import React from "react";
 import { useDeleteCaseDocument } from "../api/hooks/useDeleteCaseDocument";
 import type { CaseDocument } from "../types/CaseDocumentT";
@@ -25,8 +25,7 @@ export const CaseDocumentActions: React.FC<CaseDocumentActionsProps> = ({
     onDocumentUpdated?.();
   };
 
-  const documentName =
-    document.document_name || "هذا المستند";
+  const documentName = document.document_name || "هذا المستند";
 
   return (
     <div className="flex items-center justify-center gap-2">

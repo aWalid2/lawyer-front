@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useFormikContext } from "formik";
 import { Switch } from "@/components/ui/switch";
 import { Eye, EyeOff } from "lucide-react";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import type { FormValues } from "../types/addClientT";
 
 export const ClientAccountCreation = () => {

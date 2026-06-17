@@ -1,10 +1,10 @@
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
 import { Error } from "@/shared/components/Error";
-import { InputBox } from "@/shared/components/InputBox";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { InputBox } from "@/shared/components/inputs/InputBox";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import LoadingPage from "@/shared/components/LoadingPage";
 import React from "react";
-import { useGetAllUsers } from "@/features/settings/users/api/hooks/useGetAllUsers";
+import { useGetRoleDetails } from "../api/hooks/useGetRoleDetails";
 import type { CaseRole } from "../types";
 
 interface CaseRoleDetailsDialogProps {
@@ -20,12 +20,11 @@ export const CaseRoleDetailsDialog: React.FC<CaseRoleDetailsDialogProps> = ({
   onOpenChange,
   onEdit,
 }) => {
-  // Fetch users that belong to this role from the real settings API
   const {
-    data: usersInRole,
-    isPending: isUsersPending,
-    isError: isUsersError,
-  } = useGetAllUsers(open && role ? String(role.role_id) : undefined);
+    data: roleDetails,
+    isPending,
+    isError,
+  } = useGetRoleDetails(open && role ? role.role_id : undefined);
 
   const handleEdit = () => {
     if (onEdit) {
@@ -52,27 +51,32 @@ export const CaseRoleDetailsDialog: React.FC<CaseRoleDetailsDialogProps> = ({
       ) : (
         <>
           <div className="mb-6 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-            <InputBox label="اسم الدور" text={role.role_name} />
-            <InputBox label="عدد الموظفين" text={String(role.employee_count)} />
+            <InputBox
+              label="اسم الدور"
+              text={roleDetails?.role_name ?? role.role_name}
+            />
+            <InputBox
+              label="عدد الموظفين"
+              text={String(roleDetails?.users?.length ?? role.employee_count)}
+            />
           </div>
 
-          {/* Employees inside this role */}
           <div className="mt-6">
             <h3 className="mb-4 text-base font-bold text-[#153A4D] dark:text-white">
               الموظفين داخل الدور
             </h3>
 
-            {isUsersPending ? (
+            {isPending ? (
               <LoadingPage />
-            ) : isUsersError ? (
+            ) : isError ? (
               <Error message="تعذر تحميل قائمة الموظفين." />
-            ) : !usersInRole || usersInRole.length === 0 ? (
+            ) : !roleDetails?.users || roleDetails.users.length === 0 ? (
               <p className="text-sm text-gray-400">
                 لا يوجد موظفين في هذا الدور
               </p>
             ) : (
               <div className="max-h-60 space-y-3 overflow-y-auto">
-                {usersInRole.map((user) => (
+                {roleDetails.users.map((user) => (
                   <div
                     key={user.id}
                     className="flex items-center gap-4 rounded-lg border border-gray-100 bg-[#FDFCFA] px-4 py-3"

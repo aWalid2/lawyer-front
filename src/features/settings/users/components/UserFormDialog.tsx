@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import type { UserFormValues, UserT } from "../types/userT";
 import { useAddUser } from "../api/hooks/useAddUser";

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ViewIcon } from "../icons/View";
+import { ViewIcon } from "../../icons/View";
 
 export const ViewLinkTablePageDetails = ({ to }: { to: string }) => {
   return (

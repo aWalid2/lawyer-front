@@ -1,4 +1,4 @@
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
+import { HeaderFilter } from "@/shared/components/Header/HeaderFilter";
 import React, {
   useCallback,
   useEffect,

@@ -1,6 +1,6 @@
 import { ar } from "date-fns/locale";
 import { format } from "date-fns";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import { ProceduresCard } from "./components/ProceduresCard";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 

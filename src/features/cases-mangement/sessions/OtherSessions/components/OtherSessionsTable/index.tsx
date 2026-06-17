@@ -17,7 +17,7 @@ import {
 import { OtherSessionDetailsDialog } from "./components/OtherSessionDetailsDialog";
 import { useOtherSessionsTable } from "./hooks/useOtherSessionsTable";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 
 export const OtherSessionsTable: React.FC = () => {
   const {

@@ -1,6 +1,6 @@
 import React from "react";
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import { CaseRoleDialog } from "../CaseRoleDialog";
 import type { CaseRoleFormValues } from "../../types";
 

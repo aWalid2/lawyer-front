@@ -1,7 +1,7 @@
 import React from "react";
 import PageLayout from "@/shared/components/PageLayout";
 import { CaseDetailsInfo } from "./components/CaseDetailsInfo";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import { FormCaseDialog } from "./components/FormCaseDialog";
 import { useParams } from "react-router-dom";
 import { useCaseInfoDetails } from "./hooks/useCaseInfoDetails";

@@ -1,6 +1,6 @@
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
-import { SubmitButton } from "@/shared/components/SubmitButton";
+import { SubmitButton } from "@/shared/components/buttons/SubmitButton";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { Form, Formik } from "formik";
 import React from "react";
@@ -57,16 +57,8 @@ export const AddOtherSessionDialogForm: React.FC<
           <div className="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2">
             <InputForm name="actionType" label="نوع الإجراء" type="text" />
             <InputForm name="referral_date" label="تاريخ الإحالة" type="date" />
-            <InputForm
-              name="session_date"
-              label="تاريخ الجلسة"
-              type="date"
-            />
-            <InputForm
-              name="time_session"
-              label="وقت الجلسة"
-              type="time"
-            />
+            <InputForm name="session_date" label="تاريخ الجلسة" type="date" />
+            <InputForm name="time_session" label="وقت الجلسة" type="time" />
             <InputForm
               name="admin_authority"
               label="الجهة الإدارية"

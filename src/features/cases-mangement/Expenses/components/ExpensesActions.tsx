@@ -1,7 +1,7 @@
-import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
-import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
-import { ButtonViewTable } from "@/shared/components/ButtonViewTable";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { ButtonDeleteTable } from "@/shared/components/buttons/ButtonDeleteTable";
+import { ButtonUpdateTable } from "@/shared/components/buttons/ButtonUpdateTable";
+import { ButtonViewTable } from "@/shared/components/buttons/ButtonViewTable";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
 import type { ExpenseItem } from "../types";
 
 interface ExpensesActionsProps {

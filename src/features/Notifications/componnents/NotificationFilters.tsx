@@ -1,27 +1,30 @@
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderFilter } from "@/shared/components/Header/HeaderFilter";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 
 interface NotificationFiltersProps {
-    notificationStatus: string;
-    onFilterChange: (value: string) => void;
+  notificationStatus: string;
+  onFilterChange: (value: string) => void;
 }
 
-function NotificationFilters({ notificationStatus, onFilterChange }: NotificationFiltersProps) {
-    return (
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-between mb-6">
-            <HeaderTitle innerPage title="الاشعارات" />
-            <HeaderFilter
-                value={notificationStatus}
-                onFilterChange={onFilterChange}
-                options={[
-                    { value: "all", label: "كل الاشعارات" },
-                    { value: "new", label: "جديد" },
-                    { value: "read", label: "مقروء" },
-                ]}
-                className="md:w-[130px]"
-            />
-        </div>
-    );
+function NotificationFilters({
+  notificationStatus,
+  onFilterChange,
+}: NotificationFiltersProps) {
+  return (
+    <div className="mb-6 flex w-full flex-wrap items-center justify-between gap-3 md:w-auto">
+      <HeaderTitle innerPage title="الاشعارات" />
+      <HeaderFilter
+        value={notificationStatus}
+        onFilterChange={onFilterChange}
+        options={[
+          { value: "all", label: "كل الاشعارات" },
+          { value: "new", label: "جديد" },
+          { value: "read", label: "مقروء" },
+        ]}
+        className="md:w-[130px]"
+      />
+    </div>
+  );
 }
 
 export default NotificationFilters;

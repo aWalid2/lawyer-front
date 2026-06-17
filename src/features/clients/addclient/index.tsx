@@ -1,14 +1,14 @@
 import { Formik, Form } from "formik";
 import type { FormValues } from "../addclient/types/addClientT";
 import { validationSchema } from "../addclient/components/ValidationSchema";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import PageLayout from "@/shared/components/PageLayout";
 import { useAddClient } from "./api/hooks/useAddClient";
 import { BasicClientInfo } from "./components/BasicClientInfo";
 import { ContractDetails } from "./components/ContractDetails";
 import { AuthorizationAndNotes } from "./components/AuthorizationAndNotes";
 import { ClientAccountCreation } from "./components/ClientAccountCreation";
-import { SubmitButton } from "@/shared/components/SubmitButton";
+import { SubmitButton } from "@/shared/components/buttons/SubmitButton";
 import { formatPhoneNumber } from "@/shared/utils/validators";
 
 const FormDetails = () => {

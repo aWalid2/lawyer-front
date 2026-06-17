@@ -1,7 +1,7 @@
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
-import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
+import { HeaderDatePicker } from "@/shared/components/Header/HeaderDatePicker";
+import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
 import { Plus } from "lucide-react";
 import React from "react";
 import type { ContractFormValues } from "../types";

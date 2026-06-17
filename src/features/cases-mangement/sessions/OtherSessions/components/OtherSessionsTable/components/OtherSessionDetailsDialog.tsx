@@ -1,6 +1,6 @@
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import { DateIcon } from "@/shared/icons/Date";
 import {
   formatDateToTime,
@@ -9,8 +9,8 @@ import {
 import React from "react";
 import { useGetOtherSession } from "../../../api/hooks/useGetOtherSession";
 import { getOtherSessionLawyerName } from "../../../types/typesOther";
-import { InputBox } from "@/shared/components/InputBox";
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
+import { InputBox } from "@/shared/components/inputs/InputBox";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 
 interface OtherSessionDetailsDialogProps {
@@ -60,15 +60,11 @@ export const OtherSessionDetailsDialog: React.FC<
             />
             <InputBox
               label="تاريخ الجلسة "
-              text={
-                formatDateToYYYYMMDD(session.session_date)
-              }
+              text={formatDateToYYYYMMDD(session.session_date)}
             />
             <InputBox
               label="وقت الجلسة"
-              text={
-                formatDateToTime(session.session_date)
-              }
+              text={formatDateToTime(session.session_date)}
             />
             <InputBox
               label="الجهة الإدارية"

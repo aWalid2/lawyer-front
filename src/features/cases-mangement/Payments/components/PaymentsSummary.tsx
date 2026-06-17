@@ -1,5 +1,5 @@
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
-import { InputBox } from "@/shared/components/InputBox";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { useGetCasePaymentsSummary } from "@/features/cases-mangement/Payments/api/hooks/useGetCasePaymentsSummary";
 
@@ -20,7 +20,7 @@ export const PaymentsSummary = ({ caseId }: Props) => {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <InputBox
           label="إجمالي المدفوعات"
-          text={`${summary.totalAmount.toLocaleString("en-US")} ج.م`}
+          text={`${summary.totalAmount.toLocaleString("en-US")} د.ك`}
         />
         <InputBox
           label="تاريخ آخر دفعة"

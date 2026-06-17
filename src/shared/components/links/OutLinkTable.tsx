@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { SearchIcon } from "../icons/Search";
+import { SearchIcon } from "../../icons/Search";
 
 export const OutLinkTable: React.FC<{
   to: string;

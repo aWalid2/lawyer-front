@@ -1,6 +1,6 @@
-import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
-import { ButtonViewTable } from "@/shared/components/ButtonViewTable";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { ButtonDeleteTable } from "@/shared/components/buttons/ButtonDeleteTable";
+import { ButtonViewTable } from "@/shared/components/buttons/ButtonViewTable";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
 import React from "react";
 import { ExpertSessionDetailsDialog } from "./ExpertSessionDetailsDialog";
 

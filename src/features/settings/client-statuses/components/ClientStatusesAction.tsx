@@ -1,7 +1,7 @@
 import React from "react";
-import { TableEditButton } from "@/shared/components/TableEditButton";
-import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { TableEditButton } from "@/shared/components/buttons/TableEditButton";
+import { TableDeleteButton } from "@/shared/components/buttons/TableDeleteButton";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
 import { ClientStatusFormDialog } from "./ClientStatusFormDialog";
 import type { ClientStatusT } from "../types/clientStatusT";
 import { useDeleteClientStatus } from "../api/hooks/useDeleteClientStatus";
@@ -19,7 +19,7 @@ export const ClientStatusesAction: React.FC<ClientStatusesActionProps> = ({
     <div className="flex items-center justify-center gap-2">
       <ClientStatusFormDialog
         clientStatus={clientStatus}
-        trigger={<TableEditButton onClick={() => { }} />}
+        trigger={<TableEditButton onClick={() => {}} />}
       />
 
       <ConfirmDeleteDialog
@@ -28,7 +28,7 @@ export const ClientStatusesAction: React.FC<ClientStatusesActionProps> = ({
         onConfirm={async () => {
           await deleteClientStatus(clientStatus.id);
         }}
-        trigger={<TableDeleteButton onClick={() => { }} />}
+        trigger={<TableDeleteButton onClick={() => {}} />}
       />
     </div>
   );

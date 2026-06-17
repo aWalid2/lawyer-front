@@ -1,11 +1,11 @@
-import { HeaderDatePicker } from "@/shared/components/HeaderDatePicker";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderDatePicker } from "@/shared/components/Header/HeaderDatePicker";
+import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
 import type { SelectOption } from "@/shared/hooks/useCachedPaginatedOptions";
 import React from "react";
 import { AddTask } from "./AddTask";
 import { UserTaskFilter } from "./UserTasksFilter";
-import { ButtonShowAll } from "@/shared/components/ButtonShowAll";
+import { ButtonShowAll } from "@/shared/components/buttons/ButtonShowAll";
 
 interface HeaderTasksUserProps {
   onSearch: (term: string) => void;

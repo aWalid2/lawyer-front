@@ -1,5 +1,5 @@
 import { FileUpload } from "@/shared/components/FileUpload";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import PageLayout from "@/shared/components/PageLayout";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { SwitchForm } from "@/shared/components/SwitchForm";
@@ -29,20 +29,20 @@ export const GeneralSettingsFeature = () => {
     darkMode: false,
   };
 
-  const handleSubmit = () => { };
+  const handleSubmit = () => {};
 
   return (
     <PageLayout>
       <HeaderTitle title="الإعدادات العامة للنظام" />
 
-      <div className="bg-white rounded-[18px] border border-[#E8E8E8] p-6 mt-6">
+      <div className="mt-6 rounded-[18px] border border-[#E8E8E8] bg-white p-6">
         <Formik
           initialValues={initialValues}
           validationSchema={GeneralSettingsSchema}
           onSubmit={handleSubmit}
         >
           {({ isSubmitting, values }) => (
-            <Form className="space-y-6 ">
+            <Form className="space-y-6">
               <div className="w-full">
                 <SelectForm
                   name="systemName"
@@ -56,7 +56,7 @@ export const GeneralSettingsFeature = () => {
                 />
               </div>
 
-              <div className="max-w-30 " >
+              <div className="max-w-30">
                 <FileUpload
                   name="systemLogo"
                   label="شعار النظام"
@@ -64,61 +64,51 @@ export const GeneralSettingsFeature = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+              <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
                 <SelectForm
                   name="currency"
                   label="العملة"
-                  options={[
-                    { label: "دينار كويتي", value: "kwd" },
-                  ]}
+                  options={[{ label: "دينار كويتي", value: "kwd" }]}
                 />
                 <SelectForm
                   name="alertDays"
                   label="أيام التنبيه"
-                  options={[
-                    { label: "ثلاثة أيام", value: "3" },
-                  ]}
+                  options={[{ label: "ثلاثة أيام", value: "3" }]}
                 />
 
                 <SelectForm
                   name="language"
                   label="اللغة"
-                  options={[
-                    { label: "العربية", value: "ar" },
-                  ]}
+                  options={[{ label: "العربية", value: "ar" }]}
                 />
                 <SelectForm
                   name="timezone"
                   label="المنطقة الزمنية"
-                  options={[
-                    { label: "GMT +3", value: "gmt3" },
-                  ]}
+                  options={[{ label: "GMT +3", value: "gmt3" }]}
                 />
               </div>
 
-              <div className="w-full pt-4 space-y-2">
-                <div className="p-4 rounded-[10px] ">
+              <div className="w-full space-y-2 pt-4">
+                <div className="rounded-[10px] p-4">
                   <SwitchForm name="notifications" label="الإشعارات" />
                   {values.notifications && (
-                    <div className="mt-4 p-4 bg-[#F9F9F9] rounded-md text-sm text-[#476274]">
+                    <div className="mt-4 rounded-md bg-[#F9F9F9] p-4 text-sm text-[#476274]">
                       محتوى إعدادات الإشعارات (يظهر فقط عند تفعيل الإشعارات)
                     </div>
                   )}
                 </div>
-                <div className="p-4 rounded-[10px] ">
+                <div className="rounded-[10px] p-4">
                   <SwitchForm name="darkMode" label="الوضع المظلم" />
                 </div>
               </div>
 
-
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full h-[50px] bg-[#C1A063] hover:bg-[#a88a53] text-white font-medium text-base rounded-[10px] transition-colors"
+                className="h-[50px] w-full rounded-[10px] bg-[#C1A063] text-base font-medium text-white transition-colors hover:bg-[#a88a53]"
               >
                 حفظ التغييرات
               </Button>
-
             </Form>
           )}
         </Formik>

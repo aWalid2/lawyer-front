@@ -1,7 +1,7 @@
 import React from "react";
-import { TableEditButton } from "@/shared/components/TableEditButton";
-import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { TableEditButton } from "@/shared/components/buttons/TableEditButton";
+import { TableDeleteButton } from "@/shared/components/buttons/TableDeleteButton";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
 import { LitigationDegreeFormDialog } from "./LitigationDegreeFormDialog";
 import type { LitigationDegreeT } from "../types";
 
@@ -11,13 +11,11 @@ interface LitigationDegreesActionProps {
   onDelete: (id: string) => void;
 }
 
-export const LitigationDegreesAction: React.FC<LitigationDegreesActionProps> = ({
-  degree,
-  onUpdate,
-  onDelete,
-}) => {
+export const LitigationDegreesAction: React.FC<
+  LitigationDegreesActionProps
+> = ({ degree, onUpdate, onDelete }) => {
   return (
-    <div className="flex items-center gap-2 justify-center">
+    <div className="flex items-center justify-center gap-2">
       <LitigationDegreeFormDialog
         degree={degree}
         onSave={(values) => onUpdate(degree.id, values)}

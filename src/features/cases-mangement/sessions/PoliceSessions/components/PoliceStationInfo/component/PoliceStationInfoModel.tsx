@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useFetchPoliceStations } from "@/shared/api/hooks/useGetPubliceProsectution";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { Form, Formik } from "formik";
 import { XIcon } from "lucide-react";

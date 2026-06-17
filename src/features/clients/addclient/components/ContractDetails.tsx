@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { FieldArray, useFormikContext } from "formik";
 import { Switch } from "@/components/ui/switch";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { FileUpload } from "@/shared/components/FileUpload";
 import type { FormValues, ContractItem } from "../types/addClientT";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";

@@ -1,7 +1,7 @@
 import { Form, Formik } from "formik";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
-import { SubmitButton } from "@/shared/components/SubmitButton";
+import { SubmitButton } from "@/shared/components/buttons/SubmitButton";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import React from "react";
 import * as Yup from "yup";
@@ -80,7 +80,7 @@ export const AddProcedureDialogForm: React.FC<AddProcedureDialogFormProps> = ({
             />
             <SelectForm
               name="lawyer_id"
-              label="المحامي المسؤول"
+              label="الموظف المسئول"
               options={lawyersOptions}
               showSearch={true}
             />

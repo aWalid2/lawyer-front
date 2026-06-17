@@ -17,7 +17,7 @@ import {
 } from "@/features/UserTasks/api/hooks/useGetCase";
 import { useMemo } from "react";
 import { useGetDocument } from "../../api/hooks/useGetDocument";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 
 const DocumentDetailsFeature = () => {
   const { id } = useParams<{ id: string }>();

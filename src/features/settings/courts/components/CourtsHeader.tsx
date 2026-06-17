@@ -1,9 +1,9 @@
 import React from "react";
 import { Plus } from "lucide-react";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
+import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
+import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
 import { CourtFormDialog } from "./CourtFormDialog";
 
 interface CourtsHeaderProps {
@@ -40,7 +40,6 @@ export const CourtsHeader: React.FC<CourtsHeaderProps> = ({
           />
         }
       />
-
     </HeaderPageLayout>
   );
 };

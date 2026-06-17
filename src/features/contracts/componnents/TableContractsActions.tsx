@@ -1,6 +1,6 @@
-import { ButtonDeleteTable } from "@/shared/components/ButtonDeleteTable";
-import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { ButtonDeleteTable } from "@/shared/components/buttons/ButtonDeleteTable";
+import { ButtonUpdateTable } from "@/shared/components/buttons/ButtonUpdateTable";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
 import React from "react";
 import type { Contract, ContractFormValues } from "../types";
 import { ContractDialog } from "./ContractDialog";

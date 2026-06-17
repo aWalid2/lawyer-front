@@ -1,6 +1,6 @@
 import React from "react";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 
 interface HeaderEmployeesProps {
   onAddClick: () => void;

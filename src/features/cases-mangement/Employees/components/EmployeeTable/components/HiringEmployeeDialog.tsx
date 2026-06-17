@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { InputForm } from "@/shared/components/InputForm";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { InputForm } from "@/shared/components/inputs/InputForm";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import * as Yup from "yup";
 
 interface HiringEmployeeDialogProps {
@@ -28,9 +28,7 @@ export const HiringEmployeeDialog: React.FC<HiringEmployeeDialogProps> = ({
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={() => {
-
-        }}
+        onSubmit={() => {}}
       >
         {() => (
           <Form className="space-y-4">

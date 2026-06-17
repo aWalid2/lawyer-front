@@ -1,6 +1,6 @@
 import React from "react";
 import PageLayout from "@/shared/components/PageLayout";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import PaymentsCaseFeature from "@/features/cases-mangement/Payments";
 
 const Payments: React.FC = () => {

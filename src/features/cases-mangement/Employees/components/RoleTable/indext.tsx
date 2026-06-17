@@ -61,8 +61,8 @@ export const RoleTable: React.FC = () => {
       accessor: (item) => (
         <RolesActions
           role={item}
-          onView={() => handleOpenView(item.id)}
-          onDelete={() => handleDelete(item.id)}
+          onView={() => handleOpenView(item.role_id)}
+          onDelete={() => handleDelete(item.role_id)}
         />
       ),
     },
@@ -87,7 +87,7 @@ export const RoleTable: React.FC = () => {
             <DataTable
               data={indexedRolesData}
               columns={columns}
-              rowIdField="id"
+              rowIdField="role_id"
             />
             {totalPages > 1 && (
               <Pagination
@@ -108,6 +108,7 @@ export const RoleTable: React.FC = () => {
           isOptionsPending={isOptionsPending}
           onSave={handleSave}
           isPending={isSubmitting}
+          editRole={selectedRole}
         />
       )}
 

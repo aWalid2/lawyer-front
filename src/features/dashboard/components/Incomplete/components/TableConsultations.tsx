@@ -1,6 +1,6 @@
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
+import { ViewLinkTablePageDetails } from "@/shared/components/links/ViewLinkTablePageDetails";
 import {
   CONSULTATION_STATUS_FALLBACK,
   CONSULTATION_STATUS_LABELS,

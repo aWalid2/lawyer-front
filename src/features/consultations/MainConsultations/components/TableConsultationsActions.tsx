@@ -2,7 +2,7 @@ import React from "react";
 import type { Consultation } from "../types";
 import { EditIcon } from "@/shared/icons/Edit";
 import { TrashIcon } from "@/shared/icons/Trash";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
 import { Link } from "react-router-dom";
 import { ViewIcon } from "@/shared/icons/View";
 import { ConsultationsDialog } from "./ConsultationsDialog";

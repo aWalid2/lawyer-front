@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useAuth } from "@/shared/context/AuthContext";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import PageLayout from "@/shared/components/PageLayout";
 import Loading from "@/shared/Loading";
 import ProfileForm from "./components/ProfileForm";

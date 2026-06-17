@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDebounce } from "@/shared/hooks/useDebounce";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { SharedFormField } from "./SharedFormField";
 import { useGetCourts } from "@/shared/api/hooks/useGetCourts";

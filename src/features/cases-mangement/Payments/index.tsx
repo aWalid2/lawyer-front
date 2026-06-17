@@ -4,7 +4,7 @@ import { DataTable, type Column } from "@/shared/components/DataTable";
 import { EmptyTable } from "@/shared/components/EmptyTable";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
 import { usePaymentsCaseFeature } from "./hooks/usePaymentsCaseFeature";
 import { PaymentsActions } from "./components/PaymentsActions";
 import { EditModelPayments } from "./components/EditModelPayments";
@@ -53,11 +53,23 @@ const PaymentsCaseFeature = () => {
       headerClassName: "w-[60px]",
     },
 
-    { header: "اسم الموظف المسئول", accessor: "employee_name", className: "text-right" },
-    { header: "نوع الدفعة", accessor: (item) => PAYMENT_TYPE_OPTIONS.find((opt) => opt.value === item.payment_type)?.label || item.payment_type || "-", className: "text-right" },
+    {
+      header: "اسم الموظف المسئول",
+      accessor: "employee_name",
+      className: "text-right",
+    },
+    {
+      header: "نوع الدفعة",
+      accessor: (item) =>
+        PAYMENT_TYPE_OPTIONS.find((opt) => opt.value === item.payment_type)
+          ?.label ||
+        item.payment_type ||
+        "-",
+      className: "text-right",
+    },
     {
       header: "المبلغ",
-      accessor: (item) => `${item.amount}`,
+      accessor: (item) => `${item.amount.toLocaleString("en-US")} د.ك`,
     },
     {
       header: "تاريخ الدفعة",

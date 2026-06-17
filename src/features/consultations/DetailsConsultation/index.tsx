@@ -1,4 +1,4 @@
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import PageLayout from "@/shared/components/PageLayout";
 import { useParams } from "react-router-dom";
 import { ClientDetailsCard } from "./components/ClientDetailsCard";

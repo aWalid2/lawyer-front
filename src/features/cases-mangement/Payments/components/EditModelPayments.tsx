@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
-import { InputForm } from "@/shared/components/InputForm";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
 import { FileUpload } from "@/shared/components/FileUpload";

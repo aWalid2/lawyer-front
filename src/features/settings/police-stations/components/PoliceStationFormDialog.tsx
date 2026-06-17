@@ -1,8 +1,8 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
-import { InputForm } from "@/shared/components/InputForm";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import type { PoliceStationT } from "../types/policeStationTypes";
 import { useAddPoliceStation } from "../api/hooks/useAddPoliceStation";
 import { useUpdatePoliceStation } from "../api/hooks/useUpdatePoliceStation";

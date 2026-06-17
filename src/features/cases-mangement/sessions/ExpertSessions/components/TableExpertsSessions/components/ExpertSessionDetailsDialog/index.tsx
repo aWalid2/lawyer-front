@@ -1,7 +1,7 @@
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import React from "react";
 import { useGetExpertSession } from "../../../../api/hooks/useGetExpertSession";
 import { MainInfoSection } from "./components/MainInfoSection";

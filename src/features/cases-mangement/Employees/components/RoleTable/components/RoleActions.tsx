@@ -1,6 +1,6 @@
-import { ButtonViewTable } from "@/shared/components/ButtonViewTable";
-import { ConfirmDeleteDialog } from "@/shared/components/ConfirmDeleteDialog";
-import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
+import { ButtonViewTable } from "@/shared/components/buttons/ButtonViewTable";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
+import { TableDeleteButton } from "@/shared/components/buttons/TableDeleteButton";
 import React from "react";
 import type { CaseRole } from "../types";
 

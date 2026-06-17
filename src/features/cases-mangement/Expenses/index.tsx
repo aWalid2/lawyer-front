@@ -1,4 +1,4 @@
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { EmptyTable } from "@/shared/components/EmptyTable";
@@ -74,7 +74,7 @@ export const ExpensesCaseFeature = () => {
     },
     {
       header: "قيمة المصروف",
-      accessor: (item) => `${item.amount.toLocaleString("en-US")} ج.م`,
+      accessor: (item) => `${item.amount.toLocaleString("en-US")} د.ك`,
     },
     {
       header: "تاريخ المصروف",

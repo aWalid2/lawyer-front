@@ -3,7 +3,7 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - main
+      - test/lawyer-test
 
 jobs:
   precheck:
@@ -60,10 +60,10 @@ jobs:
 
             echo "Starting deploy..."
 
-            cd /lawyer/lawyer-front
+            cd /lawyer/lawyer-front-test
 
             echo "Pulling latest code"
-            git pull origin main
+            git pull origin test/lawyer-test
 
             echo "Installing dependencies"
             npm ci

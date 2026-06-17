@@ -1,9 +1,9 @@
-import { ButtonUpdateTable } from "@/shared/components/ButtonUpdateTable";
-import { ViewLinkTablePageDetails } from "@/shared/components/ViewLinkTablePageDetails";
+import { ButtonUpdateTable } from "@/shared/components/buttons/ButtonUpdateTable";
+import { ViewLinkTablePageDetails } from "@/shared/components/links/ViewLinkTablePageDetails";
 import React from "react";
 import type { Case } from "../types/casesTypes";
 import { EditCaseDialog } from "./EditCaseDialog";
-import { OutLinkTable } from "@/shared/components/OutLinkTable";
+import { OutLinkTable } from "@/shared/components/links/OutLinkTable";
 
 export const TableCasesActions: React.FC<{
   caseItem: Case;

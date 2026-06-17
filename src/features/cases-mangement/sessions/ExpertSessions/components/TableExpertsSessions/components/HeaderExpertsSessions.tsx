@@ -1,4 +1,4 @@
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 
 export const HeaderExpertsSessions = ({
   handleOpenModal,

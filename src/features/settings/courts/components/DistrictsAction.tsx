@@ -1,6 +1,6 @@
 import React from "react";
-import { TableEditButton } from "@/shared/components/TableEditButton";
-import { TableDeleteButton } from "@/shared/components/TableDeleteButton";
+import { TableEditButton } from "@/shared/components/buttons/TableEditButton";
+import { TableDeleteButton } from "@/shared/components/buttons/TableDeleteButton";
 import { DistrictFormDialog } from "./DistrictFormDialog";
 import type { court_circle } from "../types/courtTypes";
 
@@ -16,12 +16,11 @@ export const DistrictsAction: React.FC<DistrictsActionProps> = ({
   onDelete,
 }) => {
   return (
-    <div className="flex items-center gap-2 justify-center">
+    <div className="flex items-center justify-center gap-2">
       <DistrictFormDialog
         district={district}
         onSave={(values) => {
-
-          onUpdate(Number(district.id), values)
+          onUpdate(Number(district.id), values);
         }}
         trigger={<TableEditButton />}
       />

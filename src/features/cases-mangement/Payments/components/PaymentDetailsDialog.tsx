@@ -1,6 +1,6 @@
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
-import { InputBox } from "@/shared/components/InputBox";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 import { DateIcon } from "@/shared/icons/Date";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import type { PaymentItem } from "@/features/cases-mangement/Payments/types";
@@ -44,8 +44,9 @@ export const PaymentDetailsDialog: React.FC<PaymentDetailsDialogProps> = ({
         <InputBox
           label="نوع الدفعة"
           text={
-            PAYMENT_TYPE_OPTIONS.find((opt) => opt.value === payment?.payment_type)
-              ?.label ||
+            PAYMENT_TYPE_OPTIONS.find(
+              (opt) => opt.value === payment?.payment_type,
+            )?.label ||
             payment?.payment_type ||
             "-"
           }
@@ -59,7 +60,10 @@ export const PaymentDetailsDialog: React.FC<PaymentDetailsDialogProps> = ({
           text={formatDateToYYYYMMDD(payment?.payment_date) || "-"}
           icon={<DateIcon />}
         />
-        <InputBox label="وصف الدفعة" text={payment?.payment_description || "-"} />
+        <InputBox
+          label="وصف الدفعة"
+          text={payment?.payment_description || "-"}
+        />
         <InputBox
           label="المبلغ"
           text={payment ? `${payment.amount.toLocaleString("en-US")}` : "-"}

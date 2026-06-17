@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { InputForm } from "@/shared/components/InputForm";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { InputForm } from "@/shared/components/inputs/InputForm";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import * as Yup from "yup";
 
 interface Employee {
@@ -38,7 +38,7 @@ export const EditEmployeeDialog: React.FC<EditEmployeeDialogProps> = ({
         initialValues={initialValues}
         validationSchema={validationSchema}
         enableReinitialize
-        onSubmit={() => { }}
+        onSubmit={() => {}}
       >
         {() => (
           <Form className="space-y-4">

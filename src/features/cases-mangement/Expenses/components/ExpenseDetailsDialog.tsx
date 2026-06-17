@@ -1,6 +1,6 @@
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
-import { InputBox } from "@/shared/components/InputBox";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 import { DateIcon } from "@/shared/icons/Date";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { getExpenseTypeLabel } from "@/shared/utils/getExpenseTypeLabel";
@@ -57,7 +57,7 @@ export const ExpenseDetailsDialog: React.FC<ExpenseDetailsDialogProps> = ({
         <InputBox label="وصف المصروف" text={expense?.description || "-"} />
         <InputBox
           label="قيمة المصروف"
-          text={expense ? `${expense.amount.toLocaleString("en-US")} ج.م` : "-"}
+          text={expense ? `${expense.amount.toLocaleString("en-US")} د.ك` : "-"}
         />
         <div className="col-span-1 md:col-span-2">
           <InputBox

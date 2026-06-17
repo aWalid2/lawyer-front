@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import PageLayout from "@/shared/components/PageLayout";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
 import TableCases from "./componnents/tableCases";
 import { TableClients } from "./componnents/tableClient";
 import { TableSessions } from "./componnents/Sessions";

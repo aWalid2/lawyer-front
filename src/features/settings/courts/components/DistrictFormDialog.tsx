@@ -10,7 +10,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { InputForm } from "@/shared/components/InputForm";
+import { InputForm } from "@/shared/components/inputs/InputForm";
 import type { court_circle } from "../types/courtTypes";
 
 interface DistrictFormDialogProps {
@@ -39,11 +39,11 @@ export const DistrictFormDialog: React.FC<DistrictFormDialogProps> = ({
   });
 
   return (
-    <Dialog onOpenChange={(open) => !open && formik.resetForm()} >
+    <Dialog onOpenChange={(open) => !open && formik.resetForm()}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="rounded-[24px] max-w-[400px]">
+      <DialogContent className="max-w-[400px] rounded-[24px]">
         <DialogHeader>
-          <DialogTitle className="text-center text-[#153B4D] text-lg font-bold">
+          <DialogTitle className="text-center text-lg font-bold text-[#153B4D]">
             {district ? "تعديل دائرة" : "أضافة دائرة جديدة"}
           </DialogTitle>
         </DialogHeader>
@@ -54,10 +54,10 @@ export const DistrictFormDialog: React.FC<DistrictFormDialogProps> = ({
             type="text"
             placeholder="اسم الدائرة"
           />
-          <DialogFooter className="sm:justify-center mt-6">
+          <DialogFooter className="mt-6 sm:justify-center">
             <Button
               type="submit"
-              className="w-full h-12 rounded-main bg-[#CBA462] hover:bg-[#B69357] text-white text-base font-bold"
+              className="rounded-main h-12 w-full bg-[#CBA462] text-base font-bold text-white hover:bg-[#B69357]"
             >
               {district ? "تعديل دائرة" : "إضافة دائرة"}
             </Button>

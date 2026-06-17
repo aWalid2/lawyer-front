@@ -58,7 +58,6 @@ export const InputForm: React.FC<InputFormProps> = ({
               )}
               disabled={disabled}
             >
-              <CalendarIcon className="h-4 w-4 text-gray-500 opacity-50 dark:text-gray-400" />
               <span>
                 {field.value ? (
                   format(new Date(field.value), "yyyy-MM-dd")
@@ -66,6 +65,7 @@ export const InputForm: React.FC<InputFormProps> = ({
                   <span>{placeholder || "اختر تاريخ"}</span>
                 )}
               </span>
+              <CalendarIcon className="h-4 w-4 text-gray-500 opacity-50 dark:text-gray-400" />
             </Button>
           </PopoverTrigger>
           <PopoverContent

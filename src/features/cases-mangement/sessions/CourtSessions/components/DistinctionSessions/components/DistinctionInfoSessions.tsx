@@ -6,7 +6,7 @@ import {
   formatDateToTime,
   formatDateToYYYYMMDD,
 } from "@/shared/utils/convertDate";
-import { InputBox } from "@/shared/components/InputBox";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 
 export const DistinctionInfoSessions: React.FC<CourtInfoInfProps> = ({
   courtInfoData,
@@ -59,8 +59,8 @@ export const DistinctionInfoSessions: React.FC<CourtInfoInfProps> = ({
           label="تاريخ تسجيل القضية بالمحكمة:"
           text={
             formatDateToYYYYMMDD(courtInfoData?.registration_date) +
-            " - " +
-            formatDateToTime(courtInfoData?.registration_date) || "-"
+              " - " +
+              formatDateToTime(courtInfoData?.registration_date) || "-"
           }
           icon={<DateIcon />}
         />

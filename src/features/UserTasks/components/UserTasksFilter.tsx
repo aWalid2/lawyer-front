@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { CheveronDownIcon } from "@/shared/icons/CheveronDown";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
+import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
 import type { SelectOption } from "@/shared/hooks/useCachedPaginatedOptions";
 import { decisionOptions } from "@/shared/constants/procedursOptions";
 

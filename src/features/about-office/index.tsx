@@ -2,7 +2,7 @@ import { Formik, Form } from "formik";
 import { useState } from "react";
 import type { FormValues } from "./types";
 import { validationSchema } from "./ValidationSchema";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import PageLayout from "@/shared/components/PageLayout";
 
 // استيراد المكونات
@@ -91,9 +91,7 @@ const About = () => {
       <Formik<FormValues>
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={() => {
-
-        }}
+        onSubmit={() => {}}
       >
         {({ values, setFieldValue }) => (
           <PageLayout>

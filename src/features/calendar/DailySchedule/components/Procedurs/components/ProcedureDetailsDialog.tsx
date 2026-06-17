@@ -1,6 +1,6 @@
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import { Error } from "@/shared/components/Error";
-import { InputBox } from "@/shared/components/InputBox";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { DateIcon } from "@/shared/icons/Date";
 import {

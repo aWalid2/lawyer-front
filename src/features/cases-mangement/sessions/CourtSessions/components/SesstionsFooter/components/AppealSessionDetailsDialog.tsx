@@ -1,9 +1,9 @@
 import React from "react";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
-import { LayoutDialog } from "@/shared/components/LayoutDialog";
-import { InputBox } from "@/shared/components/InputBox";
-import { ButtonUpdateInfo } from "@/shared/components/ButtonUpdateInfo";
+import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
+import { InputBox } from "@/shared/components/inputs/InputBox";
+import { ButtonUpdateInfo } from "@/shared/components/buttons/ButtonUpdateInfo";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 import { DateIcon } from "@/shared/icons/Date";
 import {
@@ -68,7 +68,10 @@ export const AppealSessionDetailsDialog: React.FC<
             <InputBox label="المحكمة" text={session.court?.name || "-"} />
             <InputBox label="دور القاعة" text={session.hall_floor || "-"} />
             <InputBox label="رقم القاعة" text={session.hall_number || "-"} />
-            <InputBox label="قرار الجلسة" text={session.session_decision || "-"} />
+            <InputBox
+              label="قرار الجلسة"
+              text={session.session_decision || "-"}
+            />
             <InputBox label="المحامي " text={session.lawyer?.name || "-"} />
           </div>
         </CustomLayoutBorder>

@@ -1,7 +1,7 @@
-import { HeaderExportMenu } from "@/shared/components/HeaderExportMenu";
-import { HeaderFilter } from "@/shared/components/HeaderFilter";
-import { HeaderPageLayout } from "@/shared/components/HeaderPageLayout";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderExportMenu } from "@/shared/components/Header/HeaderExportMenu";
+import { HeaderFilter } from "@/shared/components/Header/HeaderFilter";
+import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
 import { LITIGATION_LEVEL_OPTIONS } from "@/shared/constants/caseOptions";
 import React from "react";
 

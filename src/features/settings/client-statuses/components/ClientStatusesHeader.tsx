@@ -1,7 +1,7 @@
 import React from "react";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
-import { HeaderActionButton } from "@/shared/components/HeaderActionButton";
-import { HeaderSearch } from "@/shared/components/HeaderSearch";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
+import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
+import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
 import { Plus } from "lucide-react";
 import { ClientStatusFormDialog } from "./ClientStatusFormDialog";
 

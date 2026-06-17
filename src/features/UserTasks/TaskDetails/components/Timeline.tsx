@@ -1,4 +1,4 @@
-import { InputBox } from "@/shared/components/InputBox";
+import { InputBox } from "@/shared/components/inputs/InputBox";
 
 export default function Timeline({
   startdate,

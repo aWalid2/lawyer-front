@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import { getCaseEmployees } from "../services/getCaseEmployees";
+import { getCaseRoles } from "../services/getCaseRoles";
 
-export const useGetCaseEmployees = (caseId: string | number | undefined) => {
+export const useGetCaseRoles = (caseId: string | number | undefined) => {
   return useQuery({
-    queryKey: ["case-employees", caseId],
-    queryFn: () => getCaseEmployees(caseId!),
+    queryKey: ["case-roles", caseId],
+    queryFn: () => getCaseRoles(caseId!),
     enabled: !!caseId,
     retry: (failureCount, error) => {
       const axiosError = error as AxiosError;

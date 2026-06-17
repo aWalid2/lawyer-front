@@ -8,7 +8,7 @@ import {
   formatDateToTime,
   formatDateToYYYYMMDD,
 } from "@/shared/utils/convertDate";
-import { HeaderTitle } from "@/shared/components/HeaderTitle";
+import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 
 export const HeaderSessions = ({ tab }: { tab: string }) => {
   const { id } = useParams<{ id: string }>();

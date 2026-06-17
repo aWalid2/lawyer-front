@@ -1,69 +1,69 @@
-import { ButtonDeleteTable } from '@/shared/components/ButtonDeleteTable';
-import { ButtonUpdateTable } from '@/shared/components/ButtonUpdateTable';
-import { ConfirmDeleteDialog } from '@/shared/components/ConfirmDeleteDialog';
-import React, { useState } from 'react';
-import { useDeleteProsecution } from '../api/hooks/useDeleteProsecution';
-import { ProsecutionFormDialog } from './ProsecutionFormDialog';
+import { ButtonDeleteTable } from "@/shared/components/buttons/ButtonDeleteTable";
+import { ButtonUpdateTable } from "@/shared/components/buttons/ButtonUpdateTable";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog";
+import React, { useState } from "react";
+import { useDeleteProsecution } from "../api/hooks/useDeleteProsecution";
+import { ProsecutionFormDialog } from "./ProsecutionFormDialog";
 
 interface ProsecutionsActionProps {
-    prosecution: any;
-    onProsecutionUpdated?: () => void;
+  prosecution: any;
+  onProsecutionUpdated?: () => void;
 }
 
-export const ProsecutionsAction: React.FC<ProsecutionsActionProps> = ({ prosecution, onProsecutionUpdated }) => {
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const { mutateAsync: deleteProsecution } = useDeleteProsecution();
+export const ProsecutionsAction: React.FC<ProsecutionsActionProps> = ({
+  prosecution,
+  onProsecutionUpdated,
+}) => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { mutateAsync: deleteProsecution } = useDeleteProsecution();
 
-    const handleEditClick = () => {
-        setIsEditModalOpen(true);
-    };
+  const handleEditClick = () => {
+    setIsEditModalOpen(true);
+  };
 
-    const handleCloseModal = () => {
-        setIsEditModalOpen(false);
-    };
+  const handleCloseModal = () => {
+    setIsEditModalOpen(false);
+  };
 
-    const handleSaveProsecution = () => {
-        if (onProsecutionUpdated) {
-            onProsecutionUpdated();
-        }
-        handleCloseModal();
-    };
+  const handleSaveProsecution = () => {
+    if (onProsecutionUpdated) {
+      onProsecutionUpdated();
+    }
+    handleCloseModal();
+  };
 
-    const handleDelete = async () => {
-        try {
-            await deleteProsecution(prosecution.id.toString());
-            if (onProsecutionUpdated) {
-                onProsecutionUpdated();
-            }
-        } catch (error) {
-            console.error('Error deleting prosecution:', error);
-        }
-    };
+  const handleDelete = async () => {
+    try {
+      await deleteProsecution(prosecution.id.toString());
+      if (onProsecutionUpdated) {
+        onProsecutionUpdated();
+      }
+    } catch (error) {
+      console.error("Error deleting prosecution:", error);
+    }
+  };
 
-    return (
-        <>
-            <div className="flex items-center justify-center gap-2">
+  return (
+    <>
+      <div className="flex items-center justify-center gap-2">
+        <ButtonUpdateTable onClick={handleEditClick} />
 
-                <ButtonUpdateTable onClick={handleEditClick} />
+        <ConfirmDeleteDialog
+          title="حذف النيابة"
+          description={`هل أنت متأكد من حذف النيابة (${prosecution.name})`}
+          onConfirm={handleDelete}
+          trigger={<ButtonDeleteTable />}
+        />
+      </div>
 
-                <ConfirmDeleteDialog
-                    title="حذف النيابة"
-                    description={`هل أنت متأكد من حذف النيابة (${prosecution.name})`}
-                    onConfirm={handleDelete}
-                    trigger={
-                        <ButtonDeleteTable />
-                    }
-                />
-            </div>
-
-            {isEditModalOpen && (
-                <ProsecutionFormDialog
-                    open={isEditModalOpen}
-                    onOpenChange={setIsEditModalOpen}
-                    prosecution={prosecution}
-                    onSave={handleSaveProsecution}
-                />
-            )}
-        </>
-    );
+      {isEditModalOpen && (
+        <ProsecutionFormDialog
+          open={isEditModalOpen}
+          onOpenChange={setIsEditModalOpen}
+          prosecution={prosecution}
+          onSave={handleSaveProsecution}
+        />
+      )}
+    </>
+  );
 };
