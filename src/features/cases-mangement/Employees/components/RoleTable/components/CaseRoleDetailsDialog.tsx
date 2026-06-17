@@ -55,10 +55,7 @@ export const CaseRoleDetailsDialog: React.FC<CaseRoleDetailsDialogProps> = ({
               label="اسم الدور"
               text={roleDetails?.role_name ?? role.role_name}
             />
-            <InputBox
-              label="عدد الموظفين"
-              text={String(roleDetails?.users?.length ?? role.employee_count)}
-            />
+            <InputBox label="عدد الموظفين" text={role._count?.users ?? ""} />
           </div>
 
           <div className="mt-6">
