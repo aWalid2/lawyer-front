@@ -129,6 +129,7 @@ export const ContractDialog: React.FC<ContractDialogProps> = ({
                 hasMoreOptions={clientHasMoreOptions}
                 isFetchingMore={clientIsFetchingMore || clientsLoading}
                 onReachEnd={loadMoreClients}
+                disabled={!!initialValues?.id}
               />
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
