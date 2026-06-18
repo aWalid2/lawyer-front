@@ -25,12 +25,14 @@ const StatusCell: React.FC<{ status: string }> = ({ status }) => {
 
 interface TasksTableProps {
   searchTerm: string;
+  statusFilter?: string;
   deliverDateFrom?: Date;
   deliverDateTo?: Date;
 }
 
 export const TasksTable: React.FC<TasksTableProps> = ({
   searchTerm,
+  statusFilter = "all",
   deliverDateFrom,
   deliverDateTo,
 }) => {
@@ -42,7 +44,14 @@ export const TasksTable: React.FC<TasksTableProps> = ({
     isError,
     error,
     isFetching,
-  } = useFetchTasks(page, limit, deliverDateFrom, deliverDateTo, searchTerm);
+  } = useFetchTasks(
+    page,
+    limit,
+    deliverDateFrom,
+    statusFilter,
+    deliverDateTo,
+    searchTerm,
+  );
   const tasks = tasksResponse?.data;
   const totalPages = tasksResponse?.meta?.total_pages ?? 1;
   const indexedData = useIndexedData(tasks || [], page, limit);

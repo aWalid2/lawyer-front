@@ -65,7 +65,6 @@ const ROUTE_TITLES: Record<string, string> = {
   "/dashboard/users/lawyers": "المستخدمين > المحامين",
   "/dashboard/users/employees": "المستخدمين > الموظفين",
 
-  // Finance
   "/dashboard/finance": "المالية",
   "/dashboard/finance/expences": "المالية > المصروفات",
   "/dashboard/finance/payments": "المالية > المدفوعات",
@@ -186,7 +185,7 @@ export default function NavbarHeader() {
                       className={`text-secondary dark:text-white ${LINK_SIZE} bg-primary border-secondary flex items-center justify-center overflow-hidden rounded-full border dark:border-white/20 dark:bg-white/10`}
                     >
                       <img
-                        src="/images/user-placeholder.jpg"
+                        src="/images/user-placeholder.webp"
                         alt="User avatar"
                         className="block h-full w-full object-contain"
                       />

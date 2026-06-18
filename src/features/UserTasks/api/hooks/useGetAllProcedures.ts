@@ -9,10 +9,11 @@ export const useGetAllProcedures = (
   deliverDateFrom?: Date,
   deliverDateTo?: Date,
   searchTerm?: string,
+  status?: string,
 ) => {
   const query = useQuery({
-    queryKey: ["tasks-with-case", page, limit, deliverDateFrom, deliverDateTo, searchTerm],
-    queryFn: () => getAllProcedures(page, limit, deliverDateFrom, deliverDateTo, searchTerm),
+    queryKey: ["tasks-with-case", page, limit, deliverDateFrom, deliverDateTo, searchTerm, status],
+    queryFn: () => getAllProcedures(page, limit, status, deliverDateFrom, deliverDateTo, searchTerm),
     placeholderData: (previousData) => previousData,
     staleTime: 1000 * 60 * 2,
     retry: 2,

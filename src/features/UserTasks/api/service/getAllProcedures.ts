@@ -3,6 +3,7 @@ import api from "@/lib/api";
 export const getAllProcedures = async (
   page: number,
   limit: number,
+  status?:string,
   deliverDateFrom?: Date,
   deliverDateTo?: Date,
   searchTerm?: string,
@@ -29,6 +30,10 @@ export const getAllProcedures = async (
   }
   if (dateTo) {
     params.deliver_date_to = dateTo;
+  }
+
+  if (status && status !== "all") {
+    params.status = status;
   }
 
   const endpoint = searchTerm ? "task/with-case/search" : "task/with-case";

@@ -77,6 +77,7 @@ export const UsersTask: React.FC = () => {
         <TabsContent value="tasks">
           <TasksTable
             searchTerm={searchTerm}
+            statusFilter={statusFilter}
             deliverDateFrom={deliverDateFrom}
             deliverDateTo={deliverDateTo}
           />
@@ -85,6 +86,7 @@ export const UsersTask: React.FC = () => {
         <TabsContent value="procedures">
           <ProceduresTable
             searchTerm={searchTerm}
+            statusFilter={statusFilter}
             deliverDateFrom={deliverDateFrom}
             deliverDateTo={deliverDateTo}
           />

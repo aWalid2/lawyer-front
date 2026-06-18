@@ -12,6 +12,7 @@ import { Error } from "@/shared/components/Error";
 
 interface ProceduresTableProps {
   searchTerm: string;
+  statusFilter?: string;
   deliverDateFrom?: Date;
   deliverDateTo?: Date;
 }
@@ -30,6 +31,7 @@ const ProcedureStatusCell: React.FC<{ status: string }> = ({ status }) => {
 
 export const ProceduresTable: React.FC<ProceduresTableProps> = ({
   searchTerm,
+  statusFilter = "all",
   deliverDateFrom,
   deliverDateTo,
 }) => {
@@ -47,6 +49,7 @@ export const ProceduresTable: React.FC<ProceduresTableProps> = ({
     deliverDateFrom,
     deliverDateTo,
     searchTerm,
+    statusFilter,
   );
   const procedures = proceduresResponse?.data ?? [];
   const totalPages = proceduresResponse?.meta?.total_pages ?? 1;

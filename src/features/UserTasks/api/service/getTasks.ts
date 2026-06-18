@@ -4,6 +4,7 @@ export const getTasks = async (
   page: number,
   limit: number,
   deliverDateFrom?: Date,
+  status?:string,
   deliverDateTo?: Date,
   searchTerm?: string,
 ) => {
@@ -24,11 +25,17 @@ export const getTasks = async (
   const dateFrom = formatDateParam(deliverDateFrom);
   const dateTo = formatDateParam(deliverDateTo);
 
+
+
   if (dateFrom) {
     params.deliver_date_from = dateFrom;
   }
   if (dateTo) {
     params.deliver_date_to = dateTo;
+  }
+
+  if (status && status !== "all") {
+    params.status = status;
   }
 
   const endpoint = searchTerm ? "task/without-case/search" : "task/without-case";
