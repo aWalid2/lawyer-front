@@ -76,6 +76,5 @@ return {
   formatSessionSourceLabel,
   mapRollSession,
   FALLBACK_TEXT
-
 };
 };

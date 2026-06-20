@@ -39,6 +39,7 @@ const RollFeature = () => {
     dateFrom: filters.fromDate,
     dateTo: filters.toDate,
   });
+  console.log(allSessionsData);
 
   const {
     data: searchData,

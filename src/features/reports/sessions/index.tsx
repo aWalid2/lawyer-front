@@ -14,36 +14,74 @@ import type { GetAllSessionsParams } from "./api/services/getAllSessionsReports"
 
 const itemsPerPage = 15;
 
+const FALLBACK_TEXT = "-";
+
+const SESSION_TYPE_LABELS: Record<string, string> = {
+  court: "محكمة",
+  prosecution: "نيابة",
+  police: "مخفر",
+  procedure: "إجراءات",
+};
+
+const formatSessionTypeLabel = (value: string | null | undefined): string =>
+  value && value in SESSION_TYPE_LABELS
+    ? SESSION_TYPE_LABELS[value]
+    : value || FALLBACK_TEXT;
+
+const SESSION_SOURCE_LABELS: Record<string, string> = {
+  first_instance: "أول درجة",
+  appeal: "استئناف",
+  cassation: "تمييز",
+  police: "مخفر",
+  procedure: "إجراءات",
+  prosecution: "نيابة",
+};
+
+const formatSessionSourceLabel = (value: string | null | undefined): string =>
+  value && value in SESSION_SOURCE_LABELS
+    ? SESSION_SOURCE_LABELS[value]
+    : value || FALLBACK_TEXT;
+
 export const ReportsSessionsFeature: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({ session_source: "all", session_type: "all" });
+  const [filters, setFilters] = useState({
+    session_source: "all",
+    session_type: "all",
+  });
 
   const apiParams = useMemo(() => {
-    const params: GetAllSessionsParams = { page: currentPage, limit: itemsPerPage };
-    if (filters.session_source !== "all") params.session_source = filters.session_source;
-    if (filters.session_type !== "all") params.session_type = filters.session_type;
+    const params: GetAllSessionsParams = {
+      page: currentPage,
+      limit: itemsPerPage,
+    };
+    if (filters.session_source !== "all")
+      params.session_source = filters.session_source;
+    if (filters.session_type !== "all")
+      params.session_type = filters.session_type;
     if (searchTerm) params.search = searchTerm;
     return params;
   }, [filters, searchTerm, currentPage]);
 
-  const { data, isPending, isError, error } = useGetAllSessionsReports(apiParams);
+  const { data, isPending, isError, error } =
+    useGetAllSessionsReports(apiParams);
   const sessions = useMemo(() => data?.data ?? [], [data]);
-
 
   const totalPages = data?.meta?.total_pages ?? 1;
 
   const safeCurrentPage = useMemo(
     () => Math.min(currentPage, totalPages),
-    [currentPage, totalPages]
+    [currentPage, totalPages],
   );
 
-  const paginatedSessions = useMemo(() =>
-    sessions.map((session, index) => ({
-      ...session,
-      rowNumber: (currentPage - 1) * itemsPerPage + index + 1,
-    }))
-    , [sessions, currentPage]);
+  const paginatedSessions = useMemo(
+    () =>
+      sessions.map((session, index) => ({
+        ...session,
+        rowNumber: (currentPage - 1) * itemsPerPage + index + 1,
+      })),
+    [sessions, currentPage],
+  );
 
   useEffect(() => {
     setCurrentPage(1);
@@ -71,9 +109,18 @@ export const ReportsSessionsFeature: React.FC = () => {
 
   const columns: Column<ReportSession>[] = [
     { header: "#", accessor: "rowNumber", headerClassName: "w-15" },
-    { header: "نوع الجلسة", accessor: "session_source" },
-    { header: "الدرجة القضائية", accessor: "session_type" },
-    { header: "رقم القضية", accessor: "case_sequence" },
+    {
+      header: "نوع الجلسة",
+      accessor: (item) => formatSessionSourceLabel(item.session_source),
+    },
+    {
+      header: "الدرجة القضائية",
+      accessor: (item) => formatSessionTypeLabel(item.session_type),
+    },
+    {
+      header: "رقم القضية",
+      accessor: (item) => item.case_sequence || FALLBACK_TEXT,
+    },
     { header: "اسم الموكل", accessor: "client_name" },
     { header: "اسم المحامي", accessor: "lawyer_name" },
     { header: "الجهة", accessor: "entity" },
@@ -83,7 +130,6 @@ export const ReportsSessionsFeature: React.FC = () => {
     },
     { header: "قرار الجلسة", accessor: "session_decision" },
   ];
-
 
   if (isPending) return <LoadingPage />;
   if (isError) return <Error message={error?.message} />;
