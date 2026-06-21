@@ -15,8 +15,10 @@ type SelectOptionEntity = {
 };
 
 type ClientOptionEntity = {
-  user_id: number | string;
-  name: string;
+  id?: number | string;
+  user_id?: number | string;
+  name?: string;
+  user?: { first_name?: string; last_name?: string };
 };
 
 export function SharedFormField() {
@@ -27,8 +29,13 @@ export function SharedFormField() {
     const response = await fetchClients(page, 15, search);
     return {
       items: (response.data ?? []).map((client: ClientOptionEntity) => ({
-        label: client.name,
-        value: String(client.user_id),
+        label:
+          client.name ||
+          [client.user?.first_name, client.user?.last_name]
+            .filter(Boolean)
+            .join(" ") ||
+          "غير معروف",
+        value: String(client.user_id ?? client.id ?? ""),
       })),
       totalPages: response.meta?.total_pages ?? 1,
     };
