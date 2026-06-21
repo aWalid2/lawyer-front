@@ -1,5 +1,4 @@
 import api from "@/lib/api";
-import { isAxiosError } from "axios";
 import type { FormValues } from "../../types/addClientT";
 
 type AddClientPayload = Omit<FormValues, "countryCode"> & {
@@ -39,6 +38,7 @@ const buildClientFormData = (data: AddClientPayload) => {
     formData.append("user_status", data.user_status);
     formData.append("clientId", "");
 
+
     if (data.has_contract && data.contracts.length > 0) {
         data.contracts.forEach((contract, index) => {
             appendIfPresent(formData, `profile[contracts][${index}][start_date]`, contract.contract_start_date);
@@ -47,7 +47,7 @@ const buildClientFormData = (data: AddClientPayload) => {
 
             const contractFile = getFileFromInput(contract.contract_file);
             if (contractFile) {
-                formData.append(`contract_file_${index}`, contractFile);
+                formData.append(`contract_file`, contractFile);
             }
         });
     }
@@ -72,20 +72,11 @@ const buildClientFormData = (data: AddClientPayload) => {
 export const addClients = async (data: AddClientPayload) => {
     const formData = buildClientFormData(data);
 
-    try {
-        const response = await api.post("/users/client", formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
+    const response = await api.post("/users/client", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
 
-        return response.data;
-    } catch (error: unknown) {
-        if (isAxiosError(error)) {
-            console.error("API Error:", error.response?.data);
-            console.error("Error status:", error.response?.status);
-        }
-
-        throw error;
-    }
+    return response.data;
 };
