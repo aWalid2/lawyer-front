@@ -30,7 +30,11 @@ export const AddTask: React.FC<AddTaskProps> = ({ context = "tasks" }) => {
           background: "linear-gradient(135deg, #E3C086 0%, #CBA462 100%)",
         }}
       >
-        <span>+ مهمة جديدة</span>
+        {context === "tasks" ? (
+          <span>+ مهمة جديدة</span>
+        ) : (
+          <span>+ اجراء جديد</span>
+        )}
       </button>
 
       {isModalOpen && (

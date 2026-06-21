@@ -57,7 +57,9 @@ export const HeaderTasksUser: React.FC<HeaderTasksUserProps> = ({
         />
         <AddTask context={context} />
       </div>
-      <ButtonShowAll text={"عرض جميع المهمام"} />
+      <ButtonShowAll
+        text={context === "tasks" ? "عرض جميع المهمام" : "عرض جميع الاجراءات"}
+      />
     </HeaderPageLayout>
   );
 };

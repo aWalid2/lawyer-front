@@ -73,6 +73,16 @@ export const SelectForm: React.FC<SelectFormProps> = ({
     [hasMoreOptions, isFetchingMore, onReachEnd],
   );
 
+  const [commandKey, setCommandKey] = React.useState(0);
+
+  React.useEffect(() => {
+    if (open) {
+      // Remount Command to reset cmdk's internal search state and fetch fresh data
+      setCommandKey((k) => k + 1);
+      onSearchChange?.("");
+    }
+  }, [open, onSearchChange]);
+
   React.useEffect(() => {
     if (
       !sentinelRef.current ||
@@ -93,7 +103,13 @@ export const SelectForm: React.FC<SelectFormProps> = ({
     return () => observer.disconnect();
   }, [onReachEnd, isFetchingMore, hasMoreOptions]);
 
+  const [cachedLabel, setCachedLabel] = React.useState<React.ReactNode>(null);
+
   const handleValueChange = (value: string | number) => {
+    const option = options.find((opt) => String(opt.value) === String(value));
+    if (option) {
+      setCachedLabel(option.label);
+    }
     const finalValue = typeof field.value === "number" ? Number(value) : value;
     setFieldValue(name, finalValue);
     onChange?.(finalValue);
@@ -102,6 +118,9 @@ export const SelectForm: React.FC<SelectFormProps> = ({
   const selectedOption = options.find(
     (opt) => String(opt.value) === String(field.value),
   );
+
+  const displayLabel =
+    selectedOption?.label ?? cachedLabel ?? (placeholder || "اختر...");
 
   return (
     <div className={cn("flex w-full flex-col", className)}>
@@ -121,9 +140,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
               )}
             >
               <div className="flex items-center gap-2 overflow-hidden">
-                {selectedOption
-                  ? selectedOption.label
-                  : placeholder || "اختر..."}
+                {displayLabel}
               </div>
               <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
             </button>
@@ -133,6 +150,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
             align="start"
           >
             <Command
+              key={commandKey}
               className="text-foreground w-full bg-transparent"
               dir="rtl"
             >
@@ -142,7 +160,7 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                 onValueChange={onSearchChange}
               />
               <CommandList
-                className="custom-scrollbar dark:bg-transparent"
+                className="custom-scrollbar max-h-[40vh] overflow-y-auto dark:bg-transparent"
                 onScroll={handleScroll}
               >
                 <CommandEmpty className="dark:text-white/60">
@@ -202,10 +220,10 @@ export const SelectForm: React.FC<SelectFormProps> = ({
             )}
           >
             <div className="flex items-center gap-2 overflow-hidden">
-              {selectedOption ? selectedOption.label : placeholder || "اختر..."}
+              {displayLabel}
             </div>
           </SelectTrigger>
-          <SelectContent className="w-(--radix-select-trigger-width) border-[#E8E8E8] bg-white dark:border-white/20 dark:bg-[#1B1B1B]/95">
+          <SelectContent className="max-h-[40vh] w-(--radix-select-trigger-width) overflow-y-auto border-[#E8E8E8] bg-white dark:border-white/20 dark:bg-[#1B1B1B]/95">
             {options.map((option) => (
               <SelectItem
                 key={String(option.value)}

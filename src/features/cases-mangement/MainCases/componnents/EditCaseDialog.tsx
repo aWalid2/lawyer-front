@@ -366,7 +366,7 @@ export const EditCaseDialog: React.FC<EditCaseDialogProps> = ({
                 />
                 <SelectForm
                   name="client_id"
-                  label="اسم العميل"
+                  label="اسم الموكل"
                   options={mergedClientOptions}
                   showSearch={true}
                   onSearchChange={setClientSearch}
