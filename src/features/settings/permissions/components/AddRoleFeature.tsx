@@ -16,6 +16,7 @@ import * as Yup from "yup";
 import { FormSection } from "./FormSection";
 import { useRoleModulesData } from "../hooks/useRoleModulesData";
 import { useCreateRole, useAddPermissions, useUpdateRole } from "../api";
+import { getPermissionIdsFromArabic } from "@/shared/constants/permissions";
 import { toast } from "sonner";
 
 interface RoleFormProps {
@@ -50,8 +51,8 @@ export const AddRoleFeature = ({ initialData, isEdit }: RoleFormProps) => {
 
   const handleSelectAll = () => {
     const allSelected: Record<string, string[]> = {};
-    ruleModulesData.forEach(({ module, permissions }) => {
-      allSelected[module] = permissions;
+    ruleModulesData.forEach(({ moduleEn, permissions }) => {
+      allSelected[moduleEn] = permissions.map((p) => p.nameAr);
     });
     setSelectedPermissions(allSelected);
   };
@@ -60,16 +61,16 @@ export const AddRoleFeature = ({ initialData, isEdit }: RoleFormProps) => {
     setSelectedPermissions({});
   };
 
-  const togglePermission = (module: string, perm: string) => {
+  const togglePermission = (moduleEn: string, perm: string) => {
     setSelectedPermissions((prev) => {
-      const currentModulePerms = prev[module] || [];
+      const currentModulePerms = prev[moduleEn] || [];
       const updatedPerms = currentModulePerms.includes(perm)
         ? currentModulePerms.filter((p) => p !== perm)
         : [...currentModulePerms, perm];
 
       return {
         ...prev,
-        [module]: updatedPerms,
+        [moduleEn]: updatedPerms,
       };
     });
   };
@@ -83,7 +84,7 @@ export const AddRoleFeature = ({ initialData, isEdit }: RoleFormProps) => {
 
       if (isEdit && initialData?.id) {
         roleId = Number(initialData.id);
-        // Step 1: Update the role
+
         await updateRoleMutation.mutateAsync({
           id: roleId,
           data: {
@@ -91,27 +92,14 @@ export const AddRoleFeature = ({ initialData, isEdit }: RoleFormProps) => {
           },
         });
       } else {
-        // Step 1: Create the role
         const roleResponse = await createRoleMutation.mutateAsync({
           role_name: values.name,
         });
         roleId = roleResponse.id;
       }
 
-      // Step 2: Convert selected permissions to permission IDs
-      // Flatten the selected permissions array and map to IDs (1-indexed)
-      const permissionIds: number[] = [];
-      let permIndex = 1;
-      ruleModulesData.forEach(({ module, permissions }) => {
-        permissions.forEach((permission) => {
-          if (selectedPermissions[module]?.includes(permission)) {
-            permissionIds.push(permIndex);
-          }
-          permIndex++;
-        });
-      });
+      const permissionIds = getPermissionIdsFromArabic(selectedPermissions);
 
-      // Step 3: Add permissions to the role
       if (permissionIds.length > 0) {
         await addPermissionsMutation.mutateAsync({
           roleId: roleId,
@@ -191,66 +179,68 @@ export const AddRoleFeature = ({ initialData, isEdit }: RoleFormProps) => {
                     </>
                   }
                 >
-                  {ruleModulesData.map(({ module, permissions }) => {
-                    const isExpanded = expandedModules.includes(module);
+                  {ruleModulesData.map(
+                    ({ moduleEn, moduleAr, permissions }) => {
+                      const isExpanded = expandedModules.includes(moduleEn);
 
-                    return (
-                      <Collapsible
-                        key={module}
-                        open={isExpanded}
-                        onOpenChange={() => toggleModule(module)}
-                        className="bg-primary/3 overflow-hidden rounded-[10px] border border-[#E8E8E8] transition-all duration-200"
-                      >
-                        <CollapsibleTrigger asChild>
-                          <button
-                            type="button"
-                            className="flex w-full items-center justify-between p-4 transition-colors hover:bg-gray-50"
-                          >
-                            <span className="font-bold text-[#476274]">
-                              {module}
-                            </span>
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f4f4f4] text-[#476274]">
-                              {isExpanded ? (
-                                <ChevronUp size={16} />
-                              ) : (
-                                <ChevronDown size={16} />
-                              )}
-                            </div>
-                          </button>
-                        </CollapsibleTrigger>
+                      return (
+                        <Collapsible
+                          key={moduleEn}
+                          open={isExpanded}
+                          onOpenChange={() => toggleModule(moduleEn)}
+                          className="bg-primary/3 overflow-hidden rounded-[10px] border border-[#E8E8E8] transition-all duration-200"
+                        >
+                          <CollapsibleTrigger asChild>
+                            <button
+                              type="button"
+                              className="flex w-full items-center justify-between p-4 transition-colors hover:bg-gray-50"
+                            >
+                              <span className="font-bold text-[#476274]">
+                                {moduleAr}
+                              </span>
+                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f4f4f4] text-[#476274]">
+                                {isExpanded ? (
+                                  <ChevronUp size={16} />
+                                ) : (
+                                  <ChevronDown size={16} />
+                                )}
+                              </div>
+                            </button>
+                          </CollapsibleTrigger>
 
-                        <CollapsibleContent>
-                          <div className="bg-primary/3 border-t border-[#E8E8E8] p-6">
-                            <div className="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2 lg:grid-cols-3">
-                              {permissions.map((perm) => (
-                                <div
-                                  key={perm}
-                                  className="flex items-center gap-3"
-                                >
-                                  <Checkbox
-                                    id={`${module}-${perm}`}
-                                    checked={selectedPermissions[
-                                      module
-                                    ]?.includes(perm)}
-                                    onCheckedChange={() =>
-                                      togglePermission(module, perm)
-                                    }
-                                    className="h-5 w-5 rounded-[4px] border-[#D4D4D4] data-[state=checked]:border-[#C1A063] data-[state=checked]:bg-[#C1A063] data-[state=checked]:text-white"
-                                  />
-                                  <label
-                                    htmlFor={`${module}-${perm}`}
-                                    className="cursor-pointer text-[14px] font-medium text-[#7A7A7A]"
+                          <CollapsibleContent>
+                            <div className="bg-primary/3 border-t border-[#E8E8E8] p-6">
+                              <div className="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2 lg:grid-cols-3">
+                                {permissions.map((perm) => (
+                                  <div
+                                    key={perm.nameAr}
+                                    className="flex items-center gap-3"
                                   >
-                                    {perm}
-                                  </label>
-                                </div>
-                              ))}
+                                    <Checkbox
+                                      id={`${moduleEn}-${perm.nameAr}`}
+                                      checked={selectedPermissions[
+                                        moduleEn
+                                      ]?.includes(perm.nameAr)}
+                                      onCheckedChange={() =>
+                                        togglePermission(moduleEn, perm.nameAr)
+                                      }
+                                      className="h-5 w-5 rounded-[4px] border-[#D4D4D4] data-[state=checked]:border-[#C1A063] data-[state=checked]:bg-[#C1A063] data-[state=checked]:text-white"
+                                    />
+                                    <label
+                                      htmlFor={`${moduleEn}-${perm.nameAr}`}
+                                      className="cursor-pointer text-[14px] font-medium text-[#7A7A7A]"
+                                    >
+                                      {perm.nameAr}
+                                    </label>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        </CollapsibleContent>
-                      </Collapsible>
-                    );
-                  })}
+                          </CollapsibleContent>
+                        </Collapsible>
+                      );
+                    },
+                  )}
                 </FormSection>
               </div>
               <div className="w-full pt-4">

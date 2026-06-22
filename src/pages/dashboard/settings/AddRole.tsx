@@ -1,25 +1,40 @@
 import { AddRoleFeature } from "@/features/settings/permissions/components/AddRoleFeature";
 import { useParams } from "react-router-dom";
-import { useGetAllRoles } from "@/features/settings/permissions/api";
+import {
+  useGetAllRoles,
+  useGetRolePermissions,
+} from "@/features/settings/permissions/api";
+import { getArabicPermissionsFromIds } from "@/shared/constants/permissions";
 import LoadingPage from "@/shared/components/LoadingPage";
 
 const AddRole = () => {
   const { id } = useParams();
   const isEdit = !!id;
-  const { data: roles, isLoading } = useGetAllRoles();
+  const roleId = id ? Number(id) : undefined;
 
-  if (isEdit && isLoading) {
+  const { data: roles, isLoading: isRolesLoading } = useGetAllRoles();
+  const { data: rolePermissions, isLoading: isPermsLoading } =
+    useGetRolePermissions(roleId);
+
+  if (isEdit && (isRolesLoading || isPermsLoading)) {
     return <LoadingPage />;
   }
 
-  const role = roles?.find((r) => r.id.toString() === id);
+  const role = roles?.find((r) => r.id === roleId);
 
-  const initialData = isEdit && role ? {
-    id: role.id.toString(),
-    name: role.role_name,
-    description: "", // Description is mock or not in backend role currently
-    permissions: {} // Permissions would ideally come from the role, but we can default to empty or mock
-  } : undefined;
+  const permissions = rolePermissions?.permissions
+    ? getArabicPermissionsFromIds(rolePermissions.permissions.map((p) => p.id))
+    : {};
+
+  const initialData =
+    isEdit && role
+      ? {
+          id: role.id.toString(),
+          name: role.role_name,
+          description: "",
+          permissions,
+        }
+      : undefined;
 
   return <AddRoleFeature isEdit={isEdit} initialData={initialData} />;
 };
