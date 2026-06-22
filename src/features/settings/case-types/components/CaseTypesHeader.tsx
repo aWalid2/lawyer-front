@@ -1,4 +1,5 @@
 import React from "react";
+import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
 import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
 import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
@@ -16,7 +17,7 @@ export const CaseTypesHeader: React.FC<CaseTypesHeaderProps> = ({
   onSearch,
 }) => {
   return (
-    <div className="mb-6 flex flex-1 items-center gap-4">
+    <HeaderPageLayout>
       <HeaderTitle title="أنواع القضايا" />
       <HeaderSearch
         value={searchTerm}
@@ -33,6 +34,6 @@ export const CaseTypesHeader: React.FC<CaseTypesHeaderProps> = ({
           />
         }
       />
-    </div>
+    </HeaderPageLayout>
   );
 };

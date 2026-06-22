@@ -54,17 +54,18 @@ export const CaseStatusesFeature: React.FC = () => {
     <PageLayout>
       <CaseStatusesHeader searchTerm={searchTerm} onSearch={setSearchTerm} />
 
-      <DataTable data={indexedData} columns={columns} rowIdField="id" />
-
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-        />
-      )}
-
-      {indexedData.length === 0 && (
+      {indexedData.length > 0 ? (
+        <>
+          <DataTable data={indexedData} columns={columns} rowIdField="id" />
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          )}
+        </>
+      ) : (
         <EmptyTable message="لا توجد حالات لعرضها" />
       )}
     </PageLayout>

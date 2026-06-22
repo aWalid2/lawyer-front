@@ -1,4 +1,5 @@
 import React from "react";
+import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
 import { HeaderTitle } from "@/shared/components/Header/HeaderTitle";
 import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButton";
 import { HeaderSearch } from "@/shared/components/Header/HeaderSearch";
@@ -15,7 +16,7 @@ export const ClientStatusesHeader: React.FC<ClientStatusesHeaderProps> = ({
   onSearch,
 }) => {
   return (
-    <div className="mb-6 flex flex-1 items-center gap-4">
+    <HeaderPageLayout>
       <HeaderTitle title="صفات الموكل/الخصم" />
       <HeaderSearch
         value={searchTerm}
@@ -32,6 +33,6 @@ export const ClientStatusesHeader: React.FC<ClientStatusesHeaderProps> = ({
           />
         }
       />
-    </div>
+    </HeaderPageLayout>
   );
 };

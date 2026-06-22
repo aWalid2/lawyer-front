@@ -5,7 +5,7 @@ import { ProsecutionsHeader } from "./components/ProsecutionsHeader";
 import { useFetchProsecutions } from "./api/hooks/useGetProsecutions";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
-
+import { EmptyTable } from "@/shared/components/EmptyTable";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import type { ProsecutionT } from "./types/prosecutionsTypes";
 import PageLayout from "@/shared/components/PageLayout";
@@ -74,20 +74,19 @@ export const PublicProsecutionsFeature: React.FC = () => {
         }}
       />
 
-      <DataTable data={indexedData} columns={columns} rowIdField="id" />
-
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-        />
-      )}
-
-      {indexedData.length === 0 && (
-        <div className="py-8 text-center text-gray-500">
-          لا توجد نيابات تطابق معايير البحث
-        </div>
+      {indexedData.length > 0 ? (
+        <>
+          <DataTable data={indexedData} columns={columns} rowIdField="id" />
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          )}
+        </>
+      ) : (
+        <EmptyTable message="لا توجد نيابات تطابق معايير البحث" />
       )}
     </PageLayout>
   );

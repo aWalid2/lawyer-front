@@ -5,7 +5,7 @@ import { PoliceStationsHeader } from "./components/PoliceStationsHeader";
 import { useFetchPoliceStations } from "./api/hooks/useGetStation";
 import { Error } from "@/shared/components/Error";
 import LoadingPage from "@/shared/components/LoadingPage";
-
+import { EmptyTable } from "@/shared/components/EmptyTable";
 import type { PoliceStationT } from "./types/policeStationTypes";
 import PageLayout from "@/shared/components/PageLayout";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
@@ -73,20 +73,19 @@ export const PoliceStationsFeature: React.FC = () => {
     <PageLayout>
       <PoliceStationsHeader searchTerm={searchTerm} onSearch={setSearchTerm} />
 
-      <DataTable data={indexedData} columns={columns} rowIdField="id" />
-
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-        />
-      )}
-
-      {indexedData.length === 0 && (
-        <div className="py-8 text-center text-gray-500">
-          لا توجد مراكز شرطة تطابق معايير البحث
-        </div>
+      {indexedData.length > 0 ? (
+        <>
+          <DataTable data={indexedData} columns={columns} rowIdField="id" />
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          )}
+        </>
+      ) : (
+        <EmptyTable message="لا توجد مراكز شرطة تطابق معايير البحث" />
       )}
     </PageLayout>
   );
