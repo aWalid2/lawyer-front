@@ -58,13 +58,13 @@ export const CourtFormDialog: React.FC<CourtFormDialogProps> = ({
               label="اسم المحكمة"
               name="name"
               type="text"
-              placeholder="محكمة الجيزة"
+              placeholder="ادخل اسم المحكمة"
             />
             <InputForm
               label="العنوان"
               name="address"
               type="text"
-              placeholder="شارع فؤاد"
+              placeholder="ادخل عنوان المحكمة"
             />
             <SubmitButton isPending={isPending || isUpdating}>
               {court ? "تعديل محكمة" : "إضافة محكمة"}
