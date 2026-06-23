@@ -31,7 +31,9 @@ const ProfileForm = ({
     <Formik
       initialValues={initialValues}
       enableReinitialize
-      validationSchema={validationSchema}
+      validateOnBlur={isEditing}
+      validateOnChange={isEditing}
+      validationSchema={isEditing ? validationSchema : undefined}
       onSubmit={async (values) => {
         if (!isEditing) {
           return;
@@ -50,14 +52,14 @@ const ProfileForm = ({
                   name="firstName"
                   type="text"
                   placeholder="أدخل الاسم "
-                  readonly={!isEditing}
+                  disabled={!isEditing}
                 />
                 <InputForm
                   name="email"
                   label="البريد الإلكتروني"
                   type="email"
                   placeholder="أدخل البريد الإلكتروني"
-                  readonly={!isEditing}
+                  disabled={!isEditing}
                 />
 
                 <InputForm
@@ -65,7 +67,7 @@ const ProfileForm = ({
                   label="رقم الهاتف"
                   type="tel"
                   placeholder="أدخل رقم الهاتف"
-                  readonly={!isEditing}
+                  disabled={!isEditing}
                 />
 
                 <InputForm
@@ -73,14 +75,7 @@ const ProfileForm = ({
                   name="civilId"
                   type="text"
                   placeholder="أدخل الرقم المدني"
-                  readonly={!isEditing}
-                />
-                <InputForm
-                  label="الدولة"
-                  name="country"
-                  type="text"
-                  placeholder="أدخل الدولة"
-                  readonly={!isEditing}
+                  disabled={!isEditing}
                 />
 
                 <InputForm
@@ -88,14 +83,14 @@ const ProfileForm = ({
                   name="nationality"
                   type="text"
                   placeholder="أدخل الجنسية"
-                  readonly={!isEditing}
+                  disabled={!isEditing}
                 />
                 <InputForm
                   label="العنوان"
                   name="address"
                   type="text"
                   placeholder="أدخل العنوان"
-                  readonly={!isEditing}
+                  disabled={!isEditing}
                 />
               </div>
 

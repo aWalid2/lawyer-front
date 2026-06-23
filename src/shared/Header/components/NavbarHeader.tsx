@@ -1,15 +1,3 @@
-import { useMemo } from "react";
-import { LogOut, SearchIcon, Sun, Moon, User } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useTheme } from "next-themes";
-import { toast } from "sonner";
-import { AlertIcon } from "../../icons/Alert";
-import { ChatBotIcon } from "../../icons/ChatBot";
-import { CheveronDownIcon } from "../../icons/CheveronDown";
-import { MessagesIcon } from "../../icons/Messages";
-import { SettingsIcon } from "../../icons/Settings";
-import { useAuth } from "@/shared/context/AuthContext";
-import { useGetNotifications } from "@/features/Notifications/api/hooks/useGetNotifications";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +5,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useGetNotifications } from "@/features/Notifications/api/hooks/useGetNotifications";
+import { useUserProfile } from "@/features/profile/api/hooks/useUserProfile";
+import { useAuth } from "@/shared/context/AuthContext";
+import { LogOut, Moon, SearchIcon, Sun, User } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useMemo } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { AlertIcon } from "../../icons/Alert";
+import { ChatBotIcon } from "../../icons/ChatBot";
+import { CheveronDownIcon } from "../../icons/CheveronDown";
+import { MessagesIcon } from "../../icons/Messages";
+import { SettingsIcon } from "../../icons/Settings";
 
 const ROUTE_TITLES: Record<string, string> = {
   "/dashboard": "الرئيسية",
@@ -73,23 +74,6 @@ const ROUTE_TITLES: Record<string, string> = {
 const LINK_SIZE = "h-8 w-8 md:h-10 md:w-10 xl:h-12 xl:w-12";
 const ICON_CLASSES = "h-4 w-4 md:h-5 md:w-5 xl:h-6 xl:w-6";
 
-const getUserDisplayName = (user: Record<string, unknown> | null) => {
-  const candidateKeys = ["name", "full_name", "username", "email", "role"];
-
-  for (const key of candidateKeys) {
-    const value = user?.[key];
-    if (typeof value === "string" && value.trim()) {
-      if (key === "email") {
-        return value.split("@")[0] || value;
-      }
-
-      return value;
-    }
-  }
-
-  return "المستخدم";
-};
-
 export default function NavbarHeader() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -98,6 +82,7 @@ export default function NavbarHeader() {
 
   const userId = (user?.sub as number | string) || 3;
   const { data: apiNotifications } = useGetNotifications(userId);
+  const { data: userInfo } = useUserProfile(+userId);
 
   const unreadCount = useMemo(() => {
     if (!apiNotifications) return 0;
@@ -121,8 +106,6 @@ export default function NavbarHeader() {
 
     return "لوحة التحكم";
   }, [pathname]);
-
-  const displayName = useMemo(() => getUserDisplayName(user), [user]);
 
   const handleLogout = () => {
     logout();
@@ -180,14 +163,14 @@ export default function NavbarHeader() {
                 <button className="flex items-center gap-2 outline-none md:gap-3">
                   <CheveronDownIcon className="h-3 w-3 sm:h-5 sm:w-5" />
                   <span className="flex items-center gap-2 dark:text-white">
-                    <p className="max-w-32 truncate">{displayName}</p>
+                    <p className="max-w-32 truncate">{userInfo?.first_name}</p>
                     <div
                       className={`text-secondary dark:text-white ${LINK_SIZE} bg-primary border-secondary flex items-center justify-center overflow-hidden rounded-full border dark:border-white/20 dark:bg-white/10`}
                     >
                       <img
-                        src="/images/user-placeholder.webp"
+                        src={userInfo?.photo || "/images/user-placeholder.webp"}
                         alt="User avatar"
-                        className="block h-full w-full object-contain"
+                        className="block h-full w-full object-cover"
                       />
                     </div>
                   </span>

@@ -8,7 +8,6 @@ export const validationSchema = Yup.object({
     .required("البريد الإلكتروني مطلوب"),
   phoneNumber: Yup.string().required("رقم الهاتف مطلوب"),
   civilId: Yup.string().required("الرقم المدني مطلوب"),
-  country: Yup.string().required("الدولة مطلوبة"),
   nationality: Yup.string().required("الجنسية مطلوبة"),
   address: Yup.string().required("العنوان مطلوب"),
   password: Yup.string()

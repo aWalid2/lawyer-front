@@ -1,24 +1,31 @@
 import { useState } from "react";
-import { Camera } from "lucide-react";
+import { Camera, Loader2 } from "lucide-react";
 
 interface ProfileImageProps {
-  onImageChange?: (file: File | null) => void;
+  currentPhoto?: string | null;
+  onUpload?: (file: File) => void;
   disabled?: boolean;
+  isUploading?: boolean;
 }
 
 const ProfileImage = ({
-  onImageChange,
+  currentPhoto,
+  onUpload,
   disabled = false,
+  isUploading = false,
 }: ProfileImageProps) => {
-  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setProfileImage(file);
-      onImageChange?.(file);
+      const objectUrl = URL.createObjectURL(file);
+      setPreview(objectUrl);
+      onUpload?.(file);
     }
   };
+
+  const displaySrc = preview || currentPhoto || null;
 
   return (
     <div className="flex w-full flex-col items-center md:w-70">
@@ -29,34 +36,44 @@ const ProfileImage = ({
           accept="image/*"
           className="hidden"
           id="profileImage"
-          disabled={disabled}
+          disabled={disabled || isUploading}
           onChange={handleImageChange}
         />
 
         <label
-          htmlFor={disabled ? undefined : "profileImage"}
-          className={`relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-full ${disabled ? "cursor-default" : "cursor-pointer"}`}
+          htmlFor={disabled || isUploading ? undefined : "profileImage"}
+          className={`relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-full ${disabled || isUploading ? "cursor-default" : "cursor-pointer"}`}
         >
-          {profileImage ? (
+          {displaySrc ? (
             <>
               <img
-                src={URL.createObjectURL(profileImage)}
+                src={displaySrc}
                 alt="الصورة الشخصية"
                 className="h-full w-full object-cover"
               />
-              <div
-                className={`bg-opacity-50 absolute inset-0 flex items-center justify-center bg-black/20 transition-all duration-300 ${disabled ? "opacity-0" : "opacity-0 hover:opacity-100"}`}
-              >
-                <div className="rounded-full border-4 border-white bg-black/20 p-2">
-                  <Camera className="h-6 w-6 text-white" />
+              {isUploading ? (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                  <Loader2 className="h-10 w-10 animate-spin text-white" />
                 </div>
-              </div>
+              ) : (
+                <div
+                  className={`absolute inset-0 flex items-center justify-center bg-black/20 transition-all duration-300 ${disabled ? "opacity-0" : "opacity-0 hover:opacity-100"}`}
+                >
+                  <div className="rounded-full border-4 border-white bg-black/20 p-2">
+                    <Camera className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              )}
             </>
           ) : (
             <div className="flex flex-col items-center justify-center text-center">
-              <div className="rounded-full border-4 border-[#FFFFFF] p-2">
-                <Camera className="h-10 w-10 text-white" />
-              </div>
+              {isUploading ? (
+                <Loader2 className="h-10 w-10 animate-spin text-white" />
+              ) : (
+                <div className="rounded-full border-4 border-[#FFFFFF] p-2">
+                  <Camera className="h-10 w-10 text-white" />
+                </div>
+              )}
             </div>
           )}
         </label>

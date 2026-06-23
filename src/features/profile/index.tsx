@@ -6,6 +6,7 @@ import Loading from "@/shared/Loading";
 import ProfileForm from "./components/ProfileForm";
 import ProfileImage from "./components/ProfileImage";
 import { useUpdateUserProfile } from "./api/hooks/useUpdateUserProfile";
+import { useUploadUserPhoto } from "./api/hooks/useUploadUserPhoto";
 import { useUserProfile } from "./api/hooks/useUserProfile";
 import type {
   UpdateProfilePayload,
@@ -122,6 +123,7 @@ const ProfileUser = () => {
 
   const { data, isLoading, isError } = useUserProfile(effectiveUserId);
   const updateProfileMutation = useUpdateUserProfile(effectiveUserId);
+  const uploadPhotoMutation = useUploadUserPhoto(effectiveUserId);
 
   const initialValues = useMemo(() => mapUserToFormValues(data), [data]);
 
@@ -147,7 +149,9 @@ const ProfileUser = () => {
     }
   };
 
-  const handleImageChange = () => {};
+  const handleImageUpload = (file: File) => {
+    uploadPhotoMutation.mutate(file);
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -168,7 +172,9 @@ const ProfileUser = () => {
           <div className="order-1 md:order-2">
             <ProfileImage
               disabled={!isEditing}
-              onImageChange={handleImageChange}
+              currentPhoto={data?.photo}
+              isUploading={uploadPhotoMutation.isPending}
+              onUpload={handleImageUpload}
             />
           </div>
 
