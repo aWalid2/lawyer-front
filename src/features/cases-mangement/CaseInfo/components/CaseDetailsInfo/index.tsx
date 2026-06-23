@@ -113,7 +113,6 @@ export const CaseDetailsInfo: React.FC<FormCaseDetailsProps> = ({
       <CaseDetailsCollapsibleSection
         title="معلومات العقد المرتبط بالقضية"
         fields={contractFields}
-        defaultOpen
       />
       <CaseDetailsCollapsibleSection
         title="معلومات ادارية اخري"

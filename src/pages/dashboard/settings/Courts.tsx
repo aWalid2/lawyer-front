@@ -1,11 +1,7 @@
 import { CourtsFeature } from "@/features/settings/courts";
 
 const Courts = () => {
-  return (
-
-    <CourtsFeature />
-
-  );
+  return <CourtsFeature />;
 };
 
 export default Courts;
