@@ -68,7 +68,7 @@ export const CaseDetailsInfo: React.FC<FormCaseDetailsProps> = ({
 
   const contractFields: DetailField[] = [
     { label: "نوع الأتعاب", text: caseData?.caseFeesType },
-    { label: "رقم العقد", text: caseData?.contractNumber },
+    { label: "كود العقد", text: caseData?.contractNumber },
     { label: "قيمة العقد", text: caseData?.contractValue },
     { label: "مدة العقد", text: caseData?.contractDuration },
     { label: "تاريخ بداية العقد", text: caseData?.contractStartDate },

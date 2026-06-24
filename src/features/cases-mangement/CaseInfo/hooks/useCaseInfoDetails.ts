@@ -28,6 +28,7 @@ export const useCaseInfoDetails = (id?: string) => {
   const caseInfoQuery = useGetCaseInfo(id!);
 
   const { data: contractData } = useGetCaseRelatedContract(id);
+  console.log(contractData)
 
   const currentCourtLevel = caseInfoQuery.data?.Current_court_degree;
   const normalizedCourtLevel = normalizeCourtLevel(currentCourtLevel);
