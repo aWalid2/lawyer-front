@@ -26,7 +26,7 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
     <div className="mb-6 flex flex-wrap items-center justify-between gap-y-3">
       <HeaderTitle title="تفاصيل الموكل" />
 
-      {activeTab === "info" ? (
+      {activeTab === "info" && (
         <div className="flex items-center gap-3">
           <EditClientDialog
             client={client}
@@ -50,10 +50,10 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
               navigate("/dashboard/clients");
             }}
           />
-
-          {!hasContractInfo && <AddContractDialog clientId={client.user_id} />}
         </div>
-      ) : (
+      )}
+
+      {activeTab === "cases" && (
         <Link
           to={`/dashboard/case-management/add-case?clientId=${client?.user_id ?? ""}`}
           className="bg-primary-gradient rounded-mainfont-semibold rounded-main flex h-12.5 items-center gap-2 px-6 py-2.5 text-white shadow-lg transition-all hover:shadow-xl"
@@ -61,6 +61,12 @@ export const HeaderUserDetails: React.FC<HeaderUserDetailsProps> = ({
           <Plus size={20} />
           قضية جديدة
         </Link>
+      )}
+      {activeTab === "contracts" && (
+        <>
+          {" "}
+          {!hasContractInfo && <AddContractDialog clientId={client.user_id} />}
+        </>
       )}
     </div>
   );

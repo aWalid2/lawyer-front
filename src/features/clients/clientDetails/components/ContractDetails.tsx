@@ -1,9 +1,9 @@
 import { InputBox } from "@/shared/components/inputs/InputBox";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
-import { ImagePreviewCard } from "./ImagePreviewCard";
-import { AddContractDialog } from "../../AddContractDialog";
-import type { ClientContract } from "../../../types/client";
+import { ImagePreviewCard } from "./ClientDetailsInfo/components/ImagePreviewCard";
+import { AddContractDialog } from "./AddContractDialog";
+import type { ClientContract } from "../types/client";
 
 interface ContractDetailsProps {
   contracts?: ClientContract[] | null;
@@ -15,7 +15,18 @@ export const ContractDetails: React.FC<ContractDetailsProps> = ({
   clientId,
 }) => {
   if (!contracts || contracts.length === 0) {
-    return null;
+    return (
+      <>
+        <div className="rounded-xl border border-dashed border-gray-200 bg-[#FBFBFB] p-10 text-center text-sm text-gray-500">
+          لا توجد عقود لهذا الموكل
+        </div>
+        {clientId && (
+          <div className="mt-4 flex justify-center">
+            <AddContractDialog clientId={String(clientId)} />
+          </div>
+        )}
+      </>
+    );
   }
 
   return (

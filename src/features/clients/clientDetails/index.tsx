@@ -7,6 +7,7 @@ import { useGetClient } from "./api/hooks/useGetClient";
 import { useParams } from "react-router-dom";
 import LoadingPage from "@/shared/components/LoadingPage";
 import { Error } from "@/shared/components/Error";
+import { ContractDetails } from "./components/ContractDetails";
 
 export const ClientDetails = () => {
   const [activeTab, setActiveTab] = useState("info");
@@ -39,6 +40,12 @@ export const ClientDetails = () => {
           >
             قضايا الموكل
           </TabsTrigger>
+          <TabsTrigger
+            value="contracts"
+            className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white sm:px-12 sm:text-base"
+          >
+            عقود الموكل
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="info" className="mt-0">
@@ -47,6 +54,10 @@ export const ClientDetails = () => {
 
         <TabsContent value="cases" className="mt-0">
           <ClientCases />
+        </TabsContent>
+
+        <TabsContent value="contracts" className="mt-0">
+          <ContractDetails contracts={client?.contracts} clientId={id} />
         </TabsContent>
       </Tabs>
     </>
