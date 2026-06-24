@@ -48,17 +48,16 @@ export function PoliceStationCase() {
       />
 
       <InputForm
+        label="جهة التحقيق المحول إليها"
+        name="investigation_name"
+        type="text"
+        placeholder="جهة التحقيق"
+      />
+      <InputForm
         label="اسم المحقق"
         name="detective_name"
         type="text"
         placeholder="اسم المحقق"
-      />
-
-      <InputForm
-        label="جهة التحقيق"
-        name="investigation_name"
-        type="text"
-        placeholder="جهة التحقيق"
       />
     </>
   );

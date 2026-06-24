@@ -7,10 +7,10 @@ export const LITIGATION_LEVEL_OPTIONS = [
 ];
 
 export const CASE_SITUATION_OPTIONS = [
-    { value: "POLICE_CASE", label: " في المخفر" },
-    { value: "AT_PROSECUTOR_OFFICE", label: "في النيابة" },
-    { value: "PUBLIC_PROSECUTION", label: "الادعاء العام" },
     { value: "UNDER_APPEAL", label: "تحت الرفع " },
-    { value: "ACTIVE", label: "نشط" },
+    { value: "POLICE_CASE", label: " في المخفر" },
+    { value: "PUBLIC_PROSECUTION", label: "الادعاء العام" },
+    { value: "AT_PROSECUTOR_OFFICE", label: "في النيابة" },
+    { value: "ACTIVE", label: "متداولة" },
     { value: "OTHER", label: "أخرى" },
 ];

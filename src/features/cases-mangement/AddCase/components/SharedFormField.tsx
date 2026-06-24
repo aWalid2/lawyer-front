@@ -126,13 +126,17 @@ export function SharedFormField() {
 
   return (
     <>
-      <InputForm
-        label="عنوان القضية"
-        name="case_title"
-        type="text"
-        placeholder="عنوان القضية"
+      <SelectForm
+        showSearch={true}
+        label="نوع القضية"
+        name="case_type_id"
+        options={caseTypeOptions}
+        placeholder="اختر نوع القضية"
+        onSearchChange={setCaseTypeSearch}
+        hasMoreOptions={caseTypeHasMoreOptions}
+        isFetchingMore={caseTypeIsFetchingMore}
+        onReachEnd={loadMoreCaseTypes}
       />
-
       <SelectForm
         label="اسم الموكل"
         name="client_id"
@@ -143,6 +147,12 @@ export function SharedFormField() {
         hasMoreOptions={clientHasMoreOptions}
         isFetchingMore={clientIsFetchingMore}
         onReachEnd={loadMoreClients}
+      />
+      <InputForm
+        label="عنوان القضية"
+        name="case_title"
+        type="text"
+        placeholder="عنوان القضية"
       />
 
       <SelectForm
@@ -167,18 +177,6 @@ export function SharedFormField() {
         hasMoreOptions={clientStatusHasMoreOptions}
         isFetchingMore={clientStatusIsFetchingMore}
         onReachEnd={loadMoreClientStatuses}
-      />
-
-      <SelectForm
-        showSearch={true}
-        label="نوع القضية"
-        name="case_type_id"
-        options={caseTypeOptions}
-        placeholder="اختر نوع القضية"
-        onSearchChange={setCaseTypeSearch}
-        hasMoreOptions={caseTypeHasMoreOptions}
-        isFetchingMore={caseTypeIsFetchingMore}
-        onReachEnd={loadMoreCaseTypes}
       />
     </>
   );

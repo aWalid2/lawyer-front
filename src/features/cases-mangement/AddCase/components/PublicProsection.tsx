@@ -26,6 +26,11 @@ export function PublicProsection() {
   return (
     <>
       <SharedFormField />
+      <InputForm
+        label="تاريخ ورود القضية في الادعاء العام"
+        name="regestration_date_of_case_at_prosecution"
+        type="date"
+      />
       <SelectForm
         showSearch={true}
         label="المخفر التابع له القضية"
@@ -47,23 +52,16 @@ export function PublicProsection() {
       />
 
       <InputForm
-        label="اسم المحقق"
-        name="detective_name"
-        type="text"
-        placeholder="اسم المحقق"
-      />
-
-      <InputForm
         label="جهة التحقيق"
         name="investigation_name"
         type="text"
         placeholder="جهة التحقيق"
       />
-
       <InputForm
-        label="تاريخ تسجيل القضية في الادعاء العام"
-        name="regestration_date_of_case_at_prosecution"
-        type="date"
+        label="اسم المحقق"
+        name="detective_name"
+        type="text"
+        placeholder="اسم المحقق"
       />
     </>
   );

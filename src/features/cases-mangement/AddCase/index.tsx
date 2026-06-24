@@ -147,7 +147,7 @@ const FormCase = () => {
                   {values.case_situation === "OTHER" && <Other />}
 
                   <InputForm
-                    label="تاريخ ورود القضية داخل المكتب"
+                    label="تاريخ ورود القضية للمكتب"
                     name="case_entry_date"
                     type="date"
                   />
