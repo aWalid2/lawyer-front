@@ -7,6 +7,7 @@ import { useGetProsecutionSessionInfo } from "../../sessions/ProsecutionSessions
 import { useGetLastExpertSession } from "../../sessions/ExpertSessions/api/hooks/useGetLastExpertSession";
 import { useGetCourtSessionData } from "../../sessions/CourtSessions/api/hooks/useGetCourtSessionData";
 import { useGetCaseInfo } from "../api/hooks/useGetCaseInfo";
+import { useGetCaseRelatedContract } from "../api/hooks/useGetCaseRelatedContract";
 
 const normalizeCourtLevel = (level?: string) => {
   if (!level) {
@@ -25,6 +26,8 @@ type CourtLevel = "first_instance" | "appeal" | "cassation";
 export const useCaseInfoDetails = (id?: string) => {
   const caseId = Number(id);
   const caseInfoQuery = useGetCaseInfo(id!);
+
+  const { data: contractData } = useGetCaseRelatedContract(id);
 
   const currentCourtLevel = caseInfoQuery.data?.Current_court_degree;
   const normalizedCourtLevel = normalizeCourtLevel(currentCourtLevel);
@@ -157,21 +160,33 @@ export const useCaseInfoDetails = (id?: string) => {
         ),
         caseFeesType: caseInfoQuery.data?.case_fees?.case_fees_type || "",
         contractNumber:
+          contractData?.id?.toString() ||
           caseInfoQuery.data?.contract?.contract_number ||
           caseInfoQuery.data?.case_fees?.contract_based?.toString() ||
           "",
         contractStartDate:
+          contractData?.start_date?.split("T")[0] ||
           caseInfoQuery.data?.contract?.start_date ||
           caseInfoQuery.data?.contract_start_date ||
           "",
+        contractEndDate:
+          contractData?.end_date?.split("T")[0] ||
+          "",
         contractValue:
+          contractData?.contract_value ||
           caseInfoQuery.data?.contract?.contract_value ||
           caseInfoQuery.data?.contract_value ||
           "",
         contractDuration:
+          contractData?.contract_duration?.toString() ||
           caseInfoQuery.data?.contract?.contract_duration ||
           caseInfoQuery.data?.contract_duration ||
           "",
+        contractDocumentFile: contractData?.document_file || "",
+        contractCreatedAt:
+          contractData?.created_at?.split("T")[0] || "",
+        contractClientName: contractData?.client_profile?.name || "",
+        contractClientType: contractData?.client_profile?.client_type || "",
       }
     : undefined;
 

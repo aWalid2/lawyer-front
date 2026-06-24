@@ -30,8 +30,13 @@ export interface CaseFormValues {
   caseFeesType?: string;
   contractNumber?: string;
   contractStartDate?: string;
+  contractEndDate?: string;
   contractValue?: string;
   contractDuration?: string;
+  contractDocumentFile?: string;
+  contractCreatedAt?: string;
+  contractClientName?: string;
+  contractClientType?: string;
 }
 
 export interface DetailField {

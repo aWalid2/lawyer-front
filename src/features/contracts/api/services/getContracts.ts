@@ -19,7 +19,14 @@ export interface ContractApiItem {
   document_file?: string | null;
   created_at?: string | null;
   client_profile?: {
+    user_id?: number;
     name?: string | null;
+    client_type?: string;
+    date_joined?: string;
+    case_count?: number;
+    contract_photo?: string;
+    authorization_photo?: string;
+    notes?: string;
   } | null;
 }
 
