@@ -67,6 +67,16 @@ export type ActivePayload = BasePayload & {
   Complaint_Number: number;
   court_id: number;
   Current_court_degree: string;
+  date_case_registered_court?: string;
+  case_number_court?: string;
+  circuit_id?: number;
+  session_comming_date?: string;
+  court_role?: string;
+  court_hall_number?: string;
+  circuit_judge_name?: string;
+  circuit_secretary_name?: string;
+  circuit_secretary_office_role?: string;
+  circuit_secretary_office_number?: string;
   case_fees: CaseFees;
   opponents: {
     name: string;
@@ -79,6 +89,13 @@ export type ActivePayload = BasePayload & {
 export type OtherPayload = BasePayload & {
   case_situation: "OTHER";
   Complaint_Number: number;
+  complaint_case_type?: string;
+  client_name?: string;
+  complaint_case_subject?: string;
+  complaint_case_status?: string;
+  complaint_case_authority?: string;
+  complaint_case_registration_date?: string;
+  client_status?: string;
   detective_name: string;
   investigation_name: string;
   Case_Arrival_Date_at_the_Authority?: string;

@@ -44,19 +44,7 @@ export const validationSchema = Yup.object({
           : schema.notRequired(),
     ),
 
-  case_arrival_date_at_police_station: Yup.date()
-    .nullable()
-    .when(
-      "case_situation",
-      (
-        [caseSituation]: string[],
-        schema: Yup.DateSchema<Date | null | undefined>,
-      ) =>
-        caseSituation === "PUBLIC_PROSECUTION" ||
-        caseSituation === "POLICE_STATION"
-          ? schema.required("تاريخ ورود القضية ")
-          : schema.notRequired(),
-    ),
+  case_arrival_date_at_police_station: Yup.date().nullable().notRequired(),
 
   case_number_at_police_station: Yup.string().when("case_situation", {
     is: "POLICE_STATION",

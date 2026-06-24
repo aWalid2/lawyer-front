@@ -63,9 +63,25 @@ contract_based?: undefined;
   Complaint_Number?: string;
   court_id?: string;
   Current_court_degree?: string;
+  date_case_registered_court?: string;
+  case_number_court?: string;
+  circuit_id?: string;
+  session_comming_date?: string;
+  court_role?: string;
+  court_hall_number?: string;
+  circuit_judge_name?: string;
+  circuit_secretary_name?: string;
+  circuit_secretary_office_role?: string;
+  circuit_secretary_office_number?: string;
 
   // Other Fields
   Case_Arrival_Date_at_the_Authority?: string;
+  complaint_case_type?: string;
+  complaint_case_subject?: string;
+  complaint_case_status?: string;
+  complaint_case_authority?: string;
+  complaint_case_registration_date?: string;
+  client_status?: string;
 }
 
 export type CaseSituation =
@@ -162,9 +178,9 @@ const case_fees: CaseFees = {
   }
 
   if (values.case_situation === "POLICE_CASE") {
-    const { client_type, ...policeBase } = base;
     return {
-      ...policeBase,
+      ...base,
+      client_type:  "company",
       case_situation: "POLICE_CASE",
       case_police_station_id: Number(values.case_police_station_id),
       case_number_at_police_station: Number(values.case_number_at_police_station),
