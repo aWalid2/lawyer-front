@@ -59,6 +59,7 @@ contract_based?: undefined;
   has_opponent: boolean;
   Employee_id?: number | string;
   role_id?: number | string;
+  selected_contract?: number | null;
 
   // Active Fields
   reference_number?: string;

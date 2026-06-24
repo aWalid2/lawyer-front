@@ -2,10 +2,30 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { InputForm } from "@/shared/components/inputs/InputForm";
 import { useFormikContext } from "formik";
-import { ContractCards } from "./ContractCards";
+import { ContractCards, type ContractItem } from "./ContractCards";
+import { useGetClient } from "@/features/clients/clientDetails/api/hooks/useGetClient";
+import { useMemo } from "react";
 
 export function FeesRadio() {
   const { values, setFieldValue } = useFormikContext<any>();
+  const clientId = values.client_id;
+  const { data: clientData, isPending: isClientPending } =
+    useGetClient(clientId);
+
+  const contracts: ContractItem[] = useMemo(() => {
+    if (!clientData?.contracts || !Array.isArray(clientData.contracts))
+      return [];
+    return clientData.contracts.map((c: any) => ({
+      id: c.id,
+      client_id: c.client_id,
+      start_date: c.start_date,
+      end_date: c.end_date,
+      contract_value: c.contract_value,
+      contract_duration: c.contract_duration,
+      document_file: c.document_file,
+      created_at: c.created_at,
+    }));
+  }, [clientData]);
 
   return (
     <>
@@ -62,6 +82,8 @@ export function FeesRadio() {
             onChange={(contractId) =>
               setFieldValue("selected_contract", contractId)
             }
+            contracts={contracts}
+            isPending={isClientPending}
           />
         )}
       </div>
