@@ -24,9 +24,11 @@ import { validationSchema } from "./components/ValidationSchema";
 import { initialValues } from "./hooks/initialValues";
 import { Active } from "./components/Active";
 import { Other } from "./components/Other";
+import { EmployeesForm } from "./components/EmployeesForm";
 import { CASE_SITUATION_OPTIONS } from "@/shared/constants/caseOptions";
 import { CustomLayoutBorder } from "@/shared/components/CustomLayoutBorder";
 import type { FormValues } from "./utils/mapToApiPayload";
+import { RoleForm } from "./components/RoleForm";
 
 const collectErrorMessages = (errors: FormikErrors<typeof initialValues>) => {
   const messages: string[] = [];
@@ -164,6 +166,8 @@ const FormCase = () => {
 
                   {values.has_opponent && <OpponentForm />}
                 </div>
+                <EmployeesForm />
+                <RoleForm />
                 <FeesForm />
                 <SubmitButton
                   isPending={

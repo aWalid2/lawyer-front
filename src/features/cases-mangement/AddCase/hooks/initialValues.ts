@@ -65,6 +65,8 @@ contract_based: undefined,
 
   notes: "",
   has_opponent: true,
+  Employee_id: "",
+  role_id: "",
 
   // Active Fields
 reference_number: "",
