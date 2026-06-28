@@ -22,7 +22,7 @@ export const ImagePreviewCard: React.FC<ImagePreviewCardProps> = ({
   title,
   emptyText = "لا توجد صورة",
   containerClassName = "mt-4 h-28 w-28 max-md:w-full",
-  imageClassName = "h-full w-full object-cover",
+  imageClassName = "h-full w-full object-cover ",
 }) => {
   const frameClassName = `rounded-main overflow-hidden border border-[#E8E8E8] bg-gray-200 transition-colors hover:border-primary ${containerClassName}`;
   const mediaContainerClassName = `${frameClassName} block shrink-0 p-0 text-right transition-opacity hover:opacity-90`;

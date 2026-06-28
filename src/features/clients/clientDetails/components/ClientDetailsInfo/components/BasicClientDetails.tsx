@@ -46,13 +46,15 @@ export const BasicClientDetails: React.FC<BasicClientDetailsProps> = ({
           title="معاينة صورة التوكيل"
         />
       </div>
-      <div className="mt-6 flex items-end gap-8">
-        <ImagePreviewCard
-          src={client?.civil_id_photo}
-          alt="صورة البطاقة"
-          label="صورة البطاقة"
-          title="معاينة صورة البطاقة"
-        />
+      <div className="mt-6 flex flex-col items-end gap-8 md:flex-row">
+        <div className="w-full">
+          <ImagePreviewCard
+            src={client?.civil_id_photo}
+            alt="صورة البطاقة"
+            label="صورة البطاقة"
+            title="معاينة صورة البطاقة"
+          />
+        </div>
         <InputBox
           label="تاريخ انتهاء البطاقة"
           text={formatDateToYYYYMMDD(client?.user?.expired_civil_id) || "-"}
