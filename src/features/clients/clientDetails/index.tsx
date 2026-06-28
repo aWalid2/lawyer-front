@@ -27,22 +27,22 @@ export const ClientDetails = () => {
         className="w-full"
         dir="rtl"
       >
-        <TabsList className="border-primary/50 mb-6 flex h-13! w-full items-center overflow-hidden rounded-full border bg-white p-0 sm:w-fit">
+        <TabsList className="border-primary/50 mb-6 flex h-13! w-full items-center overflow-hidden rounded-full border bg-white p-0 max-[786px]:h-auto! max-[786px]:w-full! max-[786px]:flex-col! max-[786px]:rounded-2xl! sm:w-fit">
           <TabsTrigger
             value="info"
-            className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white sm:px-12 sm:text-base"
+            className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white max-[786px]:h-auto! max-[786px]:w-full! max-[786px]:flex-none! max-[786px]:rounded-2xl! max-[786px]:py-3 sm:px-12 sm:text-base"
           >
             معلومات الموكل
           </TabsTrigger>
           <TabsTrigger
             value="cases"
-            className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white sm:px-12 sm:text-base"
+            className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white max-[786px]:h-auto! max-[786px]:w-full! max-[786px]:flex-none! max-[786px]:rounded-2xl! max-[786px]:py-3 sm:px-12 sm:text-base"
           >
             قضايا الموكل
           </TabsTrigger>
           <TabsTrigger
             value="contracts"
-            className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white sm:px-12 sm:text-base"
+            className="data-[state=active]:bg-primary-gradient! text-secondary/60 h-full rounded-full bg-transparent px-3 text-sm font-bold transition-all data-[state=active]:text-white max-[786px]:h-auto! max-[786px]:w-full! max-[786px]:flex-none! max-[786px]:rounded-2xl! max-[786px]:py-3 sm:px-12 sm:text-base"
           >
             عقود الموكل
           </TabsTrigger>
