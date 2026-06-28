@@ -25,4 +25,6 @@ export interface FormValues {
   contracts: ContractItem[];
   confirmation_password: string;
   user_status?: string;
+  civil_id_photo: File | null;
+  expired_civil_id: string;
 }

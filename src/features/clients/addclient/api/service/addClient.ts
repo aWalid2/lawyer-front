@@ -3,6 +3,7 @@ import type { FormValues } from "../../types/addClientT";
 
 type AddClientPayload = Omit<FormValues, "countryCode"> & {
     authorization_photo: FormValues["authorization_photo"] | FileList | null;
+    civil_id_photo: FormValues["civil_id_photo"] | FileList | null;
 };
 
 const appendIfPresent = (formData: FormData, key: string, value?: string) => {
@@ -59,6 +60,13 @@ const buildClientFormData = (data: AddClientPayload) => {
             "profile[account][confirmation_password]",
             data.confirmation_password,
         );
+    }
+
+    appendIfPresent(formData, "expired_civil_id", data.expired_civil_id);
+
+    const civilIdFile = getFileFromInput(data.civil_id_photo);
+    if (civilIdFile) {
+        formData.append("civil_id_photo", civilIdFile);
     }
 
     const authorizationFile = getFileFromInput(data.authorization_photo);

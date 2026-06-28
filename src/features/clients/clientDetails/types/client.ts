@@ -18,6 +18,7 @@ export interface ClientUserDetails {
   address?: string | null;
   email?: string | null;
   created_at?: string | null;
+  expired_civil_id?:string | null;
 }
 
 export interface ClientDetailsData {
@@ -27,4 +28,5 @@ export interface ClientDetailsData {
   user?: ClientUserDetails | null;
   contract?: ClientContract | null;
   contracts?: ClientContract[] | null;
+  civil_id_photo?:string;
 }

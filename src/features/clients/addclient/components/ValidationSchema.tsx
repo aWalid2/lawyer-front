@@ -72,6 +72,8 @@ const validationFields = {
       otherwise: (schema) => schema.notRequired(),
     }),
   user_status: Yup.string().notRequired(),
+  civil_id_photo: Yup.mixed().nullable().notRequired(),
+  expired_civil_id: Yup.string().notRequired(),
   authorization_photo: Yup.string().nullable(),
 } satisfies Record<keyof FormValues, Yup.AnySchema>;
 

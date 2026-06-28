@@ -10,6 +10,7 @@ import { AuthorizationAndNotes } from "./components/AuthorizationAndNotes";
 // import { ClientAccountCreation } from "./components/ClientAccountCreation";
 import { SubmitButton } from "@/shared/components/buttons/SubmitButton";
 import { formatPhoneNumber } from "@/shared/utils/validators";
+import { CivilIdContainer } from "./components/CivilIdContainer";
 
 const FormDetails = () => {
   const { mutate, isPending } = useAddClient();
@@ -32,6 +33,8 @@ const FormDetails = () => {
     contracts: [],
     confirmation_password: "",
     user_status: "active",
+    civil_id_photo: null,
+    expired_civil_id: "",
   };
 
   const handleSubmit = (values: FormValues) => {
@@ -61,6 +64,8 @@ const FormDetails = () => {
       authorization_photo: values.authorization_photo,
       client_type: values.client_type,
       user_status: values.user_status,
+      civil_id_photo: values.civil_id_photo,
+      expired_civil_id: values.expired_civil_id,
     };
 
     mutate(dataToSend);
@@ -83,6 +88,7 @@ const FormDetails = () => {
             <Form>
               <BasicClientInfo />
               <ContractDetails />
+              <CivilIdContainer />
               <AuthorizationAndNotes />
               {/* <ClientAccountCreation /> */}
 
