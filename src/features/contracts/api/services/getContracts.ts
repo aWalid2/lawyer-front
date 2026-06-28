@@ -18,6 +18,7 @@ export interface ContractApiItem {
   contract_duration?: string | number | null;
   document_file?: string | null;
   created_at?: string | null;
+  contract_title:string;
   client_profile?: {
     user_id?: number;
     name?: string | null;

@@ -30,6 +30,7 @@ const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("تاريخ بداية العقد مطلوب"),
   contractValue: Yup.string().required("قيمة العقد مطلوبة"),
   contractDuration: Yup.string().required("مدة العقد مطلوبة"),
+  contractTitle: Yup.string(),
   file: Yup.mixed().nullable(),
 });
 
@@ -120,19 +121,26 @@ export const ContractDialog: React.FC<ContractDialogProps> = ({
         >
           {({ isSubmitting }) => (
             <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
-              <SelectForm
-                name="clientId"
-                label="اسم الموكل"
-                options={clientOptions}
-                showSearch={true}
-                onSearchChange={setClientSearch}
-                hasMoreOptions={clientHasMoreOptions}
-                isFetchingMore={clientIsFetchingMore || clientsLoading}
-                onReachEnd={loadMoreClients}
-                disabled={!!initialValues?.id}
-              />
-
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <InputForm
+                  name="contractTitle"
+                  label="عنوان العقد"
+                  type="string"
+                  placeholder="أدخل عنوان العقد"
+                  dir="ltr"
+                />
+                <SelectForm
+                  name="clientId"
+                  label="اسم الموكل"
+                  options={clientOptions}
+                  showSearch={true}
+                  onSearchChange={setClientSearch}
+                  hasMoreOptions={clientHasMoreOptions}
+                  isFetchingMore={clientIsFetchingMore || clientsLoading}
+                  onReachEnd={loadMoreClients}
+                  disabled={!!initialValues?.id}
+                />
+
                 <InputForm
                   name="startDate"
                   label="تاريخ بداية العقد"
@@ -156,7 +164,11 @@ export const ContractDialog: React.FC<ContractDialogProps> = ({
                 />
               </div>
 
-              <FileUpload name="file" label="ملف العقد" className="w-full" />
+              <FileUpload
+                name="file"
+                label="ملف العقد"
+                className="w-full md:w-37.5"
+              />
 
               <button
                 type="submit"

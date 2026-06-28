@@ -1,10 +1,7 @@
 import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { COUNTRY_OPTIONS } from "@/shared/constants/countryOptions";
-import {
-  CLIENT_STATUS_OPTIONS,
-  CLIENT_TYPES_OPTIONS,
-} from "@/shared/constants/clientOptions";
+import { CLIENT_TYPES_OPTIONS } from "@/shared/constants/clientOptions";
 
 export const BasicClientInfo = () => {
   return (
@@ -60,18 +57,10 @@ export const BasicClientInfo = () => {
         </div>
         <div className="flex-1">
           <InputForm
-            name="nationality"
-            type="string"
-            label="الجنسية"
-            placeholder="ادخل الجنسية"
-          />
-        </div>
-        <div className="flex-1">
-          <InputForm
-            name="country"
-            type="string"
-            label="الدولة"
-            placeholder="ادخل اسم الدولة"
+            name="email"
+            type="email"
+            label="البريد الإلكتروني"
+            placeholder="ادخل البريد الإلكتروني"
           />
         </div>
       </div>
@@ -87,14 +76,22 @@ export const BasicClientInfo = () => {
         </div>
         <div className="flex-1">
           <InputForm
-            name="email"
-            type="email"
-            label="البريد الإلكتروني"
-            placeholder="ادخل البريد الإلكتروني"
+            name="nationality"
+            type="string"
+            label="الجنسية"
+            placeholder="ادخل الجنسية"
+          />
+        </div>
+        <div className="flex-1">
+          <InputForm
+            name="country"
+            type="string"
+            label="الدولة"
+            placeholder="ادخل اسم الدولة"
           />
         </div>
       </div>
-      <div className="flex flex-col gap-3 pt-3 md:flex-row md:pt-5">
+      {/* <div className="flex flex-col gap-3 pt-3 md:flex-row md:pt-5">
         <div className="flex-1">
           <SelectForm
             name="user_status"
@@ -102,7 +99,7 @@ export const BasicClientInfo = () => {
             options={CLIENT_STATUS_OPTIONS}
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

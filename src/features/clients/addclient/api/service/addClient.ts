@@ -35,7 +35,7 @@ const buildClientFormData = (data: AddClientPayload) => {
     formData.append("phone", data.phone);
     formData.append("profile[client_type]", data.client_type);
     formData.append("profile[notes]", data.notes);
-    formData.append("user_status", data.user_status);
+    appendIfPresent(formData, "user_status", data.user_status);
     formData.append("clientId", "");
 
 

@@ -1,3 +1,4 @@
+
 export interface Contract {
   id: string;
   rowNumber?: number;
@@ -8,6 +9,7 @@ export interface Contract {
   contractDuration: string;
   documentFile: string;
   createdAt: string;
+  contractTitle:string;
   endDate: string;
   client_profile?: {
     name?: string;
@@ -19,6 +21,7 @@ export interface ContractFormValues {
   startDate: string;
   contractValue: string;
   contractDuration: string;
+  contractTitle:string;
   file: File | FileList | string | null;
 }
 
@@ -27,12 +30,14 @@ export const EMPTY_CONTRACT_FORM_VALUES: ContractFormValues = {
   startDate: "",
   contractValue: "",
   contractDuration: "",
+  contractTitle:"",
   file: null,
 };
 
 export const toContractFormValues = (
   contract?: Contract,
 ): ContractFormValues => ({
+  contractTitle:contract?.contractTitle ?? "",
   clientId: contract?.clientId ?? "",
   startDate: contract?.startDate ?? "",
   contractValue: contract?.contractValue ?? "",

@@ -6,24 +6,21 @@ import {
   isValidPhoneNumber,
   phoneValidationSchema,
 } from "@/shared/utils/validators";
-import {
-  CLIENT_STATUS_OPTIONS,
-  CLIENT_TYPES_OPTIONS,
-} from "@/shared/constants/clientOptions";
+import { CLIENT_TYPES_OPTIONS } from "@/shared/constants/clientOptions";
 
 const validationFields = {
   first_name: Yup.string().required("اسم الموكل مطلوب"),
   email: Yup.string()
-    .required("البريد الإلكتروني مطلوب")
-    .email("البريد الإلكتروني غير صالح"),
+    .email("البريد الإلكتروني غير صالح")
+    .required("البريد الالكتروني مطلوب"),
   ssn: civilIdValidationSchema().test(
     "client-ssn",
-    "الرقم المدني يجب أن يكون من 12 إلى 14 رقماً",
+    "الرقم المدني يجب أن يكون من 12",
     (value) => isValidCivilId(value),
   ),
-  nationality: Yup.string().required("الجنسية مطلوبة"),
-  country: Yup.string().required("الدولة مطلوبة"),
-  address: Yup.string().required("العنوان مطلوب"),
+  nationality: Yup.string(),
+  country: Yup.string(),
+  address: Yup.string(),
   countryCode: Yup.string().required("كود الدولة مطلوب"),
   phone: phoneValidationSchema("countryCode").test(
     "client-phone",
@@ -32,12 +29,10 @@ const validationFields = {
       return isValidPhoneNumber(value, this.parent.countryCode);
     },
   ),
-  client_type: Yup.string()
-    .oneOf(
-      CLIENT_TYPES_OPTIONS.map((option) => option.value),
-      "نوع الموكل غير صالح",
-    )
-    .required("نوع الموكل مطلوب"),
+  client_type: Yup.string().oneOf(
+    CLIENT_TYPES_OPTIONS.map((option) => option.value),
+    "نوع الموكل غير صالح",
+  ),
   notes: Yup.string(),
   has_contract: Yup.boolean(),
   contracts: Yup.array()
@@ -76,12 +71,7 @@ const validationFields = {
           .oneOf([Yup.ref("password")], "كلمة المرور غير متطابقة"),
       otherwise: (schema) => schema.notRequired(),
     }),
-  user_status: Yup.string()
-    .oneOf(
-      CLIENT_STATUS_OPTIONS.map((option) => option.value),
-      "حالة المستخدم غير صالحة",
-    )
-    .required("حالة المستخدم مطلوبة"),
+  user_status: Yup.string().notRequired(),
   authorization_photo: Yup.string().nullable(),
 } satisfies Record<keyof FormValues, Yup.AnySchema>;
 

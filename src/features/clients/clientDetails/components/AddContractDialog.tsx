@@ -19,6 +19,7 @@ import { buildContractFormData } from "../api/services/buildContractFormData";
 interface AddContractFormValues {
   start_date: string;
   contract_value: string;
+  contract_title: string;
   contract_duration: string;
   file: string | File;
 }
@@ -37,6 +38,7 @@ export const AddContractDialog: React.FC<AddContractDialogProps> = ({
     start_date: "",
     contract_value: "",
     contract_duration: "",
+    contract_title: "",
     file: "",
   };
 
@@ -95,6 +97,12 @@ export const AddContractDialog: React.FC<AddContractDialogProps> = ({
           {() => (
             <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
               <div className="space-y-3">
+                <InputForm
+                  name="contract_title"
+                  label="عنوان العقد"
+                  placeholder="عنوان العقد"
+                  type="text"
+                />
                 <InputForm
                   name="start_date"
                   label="تاريخ بداية العقد"

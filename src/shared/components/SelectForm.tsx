@@ -167,9 +167,9 @@ export const SelectForm: React.FC<SelectFormProps> = ({
                   لا توجد نتائج
                 </CommandEmpty>
                 <CommandGroup className="dark:bg-transparent">
-                  {options.map((option) => (
+                  {options.map((option, idx) => (
                     <CommandItem
-                      key={String(option.value)}
+                      key={`${String(option.value)}-${idx}`}
                       value={`${typeof option.label === "string" ? option.label : String(option.value)}_${String(option.value)}`}
                       onSelect={() => {
                         handleValueChange(option.value);
@@ -224,9 +224,9 @@ export const SelectForm: React.FC<SelectFormProps> = ({
             </div>
           </SelectTrigger>
           <SelectContent className="max-h-[40vh] w-(--radix-select-trigger-width) overflow-y-auto border-[#E8E8E8] bg-white dark:border-white/20 dark:bg-[#1B1B1B]/95">
-            {options.map((option) => (
+            {options.map((option, idx) => (
               <SelectItem
-                key={String(option.value)}
+                key={`${String(option.value)}-${idx}`}
                 value={String(option.value)}
                 className="data-[state=checked]:bg-primary! data-[state=checked]:text-primary-foreground! data-highlighted:bg-primary/90! data-highlighted:text-primary-foreground! dark:text-foreground dark:data-highlighted:text-foreground! dark:data-[state=checked]:bg-primary! dark:data-[state=checked]:text-primary-foreground! dark:hover:bg-white/10 dark:data-highlighted:bg-white/10!"
               >

@@ -11,7 +11,7 @@ export const ContractInfoFields = ({ contract }: ContractInfoFieldsProps) => {
   return (
     <>
       <div className="grid grid-cols-2 gap-3 max-md:grid-cols-1">
-        <InputBox label="رقم العقد" text={contract.id ?? "-"} />
+        <InputBox label="عنوان العقد" text={contract.contract_title ?? "-"} />
 
         <InputBox label="قيمة العقد" text={contract.contract_value ?? "-"} />
 

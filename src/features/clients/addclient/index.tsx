@@ -7,7 +7,7 @@ import { useAddClient } from "./api/hooks/useAddClient";
 import { BasicClientInfo } from "./components/BasicClientInfo";
 import { ContractDetails } from "./components/ContractDetails";
 import { AuthorizationAndNotes } from "./components/AuthorizationAndNotes";
-import { ClientAccountCreation } from "./components/ClientAccountCreation";
+// import { ClientAccountCreation } from "./components/ClientAccountCreation";
 import { SubmitButton } from "@/shared/components/buttons/SubmitButton";
 import { formatPhoneNumber } from "@/shared/utils/validators";
 
@@ -31,7 +31,7 @@ const FormDetails = () => {
     notes: "",
     contracts: [],
     confirmation_password: "",
-    user_status: "",
+    user_status: "active",
   };
 
   const handleSubmit = (values: FormValues) => {
@@ -84,7 +84,7 @@ const FormDetails = () => {
               <BasicClientInfo />
               <ContractDetails />
               <AuthorizationAndNotes />
-              <ClientAccountCreation />
+              {/* <ClientAccountCreation /> */}
 
               <div className="w-full pt-8">
                 <SubmitButton

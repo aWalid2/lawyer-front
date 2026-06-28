@@ -11,6 +11,7 @@ const emptyContract: ContractItem = {
   contract_value: "",
   contract_duration: "",
   contract_file: null,
+  contract_title: "",
 };
 
 export const ContractDetails = () => {
@@ -100,6 +101,12 @@ export const ContractDetails = () => {
                         </div>
 
                         <div className="grid grid-cols-2 gap-4 md:gap-7">
+                          <InputForm
+                            name={`contracts.${index}.contract_title`}
+                            type="string"
+                            label="عنوان العقد"
+                            placeholder="عنوان العقد"
+                          />
                           <InputForm
                             name={`contracts.${index}.contract_start_date`}
                             type="date"
