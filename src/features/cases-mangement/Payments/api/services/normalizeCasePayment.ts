@@ -13,6 +13,9 @@ interface PaymentApiItem {
   attachment?: string | null;
   created_at?: string | null;
   updated_at?: string | null;
+  employee?:{
+    first_name:string;
+  }
 }
 
 const toAttachmentList = (attachment?: string | null) => {
@@ -24,7 +27,7 @@ export const normalizeCasePayment = (p?: PaymentApiItem | null): PaymentItem => 
   id: String(p?.id ?? ""),
   payment_type: p?.payment_type ?? "",
   employee_id: p?.employee_id ? Number(p.employee_id) : "",
-  employee_name: p?.employee_name ?? "-",
+  employee_name: p?.employee?.first_name ?? "-",
   payment_description: p?.payment_description ?? "",
   amount: Number(p?.amount ?? 0),
   payment_date: p?.payment_date ?? "",

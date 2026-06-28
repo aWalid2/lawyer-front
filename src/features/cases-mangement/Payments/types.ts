@@ -14,6 +14,7 @@ export interface PaymentItem {
   caseId?: number;
   createdAt?: string;
   updatedAt?: string;
+
 }
 
 export interface PaymentFormValues {
