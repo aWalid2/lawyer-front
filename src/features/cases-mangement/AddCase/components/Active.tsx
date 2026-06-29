@@ -103,7 +103,7 @@ export function Active() {
       />
       <InputForm
         label="وقت الجلسة "
-        name="session_comming_date"
+        name="session_comming_time"
         type="time"
         placeholder="وقت الجلسة القادم"
       />

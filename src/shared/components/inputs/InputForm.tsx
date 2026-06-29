@@ -60,7 +60,16 @@ export const InputForm: React.FC<InputFormProps> = ({
             >
               <span>
                 {field.value ? (
-                  format(new Date(field.value), "yyyy-MM-dd")
+                  (() => {
+                    try {
+                      const date = new Date(field.value);
+                      if (isNaN(date.getTime()))
+                        throw new Error("Invalid date");
+                      return format(date, "yyyy-MM-dd");
+                    } catch {
+                      return field.value;
+                    }
+                  })()
                 ) : (
                   <span>{placeholder || "اختر تاريخ"}</span>
                 )}
@@ -74,7 +83,18 @@ export const InputForm: React.FC<InputFormProps> = ({
           >
             <Calendar
               mode="single"
-              selected={field.value ? new Date(field.value) : undefined}
+              selected={
+                field.value
+                  ? (() => {
+                      try {
+                        const date = new Date(field.value);
+                        return isNaN(date.getTime()) ? undefined : date;
+                      } catch {
+                        return undefined;
+                      }
+                    })()
+                  : undefined
+              }
               onSelect={(date) => {
                 if (date) {
                   setFieldValue(name, format(date, "yyyy-MM-dd"));
