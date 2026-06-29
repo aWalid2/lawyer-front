@@ -5,6 +5,7 @@ import { usePaginatedOptions } from "@/shared/hooks/usePaginatedOptions";
 import { fetchClients } from "@/shared/api/services/getClients";
 import { getClientStatuses } from "@/features/settings/client-statuses/api/services/getClientStatuses";
 import { useCallback, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 type ClientOptionEntity = {
   id?: number | string;
   user_id?: number | string;
@@ -17,6 +18,8 @@ type SelectOptionEntity = {
 };
 
 export function Other() {
+  const [searchParams] = useSearchParams();
+  const clientIdFromUrl = searchParams.get("clientId");
   const [clientSearch, setClientSearch] = useState("");
   const [clientStatusSearch, setClientStatusSearch] = useState("");
   const debouncedClientSearch = useDebounce(clientSearch, 500);
@@ -80,6 +83,7 @@ export function Other() {
         options={clientOptions}
         placeholder="اختر الموكل"
         showSearch={true}
+        disabled={!!clientIdFromUrl}
         onSearchChange={setClientSearch}
         hasMoreOptions={clientHasMoreOptions}
         isFetchingMore={clientIsFetchingMore}

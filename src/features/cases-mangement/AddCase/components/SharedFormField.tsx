@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
@@ -22,6 +23,8 @@ type ClientOptionEntity = {
 };
 
 export function SharedFormField() {
+  const [searchParams] = useSearchParams();
+  const clientIdFromUrl = searchParams.get("clientId");
   const [clientSearch, setClientSearch] = useState("");
   const debouncedClientSearch = useDebounce(clientSearch, 500);
 
@@ -143,6 +146,7 @@ export function SharedFormField() {
         options={options}
         placeholder="اختر الموكل"
         showSearch={true}
+        disabled={!!clientIdFromUrl}
         onSearchChange={setClientSearch}
         hasMoreOptions={clientHasMoreOptions}
         isFetchingMore={clientIsFetchingMore}
