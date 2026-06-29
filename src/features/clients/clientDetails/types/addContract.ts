@@ -4,5 +4,8 @@ export interface ContractFormValues {
   start_date: string;
   contract_value: string;
   contract_duration: string;
+  contract_cases: string;
+  hasFixedDuration: boolean;
+  hasFixedCases: boolean;
   file: File | FileList | string | null;
 }

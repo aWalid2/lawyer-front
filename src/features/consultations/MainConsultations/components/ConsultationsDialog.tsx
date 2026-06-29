@@ -10,8 +10,7 @@ import { useFetchLawyers } from "@/features/users/users-lawyers/api/hooks/useLaw
 import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { TextAreaForm } from "@/shared/components/TextAreaForm";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { ToggleSwitch } from "@/shared/components/ToggleSwitch";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { usePaginatedOptions } from "@/shared/hooks/usePaginatedOptions";
 import { fetchClients } from "@/shared/api/services/getClients";
@@ -193,38 +192,22 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
                 </div>
 
                 <div className="md:col-span-2">
-                  <div className="flex items-center justify-center gap-4 rounded-xl bg-gray-50 p-3 dark:bg-white/5">
-                    <Label
-                      htmlFor="client-toggle"
-                      className={`flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors ${
-                        isClient ? "text-[#153A4D]" : "text-gray-400"
-                      }`}
-                    >
-                      <UserRound size={18} />
-                      موكل
-                    </Label>
-                    <Switch
-                      id="client-toggle"
-                      checked={!isClient}
-                      onCheckedChange={(checked) => {
-                        setIsClient(!checked);
-                        if (checked) {
-                          setFieldValue("client_id", 0);
-                        } else {
-                          setFieldValue("consultation_request_name", "");
-                        }
-                      }}
-                    />
-                    <Label
-                      htmlFor="client-toggle"
-                      className={`flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors ${
-                        !isClient ? "text-[#153A4D]" : "text-gray-400"
-                      }`}
-                    >
-                      <User size={18} />
-                      غير موكل
-                    </Label>
-                  </div>
+                  <ToggleSwitch
+                    id="client-toggle"
+                    leftLabel="موكل"
+                    rightLabel="غير موكل"
+                    leftIcon={<UserRound size={18} />}
+                    rightIcon={<User size={18} />}
+                    checked={!isClient}
+                    onCheckedChange={(checked) => {
+                      setIsClient(!checked);
+                      if (checked) {
+                        setFieldValue("client_id", 0);
+                      } else {
+                        setFieldValue("consultation_request_name", "");
+                      }
+                    }}
+                  />
                 </div>
 
                 {isClient ? (
@@ -282,29 +265,13 @@ export const ConsultationsDialog: React.FC<ConsultationsDialogProps> = ({
                 </div>
 
                 <div className="md:col-span-2">
-                  <div className="flex items-center justify-center gap-4 rounded-xl bg-gray-50 p-3 dark:bg-white/5">
-                    <Label
-                      htmlFor="date-toggle"
-                      className={`flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors ${
-                        showDate ? "text-[#153A4D]" : "text-gray-400"
-                      }`}
-                    >
-                      تحديد موعد الاستشارة
-                    </Label>
-                    <Switch
-                      id="date-toggle"
-                      checked={showDate}
-                      onCheckedChange={setShowDate}
-                    />
-                    <Label
-                      htmlFor="date-toggle"
-                      className={`flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors ${
-                        !showDate ? "text-[#153A4D]" : "text-gray-400"
-                      }`}
-                    >
-                      بدون تحديد موعد الاستشارة
-                    </Label>
-                  </div>
+                  <ToggleSwitch
+                    id="date-toggle"
+                    leftLabel="تحديد موعد الاستشارة"
+                    rightLabel="بدون تحديد موعد الاستشارة"
+                    checked={showDate}
+                    onCheckedChange={setShowDate}
+                  />
                 </div>
 
                 {showDate && (

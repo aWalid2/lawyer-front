@@ -5,7 +5,11 @@ export const buildContractFormData = (values: ContractFormValues) => {
 
   formData.append("start_date", values.startDate);
   formData.append("contract_value", values.contractValue);
-  formData.append("contract_duration", values.contractDuration);
+  formData.append("contract_duration", values.hasFixedDuration ? values.contractDuration : "");
+  formData.append("related_cases", values.hasFixedCases ? values.contractCases : "");
+  if (values.contractTitle) {
+    formData.append("contract_title", values.contractTitle);
+  }
 
   if (values.file instanceof FileList) {
     if (values.file.length > 0) {

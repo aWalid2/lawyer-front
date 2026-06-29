@@ -8,7 +8,8 @@ import {
 import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { FileUpload } from "@/shared/components/FileUpload";
-import { XIcon } from "lucide-react";
+import { ToggleSwitch } from "@/shared/components/ToggleSwitch";
+import { XIcon, Calendar, CalendarX, List, ListX } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { Formik, Form } from "formik";
 import type { Contract, ContractFormValues } from "../types";
@@ -29,7 +30,16 @@ const validationSchema = Yup.object().shape({
   clientId: Yup.string().required("اسم الموكل مطلوب"),
   startDate: Yup.string().required("تاريخ بداية العقد مطلوب"),
   contractValue: Yup.string().required("قيمة العقد مطلوبة"),
-  contractDuration: Yup.string().required("مدة العقد مطلوبة"),
+  contractDuration: Yup.string().when("hasFixedDuration", {
+    is: true,
+    then: (schema) => schema.required("مدة العقد مطلوبة"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  contractCases: Yup.string().when("hasFixedCases", {
+    is: true,
+    then: (schema) => schema.required("عدد القضايا مطلوب"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
   contractTitle: Yup.string(),
   file: Yup.mixed().nullable(),
 });
@@ -119,7 +129,7 @@ export const ContractDialog: React.FC<ContractDialogProps> = ({
             }
           }}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, values, setFieldValue }) => (
             <Form className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pb-2 pl-2">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <InputForm
@@ -155,13 +165,59 @@ export const ContractDialog: React.FC<ContractDialogProps> = ({
                   dir="ltr"
                 />
 
-                <InputForm
-                  name="contractDuration"
-                  label="مدة العقد"
-                  type="number"
-                  placeholder="أدخل مدة العقد"
-                  dir="ltr"
-                />
+                <div className="md:col-span-2">
+                  <ToggleSwitch
+                    id="duration-toggle"
+                    leftLabel="محدد بمدة"
+                    rightLabel="غير محدد بمدة"
+                    leftIcon={<Calendar size={18} />}
+                    rightIcon={<CalendarX size={18} />}
+                    checked={!values.hasFixedDuration}
+                    onCheckedChange={(checked) => {
+                      setFieldValue("hasFixedDuration", !checked);
+                      if (!checked) {
+                        setFieldValue("contractDuration", "");
+                      }
+                    }}
+                  />
+                </div>
+
+                {values.hasFixedDuration && (
+                  <InputForm
+                    name="contractDuration"
+                    label="مدة العقد"
+                    type="number"
+                    placeholder="أدخل مدة العقد"
+                    dir="ltr"
+                  />
+                )}
+
+                <div className="md:col-span-2">
+                  <ToggleSwitch
+                    id="cases-toggle"
+                    leftLabel="مربوط بعدد قضايا ثابت"
+                    rightLabel="غير مربوط"
+                    leftIcon={<List size={18} />}
+                    rightIcon={<ListX size={18} />}
+                    checked={!values.hasFixedCases}
+                    onCheckedChange={(checked) => {
+                      setFieldValue("hasFixedCases", !checked);
+                      if (checked) {
+                        setFieldValue("contractCases", "");
+                      }
+                    }}
+                  />
+                </div>
+
+                {values.hasFixedCases && (
+                  <InputForm
+                    name="contractCases"
+                    label="عدد القضايا"
+                    type="number"
+                    placeholder="أدخل عدد القضايا"
+                    dir="ltr"
+                  />
+                )}
               </div>
 
               <FileUpload
