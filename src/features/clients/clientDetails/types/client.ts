@@ -8,6 +8,8 @@ export interface ClientContract {
   document_file?: string | null;
   created_at?: string | null;
   contract_title?:string | null;
+  cases_related_contracts?:number |null;
+  contract_payment:number |string | null;
 }
 
 export interface ClientUserDetails {

@@ -1,6 +1,7 @@
 import { InputBox } from "@/shared/components/inputs/InputBox";
 import { formatDateToYYYYMMDD } from "@/shared/utils/convertDate";
 import { ImagePreviewCard } from "../../ClientDetailsInfo/components/ImagePreviewCard";
+import { AddPaymentDialog } from "./AddPaymentDialog";
 import type { ClientContract } from "../../../types/client";
 
 interface ContractInfoFieldsProps {
@@ -31,6 +32,19 @@ export const ContractInfoFields = ({ contract }: ContractInfoFieldsProps) => {
           label="تاريخ إنشاء العقد"
           text={formatDateToYYYYMMDD(contract.created_at) || "-"}
         />
+        <InputBox
+          label="عدد القضايا المرتبطه بالعقد"
+          text={contract.cases_related_contracts || "-"}
+        />
+        <div className="flex items-end gap-2">
+          <div className="flex-1">
+            <InputBox
+              label="مدفوعات العقد"
+              text={contract.contract_payment || "-"}
+            />
+          </div>
+          {contract.id && <AddPaymentDialog contractId={contract.id} />}
+        </div>
       </div>
 
       {contract.document_file && (

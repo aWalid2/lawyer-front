@@ -1,20 +1,31 @@
 import { useState } from "react";
+import { useFormikContext } from "formik";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { InputForm } from "@/shared/components/inputs/InputForm";
 import { SelectForm } from "@/shared/components/SelectForm";
 import { SharedFormField } from "./SharedFormField";
 import { useGetCourts } from "@/shared/api/hooks/useGetCourts";
+import { useGetCircles } from "@/shared/api/hooks/useGetCircles";
 import { LITIGATION_LEVEL_OPTIONS } from "@/shared/constants/caseOptions";
+
+interface ActiveFormValues {
+  court_id?: string | number;
+  [key: string]: unknown;
+}
 
 export function Active() {
   const [courtSearch, setCourtSearch] = useState("");
   const debouncedCourtSearch = useDebounce(courtSearch, 500);
+  const { values } = useFormikContext<ActiveFormValues>();
 
   const { data: courts } = useGetCourts(
     undefined,
     undefined,
     debouncedCourtSearch,
   );
+
+  const selectedCourtId = Number(values.court_id) || undefined;
+  const { data: circles } = useGetCircles(selectedCourtId, !!selectedCourtId);
 
   interface Court {
     id: string | number;
@@ -25,6 +36,20 @@ export function Active() {
     courts?.data?.map((court: Court) => ({
       label: court.name,
       value: String(court.id),
+    })) || [];
+
+  interface Circle {
+    id: number | string;
+    name: string;
+  }
+
+  const circlesData = Array.isArray(circles)
+    ? circles
+    : ((circles as { data?: Circle[] })?.data ?? []);
+  const circlesOptions =
+    circlesData.map((circle: Circle) => ({
+      value: String(circle.id),
+      label: circle.name,
     })) || [];
 
   return (
@@ -39,8 +64,7 @@ export function Active() {
       <InputForm
         label="تاريخ تسجيل القضية في المحكمة"
         name="date_case_registered_court"
-        type="string"
-        placeholder="تاريخ تسجيل القضية في المحكمة"
+        type="date"
       />
       <InputForm
         label="رقم القضية في المحكمة"
@@ -67,10 +91,9 @@ export function Active() {
       <SelectForm
         label=" اسم الدائرة "
         name="circuit_id"
-        options={courtOptions}
+        options={circlesOptions}
         placeholder="اختر اسم الدائرة"
         showSearch={true}
-        onSearchChange={setCourtSearch}
       />
       <InputForm
         label="تاريخ الجلسة القادم"

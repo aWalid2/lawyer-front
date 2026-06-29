@@ -64,9 +64,20 @@ const ContractsFeature = () => {
       accessor: (item) => item.contractValue || FALLBACK_TEXT,
     },
     {
+      header: "اجمالي المدفوع",
+      accessor: (item) => item.contractPayment || FALLBACK_TEXT,
+    },
+    {
       header: "مدة العقد",
       accessor: (item) =>
         item.contractDuration ? `${item.contractDuration} شهر` : FALLBACK_TEXT,
+    },
+    {
+      header: "عدد القضايا المرتبطه بالعقد",
+      accessor: (item) =>
+        item.contractRelatedCases
+          ? `${item.contractRelatedCases} `
+          : FALLBACK_TEXT,
     },
     {
       header: "تاريخ بداية العقد",

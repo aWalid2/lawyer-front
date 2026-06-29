@@ -13,6 +13,7 @@ export interface ContractItem {
   contract_duration: number;
   document_file: string;
   created_at: string;
+  cases_related_contracts: number | string;
 }
 
 interface ContractCardsProps {
@@ -82,6 +83,13 @@ export function ContractCards({
                   <div className="flex items-center gap-2">
                     <Link2 className="text-primary/70 h-3.5 w-3.5" />
                     <span>المدة: {contract.contract_duration} شهر</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Link2 className="text-primary/70 h-3.5 w-3.5" />
+                    <span>
+                      عدد القضايا:
+                      {contract.cases_related_contracts || "-"}
+                    </span>
                   </div>
                 </div>
               </CardContent>

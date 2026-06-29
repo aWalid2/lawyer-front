@@ -14,6 +14,8 @@ export interface Contract {
   client_profile?: {
     name?: string;
   };
+  contractRelatedCases:number | string;
+  contractPayment:number | string;
 }
 
 export interface ContractFormValues {

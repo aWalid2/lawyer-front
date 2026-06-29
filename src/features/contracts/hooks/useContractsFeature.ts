@@ -23,7 +23,9 @@ const normalizeContract = (item: ContractApiItem): Contract => ({
   contractDuration: String(item.contract_duration ?? ""),
   documentFile: item.document_file ?? "",
   createdAt: item.created_at ? item.created_at.split("T")[0] : "",
-  contractTitle:item?.contract_title || FALLBACK_TEXT
+  contractTitle: item?.contract_title || FALLBACK_TEXT,
+  contractRelatedCases: item?.cases_related_contracts || FALLBACK_TEXT,
+  contractPayment:item?.contract_payment || FALLBACK_TEXT
 });
 
 interface Filters {

@@ -29,6 +29,8 @@ export interface ContractApiItem {
     authorization_photo?: string;
     notes?: string;
   } | null;
+  cases_related_contracts?:string | number;
+  contract_payment: string | number | null;
 }
 
 export interface ContractsResponse {
