@@ -1,9 +1,10 @@
 import { useCreateCasePayment } from "@/features/cases-mangement/Payments/api/hooks/useCreateCasePayment";
 import { useDeleteCasePayment } from "@/features/cases-mangement/Payments/api/hooks/useDeleteCasePayment";
+import { useExportPaymentPdf } from "@/features/cases-mangement/Payments/api/hooks/useExportPaymentPdf";
 import { useGetCasePayment } from "@/features/cases-mangement/Payments/api/hooks/useGetCasePayment";
 import { useGetCasePayments } from "@/features/cases-mangement/Payments/api/hooks/useGetCasePayments";
 import { useUpdateCasePayment } from "@/features/cases-mangement/Payments/api/hooks/useUpdateCasePayment";
-import type { PaymentFormValues } from "@/features/cases-mangement/Payments/types";
+import type { PaymentFormValues, PaymentItem } from "@/features/cases-mangement/Payments/types";
 import { useIndexedApiPagination } from "@/shared/hooks/useIndexedApiPagination";
 import { useMemo, useState } from "react";
 
@@ -19,6 +20,7 @@ export const usePaymentsCaseFeature = (caseId: string) => {
   const createPayment = useCreateCasePayment(caseId);
   const updatePayment = useUpdateCasePayment(caseId);
   const deletePayment = useDeleteCasePayment(caseId);
+  const { handleExportPdf, isPending: isExportingPdf } = useExportPaymentPdf();
   const { data: selectedPaymentDetails } = useGetCasePayment(selectedId, Boolean(selectedId && (isModalOpen || isViewOpen)));
 
   const payments = useMemo(() => paymentsResponse?.data ?? [], [paymentsResponse?.data]);
@@ -43,6 +45,11 @@ export const usePaymentsCaseFeature = (caseId: string) => {
   const handleEditFromView = () => { setIsViewOpen(false); setIsModalOpen(true); };
   const handleDelete = (id: string) => { deletePayment.mutate(id); if (selectedId === id) { setSelectedId(null); setIsModalOpen(false); setIsViewOpen(false); } };
 
+  const handleExportPaymentPdf = (payment: PaymentItem) => {
+    const fileName = `دفعة_${payment.payment_description || payment.payment_type}_${payment.id}`;
+    handleExportPdf(payment.id, fileName);
+  };
+
   const handleSaveChanges = async (values: PaymentFormValues, paymentId?: string) => {
     if (paymentId) {
       await updatePayment.mutateAsync({ paymentId, data: values });
@@ -53,7 +60,7 @@ export const usePaymentsCaseFeature = (caseId: string) => {
 
   return {
     page, setPage, isModalOpen, isViewOpen, payments, indexedPayments: indexed, selectedPayment, totalPages, isPending, isError, error,
-    handleModalOpenChange, handleOpenCreate, handleOpenEdit, handleOpenView, handleViewOpenChange, handleEditFromView, handleDelete, handleSaveChanges,
-    isSaving: createPayment.isPending || updatePayment.isPending,
+    handleModalOpenChange, handleOpenCreate, handleOpenEdit, handleOpenView, handleViewOpenChange, handleEditFromView, handleDelete, handleSaveChanges, handleExportPaymentPdf,
+    isSaving: createPayment.isPending || updatePayment.isPending || isExportingPdf,
   };
 };

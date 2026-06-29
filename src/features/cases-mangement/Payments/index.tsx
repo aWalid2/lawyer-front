@@ -39,6 +39,7 @@ const PaymentsCaseFeature = () => {
     handleEditFromView,
     handleDelete,
     handleSaveChanges,
+    handleExportPaymentPdf,
     isSaving,
   } = usePaymentsCaseFeature(caseId);
 
@@ -82,6 +83,7 @@ const PaymentsCaseFeature = () => {
           payment={item}
           onView={() => handleOpenView(item.id)}
           onDelete={() => handleDelete(item.id)}
+          onExportPdf={() => handleExportPaymentPdf(item)}
         />
       ),
     },
