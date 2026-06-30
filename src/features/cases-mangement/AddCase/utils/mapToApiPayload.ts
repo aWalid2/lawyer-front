@@ -57,8 +57,10 @@ contract_based?: undefined;
 
 
   has_opponent: boolean;
-  Employee_id?: number | string;
-  role_id?: number | string;
+  has_employees: boolean;
+  has_role: boolean;
+  employees: { employee_id: string }[];
+  roles: { role_id: string }[];
   selected_contract?: number | null;
 
   // Active Fields
@@ -110,6 +112,12 @@ export const mapToApiPayload = (
     case_type_id: Number(values.case_type_id),
     notes: values.notes || "",
     case_entry_date: formatDate(values.case_entry_date),
+    employee_ids: values.employees
+      .filter((emp) => emp.employee_id)
+      .map((emp) => Number(emp.employee_id)),
+    role_ids: values.roles
+      .filter((role) => role.role_id)
+      .map((role) => Number(role.role_id)),
   };
 
 const case_fees: CaseFees = {

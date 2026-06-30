@@ -166,8 +166,16 @@ const FormCase = () => {
 
                   {values.has_opponent && <OpponentForm />}
                 </div>
-                <EmployeesForm />
-                <RoleForm />
+                <div className="mt-8 border-t border-gray-100 pt-8">
+                  <SwitchForm name="has_employees" label="إضافة موظف للقضية" />
+
+                  {values.has_employees && <EmployeesForm />}
+                </div>
+                <div className="mt-8 border-t border-gray-100 pt-8">
+                  <SwitchForm name="has_role" label="إضافة دور للقضية" />
+
+                  {values.has_role && <RoleForm />}
+                </div>
                 <FeesForm />
                 <SubmitButton
                   isPending={

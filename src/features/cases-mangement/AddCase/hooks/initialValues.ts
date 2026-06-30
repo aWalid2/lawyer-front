@@ -65,8 +65,10 @@ contract_based: undefined,
 
   notes: "",
   has_opponent: true,
-  Employee_id: "",
-  role_id: "",
+  has_employees: false,
+  has_role: false,
+  employees: [{ employee_id: "" }],
+  roles: [{ role_id: "" }],
   selected_contract: null,
 
   // Active Fields

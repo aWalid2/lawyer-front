@@ -12,6 +12,8 @@ export type BasePayload = {
   case_type_id: number;
   notes: string;
   case_entry_date?: string;
+  employee_ids?: number[];
+  role_ids?: number[];
 };
 
 export type CaseFees = {
