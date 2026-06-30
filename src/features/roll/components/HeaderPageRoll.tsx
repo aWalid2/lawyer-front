@@ -30,8 +30,8 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
 }) => {
   return (
     <HeaderPageLayout>
-      <div className="flex w-full justify-between gap-3">
-        <div className="flex items-center justify-center gap-3">
+      <div className="flex w-full flex-wrap justify-between gap-3">
+        <div className="flex flex-wrap items-center justify-center gap-3">
           <HeaderDatePicker
             date={filters.fromDate}
             onDateChange={(date) => onFilterChange("fromDate", date)}
