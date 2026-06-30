@@ -24,6 +24,7 @@ export interface RollSessionApiResponse {
 
 export interface RollSessionsParams {
   sessionSource: string;
+  courtLevel: string;
   dateFrom?: Date;
   dateTo?: Date;
 }

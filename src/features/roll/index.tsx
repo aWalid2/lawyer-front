@@ -6,7 +6,6 @@ import { useExport } from "@/shared/hooks/useExport";
 import { formatDateToTime, formatDateToYYYYMMDD } from "@/shared/utils";
 import { useMemo, useState } from "react";
 import { useGetAllRollSessions } from "./api/hooks/useGetAllSessions";
-import { useSearchSessions } from "./api/hooks/useSearchSessions";
 import { exportRollSessionsExcel } from "./api/service/exportRollSessionsExcel";
 import { exportRollSessionsPdf } from "./api/service/exportRollSessionsPdf";
 import { HeaderPageRoll } from "./components/HeaderPageRoll";
@@ -16,6 +15,7 @@ import { EmptyTable } from "@/shared/components/EmptyTable";
 
 interface RollFilters {
   sessionSource: string;
+  courtLevel: string;
   fromDate?: Date;
   toDate?: Date;
 }
@@ -23,38 +23,18 @@ interface RollFilters {
 const RollFeature = () => {
   const { mapRollSession, FALLBACK_TEXT } = useRoll();
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<RollFilters>({
     sessionSource: "all",
+    courtLevel: "all",
   });
   const itemsPerPage = 15;
-  const isSearching = searchTerm.trim().length > 0;
 
-  const {
-    data: allSessionsData,
-    isPending: isAllPending,
-    // isFetching: isAllFetching,
-  } = useGetAllRollSessions({
+  const { data: allSessionsData, isPending } = useGetAllRollSessions({
     sessionSource: filters.sessionSource,
+    courtLevel: filters.courtLevel,
     dateFrom: filters.fromDate,
     dateTo: filters.toDate,
   });
-  console.log(allSessionsData);
-
-  const {
-    data: searchData,
-    isPending: isSearchPending,
-    // isFetching: isSearchFetching,
-  } = useSearchSessions({
-    q: searchTerm.trim(),
-    page: currentPage,
-    limit: itemsPerPage,
-    enabled: isSearching,
-  });
-
-  const isPending = isSearching ? isSearchPending : isAllPending;
-  // const isFetching = isSearching ? isSearchFetching : isAllFetching;
-  const rawData = isSearching ? searchData?.data : allSessionsData;
 
   const { handleExport: triggerExport } = useExport({
     exportExcelFn: exportRollSessionsExcel,
@@ -77,6 +57,7 @@ const RollFeature = () => {
   const handleExport = (type: "pdf" | "excel") => {
     triggerExport(type, {
       sessionSource: filters.sessionSource,
+      courtLevel: filters.courtLevel,
       dateFrom: filters.fromDate,
       dateTo: filters.toDate,
     });
@@ -84,14 +65,11 @@ const RollFeature = () => {
 
   const sessions = useMemo(
     () =>
-      (rawData || []).map((session, index) => mapRollSession(session, index)),
-    [rawData, mapRollSession],
+      (allSessionsData || []).map((session, index) =>
+        mapRollSession(session, index),
+      ),
+    [allSessionsData, mapRollSession],
   );
-
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-    setCurrentPage(1);
-  };
 
   const handleFilterChange = (
     key: keyof RollFilters,
@@ -101,9 +79,7 @@ const RollFeature = () => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  const totalPages = isSearching
-    ? (searchData?.meta?.total_pages ?? 1)
-    : Math.ceil(sessions.length / itemsPerPage);
+  const totalPages = Math.ceil(sessions.length / itemsPerPage);
   const safeCurrentPage =
     totalPages === 0 ? 1 : Math.min(currentPage, totalPages);
 
@@ -182,26 +158,20 @@ const RollFeature = () => {
     },
   ];
 
-  if (isPending && !rawData) {
+  if (isPending && !allSessionsData) {
     return <LoadingPage />;
   }
 
   return (
     <PageLayout>
       <HeaderPageRoll
-        searchTerm={searchTerm}
-        onSearch={handleSearch}
         onFilterChange={handleFilterChange}
         onExport={handleExport}
         filters={filters}
       />
 
       {paginatedSessions.length === 0 ? (
-        <EmptyTable
-          message={
-            isSearching ? "لا توجد جلسات تطابق  البحث" : "لا توجد جلسات لعرضها"
-          }
-        />
+        <EmptyTable message="لا توجد جلسات لعرضها" />
       ) : (
         <DataTable columns={columns} data={paginatedSessions} rowIdField="id" />
       )}
