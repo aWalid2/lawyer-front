@@ -26,9 +26,11 @@ type CourtLevel = "first_instance" | "appeal" | "cassation";
 export const useCaseInfoDetails = (id?: string) => {
   const caseId = Number(id);
   const caseInfoQuery = useGetCaseInfo(id!);
+  
+
 
   const { data: contractData } = useGetCaseRelatedContract(id);
-  console.log(contractData)
+
 
   const currentCourtLevel = caseInfoQuery.data?.Current_court_degree;
   const normalizedCourtLevel = normalizeCourtLevel(currentCourtLevel);
@@ -79,6 +81,8 @@ export const useCaseInfoDetails = (id?: string) => {
           caseInfoQuery.data?.client?.first_name ||
           "",
         caseTitle: caseInfoQuery.data?.case_title,
+        referenceNumber: caseInfoQuery.data?.reference_number,
+        caseSequence: caseInfoQuery.data?.case_sequence,
         court:
           selectedCourtSessionInfo?.court?.name ||
           caseInfoQuery.data?.court?.name ||
@@ -86,6 +90,10 @@ export const useCaseInfoDetails = (id?: string) => {
           "",
         litigationLevel:
           getOptionLabel(selectedCourtLevel, LITIGATION_LEVEL_OPTIONS) ||
+          currentCourtLevel ||
+          "",
+        currentCourtDegree:
+          getOptionLabel(currentCourtLevel, LITIGATION_LEVEL_OPTIONS) ||
           currentCourtLevel ||
           "",
         status: caseInfoQuery.data?.caseStatus?.name || "",
@@ -190,6 +198,7 @@ export const useCaseInfoDetails = (id?: string) => {
         contractClientType: contractData?.client_profile?.client_type || "",
       }
     : undefined;
+
 
   return {
     caseData,

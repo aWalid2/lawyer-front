@@ -37,6 +37,10 @@ export interface CaseFormValues {
   contractCreatedAt?: string;
   contractClientName?: string;
   contractClientType?: string;
+  currentCourtDegree?:string;
+  caseSequence?:string;
+  referenceNumber?:string;
+
 }
 
 export interface DetailField {

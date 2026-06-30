@@ -43,6 +43,7 @@ export const FormCaseDialog: React.FC = () => {
     undefined,
     open,
   );
+
   const [caseTypeSearch, setCaseTypeSearch] = React.useState("");
   const debouncedCaseTypeSearch = useDebounce(caseTypeSearch, 300);
 
