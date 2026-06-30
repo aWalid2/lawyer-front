@@ -42,7 +42,6 @@ export const HeaderFilter: React.FC<HeaderFilterProps> = ({
   const [open, setOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
-
   useEffect(() => {
     if (open && showSearch) {
       setTimeout(() => searchRef.current?.focus(), 0);
@@ -62,12 +61,12 @@ export const HeaderFilter: React.FC<HeaderFilterProps> = ({
     return options.filter(
       (opt) =>
         opt.label.toLowerCase().includes(lower) ||
-        opt.value.toLowerCase().includes(lower)
+        opt.value.toLowerCase().includes(lower),
     );
   }, [search, options]);
 
   return (
-    <div className={cn("w-full md:w-[140px]", className)}>
+    <div className={cn("w-full md:min-w-35", className)}>
       <Select
         open={open}
         onOpenChange={setOpen}
@@ -78,7 +77,7 @@ export const HeaderFilter: React.FC<HeaderFilterProps> = ({
         defaultValue={defaultValue}
         value={value}
       >
-        <SelectTrigger className="w-full h-12.5 rounded-[18px] border-[#E2E8F0] bg-white text-primary-text focus:border-[#BF9A61] focus:ring-2 focus:ring-[#BF9A61]/10 outline-none transition-all">
+        <SelectTrigger className="text-primary-text h-12.5 w-full rounded-[18px] border-[#E2E8F0] bg-white transition-all outline-none focus:border-[#BF9A61] focus:ring-2 focus:ring-[#BF9A61]/10">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent
@@ -86,7 +85,8 @@ export const HeaderFilter: React.FC<HeaderFilterProps> = ({
           onCloseAutoFocus={(e) => e.preventDefault()}
           onScroll={(e) => {
             const el = e.currentTarget;
-            const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 40;
+            const isAtBottom =
+              el.scrollHeight - el.scrollTop - el.clientHeight < 40;
             if (isAtBottom) onScrollEnd?.();
           }}
         >
@@ -100,7 +100,7 @@ export const HeaderFilter: React.FC<HeaderFilterProps> = ({
               onPointerDown={(e) => e.stopPropagation()}
               onMouseDown={(e) => e.stopPropagation()}
               onKeyDown={(e) => e.stopPropagation()}
-              className="w-full mb-2 rounded-[10px] border border-[#E2E8F0] px-2 py-1 text-sm focus:outline-none"
+              className="mb-2 w-full rounded-[10px] border border-[#E2E8F0] px-2 py-1 text-sm focus:outline-none"
             />
           )}
           {filteredOptions.map((option) => (
