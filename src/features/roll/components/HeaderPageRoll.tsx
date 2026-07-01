@@ -1,6 +1,7 @@
 import { ButtonShowAll } from "@/shared/components/buttons/ButtonShowAll";
 import { HeaderDatePicker } from "@/shared/components/Header/HeaderDatePicker";
 import { HeaderFilter } from "@/shared/components/Header/HeaderFilter";
+import { HeaderMultiFilter } from "@/shared/components/Header/HeaderMultiFilter";
 import { HeaderPageLayout } from "@/shared/components/Header/HeaderPageLayout";
 import { LITIGATION_LEVEL_OPTIONS } from "@/shared/constants/caseOptions";
 import React from "react";
@@ -11,13 +12,14 @@ import {
 
 interface HeaderPageRollProps {
   onFilterChange: (
-    key: "sessionSource" | "courtLevel" | "fromDate" | "toDate",
+    key: "sessionSource" | "fromDate" | "toDate",
     value: string | Date | undefined,
   ) => void;
+  onCourtLevelChange: (values: string[]) => void;
   onExport: (type: HeaderExportType) => void;
   filters: {
     sessionSource: string;
-    courtLevel: string;
+    courtLevel: string[];
     fromDate?: Date;
     toDate?: Date;
   };
@@ -25,6 +27,7 @@ interface HeaderPageRollProps {
 
 export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
   onFilterChange,
+  onCourtLevelChange,
   onExport,
   filters,
 }) => {
@@ -57,17 +60,18 @@ export const HeaderPageRoll: React.FC<HeaderPageRollProps> = ({
             className="md:w-27.5"
           />
 
-          <HeaderFilter
+          <HeaderMultiFilter
             placeholder="درجة التقاضي"
-            value={filters.courtLevel}
-            onFilterChange={(v) => onFilterChange("courtLevel", v)}
-            options={[
-              { value: "all", label: "درجة التقاضي" },
-              ...LITIGATION_LEVEL_OPTIONS.map((opt) => ({
-                value: opt.value,
-                label: opt.label,
-              })),
-            ]}
+            selectedValues={filters.courtLevel}
+            onSelectionChange={onCourtLevelChange}
+            options={LITIGATION_LEVEL_OPTIONS}
+            className="md:w-27.5"
+          />
+          <HeaderFilter
+            placeholder="اسم الجهة"
+            value={""}
+            onFilterChange={() => onFilterChange("sessionSource", "")}
+            options={[{ value: "all", label: "اسم الجهة" }]}
             className="md:w-27.5"
           />
         </div>

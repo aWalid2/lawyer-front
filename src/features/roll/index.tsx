@@ -15,7 +15,7 @@ import { EmptyTable } from "@/shared/components/EmptyTable";
 
 interface RollFilters {
   sessionSource: string;
-  courtLevel: string;
+  courtLevel: string[];
   fromDate?: Date;
   toDate?: Date;
 }
@@ -25,7 +25,7 @@ const RollFeature = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState<RollFilters>({
     sessionSource: "all",
-    courtLevel: "all",
+    courtLevel: [],
   });
   const itemsPerPage = 15;
 
@@ -57,7 +57,7 @@ const RollFeature = () => {
   const handleExport = (type: "pdf" | "excel") => {
     triggerExport(type, {
       sessionSource: filters.sessionSource,
-      courtLevel: filters.courtLevel,
+      courtLevel: filters.courtLevel.join(","),
       dateFrom: filters.fromDate,
       dateTo: filters.toDate,
     });
@@ -77,6 +77,11 @@ const RollFeature = () => {
   ) => {
     setCurrentPage(1);
     setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleCourtLevelChange = (values: string[]) => {
+    setCurrentPage(1);
+    setFilters((prev) => ({ ...prev, courtLevel: values }));
   };
 
   const totalPages = Math.ceil(sessions.length / itemsPerPage);
@@ -166,6 +171,7 @@ const RollFeature = () => {
     <PageLayout>
       <HeaderPageRoll
         onFilterChange={handleFilterChange}
+        onCourtLevelChange={handleCourtLevelChange}
         onExport={handleExport}
         filters={filters}
       />

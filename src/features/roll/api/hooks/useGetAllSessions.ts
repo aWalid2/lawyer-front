@@ -9,7 +9,7 @@ export const useGetAllRollSessions = (params: RollSessionsParams) => {
     queryKey: [
       "roll-sessions",
       params.sessionSource,
-      params.courtLevel,
+      params.courtLevel.join(","),
       params.dateFrom?.toISOString(),
       params.dateTo?.toISOString(),
     ],

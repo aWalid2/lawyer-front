@@ -23,8 +23,8 @@ export const buildQueryParams = (params: RollSessionsParams) => {
         : params.sessionSource;
   }
 
-  if (params.courtLevel && params.courtLevel !== "all") {
-    queryParams.court_level = params.courtLevel;
+  if (params.courtLevel && params.courtLevel.length > 0 && !params.courtLevel.includes("all")) {
+    queryParams.court_level = params.courtLevel.join(",");
   }
 
   const dateFrom = formatDateParam(params.dateFrom);
