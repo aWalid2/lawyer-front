@@ -17,6 +17,16 @@ import { Spinner } from "@/components/ui/spinner";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import { Pagination } from "@/shared/components/Pagination";
 import { EmptyTable } from "@/shared/components/EmptyTable";
+import { DOCUMENT_CLASSIFICATION_OPTIONS } from "@/shared/constants/documentOptions";
+
+const classificationLabelMap = new Map(
+  DOCUMENT_CLASSIFICATION_OPTIONS.map((opt) => [opt.value, opt.label]),
+);
+
+const getClassificationLabel = (value?: string) => {
+  if (!value) return "-";
+  return classificationLabelMap.get(value) || value;
+};
 
 export const DocumentsFeature: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -145,7 +155,7 @@ export const DocumentsFeature: React.FC = () => {
     },
     {
       header: "تصنيف المستند",
-      accessor: (item) => item.document_classification || "-",
+      accessor: (item) => getClassificationLabel(item.document_classification),
       headerClassName: "w-35",
       className: "w-35",
     },

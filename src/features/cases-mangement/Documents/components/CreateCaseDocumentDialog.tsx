@@ -5,8 +5,10 @@ import { HeaderActionButton } from "@/shared/components/Header/HeaderActionButto
 import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import { InputForm } from "@/shared/components/inputs/InputForm";
 import { FileUpload } from "@/shared/components/FileUpload";
+import { SelectForm } from "@/shared/components/SelectForm";
 import { useCreateCaseDocument } from "../api/hooks/useCreateCaseDocument";
 import type { CaseDocumentFormValues } from "../types/CaseDocumentT";
+import { DOCUMENT_CLASSIFICATION_OPTIONS } from "@/shared/constants/documentOptions";
 
 const validationSchema = Yup.object({
   document_name: Yup.string().required("اسم المستند مطلوب"),
@@ -29,6 +31,7 @@ export const CreateCaseDocumentDialog: React.FC<
     document_name: "",
     phone: "",
     document_details: "",
+    document_classification: "",
     file: null,
   };
 
@@ -40,6 +43,13 @@ export const CreateCaseDocumentDialog: React.FC<
     formData.append("phone", values.phone);
     formData.append("caseId", caseId);
     formData.append("document_details", values.document_details);
+
+    if (values.document_classification) {
+      formData.append(
+        "document_classification",
+        values.document_classification,
+      );
+    }
 
     if (values.file) {
       formData.append("file", values.file);
@@ -80,6 +90,13 @@ export const CreateCaseDocumentDialog: React.FC<
             label="اسم المستند"
             type="text"
             placeholder="أدخل اسم المستند"
+          />
+
+          <SelectForm
+            name="document_classification"
+            label="تصنيف المستند"
+            options={DOCUMENT_CLASSIFICATION_OPTIONS}
+            placeholder="اختر تصنيف المستند"
           />
 
           <InputForm

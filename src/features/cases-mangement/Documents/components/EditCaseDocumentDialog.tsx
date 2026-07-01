@@ -3,8 +3,10 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { InputForm } from "@/shared/components/inputs/InputForm";
 import { FileUpload } from "@/shared/components/FileUpload";
+import { SelectForm } from "@/shared/components/SelectForm";
 import { LayoutDialog } from "@/shared/components/dialogs/LayoutDialog";
 import { useUpdateCaseDocument } from "../api/hooks/useUpdateCaseDocument";
+import { DOCUMENT_CLASSIFICATION_OPTIONS } from "@/shared/constants/documentOptions";
 import type {
   CaseDocument,
   CaseDocumentFormValues,
@@ -35,6 +37,7 @@ export const EditCaseDocumentDialog: React.FC<EditCaseDocumentDialogProps> = ({
     document_name: document.document_name || "",
     phone: document.phone || "",
     document_details: document.document_details || "",
+    document_classification: document.document_classification || "",
     file: null,
   };
 
@@ -46,6 +49,10 @@ export const EditCaseDocumentDialog: React.FC<EditCaseDocumentDialogProps> = ({
     formData.append("phone", values.phone);
     formData.append("case", caseId);
     formData.append("document_details", values.document_details);
+
+    if (values.document_classification) {
+      formData.append("document_classification", values.document_classification);
+    }
 
     if (values.file) {
       formData.append("file", values.file);
@@ -85,6 +92,13 @@ export const EditCaseDocumentDialog: React.FC<EditCaseDocumentDialogProps> = ({
             label="اسم المستند"
             type="text"
             placeholder="أدخل اسم المستند"
+          />
+
+          <SelectForm
+            name="document_classification"
+            label="تصنيف المستند"
+            options={DOCUMENT_CLASSIFICATION_OPTIONS}
+            placeholder="اختر تصنيف المستند"
           />
 
           <InputForm

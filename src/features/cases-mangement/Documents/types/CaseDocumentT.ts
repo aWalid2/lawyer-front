@@ -4,6 +4,7 @@ export interface CaseDocument {
   document_name?: string;
   phone?: string;
   document_details?: string;
+  document_classification?: string;
   document_file?: string;
   caseId?: string | number;
   case_id?: string | number;
@@ -15,5 +16,6 @@ export interface CaseDocumentFormValues {
   document_name: string;
   phone: string;
   document_details: string;
+  document_classification: string;
   file: File | null;
 }

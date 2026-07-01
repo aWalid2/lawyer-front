@@ -13,6 +13,16 @@ import { HeaderCaseDocuments } from "./components/HeaderCaseDocuments";
 import type { CaseDocument } from "./types/CaseDocumentT";
 import { extractCaseDocuments } from "./utils";
 import { EmptyTable } from "@/shared/components/EmptyTable";
+import { DOCUMENT_CLASSIFICATION_OPTIONS } from "@/shared/constants/documentOptions";
+
+const classificationLabelMap = new Map(
+  DOCUMENT_CLASSIFICATION_OPTIONS.map((opt) => [opt.value, opt.label]),
+);
+
+const getClassificationLabel = (value?: string) => {
+  if (!value) return "-";
+  return classificationLabelMap.get(value) || value;
+};
 
 export const CaseDocuments: React.FC = () => {
   const { id: caseId } = useParams<{ id: string }>();
@@ -69,6 +79,11 @@ export const CaseDocuments: React.FC = () => {
     {
       header: "اسم المستند",
       accessor: (item) => item.document_name || "-",
+      className: "text-right",
+    },
+    {
+      header: " تصنيف المستند",
+      accessor: (item) => getClassificationLabel(item.document_classification),
       className: "text-right",
     },
     {
