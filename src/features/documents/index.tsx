@@ -16,6 +16,7 @@ import PageLayout from "@/shared/components/PageLayout";
 import { Spinner } from "@/components/ui/spinner";
 import { useIndexedData } from "@/shared/utils/useIndexedData";
 import { Pagination } from "@/shared/components/Pagination";
+import { EmptyTable } from "@/shared/components/EmptyTable";
 
 export const DocumentsFeature: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -169,6 +170,10 @@ export const DocumentsFeature: React.FC = () => {
           <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-white/60">
             <Spinner className="size-8 text-[#CBA462]" />
           </div>
+        )}
+
+        {isSearching && !isPending && indexedData.length === 0 && (
+          <EmptyTable message="لا توجد مستندات مطابقة للبحث" />
         )}
       </div>
 

@@ -36,7 +36,7 @@ interface AddDocumentFormValues {
   document_category: string;
   document_name: string;
   document_details: string;
-  file: FileList | null;
+  file: File | FileList | null;
   caseId: string;
 }
 
@@ -120,8 +120,12 @@ export const AddDocumentDialog: React.FC<AddDocumentDialogProps> = ({
       formData.append("document_category", values.document_category);
     }
 
-    if (values.file && values.file.length > 0) {
-      formData.append("file", values.file[0]);
+    if (values.file) {
+      const file =
+        values.file instanceof FileList ? values.file[0] : values.file;
+      if (file) {
+        formData.append("file", file);
+      }
     }
 
     addDocument(
