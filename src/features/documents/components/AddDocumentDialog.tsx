@@ -19,6 +19,7 @@ import {
   useFetchCasesInfinite,
 } from "@/features/UserTasks/api/hooks/useGetCase";
 import { useAddDocument } from "../api/hooks/useAddDocument";
+import { DOCUMENT_CLASSIFICATION_OPTIONS } from "@/shared/constants/documentOptions";
 
 interface AddDocumentDialogProps {
   filter: string;
@@ -34,6 +35,7 @@ interface DocumentCaseOption {
 interface AddDocumentFormValues {
   document_type: string;
   document_category: string;
+  document_classification: string;
   document_name: string;
   document_details: string;
   file: File | FileList | null;
@@ -74,6 +76,7 @@ export const AddDocumentDialog: React.FC<AddDocumentDialogProps> = ({
   const initialValues: AddDocumentFormValues = {
     document_type: "NOT_CASE_RELATED",
     document_category: "",
+    document_classification: "",
     document_name: "",
     document_details: "",
     file: null,
@@ -118,6 +121,10 @@ export const AddDocumentDialog: React.FC<AddDocumentDialogProps> = ({
       formData.append("document_category", "");
     } else {
       formData.append("document_category", values.document_category);
+    }
+
+    if (values.document_classification) {
+      formData.append("document_classification", values.document_classification);
     }
 
     if (values.file) {
@@ -215,6 +222,13 @@ export const AddDocumentDialog: React.FC<AddDocumentDialogProps> = ({
                   placeholder="أدخل نوع المستند "
                 />
               )}
+
+              <SelectForm
+                name="document_classification"
+                label="تصنيف المستند "
+                options={DOCUMENT_CLASSIFICATION_OPTIONS}
+                placeholder="اختر تصنيف المستند"
+              />
 
               <InputForm
                 name="document_name"

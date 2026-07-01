@@ -23,9 +23,14 @@ export const searchDocuments = async (
   q: string,
   page: number = 1,
   limit: number = 15,
+  classification?: string,
 ): Promise<SearchDocumentsResponse> => {
-  const response = await api.get("/documnet/search", {
-    params: { q, page, limit },
-  });
+  const params: any = { q, page, limit };
+
+  if (classification && classification !== "all") {
+    params.document_classification = classification;
+  }
+
+  const response = await api.get("/documnet/search", { params });
   return response.data;
 };

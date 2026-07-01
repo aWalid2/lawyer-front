@@ -1,7 +1,7 @@
 
 import api from "@/lib/api";
 
-export const getDocuments = async (page: number, limit: number, status?: string, search?: string) => {
+export const getDocuments = async (page: number, limit: number, status?: string, search?: string, classification?: string) => {
     const params: any = { page, limit };
   
     if (status && status !== "all") {
@@ -12,6 +12,9 @@ export const getDocuments = async (page: number, limit: number, status?: string,
       params.search = search;
     }
 
+    if (classification && classification !== "all") {
+      params.document_classification = classification;
+    }
 
     const response = await api.get("/documnet", { params });
     return response.data;

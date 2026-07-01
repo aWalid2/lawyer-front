@@ -19,6 +19,7 @@ import {
 } from "@/features/UserTasks/api/hooks/useGetCase";
 import { useUpdateDocument } from "../api/hooks/useUpdateDocument";
 import type { Document } from "../types/types";
+import { DOCUMENT_CLASSIFICATION_OPTIONS } from "@/shared/constants/documentOptions";
 
 interface EditDocumentDialogProps {
   document: Document;
@@ -35,9 +36,10 @@ interface DocumentCaseOption {
 interface EditDocumentFormValues {
   document_type: string;
   document_category: string;
+  document_classification: string;
   document_name: string;
   document_details: string;
-  file: FileList | null;
+  file: File | FileList | null;
   case: string;
 }
 
@@ -121,6 +123,7 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
   const initialValues: EditDocumentFormValues = {
     document_type: document.document_type || "NOT_CASE_RELATED",
     document_category: document.document_category || "",
+    document_classification: document.document_classification || "",
     document_name: document.document_name || "",
     document_details: document.document_details || "",
     file: null,
@@ -150,8 +153,19 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
       formData.append("document_category", values.document_category);
     }
 
-    if (values.file && values.file.length > 0) {
-      formData.append("file", values.file[0]);
+    if (values.document_classification) {
+      formData.append(
+        "document_classification",
+        values.document_classification,
+      );
+    }
+
+    if (values.file) {
+      const file =
+        values.file instanceof FileList ? values.file[0] : values.file;
+      if (file) {
+        formData.append("file", file);
+      }
     }
 
     updateDocument(
@@ -234,6 +248,13 @@ export const EditDocumentDialog: React.FC<EditDocumentDialogProps> = ({
                   placeholder="أدخل نوع المستند"
                 />
               )}
+
+              <SelectForm
+                name="document_classification"
+                label="تصنيف المستند"
+                options={DOCUMENT_CLASSIFICATION_OPTIONS}
+                placeholder="اختر تصنيف المستند"
+              />
 
               <InputForm
                 name="document_name"

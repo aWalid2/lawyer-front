@@ -20,13 +20,15 @@ import { EmptyTable } from "@/shared/components/EmptyTable";
 
 export const DocumentsFeature: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [classificationFilter, setClassificationFilter] =
+    useState<string>("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [page, setPage] = useState(1);
   const limit = 15;
 
   useEffect(() => {
     setPage(1);
-  }, [statusFilter, searchTerm]);
+  }, [statusFilter, searchTerm, classificationFilter]);
 
   const isSearching = searchTerm.trim().length > 0;
 
@@ -35,13 +37,19 @@ export const DocumentsFeature: React.FC = () => {
     isPending: isListPending,
     isError: isListError,
     refetch,
-  } = useFetchDocuments(page, limit, statusFilter);
+  } = useFetchDocuments(
+    page,
+    limit,
+    statusFilter,
+    undefined,
+    classificationFilter,
+  );
 
   const {
     data: searchResponse,
     isPending: isSearchPending,
     isError: isSearchError,
-  } = useSearchDocuments(searchTerm.trim(), page, limit);
+  } = useSearchDocuments(searchTerm.trim(), page, limit, classificationFilter);
 
   const isPending = isSearching ? isSearchPending : isListPending;
   const isError = isSearching ? isSearchError : isListError;
@@ -136,6 +144,12 @@ export const DocumentsFeature: React.FC = () => {
       className: "w-35",
     },
     {
+      header: "تصنيف المستند",
+      accessor: (item) => item.document_classification || "-",
+      headerClassName: "w-35",
+      className: "w-35",
+    },
+    {
       header: "إجراء",
       accessor: (item) => <TableDocumentsActions document={item} />,
       headerClassName: "w-35",
@@ -153,6 +167,8 @@ export const DocumentsFeature: React.FC = () => {
         searchTerm={searchTerm}
         onFilterChange={setStatusFilter}
         filter={statusFilter}
+        classificationFilter={classificationFilter}
+        onClassificationFilterChange={setClassificationFilter}
         onDocumentAdded={() => {
           refetch();
         }}
