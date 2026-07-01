@@ -57,7 +57,7 @@ const RollFeature = () => {
   const handleExport = (type: "pdf" | "excel") => {
     triggerExport(type, {
       sessionSource: filters.sessionSource,
-      courtLevel: filters.courtLevel.join(","),
+      courtLevel: filters.courtLevel,
       dateFrom: filters.fromDate,
       dateTo: filters.toDate,
     });
